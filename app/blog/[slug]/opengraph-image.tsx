@@ -36,11 +36,6 @@ export default async function Image({ params }: { params: { slug: string } }) {
     )
   }
 
-  // Font
-  const interSemiBold = fetch(
-    new URL("https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap", import.meta.url),
-  ).then((res) => res.arrayBuffer())
-
   return new ImageResponse(
     // ImageResponse JSX element
     <div
@@ -121,14 +116,6 @@ export default async function Image({ params }: { params: { slug: string } }) {
     // ImageResponse options
     {
       ...size,
-      fonts: [
-        {
-          name: "Inter",
-          data: await interSemiBold,
-          style: "normal",
-          weight: 600,
-        },
-      ],
     },
   )
 }

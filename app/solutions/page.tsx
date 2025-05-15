@@ -29,66 +29,66 @@ export const metadata = {
   },
 }
 
-// Add structured data at the beginning of the component
 export default function SolutionsPage() {
   // Add structured data for the solutions page
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "itemListElement": [
+    itemListElement: [
       {
         "@type": "Service",
-        "position": 1,
-        "name": "AI-Powered Web Design",
-        "description": "Custom layouts generated automatically using your brand assets, optimized for SEO, speed, and mobile devices.",
-        "provider": {
+        position: 1,
+        name: "AI-Powered Web Design",
+        description:
+          "Custom layouts generated automatically using your brand assets, optimized for SEO, speed, and mobile devices.",
+        provider: {
           "@type": "Organization",
-          "name": "KozkerTech"
+          name: "KozkerTech",
         },
-        "url": `${process.env.NEXT_PUBLIC_SITE_URL}/solutions#web-design`
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/solutions#web-design`,
       },
       {
         "@type": "Service",
-        "position": 2,
-        "name": "Customer Support",
-        "description": "Live chat and email routing with FAQs and SLA-driven response times to keep your customers happy.",
-        "provider": {
+        position: 2,
+        name: "Customer Support",
+        description:
+          "Live chat and email routing with FAQs and SLA-driven response times to keep your customers happy.",
+        provider: {
           "@type": "Organization",
-          "name": "KozkerTech"
+          name: "KozkerTech",
         },
-        "url": `${process.env.NEXT_PUBLIC_SITE_URL}/solutions#customer-support`
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/solutions#customer-support`,
       },
       {
         "@type": "Service",
-        "position": 3,
-        "name": "WhatsApp Automation",
-        "description": "Automated lead capture, order updates, appointment reminders, and feedback requests via WhatsApp.",
-        "provider": {
+        position: 3,
+        name: "WhatsApp Automation",
+        description:
+          "Automated lead capture, order updates, appointment reminders, and feedback requests via WhatsApp.",
+        provider: {
           "@type": "Organization",
-          "name": "KozkerTech"
+          name: "KozkerTech",
         },
-        "url": `${process.env.NEXT_PUBLIC_SITE_URL}/solutions#whatsapp`
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/solutions#whatsapp`,
       },
       {
         "@type": "Service",
-        "position": 4,
-        "name": "Power BI Solutions",
-        "description": "Data visualization, interactive dashboards, and custom reporting to help you make data-driven decisions.",
-        "provider": {
+        position: 4,
+        name: "Power BI Solutions",
+        description:
+          "Data visualization, interactive dashboards, and custom reporting to help you make data-driven decisions.",
+        provider: {
           "@type": "Organization",
-          "name": "KozkerTech"
+          name: "KozkerTech",
         },
-        "url": `${process.env.NEXT_PUBLIC_SITE_URL}/solutions#power-bi`
-      }
-    ]
-  };
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/solutions#power-bi`,
+      },
+    ],
+  }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Hero Section */}
       <section className="py-20 md:py-28 hero-pattern">
         <div className="container">
@@ -114,9 +114,7 @@ export default function SolutionsPage() {
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Web Solutions</h2>
-            <p className="text-xl text-gray-600">
-              High-Conversion Websites + 24/7 Support + WhatsApp Automation
-            </p>
+            <p className="text-xl text-gray-600">High-Conversion Websites + 24/7 Support + WhatsApp Automation</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
@@ -129,7 +127,8 @@ export default function SolutionsPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-gray-600">
-                  Custom layouts generated automatically using your brand assets, optimized for SEO, speed, and mobile devices.
+                  Custom layouts generated automatically using your brand assets, optimized for SEO, speed, and mobile
+                  devices.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
@@ -352,7 +351,7 @@ export default function SolutionsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
             <div>
               <Image
-                src="/placeholder-yhg90.png"
+                src="/placeholder-rduq3.png"
                 alt="Power BI Dashboard"
                 width={600}
                 height={500}
@@ -362,13 +361,18 @@ export default function SolutionsPage() {
             <div className="space-y-6">
               <h3 className="text-2xl font-bold">Data Visualization & Interactive Dashboards</h3>
               <p className="text-gray-600">
-                Power BI is a powerful business intelligence tool that allows you to visualize your data in a variety of ways. With Power BI, you can create interactive dashboards, custom reports, and more.
+                Power BI is a powerful business intelligence tool that allows you to visualize your data in a variety of
+                ways. With Power BI, you can create interactive dashboards, custom reports, and more.
               </p>
               <p className="text-gray-600">
-                Data visualization is the process of representing data in a graphical format. This can be done using charts, graphs, maps, and other visual elements. Data visualization can help you to identify trends, patterns, and outliers in your data.
+                Data visualization is the process of representing data in a graphical format. This can be done using
+                charts, graphs, maps, and other visual elements. Data visualization can help you to identify trends,
+                patterns, and outliers in your data.
               </p>
               <p className="text-gray-600">
-                Interactive dashboards are a type of data visualization that allows you to explore your data in a more interactive way. With interactive dashboards, you can drill down into your data, filter your data, and more.
+                Interactive dashboards are a type of data visualization that allows you to explore your data in a more
+                interactive way. With interactive dashboards, you can drill down into your data, filter your data, and
+                more.
               </p>
             </div>
           </div>
@@ -391,7 +395,18 @@ export default function SolutionsPage() {
             <Card className="border-2 hover:border-primary transition-all">
               <CardHeader>
                 <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-primary"
+                  >
                     <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
                     <path d="m9 12 2 2 4-4" />
                   </svg>
@@ -400,7 +415,8 @@ export default function SolutionsPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600">
-                  Get tailor-made visualizations that align with your KPIs, delivering exactly what you need to optimize performance.
+                  Get tailor-made visualizations that align with your KPIs, delivering exactly what you need to optimize
+                  performance.
                 </p>
               </CardContent>
             </Card>
@@ -414,7 +430,8 @@ export default function SolutionsPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600">
-                  Get tailor-made visualizations that align with your KPIs, delivering exactly what you need to optimize performance.
+                  Get tailor-made visualizations that align with your KPIs, delivering exactly what you need to optimize
+                  performance.
                 </p>
               </CardContent>
             </Card>
@@ -544,7 +561,8 @@ export default function SolutionsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-gray-600">
-                    A Complete 360° cross-functional solution that covers multiple reports across all areas of your business.
+                    A Complete 360° cross-functional solution that covers multiple reports across all areas of your
+                    business.
                   </p>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2">
@@ -571,9 +589,7 @@ export default function SolutionsPage() {
               <Card className="border-2 hover:border-primary transition-all">
                 <CardHeader>
                   <CardTitle>Enterprise</CardTitle>
-                  <div className="mt-4">
-                    
-                  </div>
+                  <div className="mt-4"></div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-gray-600">
@@ -600,3 +616,10 @@ export default function SolutionsPage() {
                   </Button>
                 </CardFooter>
               </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}
