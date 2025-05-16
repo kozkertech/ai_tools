@@ -7,11 +7,12 @@ import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, UserIcon } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import type { Metadata } from "next"
+import type { PostOrPage, Tag } from "@tryghost/content-api"
 
 export async function generateStaticParams() {
   const posts = await getPosts()
 
-  return posts.map((post) => ({
+  return posts.map((post: PostOrPage) => ({
     slug: post.slug,
   }))
 }
@@ -44,7 +45,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       publishedTime: post.published_at,
       modifiedTime: post.updated_at,
       authors: [post.primary_author.name],
-      tags: post.tags?.map((tag) => tag.name) || [],
+      tags: post.tags?.map((tag: Tag) => tag.name) || [],
     },
     twitter: {
       card: "summary_large_image",
@@ -128,7 +129,10 @@ export default async function PostPage({ params }: { params: { slug: string } })
           </div>
         )}
 
-        <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: post.html }} />
+        <div 
+          className="prose dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-pre:bg-muted prose-pre:p-0 prose-pre:overflow-x-auto prose-pre:rounded-lg prose-pre:border prose-pre:border-border" 
+          dangerouslySetInnerHTML={{ __html: post.html }} 
+        />
       </div>
     </article>
   )
