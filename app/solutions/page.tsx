@@ -227,9 +227,9 @@ export default function SolutionsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <span className="text-3xl font-bold">₹5,297</span>
+                    <span className="text-3xl font-bold">₹5,299</span>
                     <span className="text-gray-500"> one-time</span>
-                    <p className="text-sm text-gray-500">+ ₹1,328/month</p>
+                    <p className="text-sm text-gray-500">+ ₹1,399/month</p>
                   </div>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2">
@@ -267,9 +267,9 @@ export default function SolutionsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <span className="text-3xl font-bold">₹8,229</span>
+                    <span className="text-3xl font-bold">₹8,299</span>
                     <span className="text-gray-500"> one-time</span>
-                    <p className="text-sm text-gray-500">+ ₹3,728/month</p>
+                    <p className="text-sm text-gray-500">+ ₹3,799/month</p>
                   </div>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2">
@@ -304,9 +304,9 @@ export default function SolutionsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <span className="text-3xl font-bold">₹15,200</span>
+                    <span className="text-3xl font-bold">₹15,299</span>
                     <span className="text-gray-500"> one-time</span>
-                    <p className="text-sm text-gray-500">+ ₹4,699–6,199/month</p>
+                    <p className="text-sm text-gray-500">+ ₹4,699 – 6,199/month</p>
                   </div>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2">
