@@ -255,6 +255,137 @@ const config = {
               lineHeight: '1.4285714',
               marginTop: '0.8571429em',
             },
+            // Ghost-specific styles
+            '.kg-card': {
+              marginTop: '2em',
+              marginBottom: '2em',
+            },
+            '.kg-image': {
+              margin: '0',
+              borderRadius: '0.375rem',
+            },
+            '.kg-image-card': {
+              margin: '2em 0',
+            },
+            '.kg-gallery-container': {
+              display: 'flex',
+              flexDirection: 'column',
+              margin: '2em 0',
+            },
+            '.kg-gallery-row': {
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              margin: '0.5em 0',
+            },
+            '.kg-gallery-image': {
+              margin: '0 0.5em',
+              borderRadius: '0.375rem',
+            },
+            '.kg-bookmark-card': {
+              border: '1px solid var(--tw-prose-borders)',
+              borderRadius: '0.375rem',
+              padding: '1em',
+              margin: '2em 0',
+            },
+            '.kg-bookmark-content': {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5em',
+            },
+            '.kg-bookmark-title': {
+              fontWeight: '600',
+              fontSize: '1.1em',
+            },
+            '.kg-bookmark-description': {
+              color: 'var(--tw-prose-body)',
+              fontSize: '0.9em',
+            },
+            '.kg-bookmark-metadata': {
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5em',
+              fontSize: '0.9em',
+              color: 'var(--tw-prose-meta)',
+            },
+            '.kg-bookmark-icon': {
+              width: '1.2em',
+              height: '1.2em',
+            },
+            '.kg-bookmark-thumbnail': {
+              width: '100%',
+              height: '200px',
+              objectFit: 'cover',
+              borderRadius: '0.375rem',
+            },
+            '.kg-callout-card': {
+              border: '1px solid var(--tw-prose-borders)',
+              borderRadius: '0.375rem',
+              padding: '1em',
+              margin: '2em 0',
+              backgroundColor: 'var(--tw-prose-bg)',
+            },
+            '.kg-callout-emoji': {
+              marginRight: '0.5em',
+            },
+            '.kg-toggle-card': {
+              border: '1px solid var(--tw-prose-borders)',
+              borderRadius: '0.375rem',
+              margin: '2em 0',
+            },
+            '.kg-toggle-heading': {
+              padding: '1em',
+              cursor: 'pointer',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            },
+            '.kg-toggle-content': {
+              padding: '1em',
+              borderTop: '1px solid var(--tw-prose-borders)',
+            },
+            '.kg-button-card': {
+              margin: '2em 0',
+            },
+            '.kg-button-card a': {
+              display: 'inline-block',
+              padding: '0.5em 1em',
+              backgroundColor: 'var(--tw-prose-links)',
+              color: 'white',
+              borderRadius: '0.375rem',
+              textDecoration: 'none',
+              fontWeight: '500',
+            },
+            '.kg-button-card a:hover': {
+              backgroundColor: 'var(--tw-prose-links-hover)',
+            },
+            '.kg-file-card': {
+              border: '1px solid var(--tw-prose-borders)',
+              borderRadius: '0.375rem',
+              padding: '1em',
+              margin: '2em 0',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1em',
+            },
+            '.kg-file-card-icon': {
+              width: '2em',
+              height: '2em',
+            },
+            '.kg-file-card-content': {
+              flex: '1',
+            },
+            '.kg-file-card-title': {
+              fontWeight: '600',
+            },
+            '.kg-file-card-caption': {
+              fontSize: '0.9em',
+              color: 'var(--tw-prose-meta)',
+            },
+            '.kg-file-card-metadata': {
+              fontSize: '0.9em',
+              color: 'var(--tw-prose-meta)',
+            },
           },
         },
       },
