@@ -32,7 +32,7 @@ export default function Home() {
       addressCountry: "IN",
     },
     description:
-      "High-Conversion Websites, 24/7 Support, WhatsApp Automation, and Power BI Solutions for businesses in Kochi and beyond.",
+      "Transform your business with KozkerTech's expert digital solutions in Kochi. Get high-converting websites, 24/7 customer support, WhatsApp automation, and Power BI analytics. Local expertise, global standards.",
   }
 
   return (
