@@ -36,6 +36,16 @@ export function BlogContainer({ initialPosts, initialTags }: BlogContainerProps)
     { label: "Z-A", value: "z-a" },
   ]
 
+  // If there are no posts or tags, show a message
+  if (initialPosts.length === 0) {
+    return (
+      <div className="mt-8 text-center py-12">
+        <h2 className="text-xl font-medium mb-4">No posts available</h2>
+        <p className="text-muted-foreground">There are currently no blog posts available. Please check back later.</p>
+      </div>
+    )
+  }
+
   return (
     <div className="mt-8 space-y-6">
       <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />

@@ -27,8 +27,16 @@ export const metadata = {
 }
 
 export default async function BlogPage() {
-  // Fetch posts and tags server-side
-  const [posts, tags] = await Promise.all([getPosts(), getTags()])
+  // Fetch posts and tags server-side with error handling
+  let posts = []
+  let tags = []
+
+  try {
+    ;[posts, tags] = await Promise.all([getPosts(), getTags()])
+  } catch (error) {
+    console.error("Error fetching blog data:", error)
+    // Continue with empty arrays
+  }
 
   // Add structured data for the blog page
   const jsonLd = {
@@ -70,7 +78,16 @@ export default async function BlogPage() {
         </div>
       </div>
 
-      <BlogContainer initialPosts={posts} initialTags={tags} />
+      {!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY ? (
+        <div className="mt-12 text-center">
+          <h2 className="text-2xl font-bold mb-4">Ghost CMS Configuration Missing</h2>
+          <p className="text-muted-foreground mb-6">
+            Please check your environment variables to ensure GHOST_URL and GHOST_CONTENT_API_KEY are properly set.
+          </p>
+        </div>
+      ) : (
+        <BlogContainer initialPosts={posts} initialTags={tags} />
+      )}
     </div>
   )
 }

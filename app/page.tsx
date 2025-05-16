@@ -4,40 +4,27 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, ArrowRight, Zap, Clock, HeadphonesIcon, MessageSquare } from "lucide-react"
+import { generateLocalBusinessSchema, generateWebsiteSchema, generateOrganizationSchema } from "@/lib/schema"
 
 export default function Home() {
-  // Add structured data for the homepage
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "KozkerTech",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com",
-    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}/logo.png`,
-    sameAs: [
-      "https://facebook.com/kozkertech",
-      "https://twitter.com/kozkertech",
-      "https://instagram.com/kozkertech",
-      "https://linkedin.com/company/kozkertech",
-    ],
-    contactPoint: {
-      "@type": "ContactPoint",
-      telephone: "+91-7306261147",
-      contactType: "customer service",
-      availableLanguage: ["English", "Malayalam"],
-    },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Kochi",
-      addressRegion: "Kerala",
-      addressCountry: "IN",
-    },
-    description:
-      "Transform your business with KozkerTech's expert digital solutions in Kochi. Get high-converting websites, 24/7 customer support, WhatsApp automation, and Power BI analytics. Local expertise, global standards.",
-  }
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kozkertech.com"
+
+  // Generate structured data
+  const localBusinessSchema = generateLocalBusinessSchema(baseUrl)
+  const websiteSchema = generateWebsiteSchema(baseUrl)
+  const organizationSchema = generateOrganizationSchema(baseUrl)
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {/* LocalBusiness Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
+
+      {/* Website Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
+
+      {/* Organization Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+
       {/* Hero Section */}
       <section className="py-20 md:py-28 hero-pattern">
         <div className="container">
