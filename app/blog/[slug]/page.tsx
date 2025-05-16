@@ -141,7 +141,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
             </div>
           )}
 
-          <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: post.html }} />
+          <div className="ghost-content" dangerouslySetInnerHTML={{ __html: post.html }} />
         </div>
       </article>
     )

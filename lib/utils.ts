@@ -18,13 +18,18 @@ export function formatDate(date: string): string {
 
 // Extract excerpt from HTML content
 export function extractExcerpt(html: string, maxLength = 200): string {
+  if (!html) return ""
+
   // Remove HTML tags
   const text = html.replace(/<\/?[^>]+(>|$)/g, "")
 
+  // Remove extra whitespace
+  const cleanText = text.replace(/\s+/g, " ").trim()
+
   // Truncate to maxLength
-  if (text.length <= maxLength) return text
+  if (cleanText.length <= maxLength) return cleanText
 
   // Find the last space before maxLength
-  const lastSpace = text.lastIndexOf(" ", maxLength)
-  return text.substring(0, lastSpace) + "..."
+  const lastSpace = cleanText.lastIndexOf(" ", maxLength)
+  return lastSpace > 0 ? cleanText.substring(0, lastSpace) + "..." : cleanText.substring(0, maxLength) + "..."
 }

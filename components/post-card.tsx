@@ -10,6 +10,7 @@ interface PostCardProps {
     slug: string
     title: string
     html: string
+    excerpt?: string
     feature_image: string | null
     published_at: string
     primary_author: {
@@ -23,6 +24,9 @@ interface PostCardProps {
 }
 
 export function PostCard({ post }: PostCardProps) {
+  // Use the provided excerpt if available, otherwise extract from HTML
+  const excerptText = post.excerpt || extractExcerpt(post.html)
+
   return (
     <Card className="overflow-hidden flex flex-col h-full">
       {post.feature_image && (
@@ -49,7 +53,7 @@ export function PostCard({ post }: PostCardProps) {
           <Link href={`/blog/${post.slug}`} className="block">
             <h3 className="text-xl font-bold leading-tight hover:underline">{post.title}</h3>
           </Link>
-          <div className="text-sm text-muted-foreground line-clamp-3">{extractExcerpt(post.html)}</div>
+          <div className="text-sm text-muted-foreground line-clamp-3">{excerptText}</div>
         </div>
       </CardHeader>
       <CardFooter className="border-t pt-4">
