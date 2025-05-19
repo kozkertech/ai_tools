@@ -16,7 +16,7 @@ const nextConfig = {
   experimental: {
     // Disable optimizeCss to avoid critters dependency issues
     optimizeCss: false,
-    scrollRestoration: true,
+    scrollRestoration: false,
   },
   poweredByHeader: false,
   reactStrictMode: true,
@@ -64,6 +64,11 @@ const nextConfig = {
         ],
       },
     ];
+  },
+  // Add webpack configuration to resolve peer dependency issues
+  webpack: (config, { isServer }) => {
+    // Add any webpack customizations here
+    return config;
   },
 };
 
