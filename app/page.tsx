@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -17,9 +18,6 @@ import {
 import { generateLocalBusinessSchema, generateWebsiteSchema, generateOrganizationSchema } from "@/lib/schema"
 import { getFeaturedPosts } from "@/lib/ghost"
 import { PostCard } from "@/components/post-card"
-import { ImageWithFallback } from "@/components/image-with-fallback"
-import { LazyComponent } from "@/components/lazy-component"
-import { SEOHead } from "@/components/seo-head"
 
 export default async function Home() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"
@@ -42,13 +40,14 @@ export default async function Home() {
 
   return (
     <>
-      <SEOHead
-        metadata={{}}
-        schema={{
-          "@context": "https://schema.org",
-          "@graph": [localBusinessSchema, websiteSchema, organizationSchema],
-        }}
-      />
+      {/* LocalBusiness Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
+
+      {/* Website Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
+
+      {/* Organization Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
 
       {/* Hero Section */}
       <section className="py-20 md:py-28 hero-pattern">
@@ -87,7 +86,7 @@ export default async function Home() {
             </div>
             <div className="relative">
               <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-primary/20 rounded-full blur-3xl"></div>
-              <ImageWithFallback
+              <Image
                 src="/chatbot-bro.svg"
                 alt="Chat bot illustration representing digital solutions"
                 width={600}
@@ -137,7 +136,7 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-primary/20 rounded-full blur-3xl"></div>
-              <ImageWithFallback
+              <Image
                 src="/website-design-team.png"
                 alt="KozkerTech Team"
                 width={500}
@@ -207,410 +206,400 @@ export default async function Home() {
       </section>
 
       {/* Services Section */}
-      <LazyComponent>
-        <section className="py-20 bg-gray-50 dark:bg-gray-900">
-          <div className="container">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">Our Services</h2>
-              <p className="text-xl text-gray-600 dark:text-gray-300">
-                Comprehensive digital solutions to help your business thrive online
+      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">Our Services</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Comprehensive digital solutions to help your business thrive online
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
+              <CardHeader>
+                <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
+                  <Smartphone className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="dark:text-white">WhatsApp CRM & Sales Funnel</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  Automate your sales process and customer follow-ups through WhatsApp, perfect for retailers and
+                  service-based businesses.
+                </p>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="font-medium mb-1">Ideal for:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Indian retailers (grocery, garments, electronics)</li>
+                    <li>MSME/SMB companies using WhatsApp for business</li>
+                    <li>Subscription-based services (education, fitness)</li>
+                  </ul>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
+                >
+                  <Link href="/solutions#whatsapp-crm">
+                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
+              <CardHeader>
+                <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
+                  <MapPin className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="dark:text-white">Local SEO & GMB Booster</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  Dominate local search results and "near me" queries with our Google My Business optimization and local
+                  SEO strategies.
+                </p>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="font-medium mb-1">Ideal for:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Restaurants & cafés seeking "near me" visibility</li>
+                    <li>Brick-and-mortar shops (salons, clinics, retail)</li>
+                    <li>Local service providers needing foot traffic</li>
+                  </ul>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
+                >
+                  <Link href="/solutions#local-seo">
+                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
+              <CardHeader>
+                <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
+                  <Bot className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="dark:text-white">AI Chatbot for Web & WhatsApp</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  Intelligent chatbots that handle customer inquiries, product recommendations, and support requests
+                  24/7.
+                </p>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="font-medium mb-1">Ideal for:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>E-commerce stores (product recommendations)</li>
+                    <li>Healthcare providers (appointment triage)</li>
+                    <li>Educational institutes (admissions info)</li>
+                  </ul>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
+                >
+                  <Link href="/solutions#ai-chatbot">
+                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
+              <CardHeader>
+                <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
+                  <Calendar className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="dark:text-white">Automated Appointment Booking</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  Streamline scheduling with automated booking systems, reminders, and follow-ups to reduce no-shows.
+                </p>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="font-medium mb-1">Ideal for:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Medical clinics & dental offices</li>
+                    <li>Beauty & wellness salons</li>
+                    <li>Professional consultants (lawyers, tutors)</li>
+                  </ul>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
+                >
+                  <Link href="/solutions#appointment-booking">
+                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
+              <CardHeader>
+                <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
+                  <Layout className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="dark:text-white">Micro-Landing Page Campaigns</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  High-converting landing pages designed specifically for campaigns, product launches, and lead
+                  generation.
+                </p>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="font-medium mb-1">Ideal for:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Digital marketers running PPC campaigns</li>
+                    <li>Startups launching product microsites</li>
+                    <li>Businesses with seasonal promotions</li>
+                  </ul>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
+                >
+                  <Link href="/solutions#micro-landing">
+                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
+              <CardHeader>
+                <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
+                  <BarChart className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="dark:text-white">Power BI Solutions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  Data visualization, interactive dashboards, and custom reporting to help you make data-driven
+                  decisions.
+                </p>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="font-medium mb-1">Ideal for:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Businesses needing performance analytics</li>
+                    <li>Companies with complex data needs</li>
+                    <li>Organizations seeking growth insights</li>
+                  </ul>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
+                >
+                  <Link href="/solutions#power-bi">
+                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+
+          <div className="mt-12 text-center">
+            <div className="inline-block bg-orange-100 dark:bg-gray-800 p-4 rounded-lg">
+              <p className="text-lg font-bold text-primary mb-2">FREE Website with Every Package!</p>
+              <p className="text-gray-600 dark:text-gray-300">
+                All our service packages include a professionally designed 1-page website at no extra cost.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
-                <CardHeader>
-                  <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
-                    <Smartphone className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle className="dark:text-white">WhatsApp CRM & Sales Funnel</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    Automate your sales process and customer follow-ups through WhatsApp, perfect for retailers and
-                    service-based businesses.
-                  </p>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    <p className="font-medium mb-1">Ideal for:</p>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Indian retailers (grocery, garments, electronics)</li>
-                      <li>MSME/SMB companies using WhatsApp for business</li>
-                      <li>Subscription-based services (education, fitness)</li>
-                    </ul>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    variant="ghost"
-                    asChild
-                    className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
-                  >
-                    <Link href="/solutions#whatsapp-crm">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
-                <CardHeader>
-                  <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
-                    <MapPin className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle className="dark:text-white">Local SEO & GMB Booster</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    Dominate local search results and "near me" queries with our Google My Business optimization and
-                    local SEO strategies.
-                  </p>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    <p className="font-medium mb-1">Ideal for:</p>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Restaurants & cafés seeking "near me" visibility</li>
-                      <li>Brick-and-mortar shops (salons, clinics, retail)</li>
-                      <li>Local service providers needing foot traffic</li>
-                    </ul>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    variant="ghost"
-                    asChild
-                    className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
-                  >
-                    <Link href="/solutions#local-seo">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
-                <CardHeader>
-                  <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
-                    <Bot className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle className="dark:text-white">AI Chatbot for Web & WhatsApp</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    Intelligent chatbots that handle customer inquiries, product recommendations, and support requests
-                    24/7.
-                  </p>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    <p className="font-medium mb-1">Ideal for:</p>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>E-commerce stores (product recommendations)</li>
-                      <li>Healthcare providers (appointment triage)</li>
-                      <li>Educational institutes (admissions info)</li>
-                    </ul>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    variant="ghost"
-                    asChild
-                    className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
-                  >
-                    <Link href="/solutions#ai-chatbot">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
-                <CardHeader>
-                  <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
-                    <Calendar className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle className="dark:text-white">Automated Appointment Booking</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    Streamline scheduling with automated booking systems, reminders, and follow-ups to reduce no-shows.
-                  </p>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    <p className="font-medium mb-1">Ideal for:</p>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Medical clinics & dental offices</li>
-                      <li>Beauty & wellness salons</li>
-                      <li>Professional consultants (lawyers, tutors)</li>
-                    </ul>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    variant="ghost"
-                    asChild
-                    className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
-                  >
-                    <Link href="/solutions#appointment-booking">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
-                <CardHeader>
-                  <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
-                    <Layout className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle className="dark:text-white">Micro-Landing Page Campaigns</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    High-converting landing pages designed specifically for campaigns, product launches, and lead
-                    generation.
-                  </p>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    <p className="font-medium mb-1">Ideal for:</p>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Digital marketers running PPC campaigns</li>
-                      <li>Startups launching product microsites</li>
-                      <li>Businesses with seasonal promotions</li>
-                    </ul>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    variant="ghost"
-                    asChild
-                    className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
-                  >
-                    <Link href="/solutions#micro-landing">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <Card className="border-2 hover:border-primary transition-all dark:bg-gray-900 dark:border-gray-800">
-                <CardHeader>
-                  <div className="bg-orange-100 p-3 rounded-lg w-fit mb-4 dark:bg-gray-800">
-                    <BarChart className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle className="dark:text-white">Power BI Solutions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    Data visualization, interactive dashboards, and custom reporting to help you make data-driven
-                    decisions.
-                  </p>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    <p className="font-medium mb-1">Ideal for:</p>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Businesses needing performance analytics</li>
-                      <li>Companies with complex data needs</li>
-                      <li>Organizations seeking growth insights</li>
-                    </ul>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    variant="ghost"
-                    asChild
-                    className="text-primary p-0 hover:text-primary/80 dark:hover:bg-gray-800"
-                  >
-                    <Link href="/solutions#power-bi">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-
-            <div className="mt-12 text-center">
-              <div className="inline-block bg-orange-100 dark:bg-gray-800 p-4 rounded-lg">
-                <p className="text-lg font-bold text-primary mb-2">FREE Website with Every Package!</p>
-                <p className="text-gray-600 dark:text-gray-300">
-                  All our service packages include a professionally designed 1-page website at no extra cost.
-                </p>
-              </div>
-            </div>
           </div>
-        </section>
-      </LazyComponent>
+        </div>
+      </section>
 
       {/* Why Choose Us Section */}
-      <LazyComponent>
-        <section className="py-20 bg-gray-50 dark:bg-gray-900">
-          <div className="container">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">Why Choose Us</h2>
-              <p className="text-xl text-gray-600 dark:text-gray-300">
-                We deliver results that matter for your business
+      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">Why Choose Us</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">We deliver results that matter for your business</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center p-6 rounded-lg bg-white hover:shadow-md transition-all dark:bg-gray-800">
+              <div className="bg-orange-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 dark:bg-gray-700">
+                <Zap className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-2 dark:text-white">Speed</h3>
+              <p className="text-gray-600 dark:text-gray-300">Launch your website in days, not weeks.</p>
+            </div>
+            <div className="text-center p-6 rounded-lg bg-white hover:shadow-md transition-all dark:bg-gray-800">
+              <div className="bg-orange-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 dark:bg-gray-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-primary"
+                >
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold mb-2 dark:text-white">Savings</h3>
+              <p className="text-gray-600 dark:text-gray-300">AI cuts development hours by 50%, saving money.</p>
+            </div>
+            <div className="text-center p-6 rounded-lg bg-white hover:shadow-md transition-all dark:bg-gray-800">
+              <div className="bg-orange-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 dark:bg-gray-700">
+                <HeadphonesIcon className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-2 dark:text-white">Support</h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                24×7 live chat and SLA-backed email ensure help anytime.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="text-center p-6 rounded-lg bg-white hover:shadow-md transition-all dark:bg-gray-800">
-                <div className="bg-orange-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 dark:bg-gray-700">
-                  <Zap className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold mb-2 dark:text-white">Speed</h3>
-                <p className="text-gray-600 dark:text-gray-300">Launch your website in days, not weeks.</p>
+            <div className="text-center p-6 rounded-lg bg-white hover:shadow-md transition-all dark:bg-gray-800">
+              <div className="bg-orange-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 dark:bg-gray-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-primary"
+                >
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                </svg>
               </div>
-              <div className="text-center p-6 rounded-lg bg-white hover:shadow-md transition-all dark:bg-gray-800">
-                <div className="bg-orange-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 dark:bg-gray-700">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary"
-                  >
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2 dark:text-white">Savings</h3>
-                <p className="text-gray-600 dark:text-gray-300">AI cuts development hours by 50%, saving money.</p>
-              </div>
-              <div className="text-center p-6 rounded-lg bg-white hover:shadow-md transition-all dark:bg-gray-800">
-                <div className="bg-orange-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 dark:bg-gray-700">
-                  <HeadphonesIcon className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold mb-2 dark:text-white">Support</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  24×7 live chat and SLA-backed email ensure help anytime.
-                </p>
-              </div>
-              <div className="text-center p-6 rounded-lg bg-white hover:shadow-md transition-all dark:bg-gray-800">
-                <div className="bg-orange-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 dark:bg-gray-700">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary"
-                  >
-                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2 dark:text-white">Growth</h3>
-                <p className="text-gray-600 dark:text-gray-300">Automate follow-ups to boost your sales conversions.</p>
-              </div>
+              <h3 className="text-xl font-bold mb-2 dark:text-white">Growth</h3>
+              <p className="text-gray-600 dark:text-gray-300">Automate follow-ups to boost your sales conversions.</p>
             </div>
           </div>
-        </section>
-      </LazyComponent>
+        </div>
+      </section>
 
       {/* Featured Blog Posts - Only show if posts are available */}
       {featuredPosts && featuredPosts.length > 0 ? (
-        <LazyComponent>
-          <section className="py-20 bg-gray-50 dark:bg-gray-900">
-            <div className="container">
-              <div className="text-center max-w-3xl mx-auto mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">Latest Insights</h2>
-                <p className="text-xl text-gray-600 dark:text-gray-300">
-                  Stay updated with our latest articles and industry insights
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {featuredPosts.map((post) => (
-                  <PostCard key={post.id} post={post} />
-                ))}
-              </div>
-
-              <div className="text-center mt-12">
-                <Button asChild>
-                  <Link href="/blog">
-                    View All Articles <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </section>
-        </LazyComponent>
-      ) : null}
-
-      {/* FAQ Section */}
-      <LazyComponent>
-        <section className="py-20 bg-white dark:bg-gray-900">
+        <section className="py-20 bg-gray-50 dark:bg-gray-900">
           <div className="container">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">Frequently Asked Questions</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">Latest Insights</h2>
               <p className="text-xl text-gray-600 dark:text-gray-300">
-                Find answers to common questions about our services
+                Stay updated with our latest articles and industry insights
               </p>
             </div>
 
-            <div className="max-w-3xl mx-auto space-y-6">
-              <Card className="dark:bg-gray-800">
-                <CardHeader>
-                  <CardTitle className="text-xl dark:text-white">How long does it take to build a website?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Our AI-powered web design process allows us to build and launch websites much faster than
-                    traditional methods. Most projects can be completed within 1-2 weeks, depending on complexity and
-                    content requirements.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="dark:bg-gray-800">
-                <CardHeader>
-                  <CardTitle className="text-xl dark:text-white">
-                    What makes your WhatsApp automation different?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Our WhatsApp automation solutions are fully customized to your business needs. We create
-                    personalized workflows for lead capture, order updates, appointment reminders, and customer feedback
-                    that integrate seamlessly with your existing systems.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="dark:bg-gray-800">
-                <CardHeader>
-                  <CardTitle className="text-xl dark:text-white">Do you offer ongoing support after launch?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Yes, we provide comprehensive ongoing support for all our clients. Our support packages include 24/7
-                    monitoring, regular updates, security patches, and dedicated customer service to ensure your digital
-                    solutions continue to perform optimally.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="dark:bg-gray-800">
-                <CardHeader>
-                  <CardTitle className="text-xl dark:text-white">Is the free website really free?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Yes! Every service package includes a professionally designed 1-page website at no additional cost.
-                    This free website is fully functional, mobile-responsive, and designed to convert visitors into
-                    customers.
-                  </p>
-                </CardContent>
-              </Card>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredPosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
             </div>
 
             <div className="text-center mt-12">
-              <p className="text-gray-600 dark:text-gray-300 mb-4">Still have questions? We're here to help!</p>
               <Button asChild>
-                <Link href="/contact">Contact Us</Link>
+                <Link href="/blog">
+                  View All Articles <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </div>
         </section>
-      </LazyComponent>
+      ) : null}
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-white dark:bg-gray-900">
+        <div className="container">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">Frequently Asked Questions</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Find answers to common questions about our services
+            </p>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-6">
+            <Card className="dark:bg-gray-800">
+              <CardHeader>
+                <CardTitle className="text-xl dark:text-white">How long does it take to build a website?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Our AI-powered web design process allows us to build and launch websites much faster than traditional
+                  methods. Most projects can be completed within 1-2 weeks, depending on complexity and content
+                  requirements.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="dark:bg-gray-800">
+              <CardHeader>
+                <CardTitle className="text-xl dark:text-white">
+                  What makes your WhatsApp automation different?
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Our WhatsApp automation solutions are fully customized to your business needs. We create personalized
+                  workflows for lead capture, order updates, appointment reminders, and customer feedback that integrate
+                  seamlessly with your existing systems.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="dark:bg-gray-800">
+              <CardHeader>
+                <CardTitle className="text-xl dark:text-white">Do you offer ongoing support after launch?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Yes, we provide comprehensive ongoing support for all our clients. Our support packages include 24/7
+                  monitoring, regular updates, security patches, and dedicated customer service to ensure your digital
+                  solutions continue to perform optimally.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="dark:bg-gray-800">
+              <CardHeader>
+                <CardTitle className="text-xl dark:text-white">Is the free website really free?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Yes! Every service package includes a professionally designed 1-page website at no additional cost.
+                  This free website is fully functional, mobile-responsive, and designed to convert visitors into
+                  customers.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-gray-600 dark:text-gray-300 mb-4">Still have questions? We're here to help!</p>
+            <Button asChild>
+              <Link href="/contact">Contact Us</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-primary text-white">

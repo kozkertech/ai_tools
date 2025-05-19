@@ -1,27 +1,37 @@
 "use client"
 
-import Image, { type ImageProps } from "next/image"
+import Image from "next/image"
 import { useState } from "react"
 
-type ImageWithFallbackProps = ImageProps & {
-  fallbackSrc?: string
+interface ImageWithFallbackProps {
+  src: string
+  alt: string
+  width: number
+  height: number
+  className?: string
+  priority?: boolean
 }
 
-export function ImageWithFallback({ src, alt, fallbackSrc = "/placeholder.svg", ...rest }: ImageWithFallbackProps) {
+export function ImageWithFallback({ src, alt, width, height, className, priority = false }: ImageWithFallbackProps) {
   const [imgSrc, setImgSrc] = useState(src)
-  const [error, setError] = useState(false)
+  const [hasError, setHasError] = useState(false)
+
+  const handleError = () => {
+    if (!hasError) {
+      setImgSrc(`/placeholder.svg?height=${height}&width=${width}&query=${encodeURIComponent(alt)}`)
+      setHasError(true)
+    }
+  }
 
   return (
     <Image
-      {...rest}
       src={imgSrc || "/placeholder.svg"}
       alt={alt}
-      onError={() => {
-        if (!error) {
-          setImgSrc(fallbackSrc)
-          setError(true)
-        }
-      }}
+      width={width}
+      height={height}
+      className={className}
+      onError={handleError}
+      priority={priority}
     />
   )
 }

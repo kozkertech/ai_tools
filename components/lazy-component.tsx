@@ -1,14 +1,17 @@
 "use client"
 
-import { useEffect, useState, type ReactNode } from "react"
+import type React from "react"
+
+import { useEffect, useRef, useState } from "react"
 
 interface LazyComponentProps {
-  children: ReactNode
-  placeholder?: ReactNode
+  children: React.ReactNode
+  threshold?: number
 }
 
-export function LazyComponent({ children, placeholder }: LazyComponentProps) {
+export function LazyComponent({ children, threshold = 0.1 }: LazyComponentProps) {
   const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -18,24 +21,23 @@ export function LazyComponent({ children, placeholder }: LazyComponentProps) {
           observer.disconnect()
         }
       },
-      { rootMargin: "200px" },
+      { threshold },
     )
 
-    const currentElement = document.getElementById("lazy-component")
-    if (currentElement) {
-      observer.observe(currentElement)
+    if (ref.current) {
+      observer.observe(ref.current)
     }
 
     return () => {
-      if (currentElement) {
-        observer.unobserve(currentElement)
+      if (ref.current) {
+        observer.unobserve(ref.current)
       }
     }
-  }, [])
+  }, [threshold])
 
   return (
-    <div id="lazy-component">
-      {isVisible ? children : placeholder || <div className="h-40 animate-pulse bg-muted rounded-md" />}
+    <div ref={ref} className="min-h-[20px]">
+      {isVisible ? children : <div className="w-full h-20" />}
     </div>
   )
 }

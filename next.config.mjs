@@ -1,43 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable image optimization
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
+    domains: ['images.unsplash.com', 'static.ghost.org'],
     formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'source.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'blob.v0.dev',
-      },
-    ],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    unoptimized: true, // Added from updates
+    unoptimized: true,
   },
-  
-  // Enable compression
-  compress: true,
-  
-  // Optimize for performance
+  experimental: {
+    optimizeCss: true,
+    scrollRestoration: true,
+  },
+  poweredByHeader: false,
   reactStrictMode: true,
   swcMinify: true,
-  
-  // Optimize for production
-  poweredByHeader: false,
-  
-  // Configure headers for security and caching
-  async headers() {
+  compress: true,
+  headers: async () => {
     return [
       {
         source: '/(.*)',
@@ -79,14 +63,6 @@ const nextConfig = {
         ],
       },
     ];
-  },
-  
-  // Added from updates
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
   },
 };
 

@@ -115,3 +115,31 @@ export async function searchPosts(query: string) {
     return []
   }
 }
+
+// Fallback data for when Ghost API is unavailable
+export const fallbackPosts = [
+  {
+    id: "fallback-1",
+    title: "Sample Post Title",
+    slug: "sample-post",
+    html: "<p>This is a fallback post when the Ghost API is unavailable.</p>",
+    feature_image: "/blog-post-concept.png",
+    published_at: new Date().toISOString(),
+    reading_time: 5,
+    excerpt: "This is a fallback post when the Ghost API is unavailable.",
+    tags: [{ name: "Sample", slug: "sample" }],
+    primary_tag: { name: "Sample", slug: "sample" },
+    authors: [{ name: "Admin", slug: "admin" }],
+  },
+]
+
+export const fallbackTags = [
+  {
+    id: "fallback-tag-1",
+    name: "Sample Tag",
+    slug: "sample",
+    description: "This is a fallback tag when the Ghost API is unavailable.",
+    feature_image: "/graffiti-tag.png",
+    count: { posts: 1 },
+  },
+]

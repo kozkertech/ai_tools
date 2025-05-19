@@ -7,7 +7,6 @@ import Footer from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import { CurrencyProvider } from "@/contexts/currency-context"
 import { Analytics } from "@/components/analytics"
-import { SEOHead } from "@/components/seo-head"
 import { Suspense } from "react"
 
 // Optimize font loading
@@ -111,7 +110,12 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <SEOHead metadata={metadata} schema={websiteSchema} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema),
+          }}
+        />
       </head>
       <body className={inter.className}>
         <ThemeProvider>
