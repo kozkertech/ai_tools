@@ -49,33 +49,38 @@ export function ContactForm() {
     setFormState("submitting")
 
     try {
-      // Create FormData object
+      // Create form data for submission
       const formData = new FormData()
-      formData.append("form-name", "contact")
-      formData.append("name", values.name)
-      formData.append("email", values.email)
-      if (values.phone) formData.append("phone", values.phone)
-      formData.append("subject", values.subject)
-      formData.append("message", values.message)
 
-      // Submit to Netlify Forms
-      const response = await fetch("/__forms.html", {
+      // Add form name - this is critical for Netlify to identify the form
+      formData.append("form-name", "contact")
+
+      // Add all form values
+      Object.entries(values).forEach(([key, value]) => {
+        if (value) formData.append(key, value.toString())
+      })
+
+      // Submit the form using the fetch API
+      const response = await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
         body: new URLSearchParams(formData as any).toString(),
       })
 
       if (!response.ok) {
-        throw new Error("Form submission failed")
+        throw new Error(`Form submission failed: ${response.status}`)
       }
 
       // Handle success
       setFormState("success")
+      form.reset()
 
       // Wait a moment to show success message before redirecting
       setTimeout(() => {
         router.push("/thank-you")
-      }, 1000)
+      }, 1500)
     } catch (error) {
       console.error("Form submission error:", error)
       setFormState("error")
@@ -84,17 +89,41 @@ export function ContactForm() {
     }
   }
 
+  // If form was successfully submitted but user is still on page
+  if (formState === "success") {
+    return (
+      <div className="p-6 bg-green-50 dark:bg-green-900/20 rounded-lg text-center">
+        <div className="flex justify-center mb-4">
+          <div className="rounded-full bg-green-100 p-3 dark:bg-green-900">
+            <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
+          </div>
+        </div>
+        <h3 className="text-xl font-semibold mb-2">Message Sent!</h3>
+        <p className="text-gray-600 dark:text-gray-300 mb-4">
+          Thank you for contacting us. We'll get back to you shortly.
+        </p>
+        <Button onClick={() => router.push("/thank-you")}>Continue to Thank You Page</Button>
+      </div>
+    )
+  }
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6"
+      >
+        {/* These hidden fields are essential for Netlify Forms */}
         <input type="hidden" name="form-name" value="contact" />
-
-        {formState === "success" && (
-          <div className="p-4 bg-green-50 text-green-700 rounded-md flex items-center justify-center mb-4">
-            <CheckCircle className="mr-2 h-5 w-5" />
-            <span>Form submitted successfully! Redirecting...</span>
-          </div>
-        )}
+        <div hidden>
+          <label>
+            Don't fill this out if you're human: <input name="bot-field" />
+          </label>
+        </div>
 
         <FormField
           control={form.control}
@@ -120,6 +149,7 @@ export function ContactForm() {
                 <FormControl>
                   <Input
                     placeholder="your.email@example.com"
+                    type="email"
                     {...field}
                     className="dark:bg-gray-800 dark:border-gray-700"
                   />
@@ -200,7 +230,7 @@ export function ContactForm() {
 
         {formState === "error" && (
           <div className="p-3 bg-red-100 text-red-700 rounded-md text-center">
-            There was an error submitting the form. Please try again.
+            There was an error submitting the form. Please try again or contact us directly.
           </div>
         )}
       </form>
