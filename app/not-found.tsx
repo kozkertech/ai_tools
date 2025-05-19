@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Suspense } from "react"
 
-export default function NotFound() {
+function NotFoundContent() {
   return (
     <div className="container flex flex-col items-center justify-center py-20 text-center">
       <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">404 - Not Found</h1>
@@ -12,5 +13,20 @@ export default function NotFound() {
         <Link href="/">Go back home</Link>
       </Button>
     </div>
+  )
+}
+
+export default function NotFound() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container flex flex-col items-center justify-center py-20 text-center">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">404 - Not Found</h1>
+          <p className="mt-4 text-lg text-muted-foreground">Loading...</p>
+        </div>
+      }
+    >
+      <NotFoundContent />
+    </Suspense>
   )
 }

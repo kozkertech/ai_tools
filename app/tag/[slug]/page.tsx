@@ -5,6 +5,12 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export async function generateStaticParams() {
   try {
+    // Check if Ghost API credentials are available
+    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
+      console.warn("Ghost API credentials are missing. Skipping static generation for tags.")
+      return []
+    }
+
     const tags = await getTags()
     return tags.map((tag) => ({
       slug: tag.slug,

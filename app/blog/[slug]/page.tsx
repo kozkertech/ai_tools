@@ -12,6 +12,12 @@ import { generateBreadcrumbSchema } from "@/lib/seo-utils"
 
 export async function generateStaticParams() {
   try {
+    // Check if Ghost API credentials are available
+    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
+      console.warn("Ghost API credentials are missing. Skipping static generation for blog posts.")
+      return []
+    }
+
     const posts = await getPosts()
     return posts.map((post) => ({
       slug: post.slug,

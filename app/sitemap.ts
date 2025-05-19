@@ -14,7 +14,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     // Check if Ghost API credentials are available
     if (process.env.GHOST_URL && process.env.GHOST_CONTENT_API_KEY) {
-      ;[posts, tags] = await Promise.all([getPosts(), getTags()])
+      // Use Promise.allSettled to prevent one failed request from affecting the other
+      const [postsResult, tagsResult] = await Promise.allSettled([getPosts(), getTags()])
+
+      if (postsResult.status === "fulfilled") {
+        posts = postsResult.value
+      }
+
+      if (tagsResult.status === "fulfilled") {
+        tags = tagsResult.value
+      }
+    } else {
+      console.warn("Ghost API credentials are missing. Sitemap will only include static pages.")
     }
   } catch (error) {
     console.error("Error fetching data for sitemap:", error)

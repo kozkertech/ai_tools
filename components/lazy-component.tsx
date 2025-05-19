@@ -1,36 +1,41 @@
 "use client"
 
 import { useEffect, useState, type ReactNode } from "react"
-import { useInView } from "react-intersection-observer"
 
 interface LazyComponentProps {
   children: ReactNode
-  threshold?: number
-  rootMargin?: string
   placeholder?: ReactNode
 }
 
-/**
- * Component that lazily renders its children when they come into view
- */
-export function LazyComponent({
-  children,
-  threshold = 0.1,
-  rootMargin = "100px",
-  placeholder = <div className="w-full h-40 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />,
-}: LazyComponentProps) {
-  const [shouldRender, setShouldRender] = useState(false)
-  const { ref, inView } = useInView({
-    threshold,
-    rootMargin,
-    triggerOnce: true,
-  })
+export function LazyComponent({ children, placeholder }: LazyComponentProps) {
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    if (inView) {
-      setShouldRender(true)
-    }
-  }, [inView])
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: "200px" },
+    )
 
-  return <div ref={ref}>{shouldRender ? children : placeholder}</div>
+    const currentElement = document.getElementById("lazy-component")
+    if (currentElement) {
+      observer.observe(currentElement)
+    }
+
+    return () => {
+      if (currentElement) {
+        observer.unobserve(currentElement)
+      }
+    }
+  }, [])
+
+  return (
+    <div id="lazy-component">
+      {isVisible ? children : placeholder || <div className="h-40 animate-pulse bg-muted rounded-md" />}
+    </div>
+  )
 }
