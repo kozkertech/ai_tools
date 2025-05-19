@@ -61,7 +61,7 @@ export default async function Image() {
           zIndex: 1,
         }}
       >
-        Our Solutions - Web Development & Power BI
+        Mobile-first websites with 24/7 support and WhatsApp automation solutions
       </div>
     </div>,
     // ImageResponse options

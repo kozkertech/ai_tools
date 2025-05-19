@@ -1,17 +1,31 @@
-// This is a placeholder function that can be used to handle form submissions
 exports.handler = async (event, context) => {
-  // Get the form data
-  const { payload } = JSON.parse(event.body)
+  try {
+    // Parse the incoming request body
+    const payload = JSON.parse(event.body).payload
 
-  console.log("Form submission received:", payload)
+    console.log("Form submission received:", payload)
 
-  // You can add custom logic here, such as:
-  // - Sending confirmation emails
-  // - Adding data to a database
-  // - Triggering other workflows
+    // Here you can add additional processing:
+    // - Send email notifications
+    // - Store data in a database
+    // - Trigger other workflows
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: "Form submission processed successfully" }),
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: "Form submission processed successfully",
+        data: payload,
+      }),
+    }
+  } catch (error) {
+    console.error("Error processing form submission:", error)
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Error processing form submission",
+        error: error.message,
+      }),
+    }
   }
 }

@@ -61,7 +61,8 @@ export default async function Image() {
           zIndex: 1,
         }}
       >
-        Web Development & Power BI Solutions
+        Launch a polished, mobile-first website in days—capture every opportunity with 24/7 live-chat and smart email
+        routing, then accelerate sales through automated WhatsApp workflows.
       </div>
     </div>,
     // ImageResponse options
