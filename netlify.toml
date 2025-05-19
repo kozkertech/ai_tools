@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm install && npm run build"
   publish = ".next"
 
 [build.environment]
@@ -10,7 +10,7 @@
   package = "@netlify/plugin-nextjs"
 
 [functions]
-  included_files = ["node_modules/critters/**"]
+  included_files = ["node_modules/critters/**", "node_modules/zod/**"]
 
 [[headers]]
   for = "/*"

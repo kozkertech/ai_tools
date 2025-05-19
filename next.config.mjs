@@ -20,7 +20,7 @@ const nextConfig = {
   },
   poweredByHeader: false,
   reactStrictMode: true,
-  swcMinify: true,
+  // Removed swcMinify as it's deprecated in Next.js 15.2.4
   compress: true,
   async headers() {
     return [
@@ -64,11 +64,6 @@ const nextConfig = {
         ],
       },
     ];
-  },
-  // Add webpack configuration to resolve peer dependency issues
-  webpack: (config, { isServer }) => {
-    // Add any webpack customizations here
-    return config;
   },
 };
 
