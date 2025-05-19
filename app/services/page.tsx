@@ -30,11 +30,11 @@ export default function ServicesPage() {
       link: "/services/ai-powered-web-design",
     },
     {
-      title: "24×7 Support Suite",
+      title: "24×7 AI-Powered Customer Support",
       description:
         "Capture every opportunity with round-the-clock live chat and smart email routing. Never miss a lead with our professional customer service team available 24/7.",
-      image: "/customer-support.png",
-      link: "/services/support-suite",
+      image: "/ai-customer-support.png",
+      link: "/services/24x7-ai-powered-customer-support",
     },
     {
       title: "WhatsApp Automation",
@@ -73,7 +73,7 @@ export default function ServicesPage() {
           "@type": "Organization",
           name: "Kozker Tech",
         },
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}${service.link}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}${service.link}`,
       },
     })),
   }

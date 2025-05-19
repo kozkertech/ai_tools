@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "24/7 Live Chat & Email Support Services in Kochi | KozkerTech",
@@ -18,12 +19,7 @@ export const metadata: Metadata = {
 }
 
 const SupportSuitePage = () => {
-  return (
-    <div>
-      <h1>24/7 Support Suite</h1>
-      <p>Never miss a lead with our round-the-clock support services.</p>
-    </div>
-  )
+  redirect("/services/24x7-ai-powered-customer-support")
 }
 
 export default SupportSuitePage

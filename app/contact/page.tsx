@@ -24,7 +24,7 @@ export default function ContactPage() {
               <Phone className="h-6 w-6 text-primary" />
             </div>
             <h3 className="text-lg font-medium mb-2">Phone</h3>
-            <p className="text-muted-foreground">+91 9072 123 456</p>
+            <p className="text-muted-foreground">+91-73062-61147</p>
             <p className="text-muted-foreground">Mon-Fri, 9am-6pm IST</p>
           </div>
 
@@ -41,8 +41,8 @@ export default function ContactPage() {
             <div className="rounded-full bg-primary/10 p-3 mb-4">
               <MapPin className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-lg font-medium mb-2">Office</h3>
-            <p className="text-muted-foreground">Kochi, Kerala</p>
+            <h3 className="text-lg font-medium mb-2">HQ</h3>
+            <p className="text-muted-foreground">1st Floor, Adithya Shopping Complex, Thoppumpady, Kochi, Kerala, India, P.O 682005</p>
             <p className="text-muted-foreground">India</p>
           </div>
         </div>
