@@ -21,7 +21,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   compress: true,
-  headers: async () => {
+  async headers() {
     return [
       {
         source: '/(.*)',
