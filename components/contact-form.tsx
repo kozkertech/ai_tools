@@ -1,6 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -8,16 +11,28 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
-import { useForm } from "react-hook-form"
 
-// Simple email validation regex
-const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
+const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  phone: z.string().optional(),
+  subject: z.string().min(1, {
+    message: "Please select a subject.",
+  }),
+  message: z.string().min(10, {
+    message: "Message must be at least 10 characters.",
+  }),
+})
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Use react-hook-form without zod dependency
-  const form = useForm({
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -25,36 +40,9 @@ export function ContactForm() {
       subject: "",
       message: "",
     },
-    // Custom validation
-    validate: {
-      name: (value) => {
-        if (!value || value.length < 2) {
-          return "Name must be at least 2 characters."
-        }
-        return true
-      },
-      email: (value) => {
-        if (!value || !EMAIL_REGEX.test(value)) {
-          return "Please enter a valid email address."
-        }
-        return true
-      },
-      subject: (value) => {
-        if (!value) {
-          return "Please select a subject."
-        }
-        return true
-      },
-      message: (value) => {
-        if (!value || value.length < 10) {
-          return "Message must be at least 10 characters."
-        }
-        return true
-      },
-    },
   })
 
-  async function onSubmit(values) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
 
     // Simulate form submission

@@ -9,14 +9,15 @@ export function useBlogFilter(initialPosts: any[]) {
   const searchParams = useSearchParams()
 
   // Get initial values from URL
-  const initialQuery = searchParams?.get("q") || ""
-  const initialCategories = searchParams?.get("categories")?.split(",").filter(Boolean) || []
-  const initialSort = searchParams?.get("sort") || "newest"
+  const initialQuery = searchParams.get("q") || ""
+  const initialCategories = searchParams.get("categories")?.split(",").filter(Boolean) || []
+  const initialSort = searchParams.get("sort") || "newest"
 
   // State
   const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [selectedCategories, setSelectedCategories] = useState<string[]>(initialCategories)
   const [sortOption, setSortOption] = useState(initialSort)
+  const [posts, setPosts] = useState(initialPosts)
 
   // Filter and sort posts
   const filteredPosts = useMemo(() => {
@@ -59,8 +60,6 @@ export function useBlogFilter(initialPosts: any[]) {
 
   // Update URL when filters change
   useEffect(() => {
-    if (!searchParams) return
-
     const params = new URLSearchParams(searchParams.toString())
 
     if (searchQuery) {

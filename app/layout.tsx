@@ -2,21 +2,12 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import HeaderWrapper from "@/components/header-wrapper"
+import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import { CurrencyProvider } from "@/contexts/currency-context"
-import { Analytics } from "@/components/analytics"
-import { PerformanceMonitor } from "@/components/performance-monitor"
-import { Suspense } from "react"
 
-// Optimize font loading
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-  variable: "--font-inter",
-})
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"),
@@ -83,57 +74,23 @@ export const metadata: Metadata = {
     generator: 'v0.dev'
 }
 
-// Website schema for structured data
-const websiteSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "KozkerTech",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/search?q={search_term_string}`,
-    "query-input": "required name=search_term_string",
-  },
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="theme-color" content="#FF6E30" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteSchema),
-          }}
-        />
-        {/* Preload critical fonts */}
-        <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-      </head>
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
           <CurrencyProvider>
-            <Suspense fallback={null}>
-              <div className="flex min-h-screen flex-col">
-                <HeaderWrapper />
-                <main className="flex-1">{children}</main>
-                <Footer />
-              </div>
-            </Suspense>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
           </CurrencyProvider>
         </ThemeProvider>
-        <Analytics />
-        <PerformanceMonitor />
       </body>
     </html>
   )

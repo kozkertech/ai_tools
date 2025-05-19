@@ -1,7 +1,7 @@
-import Link from "next/link"
 import Image from "next/image"
+import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getPost, fallbackPosts } from "@/lib/ghost"
+import { getPost, getPosts } from "@/lib/ghost"
 import { formatDate } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, UserIcon } from "lucide-react"
@@ -9,10 +9,15 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import type { Metadata } from "next"
 
 export async function generateStaticParams() {
-  // During build time, just use fallback data to avoid API calls
-  return fallbackPosts.map((post) => ({
-    slug: post.slug,
-  }))
+  try {
+    const posts = await getPosts()
+    return posts.map((post) => ({
+      slug: post.slug,
+    }))
+  } catch (error) {
+    console.error("Error generating static params for posts:", error)
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -26,18 +31,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
     const postUrl = `${baseUrl}/blog/${post.slug}`
 
     return {
       title: post.title,
-      description: post.excerpt || post.meta_description || `Read our article about ${post.title}`,
+      description: post.excerpt,
       authors: [{ name: post.primary_author.name }],
       openGraph: {
         title: post.title,
-        description: post.excerpt || post.meta_description || `Read our article about ${post.title}`,
+        description: post.excerpt,
         url: postUrl,
-        siteName: "KozkerTech Blog",
+        siteName: "Your Blog Name",
         images: post.feature_image ? [{ url: post.feature_image }] : [],
         locale: "en_US",
         type: "article",
@@ -49,7 +54,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       twitter: {
         card: "summary_large_image",
         title: post.title,
-        description: post.excerpt || post.meta_description || `Read our article about ${post.title}`,
+        description: post.excerpt,
         images: post.feature_image ? [post.feature_image] : [],
       },
       alternates: {
@@ -78,7 +83,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       headline: post.title,
-      description: post.excerpt || post.meta_description || `Read our article about ${post.title}`,
+      description: post.excerpt,
       image: post.feature_image ? [post.feature_image] : [],
       datePublished: post.published_at,
       dateModified: post.updated_at || post.published_at,
@@ -88,15 +93,15 @@ export default async function PostPage({ params }: { params: { slug: string } })
       },
       publisher: {
         "@type": "Organization",
-        name: "KozkerTech",
+        name: "Your Blog Name",
         logo: {
           "@type": "ImageObject",
-          url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/logo.png`,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}/logo.png`,
         },
       },
       mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/blog/${post.slug}`,
+        "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}/blog/${post.slug}`,
       },
     }
 
@@ -131,16 +136,12 @@ export default async function PostPage({ params }: { params: { slug: string } })
                 alt={`Featured image for ${post.title}`}
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 800px"
                 priority
               />
             </div>
           )}
 
-          <div
-            className="ghost-content prose prose-lg dark:prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.html }}
-          />
+          <div className="ghost-content" dangerouslySetInnerHTML={{ __html: post.html }} />
         </div>
       </article>
     )

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname, useSearchParams } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
 import { Menu, X, ChevronDown } from "lucide-react"
@@ -15,7 +15,6 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const { resolvedTheme } = useTheme()
   const isDarkMode = resolvedTheme === "dark"
 

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next"
-import { fallbackPosts, fallbackTags } from "@/lib/ghost"
+import { getPosts, getTags } from "@/lib/ghost"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Make sure we're using the correct base URL
@@ -7,9 +7,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   console.log("Generating sitemap with base URL:", baseUrl)
 
-  // Use fallback data for build time
-  const posts = fallbackPosts
-  const tags = fallbackTags
+  // Get all posts and tags
+  const posts = await getPosts()
+  const tags = await getTags()
 
   // Create sitemap entries for posts
   const postEntries = posts.map((post) => ({
@@ -49,12 +49,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/solutions`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/pricing`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.9,

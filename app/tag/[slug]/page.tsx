@@ -1,13 +1,18 @@
-import { getTags, getPosts, fallbackTags } from "@/lib/ghost"
+import { getTags, getPosts } from "@/lib/ghost"
 import { PostCard } from "@/components/post-card"
 import { notFound } from "next/navigation"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export async function generateStaticParams() {
-  // During build time, just use fallback data to avoid API calls
-  return fallbackTags.map((tag) => ({
-    slug: tag.slug,
-  }))
+  try {
+    const tags = await getTags()
+    return tags.map((tag) => ({
+      slug: tag.slug,
+    }))
+  } catch (error) {
+    console.error("Error generating static params for tags:", error)
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
