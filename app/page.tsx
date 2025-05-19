@@ -42,6 +42,50 @@ export default async function Home() {
   const websiteSchema = generateWebsiteSchema(baseUrl)
   const organizationSchema = generateOrganizationSchema(baseUrl)
 
+  // Add additional schema for services
+  const servicesSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: [
+      {
+        "@type": "Service",
+        position: 1,
+        name: "24/7 Live Chat Support",
+        description:
+          "Round-the-clock customer support through live chat to ensure your users always get the help they need.",
+        provider: {
+          "@type": "Organization",
+          name: "KozkerTech",
+        },
+        url: `${baseUrl}/services/support-suite`,
+      },
+      {
+        "@type": "Service",
+        position: 2,
+        name: "WhatsApp Automation",
+        description:
+          "Streamline customer communication with automated WhatsApp messaging for notifications, support, and engagement.",
+        provider: {
+          "@type": "Organization",
+          name: "KozkerTech",
+        },
+        url: `${baseUrl}/services/whatsapp-automation`,
+      },
+      {
+        "@type": "Service",
+        position: 3,
+        name: "Mobile-First Web Design",
+        description:
+          "Responsive, high-conversion websites designed for mobile users first, ensuring great experience across all devices.",
+        provider: {
+          "@type": "Organization",
+          name: "KozkerTech",
+        },
+        url: `${baseUrl}/services/ai-powered-web-design`,
+      },
+    ],
+  }
+
   return (
     <>
       {/* LocalBusiness Schema */}
@@ -52,6 +96,9 @@ export default async function Home() {
 
       {/* Organization Schema */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+
+      {/* Services Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }} />
 
       {/* Hero Section */}
       <section className="py-20 md:py-28 hero-pattern">
@@ -65,8 +112,8 @@ export default async function Home() {
                 High-Conversion Websites + 24/7 Support
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300">
-                Get online fast. Sell more. Delight every customer with AI-Accelerated Builds, Integrated Live Chat &
-                Email Support, and Automated WhatsApp Workflows.
+                Launch a polished, mobile-first website in days—capture every opportunity with 24/7 live-chat and smart
+                email routing, then accelerate sales through automated WhatsApp workflows.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="text-md">
@@ -92,7 +139,7 @@ export default async function Home() {
               <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-primary/20 rounded-full blur-3xl"></div>
               <Image
                 src="/chatbot-bro.svg"
-                alt="Chat bot illustration representing digital solutions"
+                alt="Chat bot illustration representing 24/7 support and WhatsApp automation solutions"
                 width={600}
                 height={600}
                 className="rounded-lg shadow-lg"

@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { toast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
 
 const formSchema = z.object({
@@ -42,26 +41,35 @@ export function ContactForm() {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true)
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-
-    console.log(values)
-    setIsSubmitting(false)
-
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for contacting us. We'll get back to you shortly.",
-    })
-
-    form.reset()
-  }
+  // No longer needed as Netlify handles the form submission
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   setIsSubmitting(true)
+  //   await new Promise((resolve) => setTimeout(resolve, 1500))
+  //   console.log(values)
+  //   setIsSubmitting(false)
+  //   toast({
+  //     title: "Message Sent!",
+  //     description: "Thank you for contacting us. We'll get back to you shortly.",
+  //   })
+  //   form.reset()
+  // }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        action="/thank-you"
+        netlify-honeypot="bot-field"
+        className="space-y-6"
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <div className="hidden">
+          <label>
+            Don't fill this out if you're human: <input name="bot-field" />
+          </label>
+        </div>
         <FormField
           control={form.control}
           name="name"

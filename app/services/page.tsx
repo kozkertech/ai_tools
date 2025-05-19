@@ -7,44 +7,53 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import SchemaMarkup from "@/components/schema-markup"
 
 export const metadata: Metadata = {
-  title: "Services | Kozker Tech",
-  description: "Explore our comprehensive range of digital services designed to help your business grow and succeed.",
+  title: "24/7 Support & Web Development Services | Kozker Tech",
+  description:
+    "Explore our comprehensive range of digital services including 24/7 live chat support, WhatsApp automation, and mobile-first web design to help your business grow and succeed.",
+  keywords: ["24/7 support", "live chat", "whatsapp automation", "web development", "kochi", "mobile-first websites"],
+  openGraph: {
+    title: "24/7 Support & Web Development Services | Kozker Tech",
+    description:
+      "Explore our comprehensive range of digital services including 24/7 live chat support, WhatsApp automation, and mobile-first web design to help your business grow and succeed.",
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/services`,
+    type: "website",
+  },
 }
 
 export default function ServicesPage() {
   const services = [
     {
-      title: "AI-Powered Web Design",
+      title: "Mobile-First Web Design",
       description:
-        "Leverage artificial intelligence to create stunning, functional websites that adapt to your users' needs and preferences.",
+        "Launch polished, mobile-first websites in days, not weeks. Our AI-powered design process ensures your business looks professional on any device while saving you valuable time.",
       image: "/web-development-illustration.png",
       link: "/services/ai-powered-web-design",
     },
     {
       title: "24×7 Support Suite",
       description:
-        "Round-the-clock customer support through live chat and email to ensure your users always get the help they need.",
+        "Capture every opportunity with round-the-clock live chat and smart email routing. Never miss a lead with our professional customer service team available 24/7.",
       image: "/customer-support.png",
       link: "/services/support-suite",
     },
     {
       title: "WhatsApp Automation",
       description:
-        "Streamline customer communication with automated WhatsApp messaging for notifications, support, and engagement.",
+        "Accelerate sales through automated WhatsApp workflows. Streamline customer communication with personalized messaging for notifications, support, and engagement.",
       image: "/whatsapp-business-automation.png",
       link: "/services/whatsapp-automation",
     },
     {
       title: "BI & Analytics Solutions",
       description:
-        "Transform your data into actionable insights with comprehensive business intelligence and analytics solutions.",
+        "Make data-driven decisions with our Power BI solutions that transform your business data into actionable insights for improved performance and growth.",
       image: "/data-analytics-dashboard.png",
       link: "/services/bi-analytics",
     },
     {
       title: "Cloud & Data Integration",
       description:
-        "Seamlessly integrate your data across platforms and migrate to cloud solutions for improved efficiency and scalability.",
+        "Seamlessly integrate your data across platforms and migrate to cloud solutions for improved efficiency, scalability, and business continuity.",
       image: "/cloud-data-integration.png",
       link: "/services/cloud-data-integration",
     },

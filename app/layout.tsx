@@ -12,12 +12,21 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"),
   title: {
-    default: "KozkerTech - Web Development & Power BI Solutions",
+    default: "KozkerTech - Web Development & 24/7 Support Solutions in Kochi",
     template: "%s | KozkerTech",
   },
   description:
-    "High-Conversion Websites, 24/7 Support, WhatsApp Automation, and Power BI Solutions for businesses in Kochi and beyond.",
-  keywords: ["web development", "power bi", "kochi", "website design", "whatsapp automation", "customer support"],
+    "Launch a polished, mobile-first website in days—capture every opportunity with 24/7 live-chat and smart email routing, then accelerate sales through automated WhatsApp workflows.",
+  keywords: [
+    "web development",
+    "power bi",
+    "kochi",
+    "website design",
+    "whatsapp automation",
+    "24/7 support",
+    "live chat",
+    "mobile-first websites",
+  ],
   authors: [{ name: "KozkerTech" }],
   creator: "KozkerTech",
   publisher: "KozkerTech",
@@ -31,23 +40,23 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
     siteName: "KozkerTech",
-    title: "KozkerTech - Web Development & Power BI Solutions",
+    title: "KozkerTech - Web Development & 24/7 Support Solutions in Kochi",
     description:
-      "High-Conversion Websites, 24/7 Support, WhatsApp Automation, and Power BI Solutions for businesses in Kochi and beyond.",
+      "Launch a polished, mobile-first website in days—capture every opportunity with 24/7 live-chat and smart email routing, then accelerate sales through automated WhatsApp workflows.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "KozkerTech - Web Development & Power BI Solutions",
+        alt: "KozkerTech - Web Development & 24/7 Support Solutions",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "KozkerTech - Web Development & Power BI Solutions",
+    title: "KozkerTech - Web Development & 24/7 Support Solutions in Kochi",
     description:
-      "High-Conversion Websites, 24/7 Support, WhatsApp Automation, and Power BI Solutions for businesses in Kochi and beyond.",
+      "Launch a polished, mobile-first website in days—capture every opportunity with 24/7 live-chat and smart email routing, then accelerate sales through automated WhatsApp workflows.",
     images: ["/og-image.jpg"],
     creator: "@kozkertech",
   },

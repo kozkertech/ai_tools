@@ -34,10 +34,12 @@ export function generateLocalBusinessSchema(baseUrl = "") {
       },
     ],
     sameAs: [
-      "https://facebook.com/kozkertech",
-      "https://twitter.com/kozkertech",
-      "https://instagram.com/kozkertech",
-      "https://linkedin.com/company/kozkertech",
+      "https://www.facebook.com/KozkerTech/",
+      "https://x.com/KozkerTech",
+      "https://www.instagram.com/kozkertech/",
+      "https://www.linkedin.com/company/kozker-tech",
+      "https://github.com/Kozker-lab",
+      "https://in.pinterest.com/kozkertech/",
     ],
     priceRange: "₹₹₹",
     serviceArea: {
@@ -109,10 +111,12 @@ export function generateOrganizationSchema(baseUrl = "") {
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     sameAs: [
-      "https://facebook.com/kozkertech",
-      "https://twitter.com/kozkertech",
-      "https://instagram.com/kozkertech",
-      "https://linkedin.com/company/kozkertech",
+      "https://www.facebook.com/KozkerTech/",
+      "https://x.com/KozkerTech",
+      "https://www.instagram.com/kozkertech/",
+      "https://www.linkedin.com/company/kozker-tech",
+      "https://github.com/Kozker-lab",
+      "https://in.pinterest.com/kozkertech/",
     ],
     contactPoint: {
       "@type": "ContactPoint",
