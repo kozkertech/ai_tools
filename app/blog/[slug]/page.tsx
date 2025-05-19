@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getPost, getPosts } from "@/lib/ghost"
@@ -7,6 +6,9 @@ import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, UserIcon } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import type { Metadata } from "next"
+import { ImageWithFallback } from "@/components/image-with-fallback"
+import { SEOHead } from "@/components/seo-head"
+import { generateBreadcrumbSchema } from "@/lib/seo-utils"
 
 export async function generateStaticParams() {
   try {
@@ -31,18 +33,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"
     const postUrl = `${baseUrl}/blog/${post.slug}`
 
     return {
       title: post.title,
-      description: post.excerpt,
+      description: post.excerpt || post.meta_description || `Read our article about ${post.title}`,
       authors: [{ name: post.primary_author.name }],
       openGraph: {
         title: post.title,
-        description: post.excerpt,
+        description: post.excerpt || post.meta_description || `Read our article about ${post.title}`,
         url: postUrl,
-        siteName: "Your Blog Name",
+        siteName: "KozkerTech Blog",
         images: post.feature_image ? [{ url: post.feature_image }] : [],
         locale: "en_US",
         type: "article",
@@ -54,7 +56,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       twitter: {
         card: "summary_large_image",
         title: post.title,
-        description: post.excerpt,
+        description: post.excerpt || post.meta_description || `Read our article about ${post.title}`,
         images: post.feature_image ? [post.feature_image] : [],
       },
       alternates: {
@@ -83,7 +85,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       headline: post.title,
-      description: post.excerpt,
+      description: post.excerpt || post.meta_description || `Read our article about ${post.title}`,
       image: post.feature_image ? [post.feature_image] : [],
       datePublished: post.published_at,
       dateModified: post.updated_at || post.published_at,
@@ -93,21 +95,28 @@ export default async function PostPage({ params }: { params: { slug: string } })
       },
       publisher: {
         "@type": "Organization",
-        name: "Your Blog Name",
+        name: "KozkerTech",
         logo: {
           "@type": "ImageObject",
-          url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}/logo.png`,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/logo.png`,
         },
       },
       mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}/blog/${post.slug}`,
+        "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/blog/${post.slug}`,
       },
     }
 
+    // Generate breadcrumb schema
+    const breadcrumbSchema = generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Blog", url: "/blog" },
+      { name: post.title, url: `/blog/${post.slug}` },
+    ])
+
     return (
       <article className="container py-8 md:py-12">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <SEOHead metadata={{}} schema={jsonLd} />
         <Breadcrumbs className="mb-8" />
         <div className="mx-auto max-w-3xl space-y-8">
           <div className="space-y-6">
@@ -131,17 +140,21 @@ export default async function PostPage({ params }: { params: { slug: string } })
 
           {post.feature_image && (
             <div className="relative aspect-video overflow-hidden rounded-lg">
-              <Image
+              <ImageWithFallback
                 src={post.feature_image || "/placeholder.svg"}
                 alt={`Featured image for ${post.title}`}
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 800px"
                 priority
               />
             </div>
           )}
 
-          <div className="ghost-content" dangerouslySetInnerHTML={{ __html: post.html }} />
+          <div
+            className="ghost-content prose prose-lg dark:prose-invert max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.html }}
+          />
         </div>
       </article>
     )

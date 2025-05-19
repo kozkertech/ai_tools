@@ -28,6 +28,7 @@ const config = {
         primary: {
           DEFAULT: "#FF6E30",
           foreground: "#FFFFFF",
+          dark: "#E05A20", // Darker shade for hover states
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -52,6 +53,13 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // Chart colors
+        chart: {
+          1: "var(--chart-1)",
+          2: "var(--chart-2)",
+          3: "var(--chart-3)",
+          4: "var(--chart-4)",
         },
       },
       borderRadius: {

@@ -7,6 +7,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { useTheme } from "next-themes"
 
 interface CategoryFilterProps {
   categories: { id: string; name: string; slug: string; count?: { posts: number } }[]
@@ -16,16 +17,18 @@ interface CategoryFilterProps {
 
 export function CategoryFilter({ categories, selectedCategories, onSelectCategory }: CategoryFilterProps) {
   const [open, setOpen] = useState(false)
+  const { resolvedTheme } = useTheme()
+  const isDarkMode = resolvedTheme === "dark"
 
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium">Categories</h3>
+        <h3 className="text-sm font-medium dark:text-white">Categories</h3>
         {selectedCategories.length > 0 && (
           <Button
             variant="ghost"
             size="sm"
-            className="h-auto p-0 text-xs text-muted-foreground"
+            className="h-auto p-0 text-xs text-muted-foreground dark:text-gray-400 dark:hover:text-white"
             onClick={() => selectedCategories.forEach((cat) => onSelectCategory(cat))}
           >
             Clear all
@@ -34,14 +37,19 @@ export function CategoryFilter({ categories, selectedCategories, onSelectCategor
       </div>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" role="combobox" aria-expanded={open} className="justify-between w-full">
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={cn("justify-between w-full", isDarkMode ? "border-gray-800 bg-gray-900" : "")}
+          >
             {selectedCategories.length > 0 ? `${selectedCategories.length} selected` : "Select categories"}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0" align="start">
-          <Command>
-            <CommandInput placeholder="Search categories..." />
+        <PopoverContent className={cn("w-full p-0", isDarkMode ? "bg-gray-900 border-gray-800" : "")} align="start">
+          <Command className={isDarkMode ? "bg-gray-900" : ""}>
+            <CommandInput placeholder="Search categories..." className={isDarkMode ? "border-gray-800" : ""} />
             <CommandList>
               <CommandEmpty>No categories found.</CommandEmpty>
               <CommandGroup>
@@ -53,6 +61,7 @@ export function CategoryFilter({ categories, selectedCategories, onSelectCategor
                       onSelectCategory(category.slug)
                       setOpen(false)
                     }}
+                    className={isDarkMode ? "hover:bg-gray-800" : ""}
                   >
                     <Check
                       className={cn(
@@ -60,7 +69,7 @@ export function CategoryFilter({ categories, selectedCategories, onSelectCategor
                         selectedCategories.includes(category.slug) ? "opacity-100" : "opacity-0",
                       )}
                     />
-                    <span>{category.name}</span>
+                    <span className={isDarkMode ? "text-white" : ""}>{category.name}</span>
                     <Badge variant="secondary" className="ml-auto">
                       {category.count?.posts || 0}
                     </Badge>
@@ -76,7 +85,11 @@ export function CategoryFilter({ categories, selectedCategories, onSelectCategor
           {selectedCategories.map((slug) => {
             const category = categories.find((c) => c.slug === slug)
             return (
-              <Badge key={slug} variant="secondary" className="flex items-center gap-1">
+              <Badge
+                key={slug}
+                variant="secondary"
+                className="flex items-center gap-1 dark:bg-gray-800 dark:text-white"
+              >
                 {category?.name}
                 <button
                   className="ml-1 rounded-full outline-none focus:ring-2 focus:ring-primary"

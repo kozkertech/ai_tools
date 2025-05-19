@@ -5,11 +5,21 @@ import "./globals.css"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
+import { CurrencyProvider } from "@/contexts/currency-context"
+import { Analytics } from "@/components/analytics"
+import { SEOHead } from "@/components/seo-head"
+import { Suspense } from "react"
 
-const inter = Inter({ subsets: ["latin"] })
+// Optimize font loading
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+  variable: "--font-inter",
+})
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"),
   title: {
     default: "KozkerTech - Web Development & Power BI Solutions",
     template: "%s | KozkerTech",
@@ -28,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
     siteName: "KozkerTech",
     title: "KozkerTech - Web Development & Power BI Solutions",
     description:
@@ -67,10 +77,23 @@ export const metadata: Metadata = {
   alternates: {
     canonical: process.env.NEXT_PUBLIC_SITE_URL,
     languages: {
-      en: process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com",
+      en: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
     },
   },
     generator: 'v0.dev'
+}
+
+// Website schema for structured data
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "KozkerTech",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/search?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
 }
 
 export default function RootLayout({
@@ -79,15 +102,30 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="theme-color" content="#FF6E30" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <SEOHead metadata={metadata} schema={websiteSchema} />
+      </head>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+        <ThemeProvider>
+          <CurrencyProvider>
+            <Suspense fallback={null}>
+              <div className="flex min-h-screen flex-col">
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+            </Suspense>
+          </CurrencyProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )

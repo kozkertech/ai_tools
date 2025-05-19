@@ -2,11 +2,23 @@ import type { MetadataRoute } from "next"
 import { getPosts, getTags } from "@/lib/ghost"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
+  // Make sure we're using the correct base URL
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"
+
+  console.log("Generating sitemap with base URL:", baseUrl)
 
   // Get all posts and tags
-  const posts = await getPosts()
-  const tags = await getTags()
+  let posts = []
+  let tags = []
+
+  try {
+    // Check if Ghost API credentials are available
+    if (process.env.GHOST_URL && process.env.GHOST_CONTENT_API_KEY) {
+      ;[posts, tags] = await Promise.all([getPosts(), getTags()])
+    }
+  } catch (error) {
+    console.error("Error fetching data for sitemap:", error)
+  }
 
   // Create sitemap entries for posts
   const postEntries = posts.map((post) => ({
@@ -46,6 +58,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/solutions`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/pricing`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.9,

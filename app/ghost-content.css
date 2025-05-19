@@ -448,11 +448,13 @@
 
 .dark .ghost-content blockquote {
   color: #9ca3af;
+  border-left-color: #ff8e50;
 }
 
 .dark .ghost-content pre,
 .dark .ghost-content code {
   background-color: #1f2937;
+  color: #e5e7eb;
 }
 
 .dark .ghost-content th {
@@ -469,6 +471,7 @@
 
 .dark .ghost-content .kg-bookmark-container {
   border-color: #374151;
+  background-color: #111827;
 }
 
 .dark .ghost-content .kg-bookmark-title {
@@ -489,6 +492,41 @@
   border-color: #374151;
 }
 
+.dark .ghost-content .kg-callout-card.kg-callout-card-blue {
+  background-color: #172554;
+  color: #bfdbfe;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-green {
+  background-color: #14532d;
+  color: #bbf7d0;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-yellow {
+  background-color: #713f12;
+  color: #fef08a;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-red {
+  background-color: #7f1d1d;
+  color: #fecaca;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-pink {
+  background-color: #831843;
+  color: #fbcfe8;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-purple {
+  background-color: #4c1d95;
+  color: #ddd6fe;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-accent {
+  background-color: #7c2d12;
+  color: #ffedd5;
+}
+
 .dark .ghost-content .kg-toggle-card {
   border-color: #374151;
 }
@@ -505,6 +543,19 @@
   background-color: #1f2937;
 }
 
+.dark .ghost-content .kg-file-card-caption,
+.dark .ghost-content .kg-file-card-filesize {
+  color: #9ca3af;
+}
+
 .dark .ghost-content .kg-product-card {
   border-color: #374151;
+}
+
+.dark .ghost-content .kg-product-card-button {
+  background-color: #ff8e50;
+}
+
+.dark .ghost-content .kg-product-card-button:hover {
+  background-color: #ffa570;
 }

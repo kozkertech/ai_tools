@@ -1,9 +1,9 @@
 import Link from "next/link"
-import Image from "next/image"
 import { formatDate, extractExcerpt } from "@/lib/utils"
 import { Card, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, UserIcon } from "lucide-react"
+import { ImageWithFallback } from "@/components/image-with-fallback"
 
 interface PostCardProps {
   post: {
@@ -28,17 +28,16 @@ export function PostCard({ post }: PostCardProps) {
   const excerptText = post.excerpt || extractExcerpt(post.html)
 
   return (
-    <Card className="overflow-hidden flex flex-col h-full">
+    <Card className="overflow-hidden flex flex-col h-full dark:bg-gray-900 dark:border-gray-800">
       {post.feature_image && (
         <div className="aspect-video relative overflow-hidden">
           <Link href={`/blog/${post.slug}`}>
-            <Image
+            <ImageWithFallback
               src={post.feature_image || "/placeholder.svg"}
               alt={`Featured image for article: ${post.title}`}
               fill
               className="object-cover transition-transform hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              loading="lazy"
             />
           </Link>
         </div>
@@ -47,17 +46,19 @@ export function PostCard({ post }: PostCardProps) {
         <div className="space-y-2">
           {post.primary_tag && (
             <Link href={`/tag/${post.primary_tag.slug}`}>
-              <Badge variant="secondary">{post.primary_tag.name}</Badge>
+              <Badge variant="secondary" className="dark:bg-gray-800 dark:text-white">
+                {post.primary_tag.name}
+              </Badge>
             </Link>
           )}
           <Link href={`/blog/${post.slug}`} className="block">
-            <h3 className="text-xl font-bold leading-tight hover:underline">{post.title}</h3>
+            <h3 className="text-xl font-bold leading-tight hover:underline dark:text-white">{post.title}</h3>
           </Link>
-          <div className="text-sm text-muted-foreground line-clamp-3">{excerptText}</div>
+          <div className="text-sm text-muted-foreground line-clamp-3 dark:text-gray-400">{excerptText}</div>
         </div>
       </CardHeader>
-      <CardFooter className="border-t pt-4">
-        <div className="flex items-center justify-between w-full text-sm text-muted-foreground">
+      <CardFooter className="border-t pt-4 dark:border-gray-800">
+        <div className="flex items-center justify-between w-full text-sm text-muted-foreground dark:text-gray-400">
           <div className="flex items-center">
             <UserIcon className="mr-1 h-4 w-4" />
             <span>{post.primary_author.name}</span>

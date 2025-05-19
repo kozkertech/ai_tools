@@ -53,13 +53,29 @@ export async function getFeaturedPosts() {
       return []
     }
 
+    // First try to get posts with the featured filter
+    try {
+      const featuredPosts = await api.posts.browse({
+        limit: 3,
+        include: ["tags", "authors"],
+        filter: "featured:true",
+      })
+
+      if (featuredPosts.length > 0) {
+        return featuredPosts
+      }
+    } catch (featuredError) {
+      console.error("Error fetching featured posts, falling back to latest posts:", featuredError)
+    }
+
+    // If no featured posts or if the featured filter fails, fall back to latest posts
     return await api.posts.browse({
       limit: 3,
       include: ["tags", "authors"],
-      filter: "featured:true",
+      order: "published_at DESC",
     })
   } catch (err) {
-    console.error("Error fetching featured posts from Ghost:", err)
+    console.error("Error fetching posts from Ghost:", err)
     return []
   }
 }
