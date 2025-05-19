@@ -1,30 +1,35 @@
 import Link from "next/link"
+import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getPost, getPosts } from "@/lib/ghost"
+import { getPost, getPosts, fallbackPosts } from "@/lib/ghost"
 import { formatDate } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, UserIcon } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import type { Metadata } from "next"
-import { ImageWithFallback } from "@/components/image-with-fallback"
-import { SEOHead } from "@/components/seo-head"
-import { generateBreadcrumbSchema } from "@/lib/seo-utils"
 
 export async function generateStaticParams() {
   try {
-    // Check if Ghost API credentials are available
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.warn("Ghost API credentials are missing. Skipping static generation for blog posts.")
-      return []
+    // Use a try-catch block to handle any errors
+    const posts = await getPosts()
+
+    // If we get posts, use them to generate static params
+    if (posts && posts.length > 0) {
+      return posts.map((post) => ({
+        slug: post.slug,
+      }))
     }
 
-    const posts = await getPosts()
-    return posts.map((post) => ({
+    // If no posts are returned, use fallback data
+    return fallbackPosts.map((post) => ({
       slug: post.slug,
     }))
   } catch (error) {
     console.error("Error generating static params for posts:", error)
-    return []
+    // Return fallback data in case of error
+    return fallbackPosts.map((post) => ({
+      slug: post.slug,
+    }))
   }
 }
 
@@ -113,16 +118,9 @@ export default async function PostPage({ params }: { params: { slug: string } })
       },
     }
 
-    // Generate breadcrumb schema
-    const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: "Home", url: "/" },
-      { name: "Blog", url: "/blog" },
-      { name: post.title, url: `/blog/${post.slug}` },
-    ])
-
     return (
       <article className="container py-8 md:py-12">
-        <SEOHead metadata={{}} schema={jsonLd} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <Breadcrumbs className="mb-8" />
         <div className="mx-auto max-w-3xl space-y-8">
           <div className="space-y-6">
@@ -146,7 +144,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
 
           {post.feature_image && (
             <div className="relative aspect-video overflow-hidden rounded-lg">
-              <ImageWithFallback
+              <Image
                 src={post.feature_image || "/placeholder.svg"}
                 alt={`Featured image for ${post.title}`}
                 fill
