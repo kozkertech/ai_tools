@@ -35,6 +35,12 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  themeColor: "#FF6E30", // Added theme color
+  appleWebApp: {
+    title: "KozkerTech",
+    statusBarStyle: "black-translucent",
+    capable: true,
+  },
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -90,6 +96,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#FF6E30" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider>
           <CurrencyProvider>
