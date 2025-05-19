@@ -33,19 +33,21 @@ export const fallbackTags = [
 // Initialize the Ghost Content API client with proper error handling
 let api: any = null
 
-try {
-  // Only initialize if environment variables are available
-  if (process.env.GHOST_URL && process.env.GHOST_CONTENT_API_KEY) {
+// Only initialize if not in build/SSG mode and environment variables are available
+const isServerSideGeneration = process.env.NODE_ENV === "production" && !process.env.NETLIFY_LOCAL
+
+if (!isServerSideGeneration && process.env.GHOST_URL && process.env.GHOST_CONTENT_API_KEY) {
+  try {
     api = new GhostContentAPI({
       url: process.env.GHOST_URL,
       key: process.env.GHOST_CONTENT_API_KEY,
       version: "v5.0",
     })
-  } else {
-    console.warn("Ghost API credentials are missing. Using fallback data.")
+  } catch (error) {
+    console.error("Failed to initialize Ghost API client:", error)
   }
-} catch (error) {
-  console.error("Failed to initialize Ghost API client:", error)
+} else {
+  console.warn("Ghost API initialization skipped. Using fallback data.")
 }
 
 // Get all posts with their tags and authors

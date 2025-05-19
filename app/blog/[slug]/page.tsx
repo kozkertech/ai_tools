@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getPost, getPosts, fallbackPosts } from "@/lib/ghost"
+import { getPost, fallbackPosts } from "@/lib/ghost"
 import { formatDate } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, UserIcon } from "lucide-react"
@@ -9,28 +9,10 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import type { Metadata } from "next"
 
 export async function generateStaticParams() {
-  try {
-    // Use a try-catch block to handle any errors
-    const posts = await getPosts()
-
-    // If we get posts, use them to generate static params
-    if (posts && posts.length > 0) {
-      return posts.map((post) => ({
-        slug: post.slug,
-      }))
-    }
-
-    // If no posts are returned, use fallback data
-    return fallbackPosts.map((post) => ({
-      slug: post.slug,
-    }))
-  } catch (error) {
-    console.error("Error generating static params for posts:", error)
-    // Return fallback data in case of error
-    return fallbackPosts.map((post) => ({
-      slug: post.slug,
-    }))
-  }
+  // During build time, just use fallback data to avoid API calls
+  return fallbackPosts.map((post) => ({
+    slug: post.slug,
+  }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {

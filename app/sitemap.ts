@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next"
-import { getPosts, getTags, fallbackPosts, fallbackTags } from "@/lib/ghost"
+import { fallbackPosts, fallbackTags } from "@/lib/ghost"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Make sure we're using the correct base URL
@@ -7,32 +7,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   console.log("Generating sitemap with base URL:", baseUrl)
 
-  // Get all posts and tags with error handling
-  let posts = []
-  let tags = []
-
-  try {
-    // Use Promise.allSettled to prevent one failed request from affecting the other
-    const [postsResult, tagsResult] = await Promise.allSettled([getPosts(), getTags()])
-
-    if (postsResult.status === "fulfilled") {
-      posts = postsResult.value
-    } else {
-      console.warn("Failed to fetch posts for sitemap, using fallback data")
-      posts = fallbackPosts
-    }
-
-    if (tagsResult.status === "fulfilled") {
-      tags = tagsResult.value
-    } else {
-      console.warn("Failed to fetch tags for sitemap, using fallback data")
-      tags = fallbackTags
-    }
-  } catch (error) {
-    console.error("Error fetching data for sitemap:", error)
-    posts = fallbackPosts
-    tags = fallbackTags
-  }
+  // Use fallback data for build time
+  const posts = fallbackPosts
+  const tags = fallbackTags
 
   // Create sitemap entries for posts
   const postEntries = posts.map((post) => ({

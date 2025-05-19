@@ -4,28 +4,10 @@ import { notFound } from "next/navigation"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export async function generateStaticParams() {
-  try {
-    // Use a try-catch block to handle any errors
-    const tags = await getTags()
-
-    // If we get tags, use them to generate static params
-    if (tags && tags.length > 0) {
-      return tags.map((tag) => ({
-        slug: tag.slug,
-      }))
-    }
-
-    // If no tags are returned, use fallback data
-    return fallbackTags.map((tag) => ({
-      slug: tag.slug,
-    }))
-  } catch (error) {
-    console.error("Error generating static params for tags:", error)
-    // Return fallback data in case of error
-    return fallbackTags.map((tag) => ({
-      slug: tag.slug,
-    }))
-  }
+  // During build time, just use fallback data to avoid API calls
+  return fallbackTags.map((tag) => ({
+    slug: tag.slug,
+  }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
