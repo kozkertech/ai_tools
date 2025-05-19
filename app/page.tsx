@@ -31,6 +31,8 @@ export default async function Home() {
     }
   } catch (error) {
     console.error("Error fetching featured posts:", error)
+    // Set featuredPosts to an empty array in case of error
+    featuredPosts = []
   }
 
   // Generate structured data

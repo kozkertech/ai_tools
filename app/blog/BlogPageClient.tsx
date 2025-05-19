@@ -1,7 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { getPosts, getTags } from "@/lib/ghost"
+import { useState } from "react"
 import { SearchBar } from "@/components/blog/search-bar"
 import { BlogSidebar } from "@/components/blog/blog-sidebar"
 import { BlogGrid } from "@/components/blog/blog-grid"
@@ -10,24 +9,14 @@ import { SlidersHorizontal } from "lucide-react"
 import { useBlogFilter } from "@/hooks/use-blog-filter"
 import { useSearchParams } from "next/navigation"
 
-export default function BlogPageClient() {
-  const [posts, setPosts] = useState([])
-  const [tags, setTags] = useState([])
-  const [loading, setLoading] = useState(true)
+interface BlogPageClientProps {
+  initialPosts: any[]
+  tags: any[]
+}
+
+export default function BlogPageClient({ initialPosts, tags }: BlogPageClientProps) {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
   const searchParams = useSearchParams()
-
-  // Fetch posts and tags
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true)
-      const [postsData, tagsData] = await Promise.all([getPosts(), getTags()])
-      setPosts(postsData)
-      setTags(tagsData)
-      setLoading(false)
-    }
-    fetchData()
-  }, [])
 
   const {
     posts: filteredPosts,
@@ -37,7 +26,7 @@ export default function BlogPageClient() {
     handleSearch,
     handleCategorySelect,
     handleSortSelect,
-  } = useBlogFilter(posts)
+  } = useBlogFilter(initialPosts)
 
   // Sort options
   const sortOptions = [
@@ -63,7 +52,7 @@ export default function BlogPageClient() {
         url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}/logo.png`,
       },
     },
-    blogPost: posts.slice(0, 10).map((post) => ({
+    blogPost: initialPosts.slice(0, 10).map((post) => ({
       "@type": "BlogPosting",
       headline: post.title,
       description: post.excerpt || "",
@@ -123,22 +112,16 @@ export default function BlogPageClient() {
 
         {/* Main content */}
         <div className="mt-6 lg:col-span-3 lg:mt-0">
-          {loading ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">Loading posts...</p>
-            </div>
-          ) : (
-            <BlogGrid
-              posts={filteredPosts}
-              emptyMessage={
-                searchQuery
-                  ? `No posts found for "${searchQuery}"`
-                  : selectedCategories.length > 0
-                    ? "No posts found for the selected categories"
-                    : "No posts found"
-              }
-            />
-          )}
+          <BlogGrid
+            posts={filteredPosts}
+            emptyMessage={
+              searchQuery
+                ? `No posts found for "${searchQuery}"`
+                : selectedCategories.length > 0
+                  ? "No posts found for the selected categories"
+                  : "No posts found"
+            }
+          />
         </div>
       </div>
     </div>
