@@ -31,6 +31,7 @@ const nextConfig = {
   reactStrictMode: true,
   // Removed swcMinify as it's deprecated in Next.js 15.2.4
   compress: true,
+  // Changed from 'export' to 'standalone' to support client-side features
   output: 'standalone',
   async headers() {
     return [
