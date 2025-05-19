@@ -36,6 +36,13 @@
   [headers.values]
     Cache-Control = "public, max-age=86400, stale-while-revalidate=31536000"
 
+# Custom 404 page
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"

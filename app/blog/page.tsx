@@ -1,6 +1,5 @@
-import { Suspense } from "react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
-import BlogPageClient from "./BlogPageClient"
+import BlogPageClientWrapper from "./BlogPageClientWrapper"
 import { getPosts, getTags } from "@/lib/ghost"
 import { SEOHead } from "@/components/seo-head"
 
@@ -65,9 +64,7 @@ export default async function BlogPage() {
           <p className="text-muted-foreground mt-2">{error}. Please check your Ghost CMS configuration.</p>
         </div>
       ) : (
-        <Suspense fallback={<div className="text-center py-12">Loading blog posts...</div>}>
-          <BlogPageClient initialPosts={posts} tags={tags} />
-        </Suspense>
+        <BlogPageClientWrapper initialPosts={posts} tags={tags} />
       )}
     </div>
   )
