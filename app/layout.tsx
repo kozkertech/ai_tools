@@ -2,11 +2,12 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import Header from "@/components/header"
+import HeaderWrapper from "@/components/header-wrapper"
 import Footer from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import { CurrencyProvider } from "@/contexts/currency-context"
 import { Analytics } from "@/components/analytics"
+import { PerformanceMonitor } from "@/components/performance-monitor"
 import { Suspense } from "react"
 
 // Optimize font loading
@@ -116,13 +117,15 @@ export default function RootLayout({
             __html: JSON.stringify(websiteSchema),
           }}
         />
+        {/* Preload critical fonts */}
+        <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
       <body className={inter.className}>
         <ThemeProvider>
           <CurrencyProvider>
             <Suspense fallback={null}>
               <div className="flex min-h-screen flex-col">
-                <Header />
+                <HeaderWrapper />
                 <main className="flex-1">{children}</main>
                 <Footer />
               </div>
@@ -130,6 +133,7 @@ export default function RootLayout({
           </CurrencyProvider>
         </ThemeProvider>
         <Analytics />
+        <PerformanceMonitor />
       </body>
     </html>
   )

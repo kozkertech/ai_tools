@@ -10,66 +10,47 @@ import { toast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 
-// Try to import zod, but provide a fallback if it's not available
-let zodResolver
-let z
-try {
-  // Dynamic import for zod and its resolver
-  const zod = require("zod")
-  const resolver = require("@hookform/resolvers/zod")
-  z = zod
-  zodResolver = resolver.zodResolver
-} catch (error) {
-  console.error("Failed to load zod or resolver:", error)
-  // Provide fallback validation
-  z = {
-    object: () => ({
-      shape: () => ({}),
-      safeParse: (data) => ({ success: true, data }),
-    }),
-    string: () => ({
-      min: () => ({
-        email: () => ({
-          min: () => ({
-            optional: () => ({}),
-          }),
-        }),
-      }),
-    }),
-  }
-  zodResolver = (schema) => ({
-    validate: (data) => Promise.resolve(data),
-  })
-}
-
-// Define a simple schema if zod is available
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  phone: z.string().optional(),
-  subject: z.string().min(1, {
-    message: "Please select a subject.",
-  }),
-  message: z.string().min(10, {
-    message: "Message must be at least 10 characters.",
-  }),
-})
+// Simple email validation regex
+const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Use react-hook-form without zod dependency
   const form = useForm({
-    resolver: zodResolver ? zodResolver(formSchema) : undefined,
     defaultValues: {
       name: "",
       email: "",
       phone: "",
       subject: "",
       message: "",
+    },
+    // Custom validation
+    validate: {
+      name: (value) => {
+        if (!value || value.length < 2) {
+          return "Name must be at least 2 characters."
+        }
+        return true
+      },
+      email: (value) => {
+        if (!value || !EMAIL_REGEX.test(value)) {
+          return "Please enter a valid email address."
+        }
+        return true
+      },
+      subject: (value) => {
+        if (!value) {
+          return "Please select a subject."
+        }
+        return true
+      },
+      message: (value) => {
+        if (!value || value.length < 10) {
+          return "Message must be at least 10 characters."
+        }
+        return true
+      },
     },
   })
 

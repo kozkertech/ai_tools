@@ -22,16 +22,13 @@ const nextConfig = {
   experimental: {
     // Disable optimizeCss to avoid critters dependency issues
     optimizeCss: false,
-    scrollRestoration: false,
-    // This will allow Next.js to attempt to generate static pages
-    // even when the Ghost API is not available during build time
-    missingSuspenseWithCSRBailout: false,
+    scrollRestoration: true,
+    // Disable the check for missing Suspense boundaries
+    missingSuspenseWithCSRBailout: true,
   },
   poweredByHeader: false,
   reactStrictMode: true,
-  // Removed swcMinify as it's deprecated in Next.js 15.2.4
   compress: true,
-  // Changed from 'export' to 'standalone' to support client-side features
   output: 'standalone',
   async headers() {
     return [
@@ -71,6 +68,24 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=86400, stale-while-revalidate=31536000',
+          },
+        ],
+      },
+      {
+        source: '/_next/image(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=31536000',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
