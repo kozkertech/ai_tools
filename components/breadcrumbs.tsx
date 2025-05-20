@@ -43,9 +43,6 @@ export function Breadcrumbs({
   breadcrumbItems.unshift({ href: "/", label: homeLabel })
 
   // Generate structured data for breadcrumbs
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
-  const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl
-
   const breadcrumbStructuredData = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -53,7 +50,7 @@ export function Breadcrumbs({
       "@type": "ListItem",
       position: index + 1,
       name: item.label,
-      item: `${normalizedBaseUrl}${item.href}`,
+      item: `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}${item.href}`,
     })),
   }
 
