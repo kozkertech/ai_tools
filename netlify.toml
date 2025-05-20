@@ -18,20 +18,3 @@
 
 [build.processing.html]
   pretty_urls = true
-
-[[redirects]]
-  from = "///*"
-  to = "/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/*///*"
-  to = "/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/*"
-  to = "/404"
-  status = 404

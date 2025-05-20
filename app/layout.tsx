@@ -9,14 +9,8 @@ import { CurrencyProvider } from "@/contexts/currency-context"
 
 const inter = Inter({ subsets: ["latin"] })
 
-// Helper function to normalize URLs
-function normalizeUrl(url: string | undefined): string {
-  if (!url) return "https://kozker.com"
-  return url.endsWith("/") ? url.slice(0, -1) : url
-}
-
 export const metadata: Metadata = {
-  metadataBase: new URL(normalizeUrl(process.env.NEXT_PUBLIC_SITE_URL)),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"),
   title: {
     default: "KozkerTech - Web Development & 24/7 Support Solutions in Kochi",
     template: "%s | KozkerTech",
@@ -50,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: normalizeUrl(process.env.NEXT_PUBLIC_SITE_URL),
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
     siteName: "KozkerTech",
     title: "KozkerTech - Web Development & 24/7 Support Solutions in Kochi",
     description:
@@ -87,9 +81,9 @@ export const metadata: Metadata = {
     google: "google-site-verification-code", // Replace with actual verification code
   },
   alternates: {
-    canonical: normalizeUrl(process.env.NEXT_PUBLIC_SITE_URL),
+    canonical: process.env.NEXT_PUBLIC_SITE_URL,
     languages: {
-      en: normalizeUrl(process.env.NEXT_PUBLIC_SITE_URL),
+      en: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
     },
   },
     generator: 'v0.dev'

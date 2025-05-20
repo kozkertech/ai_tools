@@ -15,7 +15,6 @@ export async function generateStaticParams() {
   }
 }
 
-// Update the metadata generation in the tag page
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   try {
     const tags = await getTags()
@@ -29,8 +28,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
-    const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl
-    const tagUrl = `${normalizedBaseUrl}/tag/${tag.slug}`
+    const tagUrl = `${baseUrl}/tag/${tag.slug}`
 
     return {
       title: `${tag.name} - Articles and Insights`,
@@ -70,17 +68,15 @@ export default async function TagPage({ params }: { params: { slug: string } }) 
     const posts = await getPosts()
     const taggedPosts = posts.filter((post) => post.tags?.some((t) => t.slug === params.slug))
 
-    // Also update the JSON-LD structured data in the component
-    // Find the jsonLd object and update it:
+    // Add structured data for the tag page
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
-    const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl
     const jsonLd = {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       name: `${tag.name} - Articles and Insights`,
       description:
         tag.description || `Browse articles tagged with ${tag.name} - insights, tips, and guides from KozkerTech.`,
-      url: `${normalizedBaseUrl}/tag/${tag.slug}`,
+      url: `${baseUrl}/tag/${tag.slug}`,
       hasPart: taggedPosts.map((post) => ({
         "@type": "BlogPosting",
         headline: post.title,
@@ -90,7 +86,7 @@ export default async function TagPage({ params }: { params: { slug: string } }) 
           "@type": "Person",
           name: post.primary_author.name,
         },
-        url: `${normalizedBaseUrl}/blog/${post.slug}`,
+        url: `${baseUrl}/blog/${post.slug}`,
       })),
     }
 

@@ -17,11 +17,6 @@ export const contentType = "image/png"
 export default async function Image({ params }: { params: { slug: string } }) {
   const post = await getPost(params.slug)
 
-  // Normalize the base URL
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
-  const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl
-  const postUrl = `${normalizedBaseUrl}/blog/${post.slug}`
-
   if (!post) {
     return new ImageResponse(
       <div
