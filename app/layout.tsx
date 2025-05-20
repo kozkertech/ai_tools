@@ -41,7 +41,6 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  themeColor: "#FF6E30", // Added theme color
   appleWebApp: {
     title: "KozkerTech",
     statusBarStyle: "black-translucent",
@@ -95,6 +94,10 @@ export const metadata: Metadata = {
     generator: 'v0.dev'
 }
 
+export const viewport = {
+  themeColor: "#FF6E30",
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -103,7 +106,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#FF6E30" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
