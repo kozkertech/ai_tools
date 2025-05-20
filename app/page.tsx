@@ -180,8 +180,7 @@ export default async function Home() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">Who We Are</h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              We help Kochi's small businesses grow online fast and affordably, empowering local entrepreneurs to expand
-              their digital presence and reach more customers effectively.
+              We help small businesses quckly develop and launch online, empowering local entrepreneurs to grow their digital presence and reach more customers effectively.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
