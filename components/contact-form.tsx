@@ -60,13 +60,19 @@ export function ContactForm() {
         if (value) formData.append(key, value.toString())
       })
 
+      // Convert FormData to URLSearchParams
+      const searchParams = new URLSearchParams()
+      for (const pair of formData.entries()) {
+        searchParams.append(pair[0], pair[1] as string)
+      }
+
       // Submit the form using the fetch API
       const response = await fetch("/", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: new URLSearchParams(formData as any).toString(),
+        body: searchParams.toString(),
       })
 
       if (!response.ok) {
@@ -110,11 +116,10 @@ export function ContactForm() {
   return (
     <Form {...form}>
       <form
-        name="contact"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          e.preventDefault()
+          form.handleSubmit(onSubmit)(e)
+        }}
         className="space-y-6"
       >
         {/* These hidden fields are essential for Netlify Forms */}
@@ -230,7 +235,11 @@ export function ContactForm() {
 
         {formState === "error" && (
           <div className="p-3 bg-red-100 text-red-700 rounded-md text-center">
-            There was an error submitting the form. Please try again or contact us directly.
+            There was an error submitting the form. Please try again or contact us directly at{" "}
+            <a href="mailto:hello@kozker.com" className="underline">
+              hello@kozker.com
+            </a>
+            .
           </div>
         )}
       </form>

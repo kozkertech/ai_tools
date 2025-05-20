@@ -188,11 +188,13 @@ export default async function Home() {
             <div className="relative">
               <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-primary/20 rounded-full blur-3xl"></div>
               <Image
-                src="/website-design-team.png"
-                alt="KozkerTech Team"
-                width={500}
-                height={400}
-                className="rounded-lg shadow-lg object-cover w-full h-[400px]"
+                src="/team-collaboration-analytics.webp"
+                alt="Kozker Tech team collaborating on data-driven web solutions for small businesses in Kochi"
+                width={600}
+                height={480}
+                className="rounded-lg shadow-lg w-full h-auto object-contain"
+                priority
+                sizes="(max-width: 768px) 100vw, 600px"
               />
             </div>
             <div className="space-y-6">
@@ -669,7 +671,12 @@ export default async function Home() {
                 <Button asChild size="lg" variant="secondary" className="text-primary">
                   <Link href="/contact">Get Started Today</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="text-white border-white hover:bg-white/10">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="text-white border-white hover:bg-white/10 dark:text-white dark:border-white dark:hover:bg-white/10 text-primary border-primary hover:bg-primary/10"
+                >
                   <Link href="/solutions">Explore Solutions</Link>
                 </Button>
               </div>

@@ -15,8 +15,8 @@ export default function Footer() {
               <span className="text-2xl font-bold dark:text-white">Tech</span>
             </Link>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              We help Kochi's small businesses grow online fast and affordably, empowering local entrepreneurs to expand
-              their digital presence.
+              We help businesses grow online fast and affordably, empowering local entrepreneurs to expand their digital
+              presence.
             </p>
             <div className="flex space-x-4">
               <Link
@@ -94,11 +94,11 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h3 className="font-bold text-lg mb-4 dark:text-white">Solutions</h3>
+            <h3 className="font-bold text-lg mb-4 dark:text-white">Services</h3>
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/solutions#web-design"
+                  href="/services/ai-powered-web-design"
                   className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-primary"
                 >
                   AI-Powered Web Design
@@ -106,7 +106,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/solutions#customer-support"
+                  href="/services/24x7-ai-powered-customer-support"
                   className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-primary"
                 >
                   Customer Support
@@ -114,7 +114,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/solutions#whatsapp"
+                  href="/services/whatsapp-automation"
                   className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-primary"
                 >
                   WhatsApp Automation
@@ -122,7 +122,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/solutions#power-bi"
+                  href="/services/bi-analytics"
                   className="text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-primary"
                 >
                   Power BI Solutions

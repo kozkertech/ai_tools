@@ -22,29 +22,21 @@ self.addEventListener("install", (event) => {
       return cache.addAll(urlsToCache)
     }),
   )
-  // Force the waiting service worker to become the active service worker
-  self.skipWaiting()
 })
 
 // Activate event - clean up old caches
 self.addEventListener("activate", (event) => {
   const cacheWhitelist = [CACHE_NAME]
   event.waitUntil(
-    caches
-      .keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            if (cacheWhitelist.indexOf(cacheName) === -1) {
-              return caches.delete(cacheName)
-            }
-          }),
-        )
-      })
-      .then(() => {
-        // Take control of all clients as soon as it activates
-        return self.clients.claim()
-      }),
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName)
+          }
+        }),
+      )
+    }),
   )
 })
 
@@ -56,58 +48,21 @@ self.addEventListener("fetch", (event) => {
       if (response) {
         return response
       }
-
-      // Clone the request
-      const fetchRequest = event.request.clone()
-
-      return fetch(fetchRequest)
-        .then((response) => {
-          // Check if we received a valid response
-          if (!response || response.status !== 200 || response.type !== "basic") {
-            return response
-          }
-
-          // Clone the response
-          const responseToCache = response.clone()
-
-          caches.open(CACHE_NAME).then((cache) => {
-            // Don't cache API requests or other dynamic content
-            if (!event.request.url.includes("/api/")) {
-              cache.put(event.request, responseToCache)
-            }
-          })
-
+      return fetch(event.request).then((response) => {
+        // Check if we received a valid response
+        if (!response || response.status !== 200 || response.type !== "basic") {
           return response
+        }
+
+        // Clone the response
+        const responseToCache = response.clone()
+
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache)
         })
-        .catch(() => {
-          // If the network is unavailable, try to return the offline page
-          if (event.request.mode === "navigate") {
-            return caches.match("/offline.html")
-          }
-        })
+
+        return response
+      })
     }),
   )
-})
-
-// Handle push notifications
-self.addEventListener("push", (event) => {
-  const data = event.data.json()
-
-  const options = {
-    body: data.body,
-    icon: "/icon-192.png",
-    badge: "/icon-192.png",
-    data: {
-      url: data.url || "/",
-    },
-  }
-
-  event.waitUntil(self.registration.showNotification(data.title, options))
-})
-
-// Handle notification clicks
-self.addEventListener("notificationclick", (event) => {
-  event.notification.close()
-
-  event.waitUntil(clients.openWindow(event.notification.data.url))
 })

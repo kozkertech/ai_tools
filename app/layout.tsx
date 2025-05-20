@@ -6,7 +6,6 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import { CurrencyProvider } from "@/contexts/currency-context"
-import Script from "next/script"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -87,20 +86,6 @@ export const metadata: Metadata = {
       en: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
     },
   },
-  icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png" }],
-    other: [
-      {
-        rel: "mask-icon",
-        url: "/maskable-icon.png",
-      },
-    ],
-  },
     generator: 'v0.dev'
 }
 
@@ -113,6 +98,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#FF6E30" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={inter.className}>
@@ -125,21 +111,6 @@ export default function RootLayout({
             </div>
           </CurrencyProvider>
         </ThemeProvider>
-        <Script id="register-service-worker" strategy="afterInteractive">
-          {`
-            if ('serviceWorker' in navigator) {
-              window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/service-worker.js')
-                  .then(function(registration) {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                  })
-                  .catch(function(error) {
-                    console.log('ServiceWorker registration failed: ', error);
-                  });
-              });
-            }
-          `}
-        </Script>
       </body>
     </html>
   )
