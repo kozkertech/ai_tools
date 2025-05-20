@@ -3,7 +3,10 @@
 // Generate a canonical URL
 export function getCanonicalUrl(path: string): string {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
-  return `${baseUrl}${path}`
+  // Ensure path starts with a slash and remove any trailing slash from baseUrl
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`
+  const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl
+  return `${normalizedBaseUrl}${normalizedPath}`
 }
 
 // Generate structured data for breadcrumbs

@@ -32,7 +32,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
-    const postUrl = `${baseUrl}/blog/${post.slug}`
+    const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl
+    const postUrl = `${normalizedBaseUrl}/blog/${post.slug}`
 
     return {
       title: post.title,
@@ -78,6 +79,9 @@ export default async function PostPage({ params }: { params: { slug: string } })
       notFound()
     }
 
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
+    const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl
+
     // Generate JSON-LD structured data
     const jsonLd = {
       "@context": "https://schema.org",
@@ -96,12 +100,12 @@ export default async function PostPage({ params }: { params: { slug: string } })
         name: "Your Blog Name",
         logo: {
           "@type": "ImageObject",
-          url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}/logo.png`,
+          url: `${normalizedBaseUrl}/logo.png`,
         },
       },
       mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"}/blog/${post.slug}`,
+        "@id": `${normalizedBaseUrl}/blog/${post.slug}`,
       },
     }
 

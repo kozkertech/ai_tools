@@ -1,8 +1,14 @@
 import GhostContentAPI from "@tryghost/content-api"
 
+// Utility function to normalize URLs
+function normalizeUrl(url: string): string {
+  // Remove trailing slash if present
+  return url.endsWith("/") ? url.slice(0, -1) : url
+}
+
 // Initialize the Ghost Content API client with proper error handling
 const api = new GhostContentAPI({
-  url: process.env.GHOST_URL || "",
+  url: normalizeUrl(process.env.GHOST_URL || ""),
   key: process.env.GHOST_CONTENT_API_KEY || "",
   version: "v5.0",
 })
@@ -114,4 +120,16 @@ export async function searchPosts(query: string) {
     console.error(`Error searching posts with query "${query}" from Ghost:`, err)
     return []
   }
+}
+
+// Example function to build URLs for posts
+export function getPostUrl(post: any): string {
+  const baseUrl = normalizeUrl(process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com")
+  return `${baseUrl}/blog/${post.slug}`
+}
+
+// Example function to build URLs for tags
+export function getTagUrl(tag: any): string {
+  const baseUrl = normalizeUrl(process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com")
+  return `${baseUrl}/tag/${tag.slug}`
 }
