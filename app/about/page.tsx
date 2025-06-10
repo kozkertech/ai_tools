@@ -193,58 +193,39 @@ export default function AboutPage() {
           <div className="grid gap-8 md:grid-cols-3">
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm text-center">
               <div className="relative w-24 h-24 mx-auto mb-4">
-                <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
-                  <Image
-                    src="/tech-ceo-headshot.png"
-                    alt="Rajesh Kumar"
-                    width={96}
-                    height={96}
-                    className="object-cover"
-                  />
+                <div className="w-24 h-24 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center">
+                  <span className="text-3xl font-bold text-orange-600 dark:text-orange-400">GB</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-1">Rajesh Kumar</h3>
+              <h3 className="text-xl font-bold mb-1">Govind Bhat</h3>
               <p className="text-orange-600 dark:text-orange-400 mb-3">Founder & CEO</p>
               <p className="text-gray-500 dark:text-gray-400 text-sm">
-                With over 15 years of experience in technology and business, Rajesh leads our vision and strategy.
+                With over 6 years of experience in technology and business, Govind leads our vision and strategy.
               </p>
             </div>
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm text-center">
               <div className="relative w-24 h-24 mx-auto mb-4">
-                <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
-                  <Image
-                    src="/placeholder-9otrx.png"
-                    alt="Priya Sharma"
-                    width={96}
-                    height={96}
-                    className="object-cover"
-                  />
+                <div className="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                  <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">JJ</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-1">Priya Sharma</h3>
-              <p className="text-orange-600 dark:text-orange-400 mb-3">CTO</p>
+              <h3 className="text-xl font-bold mb-1">Joel Joseph</h3>
+              <p className="text-orange-600 dark:text-orange-400 mb-3">Product Lead</p>
               <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Priya oversees our technical direction, bringing expertise in AI, cloud architecture, and software
+                Joel oversees our technical direction, bringing expertise in AI, cloud architecture, and software
                 development.
               </p>
             </div>
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm text-center">
               <div className="relative w-24 h-24 mx-auto mb-4">
-                <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
-                  <Image
-                    src="/customer-success-director-headshot.png"
-                    alt="Amit Patel"
-                    width={96}
-                    height={96}
-                    className="object-cover"
-                  />
+                <div className="w-24 h-24 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+                  <span className="text-3xl font-bold text-green-600 dark:text-green-400">AP</span>
                 </div>
               </div>
-              <h3 className="text-xl font-bold mb-1">Amit Patel</h3>
-              <p className="text-orange-600 dark:text-orange-400 mb-3">Director of Customer Success</p>
+              <h3 className="text-xl font-bold mb-1">Alan Alves Palat</h3>
+              <p className="text-orange-600 dark:text-orange-400 mb-3">Multi-Utility</p>
               <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Amit ensures our clients receive exceptional support and achieve their desired outcomes with our
-                solutions.
+                Alan brings versatility and expertise across multiple domains to support our diverse project needs.
               </p>
             </div>
           </div>
