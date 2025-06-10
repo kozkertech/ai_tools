@@ -12,20 +12,20 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"),
   title: {
-    default: "KozkerTech - Web Development & 24/7 Support Solutions in Kochi",
+    default: "KozkerTech - Digital Solutions from Launch to Scale",
     template: "%s | KozkerTech",
   },
   description:
-    "Launch a polished, mobile-first website in days—capture every opportunity with 24/7 live-chat and smart email routing, then accelerate sales through automated WhatsApp workflows.",
+    "Comprehensive digital solutions for businesses at every stage. From rapid website launches to advanced BI analytics and automation.",
   keywords: [
+    "digital solutions",
     "web development",
-    "power bi",
-    "kochi",
-    "website design",
+    "power bi consulting",
     "whatsapp automation",
-    "24/7 support",
-    "live chat",
-    "mobile-first websites",
+    "business intelligence",
+    "data analytics",
+    "startup solutions",
+    "enterprise consulting",
   ],
   authors: [{ name: "KozkerTech" }],
   creator: "KozkerTech",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  themeColor: "#FF6E30", // Added theme color
+  themeColor: "#FF6E30",
   appleWebApp: {
     title: "KozkerTech",
     statusBarStyle: "black-translucent",
@@ -46,23 +46,23 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
     siteName: "KozkerTech",
-    title: "KozkerTech - Web Development & 24/7 Support Solutions in Kochi",
+    title: "KozkerTech - Digital Solutions from Launch to Scale",
     description:
-      "Launch a polished, mobile-first website in days—capture every opportunity with 24/7 live-chat and smart email routing, then accelerate sales through automated WhatsApp workflows.",
+      "Comprehensive digital solutions for businesses at every stage. From rapid website launches to advanced BI analytics and automation.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "KozkerTech - Web Development & 24/7 Support Solutions",
+        alt: "KozkerTech - Digital Solutions from Launch to Scale",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "KozkerTech - Web Development & 24/7 Support Solutions in Kochi",
+    title: "KozkerTech - Digital Solutions from Launch to Scale",
     description:
-      "Launch a polished, mobile-first website in days—capture every opportunity with 24/7 live-chat and smart email routing, then accelerate sales through automated WhatsApp workflows.",
+      "Comprehensive digital solutions for businesses at every stage. From rapid website launches to advanced BI analytics and automation.",
     images: ["/og-image.jpg"],
     creator: "@kozkertech",
   },
@@ -77,14 +77,8 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "google-site-verification-code", // Replace with actual verification code
-  },
   alternates: {
     canonical: process.env.NEXT_PUBLIC_SITE_URL,
-    languages: {
-      en: process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com",
-    },
   },
     generator: 'v0.dev'
 }
