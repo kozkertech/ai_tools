@@ -109,8 +109,8 @@ export default function AICustomerSupportPage() {
           </div>
           <div className="relative h-[300px] md:h-[400px] rounded-xl overflow-hidden">
             <Image
-              src="/ai-customer-support.png"
-              alt="24/7 AI-Powered Customer Support Illustration"
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/automated%20email-1lLPFPmUNHcBG1ncDv1JakdtzfKbeC.png"
+              alt="Professional customer support team providing 24/7 assistance through chat and email channels"
               fill
               className="object-cover"
               priority

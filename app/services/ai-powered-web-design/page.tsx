@@ -118,8 +118,8 @@ export default function AIWebDesignPage() {
           </div>
           <div className="relative h-[300px] md:h-[400px] rounded-xl overflow-hidden">
             <Image
-              src="/ai-web-design.png"
-              alt="AI-Powered Web Design Illustration"
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/2843c334-9a4a-4a2d-9237-c6f1ecb1e76b-8Sgtksy64pamtLDsSfFItMMvsr3uLM.png"
+              alt="AI Web Design interface showing creative solutions, UI/UX design elements, color palettes, and design analytics"
               fill
               className="object-cover"
               priority

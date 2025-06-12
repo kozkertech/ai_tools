@@ -51,8 +51,8 @@ export default function LaunchPadPage() {
 
             <div className="relative">
               <Image
-                src="/launchpad-hero.png"
-                alt="LaunchPad digital solutions for startups"
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Version%20control-bro-Qh89MYaKZ0pQ3bE5Ki22coNF2ls8tw.png"
+                alt="Developer working on automated workflows and digital solutions with gears and process diagrams in the background"
                 width={600}
                 height={600}
                 className="rounded-lg"

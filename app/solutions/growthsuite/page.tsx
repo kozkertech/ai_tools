@@ -51,8 +51,8 @@ export default function GrowthSuitePage() {
 
             <div className="relative">
               <Image
-                src="/growthsuite-hero.png"
-                alt="GrowthSuite automation solutions for growing businesses"
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Webinar-rafiki-ZpKQZr2G6pGwpmVXCqSHEHG3XFggOk.png"
+                alt="Professional woman conducting webinar and online business communication for GrowthSuite solutions"
                 width={600}
                 height={600}
                 className="rounded-lg"

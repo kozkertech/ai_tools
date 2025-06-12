@@ -136,8 +136,8 @@ export default function WhatsAppAutomationPage() {
           </div>
           <div className="relative h-[300px] md:h-[400px] rounded-xl overflow-hidden">
             <Image
-              src="/whatsapp-business-automation.png"
-              alt="WhatsApp Automation"
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/whatsapp-ZhRe7DXfJKi9NUueisUKGBW6xSvEFp.png"
+              alt="WhatsApp automation interface showing order updates, customer service features, and automated messaging capabilities"
               fill
               className="object-cover"
               priority

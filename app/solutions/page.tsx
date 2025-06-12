@@ -277,7 +277,12 @@ export default function SolutionsPage() {
               </Button>
             </div>
             <div className="relative h-[400px] rounded-xl overflow-hidden">
-              <Image src="/business-team-custom-solutions.png" alt="Custom Solutions" fill className="object-cover" />
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/0279b843-69a8-421c-8903-3c830c1c15ca-bSx53H1Gt2kx3omvwfrZtcIiDZKLoA.png"
+                alt="Business automation and integration tools showing comprehensive digital solutions for growing businesses"
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
         </div>

@@ -84,8 +84,8 @@ export default function AboutPage() {
             </div>
             <div className="relative aspect-video overflow-hidden rounded-lg">
               <Image
-                src="/team-collaboration-analytics.webp"
-                alt="KozkerTech team collaborating on analytics dashboard"
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kochi-office-49pNzu4d0efeT9A6GnoF3Ra8jrk7P5.png"
+                alt="KozkerTech team collaborating in our modern Kochi office, showcasing our local expertise and professional environment"
                 fill
                 className="object-cover"
                 priority

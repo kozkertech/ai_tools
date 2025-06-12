@@ -26,21 +26,23 @@ export default function ServicesPage() {
       title: "Mobile-First Web Design",
       description:
         "Launch polished, mobile-first websites in days, not weeks. Our AI-powered design process ensures your business looks professional on any device while saving you valuable time.",
-      image: "/web-development-illustration.png",
+      image:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/2843c334-9a4a-4a2d-9237-c6f1ecb1e76b-8Sgtksy64pamtLDsSfFItMMvsr3uLM.png",
       link: "/services/ai-powered-web-design",
     },
     {
       title: "24×7 AI-Powered Customer Support",
       description:
         "Capture every opportunity with round-the-clock live chat and smart email routing. Never miss a lead with our professional customer service team available 24/7.",
-      image: "/ai-customer-support.png",
+      image:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/automated%20email-1lLPFPmUNHcBG1ncDv1JakdtzfKbeC.png",
       link: "/services/24x7-ai-powered-customer-support",
     },
     {
       title: "WhatsApp Automation",
       description:
         "Accelerate sales through automated WhatsApp workflows. Streamline customer communication with personalized messaging for notifications, support, and engagement.",
-      image: "/whatsapp-business-automation.png",
+      image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/whatsapp-ZhRe7DXfJKi9NUueisUKGBW6xSvEFp.png",
       link: "/services/whatsapp-automation",
     },
     {
@@ -110,7 +112,40 @@ export default function ServicesPage() {
               <div
                 className={`relative h-[250px] md:h-[300px] rounded-xl overflow-hidden ${index % 2 === 1 ? "md:order-1" : ""}`}
               >
-                <Image src={service.image || "/placeholder.svg"} alt={service.title} fill className="object-cover" />
+                {service.title === "Mobile-First Web Design" && (
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/2843c334-9a4a-4a2d-9237-c6f1ecb1e76b-8Sgtksy64pamtLDsSfFItMMvsr3uLM.png"
+                    alt="AI-powered web design interface showing creative solutions and design tools"
+                    fill
+                    className="object-cover"
+                  />
+                )}
+                {service.title === "24×7 AI-Powered Customer Support" && (
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/automated%20email-1lLPFPmUNHcBG1ncDv1JakdtzfKbeC.png"
+                    alt="Customer support team providing round-the-clock assistance"
+                    fill
+                    className="object-cover"
+                  />
+                )}
+                {service.title === "WhatsApp Automation" && (
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/whatsapp-ZhRe7DXfJKi9NUueisUKGBW6xSvEFp.png"
+                    alt="WhatsApp automation showing automated customer communication and order management"
+                    fill
+                    className="object-cover"
+                  />
+                )}
+                {service.title !== "Mobile-First Web Design" &&
+                  service.title !== "24×7 AI-Powered Customer Support" &&
+                  service.title !== "WhatsApp Automation" && (
+                    <Image
+                      src={service.image || "/placeholder.svg"}
+                      alt={service.title}
+                      fill
+                      className="object-cover"
+                    />
+                  )}
               </div>
             </div>
           ))}

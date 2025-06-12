@@ -51,8 +51,8 @@ export default function IntelligencePage() {
 
             <div className="relative">
               <Image
-                src="/intelligence-hero.png"
-                alt="Power BI and data analytics solutions"
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Portfolio%20Update-amico-OhL64K0etmJPJS3dEZtqcPssksdkvh.png"
+                alt="Data analytics professional interacting with purple dashboard displaying charts, graphs, and performance metrics"
                 width={600}
                 height={600}
                 className="rounded-lg"
