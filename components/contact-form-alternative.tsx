@@ -20,6 +20,7 @@ const formSchema = z.object({
     message: "Please enter a valid email address.",
   }),
   phone: z.string().optional(),
+  company: z.string().optional(),
   subject: z.string().min(1, {
     message: "Please select a subject.",
   }),
@@ -39,6 +40,7 @@ export function ContactFormAlternative() {
       name: "",
       email: "",
       phone: "",
+      company: "",
       subject: "",
       message: "",
     },
@@ -49,7 +51,7 @@ export function ContactFormAlternative() {
     setFormState("submitting")
 
     try {
-      // Create form data for submission
+      // Create form data for Netlify submission
       const formData = new FormData()
 
       // Add form name - this is critical for Netlify to identify the form
@@ -60,14 +62,33 @@ export function ContactFormAlternative() {
         if (value) formData.append(key, value.toString())
       })
 
-      // Convert FormData to URLSearchParams
+      // Convert FormData to URLSearchParams for Netlify
       const searchParams = new URLSearchParams()
       for (const pair of formData.entries()) {
         searchParams.append(pair[0], pair[1] as string)
       }
 
-      // Submit the form using the fetch API
-      const response = await fetch("/", {
+      // Prepare webhook payload for n8n
+      const webhookPayload = {
+        timestamp: new Date().toISOString(),
+        source: "website_contact_form",
+        contact: {
+          name: values.name,
+          email: values.email,
+          phone: values.phone || "",
+          company: values.company || "",
+          subject: values.subject,
+          message: values.message,
+        },
+        metadata: {
+          userAgent: navigator.userAgent,
+          referrer: document.referrer,
+          url: window.location.href,
+        },
+      }
+
+      // Submit the form to Netlify using the fetch API
+      const netlifyResponse = await fetch("/", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -75,8 +96,29 @@ export function ContactFormAlternative() {
         body: searchParams.toString(),
       })
 
-      if (!response.ok) {
-        throw new Error(`Form submission failed: ${response.status}`)
+      if (!netlifyResponse.ok) {
+        console.error(`Netlify form submission failed: ${netlifyResponse.status}`)
+        throw new Error(`Netlify form submission failed: ${netlifyResponse.status}`)
+      }
+
+      // Submit to n8n webhook
+      const webhookResponse = await fetch(
+        "https://n8n.srv832341.hstgr.cloud/webhook/ab5b4d35-65fd-47c8-a237-75c381833f2b",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(webhookPayload),
+        },
+      )
+
+      if (!webhookResponse.ok) {
+        console.error(`Webhook submission failed: ${webhookResponse.status}`)
+        console.warn("Netlify form was submitted successfully, but webhook failed")
+        // We don't throw here because we want to show success if at least Netlify form worked
+      } else {
+        console.log("Webhook submission successful")
       }
 
       // Handle success
@@ -178,6 +220,20 @@ export function ContactFormAlternative() {
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="company"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Company (Optional)</FormLabel>
+              <FormControl>
+                <Input placeholder="Your company name" {...field} className="dark:bg-gray-800 dark:border-gray-700" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
