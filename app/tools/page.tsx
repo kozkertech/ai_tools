@@ -1,256 +1,236 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Calculator, Search, BarChart3, MessageSquare, Globe, Zap } from "lucide-react"
+import {
+  Globe,
+  Type,
+  LayoutTemplate,
+  Share2,
+  Rss,
+  Mail,
+  Bot,
+  BarChart2,
+  ClipboardList,
+  Filter,
+  FileSearch,
+  Briefcase,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Free Tools - Digital Assessment & Planning Tools | KozkerTech",
+  title: "AI-Powered Business Tools | KozkerTech",
   description:
-    "Access our free digital tools to assess your business needs, calculate ROI, and plan your digital transformation journey.",
+    "Discover our collection of AI-powered tools designed to accelerate your business growth. From domain name generation to content creation and automation.",
+  keywords: "AI tools, business automation, domain generator, content creation, digital marketing tools",
 }
 
-// Mock data for free tools
 const tools = [
   {
-    id: 1,
-    title: "Digital Readiness Assessment",
-    description: "Evaluate your business's digital maturity and get personalized recommendations for improvement.",
-    icon: BarChart3,
-    category: "Assessment",
-    estimatedTime: "5 minutes",
-    users: "2,500+",
-    benefits: [
-      "Comprehensive digital audit",
-      "Personalized improvement roadmap",
-      "Industry benchmarking",
-      "Priority action items",
-    ],
-    ctaText: "Start Assessment",
-    href: "/tools/digital-readiness",
-  },
-  {
-    id: 2,
-    title: "ROI Calculator",
-    description: "Calculate the potential return on investment for your digital transformation initiatives.",
-    icon: Calculator,
-    category: "Planning",
-    estimatedTime: "3 minutes",
-    users: "1,800+",
-    benefits: ["Accurate ROI projections", "Cost-benefit analysis", "Timeline planning", "Investment recommendations"],
-    ctaText: "Calculate ROI",
-    href: "/tools/roi-calculator",
-  },
-  {
-    id: 3,
-    title: "Local SEO Checker",
-    description: "Analyze your local search presence and discover opportunities to improve your visibility.",
-    icon: Search,
-    category: "LaunchPad",
-    estimatedTime: "2 minutes",
-    users: "3,200+",
-    benefits: ["Local ranking analysis", "GMB optimization tips", "Competitor comparison", "Action plan generation"],
-    ctaText: "Check SEO Score",
-    href: "/tools/local-seo-checker",
-  },
-  {
-    id: 4,
-    title: "WhatsApp Automation Planner",
-    description: "Design your WhatsApp automation workflow and estimate the impact on your business.",
-    icon: MessageSquare,
-    category: "GrowthSuite",
-    estimatedTime: "7 minutes",
-    users: "1,500+",
-    benefits: [
-      "Custom workflow design",
-      "Time savings calculator",
-      "Response rate projections",
-      "Implementation roadmap",
-    ],
-    ctaText: "Plan Automation",
-    href: "/tools/whatsapp-planner",
-  },
-  {
-    id: 5,
-    title: "Website Performance Analyzer",
-    description: "Get a comprehensive analysis of your website's performance, speed, and conversion potential.",
+    id: "domain-name-genie",
+    name: "Domain Name Genie",
+    description: "Find your perfect domain with AI-powered suggestions based on your business description.",
     icon: Globe,
-    category: "GrowthSuite",
-    estimatedTime: "4 minutes",
-    users: "2,100+",
-    benefits: [
-      "Speed optimization tips",
-      "Conversion rate analysis",
-      "Mobile responsiveness check",
-      "SEO recommendations",
-    ],
-    ctaText: "Analyze Website",
-    href: "/tools/website-analyzer",
+    href: "/tools/domain-name-generator",
+    status: "Available",
+    category: "Branding",
+    features: ["AI-powered suggestions", "Real-time availability check", "Multiple TLD options"],
   },
   {
-    id: 6,
-    title: "Power BI Readiness Check",
-    description: "Assess your organization's readiness for Power BI implementation and data analytics.",
-    icon: Zap,
-    category: "Intelligence",
-    estimatedTime: "6 minutes",
-    users: "900+",
-    benefits: [
-      "Data maturity assessment",
-      "Implementation timeline",
-      "Resource requirements",
-      "Success probability score",
-    ],
-    ctaText: "Check Readiness",
-    href: "/tools/powerbi-readiness",
+    id: "tagline-creator",
+    name: "Tagline & Value-Prop Creator",
+    description: "Crafts a punchy tagline and 1-sentence UVP based on user inputs.",
+    icon: Type,
+    href: "/tools/tagline-value-prop-creator",
+    status: "Available",
+    category: "Branding",
+    features: ["Punchy taglines", "Value propositions", "Brand messaging"],
+  },
+  {
+    id: "hero-copy-generator",
+    name: "Landing-Page Hero Copy Generator",
+    description: "Generates headline, sub-headline, and CTA variations for conversion.",
+    icon: LayoutTemplate,
+    href: "/tools/landing-pageherocopygenerator",
+    status: "Available",
+    category: "Content",
+    features: ["Headlines", "Sub-headlines", "CTA variations"],
+  },
+  {
+    id: "social-media-suggester",
+    name: "Social-Media Caption & Hashtag Suggester",
+    description: "Creates platform-tailored captions plus trending hashtags.",
+    icon: Share2,
+    href: "/tools/social-media-suggester",
+    status: "Available",
+    category: "Marketing",
+    features: ["Platform-specific captions", "Trending hashtags", "Engagement optimization"],
+  },
+  {
+    id: "blog-outline-builder",
+    name: "Blog-Post Topic & Outline Builder",
+    description: "Spins up a SEO-optimized blog structure with headings and key points.",
+    icon: Rss,
+    href: "/tools/blog-generator",
+    status: "Available",
+    category: "Content",
+    features: ["SEO optimization", "Content structure", "Topic research"],
+  },
+  {
+    id: "email-subject-generator",
+    name: "Email Subject-Line & Preview-Text Generator",
+    description: "Produces subject lines and preheader options to maximize opens.",
+    icon: Mail,
+    href: "/tools/email-subject-line",
+    status: "Available",
+    category: "Marketing",
+    features: ["Subject line optimization", "Preview text", "Open rate improvement"],
+  },
+  {
+    id: "ai-business-plan-generator",
+    name: "AI Business Plan Generator",
+    description: "Effortless Business Planning with AI",
+    icon: Bot,
+    href: "/tools/ai-business-plan-generator",
+    status: "Available",
+    category: "Automation",
+    features: ["AI-powered business summaries", "Realistic financial projections", "Detailed end-to-end Business strategies"],
+  },
+  {
+    id: "powerbi-generator",
+    name: "Power BI Measure & Viz Snippet Generator",
+    description: "Outputs DAX measures and a JSON snippet for a chart from KPI description.",
+    icon: BarChart2,
+    href: "/tools/power-bi-measure",
+    status: "Available",
+    category: "Analytics",
+    features: ["DAX measures", "Visualization snippets", "KPI tracking"],
+  },
+  {
+    id: "meeting-extractor",
+    name: "Meeting-Summary & Action-Item Extractor",
+    description: "Get bullet-point summary + assigned tasks from transcript or notes.",
+    icon: ClipboardList,
+    href: "/tools/meeting-summary-extractor",
+    status: "Available",
+    category: "Productivity",
+    features: ["Meeting summaries", "Action items", "Task assignment"],
+  },
+  {
+    id: "data-cleanse-helper",
+    name: "Data-Cleanse & Schema-Map Helper",
+    description: "Infers column types, flags anomalies, and proposes a star-schema from CSV.",
+    icon: Filter,
+    href: "/tools/data-cleanse",
+    status: "Available",
+    category: "Analytics",
+    features: ["Data cleaning", "Schema mapping", "Anomaly detection"],
+  },
+  {
+    id: "seo-analyzer",
+    name: "SEO-Keyword & Content-Gap Analyzer",
+    description: "Delivers untapped keyword ideas and content gaps versus competitors.",
+    icon: FileSearch,
+    href: "/tools/seo-keyword-content-gapanalyzer",
+    status: "Available",
+    category: "Marketing",
+    features: ["Keyword research", "Content gaps", "Competitor analysis"],
+  },
+  {
+    id: "proposal-generator",
+    name: "Proposal-Draft Generator",
+    description: "Get a formatted first-draft proposal from prospect details & service package.",
+    icon: Briefcase,
+    href: "/tools/proposal-draft-generator",
+    status: "Available",
+    category: "Business",
+    features: ["Proposal drafts", "Service packages", "Client customization"],
   },
 ]
 
+const categories = ["All", "Branding", "Content", "Marketing", "Automation", "Analytics", "Productivity", "Business"]
+
 export default function ToolsPage() {
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       {/* Hero Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20">
-        <div className="container">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-              Free Digital <span className="text-primary">Assessment Tools</span>
-            </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-              Evaluate your business's digital potential with our comprehensive suite of free tools. Get personalized
-              insights and actionable recommendations to accelerate your growth.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg">
-                <Link href="#tools">Explore Tools</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/contact">Get Expert Consultation</Link>
-              </Button>
-            </div>
+      <section className="relative py-20 px-4 text-center">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-purple-500/10 rounded-3xl mx-4"></div>
+        <div className="relative max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <Sparkles className="w-4 h-4" />
+            AI-Powered Business Tools
           </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-16 bg-muted/50">
-        <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="space-y-4">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <BarChart3 className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold">Instant Insights</h3>
-              <p className="text-muted-foreground">
-                Get immediate analysis and recommendations based on your specific business needs
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Zap className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold">Actionable Results</h3>
-              <p className="text-muted-foreground">
-                Receive clear, prioritized action items you can implement immediately
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Calculator className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold">Data-Driven Planning</h3>
-              <p className="text-muted-foreground">
-                Make informed decisions with accurate projections and industry benchmarks
-              </p>
-            </div>
-          </div>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+            Accelerate Your Business with AI
+          </h1>
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Discover our collection of AI-powered tools designed to streamline your workflow, enhance creativity, and
+            drive business growth.
+          </p>
         </div>
       </section>
 
       {/* Tools Grid */}
-      <section id="tools" className="py-20">
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Choose Your Assessment Tool</h2>
-            <p className="text-xl text-muted-foreground">
-              Select the tool that best matches your current business needs and goals
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {tools.map((tool) => {
               const IconComponent = tool.icon
+              const isAvailable = tool.status === "Available"
+
               return (
-                <Card key={tool.id} className="hover:shadow-lg transition-shadow h-full flex flex-col">
+                <Card
+                  key={tool.id}
+                  className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20"
+                >
                   <CardHeader>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div
-                        className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                          tool.category === "Intelligence"
-                            ? "bg-purple-100"
-                            : tool.category === "GrowthSuite"
-                              ? "bg-blue-100"
-                              : tool.category === "LaunchPad"
-                                ? "bg-green-100"
-                                : "bg-orange-100"
-                        }`}
-                      >
-                        <IconComponent
-                          className={`h-6 w-6 ${
-                            tool.category === "Intelligence"
-                              ? "text-purple-600"
-                              : tool.category === "GrowthSuite"
-                                ? "text-blue-600"
-                                : tool.category === "LaunchPad"
-                                  ? "text-green-600"
-                                  : "text-orange-600"
-                          }`}
-                        />
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <IconComponent className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <Badge variant={isAvailable ? "default" : "secondary"} className="mb-2">
+                            {tool.status}
+                          </Badge>
+                          <Badge variant="outline" className="ml-2 text-xs">
+                            {tool.category}
+                          </Badge>
+                        </div>
                       </div>
-                      <Badge
-                        className={
-                          tool.category === "Intelligence"
-                            ? "bg-purple-100 text-purple-700"
-                            : tool.category === "GrowthSuite"
-                              ? "bg-blue-100 text-blue-700"
-                              : tool.category === "LaunchPad"
-                                ? "bg-green-100 text-green-700"
-                                : "bg-orange-100 text-orange-700"
-                        }
-                      >
-                        {tool.category}
-                      </Badge>
                     </div>
-                    <CardTitle className="line-clamp-2">{tool.title}</CardTitle>
-                    <p className="text-sm text-muted-foreground line-clamp-3">{tool.description}</p>
+                    <CardTitle className="text-xl group-hover:text-primary transition-colors">{tool.name}</CardTitle>
+                    <CardDescription className="text-base">{tool.description}</CardDescription>
                   </CardHeader>
-
-                  <CardContent className="flex-1 flex flex-col">
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                      <span>⏱️ {tool.estimatedTime}</span>
-                      <span>👥 {tool.users} users</span>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-medium text-sm text-muted-foreground mb-2">Key Features:</h4>
+                        <ul className="space-y-1">
+                          {tool.features.map((feature, index) => (
+                            <li key={index} className="text-sm flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      {isAvailable ? (
+                        <Button asChild className="w-full group">
+                          <Link href={tool.href}>
+                            Try Now
+                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                          </Link>
+                        </Button>
+                      ) : (
+                        <Button disabled className="w-full">
+                          Coming Soon
+                        </Button>
+                      )}
                     </div>
-
-                    <div className="mb-6 flex-1">
-                      <h4 className="font-semibold mb-2">What you'll get:</h4>
-                      <ul className="space-y-1">
-                        {tool.benefits.map((benefit, index) => (
-                          <li key={index} className="text-sm flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full" />
-                            <span>{benefit}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <Button asChild className="w-full">
-                      <Link href={tool.href}>
-                        {tool.ctaText} <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
                   </CardContent>
                 </Card>
               )
@@ -259,77 +239,28 @@ export default function ToolsPage() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-20 bg-muted/50">
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">How Our Tools Work</h2>
-            <p className="text-xl text-muted-foreground">
-              Simple, effective process to get actionable insights for your business
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">1</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Choose Tool</h3>
-              <p className="text-sm text-muted-foreground">
-                Select the assessment tool that matches your business needs
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">2</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Answer Questions</h3>
-              <p className="text-sm text-muted-foreground">
-                Provide information about your current situation and goals
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">3</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Get Results</h3>
-              <p className="text-sm text-muted-foreground">Receive instant analysis and personalized recommendations</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-white">4</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Take Action</h3>
-              <p className="text-sm text-muted-foreground">
-                Implement recommendations or get expert help from our team
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-white">
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Accelerate Your Growth?</h2>
-            <p className="text-xl opacity-90 mb-8">
-              Use our free tools to identify opportunities, then let our experts help you implement the solutions
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" variant="secondary" className="text-primary">
-                <Link href="/contact">Get Expert Consultation</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="text-white border-white hover:bg-white/10">
-                <Link href="/solutions">Explore Our Solutions</Link>
-              </Button>
-            </div>
+      <section className="py-20 px-4 bg-primary text-primary-foreground">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Business?</h2>
+          <p className="text-xl mb-8 opacity-90">
+            Start with our Domain Name Genie and discover the perfect domain for your business.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" variant="secondary" className="text-lg px-8">
+              <Link href="/tools/digital-readiness">Try Domain Name Genie</Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="text-lg px-8 border-white text-white hover:bg-white hover:text-primary"
+            >
+              <Link href="/contact">Request Custom Tool</Link>
+            </Button>
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }
