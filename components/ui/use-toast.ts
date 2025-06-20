@@ -1,18 +1,21 @@
 "use client"
 
-// Inspired by react-hot-toast library and adapted from shadcn/ui toast component
+// Inspired by react-hot-toast library
 import * as React from "react"
 
-import type { ToastActionElement } from "@/components/ui/toast"
+import type {
+  ToastActionElement,
+  ToastProps,
+} from "@/components/ui/toast"
 
 const TOAST_LIMIT = 1
+const TOAST_REMOVE_DELAY = 1000000
 
-type ToasterToast = {
+type ToasterToast = ToastProps & {
   id: string
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
-  duration?: number
 }
 
 const actionTypes = {
@@ -55,7 +58,7 @@ interface State {
 
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
-const addToRemoveQueue = (toastId: string, duration: number) => {
+const addToRemoveQueue = (toastId: string) => {
   if (toastTimeouts.has(toastId)) {
     return
   }
@@ -66,7 +69,7 @@ const addToRemoveQueue = (toastId: string, duration: number) => {
       type: "REMOVE_TOAST",
       toastId: toastId,
     })
-  }, duration)
+  }, TOAST_REMOVE_DELAY)
 
   toastTimeouts.set(toastId, timeout)
 }
@@ -82,7 +85,9 @@ export const reducer = (state: State, action: Action): State => {
     case "UPDATE_TOAST":
       return {
         ...state,
-        toasts: state.toasts.map((t) => (t.id === action.toast.id ? { ...t, ...action.toast } : t)),
+        toasts: state.toasts.map((t) =>
+          t.id === action.toast.id ? { ...t, ...action.toast } : t
+        ),
       }
 
     case "DISMISS_TOAST": {
@@ -91,14 +96,10 @@ export const reducer = (state: State, action: Action): State => {
       // ! Side effects ! - This could be extracted into a dismissToast() action,
       // but I'll keep it here for simplicity
       if (toastId) {
-        state.toasts.forEach((toast) => {
-          if (toast.id === toastId) {
-            addToRemoveQueue(toastId, toast.duration || 5000)
-          }
-        })
+        addToRemoveQueue(toastId)
       } else {
         state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id, toast.duration || 5000)
+          addToRemoveQueue(toast.id)
         })
       }
 
@@ -110,7 +111,7 @@ export const reducer = (state: State, action: Action): State => {
                 ...t,
                 open: false,
               }
-            : t,
+            : t
         ),
       }
     }
@@ -141,7 +142,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
-function toast({ title, description, duration = 5000 }: Toast) {
+function toast({ ...props }: Toast) {
   const id = genId()
 
   const update = (props: ToasterToast) =>
@@ -154,11 +155,9 @@ function toast({ title, description, duration = 5000 }: Toast) {
   dispatch({
     type: "ADD_TOAST",
     toast: {
-      title,
-      description,
+      ...props,
       id,
       open: true,
-      duration,
       onOpenChange: (open) => {
         if (!open) dismiss()
       },

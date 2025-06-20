@@ -27,59 +27,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }))
 
-  // Add static pages - Core site structure
+  // Add static pages
   const staticPages = [
-    // Homepage - highest priority
     {
       url: baseUrl,
       lastModified: new Date(),
       changeFrequency: "daily" as const,
       priority: 1.0,
     },
-    
-    // Main service pages - high priority
-    {
-      url: `${baseUrl}/solutions`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.9,
-    },
-    
-    // Individual solution pages - based on your homepage navigation
-    {
-      url: `${baseUrl}/solutions/launchpad`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/solutions/growthsuite`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/solutions/intelligence`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    
-    // Pricing and contact - important conversion pages
-    {
-      url: `${baseUrl}/pricing`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    
-    // Blog section - content marketing
     {
       url: `${baseUrl}/blog`,
       lastModified: new Date(),
@@ -92,62 +47,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.7,
     },
-    
-    // Company pages
+    {
+      url: `${baseUrl}/solutions`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    },
     {
       url: `${baseUrl}/about`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.7,
     },
-    
-    // Service-specific pages based on your homepage content
     {
-      url: `${baseUrl}/services/web-design`,
+      url: `${baseUrl}/contact`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
-      priority: 0.7,
+      priority: 0.8,
     },
-    {
-      url: `${baseUrl}/services/whatsapp-automation`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/services/ai-chatbots`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/services/power-bi`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/services/local-seo`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    },
-    
-    // Industry/location pages (based on your Kochi focus)
-    {
-      url: `${baseUrl}/kochi-web-development`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/kerala-digital-marketing`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    },
-    
-    // Legal and policy pages
     {
       url: `${baseUrl}/privacy`,
       lastModified: new Date(),
@@ -160,74 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly" as const,
       priority: 0.3,
     },
-    {
-      url: `${baseUrl}/cookie-policy`,
-      lastModified: new Date(),
-      changeFrequency: "yearly" as const,
-      priority: 0.2,
-    },
-    
-    // Additional pages you might want to add
-    {
-      url: `${baseUrl}/case-studies`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/testimonials`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/faq`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    },
   ]
 
-  // Add dynamic service pages if you have them
-  const serviceCategories = [
-    'web-development',
-    'digital-marketing', 
-    'automation',
-    'analytics',
-    'consulting'
-  ]
-
-  const serviceCategoryEntries = serviceCategories.map((category) => ({
-    url: `${baseUrl}/services/${category}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.6,
-  }))
-
-  // Add technology-specific pages
-  const technologies = [
-    'nextjs',
-    'react',
-    'nodejs',
-    'powerbi',
-    'whatsapp-api',
-    'openai-integration'
-  ]
-
-  const technologyEntries = technologies.map((tech) => ({
-    url: `${baseUrl}/technologies/${tech}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.5,
-  }))
-
-  console.log(`Generated sitemap with ${staticPages.length + postEntries.length + tagEntries.length + serviceCategoryEntries.length + technologyEntries.length} entries`)
-
-  return [
-    ...staticPages, 
-    ...postEntries, 
-    ...tagEntries, 
-    ...serviceCategoryEntries, 
-    ...technologyEntries
-  ]
+  return [...staticPages, ...postEntries, ...tagEntries]
 }
