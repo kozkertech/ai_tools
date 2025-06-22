@@ -1,34 +1,122 @@
----
 name: Content Update
-about: Request changes to website content or copy
-title: '[CONTENT] '
-labels: ['content']
-assignees: ''
+description: Request changes to website content or copy
+title: "[CONTENT] "
+labels: ["content"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for requesting a content update! Keeping our website content fresh and accurate is essential for our business.
 
----
+  - type: dropdown
+    id: update-type
+    attributes:
+      label: What type of content update is this?
+      description: This helps us prioritize and route the request appropriately
+      options:
+        - "Text/copy changes"
+        - "Image updates"
+        - "New page content"
+        - "Service description updates"
+        - "Pricing information"
+        - "Contact information"
+        - "Blog content"
+        - "SEO improvements"
+      default: 0
+    validations:
+      required: true
 
-## What content needs to be updated?
-<!-- Describe what text, images, or other content needs to change -->
+  - type: checkboxes
+    id: affected-pages
+    attributes:
+      label: Which pages are affected?
+      description: Select all pages that need updates
+      options:
+        - label: Homepage
+        - label: About page
+        - label: Services pages
+        - label: Contact page
+        - label: Blog
+        - label: Case studies
+        - label: Pricing page
+        - label: Other (specify below)
 
-## Which page(s) are affected?
-<!-- List the specific pages or sections that need updates -->
+  - type: input
+    id: specific-page
+    attributes:
+      label: Specific page URL or section
+      description: If "Other" was selected above, or to specify exact location
+      placeholder: "https://kozker.com/specific-page or 'Homepage hero section'"
+    validations:
+      required: false
 
-## Current content
-<!-- What does it say now? (copy and paste if helpful) -->
+  - type: textarea
+    id: current-content
+    attributes:
+      label: Current content
+      description: What does it say now? (copy and paste if helpful)
+      placeholder: "Paste the current text/content that needs to be changed"
+    validations:
+      required: true
 
-## New content
-<!-- What should it say instead? (provide exact text if possible) -->
+  - type: textarea
+    id: new-content
+    attributes:
+      label: New content
+      description: What should it say instead? (provide exact text if possible)
+      placeholder: "Provide the exact new content, including any specific wording requirements"
+    validations:
+      required: true
 
-## Why this change?
-<!-- Business reason for the update - new service, price change, improved messaging, etc. -->
+  - type: textarea
+    id: reason-for-change
+    attributes:
+      label: Why this change?
+      description: Business reason for the update
+      placeholder: "New service launch, price change, improved messaging, compliance requirement, etc."
+    validations:
+      required: true
 
-## SEO considerations
-<!-- Does this affect any important keywords or page titles? -->
+  - type: checkboxes
+    id: seo-considerations
+    attributes:
+      label: SEO considerations
+      description: Check if any of these apply to this content update
+      options:
+        - label: This affects important keywords
+        - label: This affects page titles or meta descriptions
+        - label: This affects URL structure
+        - label: This content appears in search results
+        - label: No SEO impact expected
 
-## Timeline
-- [ ] Urgent - Needed this week
-- [ ] Standard - Within 2 weeks  
-- [ ] Flexible - When convenient
+  - type: dropdown
+    id: timeline
+    attributes:
+      label: Timeline
+      description: When do you need this update completed?
+      options:
+        - "Urgent - Needed this week"
+        - "Standard - Within 2 weeks"
+        - "Flexible - When convenient"
+      default: 1
+    validations:
+      required: true
 
-## Additional files
-<!-- Attach any new images, documents, or assets needed for this update -->
+  - type: textarea
+    id: additional-files
+    attributes:
+      label: Additional files or assets
+      description: Any new images, documents, or other files needed for this update?
+      placeholder: "Describe any new assets needed, or mention you'll upload them separately"
+    validations:
+      required: false
+
+  - type: textarea
+    id: approval-needed
+    attributes:
+      label: Approval requirements
+      description: Who needs to approve this content before it goes live?
+      placeholder: "Legal review needed, CEO approval required, etc."
+    validations:
+      required: false
