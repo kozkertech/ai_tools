@@ -1,0 +1,34 @@
+---
+name: Content Update
+about: Request changes to website content or copy
+title: '[CONTENT] '
+labels: ['content']
+assignees: ''
+
+---
+
+## What content needs to be updated?
+<!-- Describe what text, images, or other content needs to change -->
+
+## Which page(s) are affected?
+<!-- List the specific pages or sections that need updates -->
+
+## Current content
+<!-- What does it say now? (copy and paste if helpful) -->
+
+## New content
+<!-- What should it say instead? (provide exact text if possible) -->
+
+## Why this change?
+<!-- Business reason for the update - new service, price change, improved messaging, etc. -->
+
+## SEO considerations
+<!-- Does this affect any important keywords or page titles? -->
+
+## Timeline
+- [ ] Urgent - Needed this week
+- [ ] Standard - Within 2 weeks  
+- [ ] Flexible - When convenient
+
+## Additional files
+<!-- Attach any new images, documents, or assets needed for this update -->
