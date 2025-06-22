@@ -1,0 +1,34 @@
+---
+name: Bug Report
+about: Report a problem with the website
+title: '[BUG] '
+labels: ['bug']
+assignees: ''
+
+---
+
+## What's the problem?
+<!-- Describe what's not working as expected -->
+
+## Where did you find this issue?
+<!-- What page or section of the website? Include the URL if possible -->
+
+## What should happen instead?
+<!-- Describe the expected behavior -->
+
+## Steps to reproduce (if applicable)
+1. Go to...
+2. Click on...
+3. See error...
+
+## Screenshots or additional info
+<!-- Add any screenshots, error messages, or additional context that might help -->
+
+## Priority level
+<!-- How urgent is this? -->
+- [ ] High - Website is broken for users
+- [ ] Medium - Noticeable issue but website still functions
+- [ ] Low - Minor cosmetic or nice-to-have fix
+
+## Browser/Device info (if relevant)
+<!-- What browser, device, or screen size where you noticed this? -->
