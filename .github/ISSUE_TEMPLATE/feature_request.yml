@@ -1,0 +1,34 @@
+---
+name: Feature Request
+about: Suggest a new feature or improvement for the website
+title: '[FEATURE] '
+labels: ['enhancement']
+assignees: ''
+
+---
+
+## What feature would you like to add?
+<!-- Describe the new functionality you'd like to see -->
+
+## Why do we need this?
+<!-- What business problem does this solve? How will it help our users or business? -->
+
+## Where should this appear on the website?
+<!-- Which page(s) or section(s) should include this feature? -->
+
+## How should it work?
+<!-- Describe the user experience - what should happen when someone uses this feature? -->
+
+## Design ideas or examples
+<!-- Any specific design ideas, or examples from other websites you like? -->
+
+## Technical considerations
+<!-- Any specific integrations, tools, or technical requirements? (e.g., chatbot integration, form builder, analytics) -->
+
+## Priority and timeline
+- [ ] High - Needed for upcoming launch or campaign
+- [ ] Medium - Important for business goals
+- [ ] Low - Nice-to-have improvement
+
+## Success criteria
+<!-- How will we know this feature is working well? What metrics matter? -->
