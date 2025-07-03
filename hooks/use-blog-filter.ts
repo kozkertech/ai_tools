@@ -19,21 +19,18 @@ export interface Post {
     slug: string
   }
   tags?: Array<{
-    id: string
     name: string
     slug: string
   }>
-  reading_time?: number
 }
 
 export interface Tag {
   id: string
   name: string
   slug: string
-  count?: { posts: number }
 }
 
-export function useBlogFilter(initialPosts: Post[] = [], initialTags: Tag[] = []) {
+export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = []) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [sortBy, setSortBy] = useState("newest")
@@ -42,61 +39,33 @@ export function useBlogFilter(initialPosts: Post[] = [], initialTags: Tag[] = []
   const posts = Array.isArray(initialPosts) ? initialPosts : []
   const tags = Array.isArray(initialTags) ? initialTags : []
 
-  // Extract and format categories from tags and posts
+  // Extract categories from posts and tags
   const categories = useMemo(() => {
-    const uniqueCategories = new Map<string, Tag>()
+    const categorySet = new Set(["all"])
 
-    // Add "All Categories" as the first option
-    uniqueCategories.set("all", { id: "all", name: "All Categories", slug: "all", count: { posts: posts.length } })
-
-    // Add categories from initialTags (from Ghost)
-    tags.forEach((tag) => {
-      if (tag?.slug && tag?.name) {
-        uniqueCategories.set(tag.slug, {
-          id: tag.id || tag.slug,
-          name: tag.name,
-          slug: tag.slug,
-          count: tag.count || { posts: 0 },
+    // Add categories from post tags
+    posts.forEach((post) => {
+      if (post?.tags && Array.isArray(post.tags)) {
+        post.tags.forEach((tag: any) => {
+          if (tag?.name) {
+            categorySet.add(tag.name)
+          }
         })
       }
     })
 
-    // Add categories from posts if they are not already in initialTags, and update counts
-    posts.forEach((post) => {
-      post.tags?.forEach((tag) => {
-        if (tag?.slug && tag?.name) {
-          const currentTag = uniqueCategories.get(tag.slug)
-          if (currentTag) {
-            // If tag already exists, increment its post count
-            uniqueCategories.set(tag.slug, {
-              ...currentTag,
-              count: { posts: (currentTag.count?.posts || 0) + 1 },
-            })
-          } else {
-            // If new tag, add it with count 1
-            uniqueCategories.set(tag.slug, {
-              id: tag.id || tag.slug,
-              name: tag.name,
-              slug: tag.slug,
-              count: { posts: 1 },
-            })
-          }
-        }
-      })
+    // Add categories from initial tags
+    tags.forEach((tag) => {
+      if (tag?.name) {
+        categorySet.add(tag.name)
+      }
     })
 
-    // Sort categories alphabetically by name, keeping "All Categories" first
-    const sortedCategories = Array.from(uniqueCategories.values()).sort((a, b) => {
-      if (a.slug === "all") return -1
-      if (b.slug === "all") return 1
-      return a.name.localeCompare(b.name)
-    })
-
-    return sortedCategories
+    return Array.from(categorySet)
   }, [posts, tags])
 
   // Filter and sort posts
-  const filteredAndSortedPosts = useMemo(() => {
+  const filteredPosts = useMemo(() => {
     let filtered = [...posts]
 
     // Apply search filter
@@ -108,14 +77,9 @@ export function useBlogFilter(initialPosts: Post[] = [], initialTags: Tag[] = []
         const title = post.title?.toLowerCase() || ""
         const excerpt = post.excerpt?.toLowerCase() || ""
         const customExcerpt = post.custom_excerpt?.toLowerCase() || ""
-        const authorName = post.primary_author?.name?.toLowerCase() || ""
+        const slug = post.slug?.toLowerCase() || ""
 
-        return (
-          title.includes(query) ||
-          excerpt.includes(query) ||
-          customExcerpt.includes(query) ||
-          authorName.includes(query)
-        )
+        return title.includes(query) || excerpt.includes(query) || customExcerpt.includes(query) || slug.includes(query)
       })
     }
 
@@ -123,7 +87,7 @@ export function useBlogFilter(initialPosts: Post[] = [], initialTags: Tag[] = []
     if (selectedCategory !== "all") {
       filtered = filtered.filter((post) => {
         if (!post?.tags || !Array.isArray(post.tags)) return false
-        return post.tags.some((tag) => tag?.slug === selectedCategory)
+        return post.tags.some((tag: any) => tag?.name === selectedCategory)
       })
     }
 
@@ -147,7 +111,7 @@ export function useBlogFilter(initialPosts: Post[] = [], initialTags: Tag[] = []
   }, [posts, searchQuery, selectedCategory, sortBy])
 
   return {
-    filteredPosts: filteredAndSortedPosts,
+    filteredPosts,
     searchQuery,
     setSearchQuery,
     selectedCategory,

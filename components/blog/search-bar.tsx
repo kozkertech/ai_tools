@@ -1,54 +1,60 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
-import { Search, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Search, X } from "lucide-react"
 
 interface SearchBarProps {
-  searchQuery: string
-  onSearchChange: (query: string) => void
+  searchQuery?: string
+  onSearchChange?: (query: string) => void
+  onSearch?: (query: string) => void
+  initialQuery?: string
 }
 
-export function SearchBar({ searchQuery, onSearchChange }: SearchBarProps) {
-  const [localQuery, setLocalQuery] = useState(searchQuery)
+export function SearchBar({ searchQuery = "", onSearchChange, onSearch, initialQuery = "" }: SearchBarProps) {
+  const [query, setQuery] = useState(searchQuery || initialQuery)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSearchChange(localQuery)
+  const handleSearch = (value: string) => {
+    setQuery(value)
+    if (onSearchChange) {
+      onSearchChange(value)
+    }
+    if (onSearch) {
+      onSearch(value)
+    }
   }
 
-  const handleClear = () => {
-    setLocalQuery("")
-    onSearchChange("")
+  const clearSearch = () => {
+    setQuery("")
+    if (onSearchChange) {
+      onSearchChange("")
+    }
+    if (onSearch) {
+      onSearch("")
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="relative flex-1">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="text"
-          placeholder="Search posts..."
-          value={localQuery}
-          onChange={(e) => setLocalQuery(e.target.value)}
-          className="pl-10 pr-10"
-        />
-        {localQuery && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={handleClear}
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
-          >
-            <X className="h-4 w-4" />
-            <span className="sr-only">Clear search</span>
-          </Button>
-        )}
-      </div>
-    </form>
+    <div className="relative">
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+      <Input
+        type="text"
+        placeholder="Search posts..."
+        value={query}
+        onChange={(e) => handleSearch(e.target.value)}
+        className="pl-10 pr-10"
+      />
+      {query && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={clearSearch}
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      )}
+    </div>
   )
 }

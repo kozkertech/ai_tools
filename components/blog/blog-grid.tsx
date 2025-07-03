@@ -4,14 +4,15 @@ import { PostCard } from "@/components/post-card"
 
 interface BlogGridProps {
   posts: any[]
+  emptyMessage?: string
 }
 
-export function BlogGrid({ posts }: BlogGridProps) {
-  if (!posts || posts.length === 0) {
+export function BlogGrid({ posts = [], emptyMessage = "No posts found" }: BlogGridProps) {
+  if (!Array.isArray(posts) || posts.length === 0) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-lg font-medium mb-2">No posts found</h3>
-        <p className="text-muted-foreground">Try adjusting your search or filter criteria.</p>
+        <h3 className="text-lg font-medium text-muted-foreground mb-2">No Posts Found</h3>
+        <p className="text-muted-foreground">{emptyMessage}</p>
       </div>
     )
   }
@@ -19,7 +20,7 @@ export function BlogGrid({ posts }: BlogGridProps) {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id || post.slug} post={post} />
       ))}
     </div>
   )
