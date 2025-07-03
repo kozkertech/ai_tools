@@ -1,126 +1,127 @@
 import GhostContentAPI from "@tryghost/content-api"
 
-// Initialize the Ghost Content API client with proper error handling
+// Create API instance with site credentials
 const api = new GhostContentAPI({
-  url: process.env.GHOST_URL || "",
-  key: process.env.GHOST_CONTENT_API_KEY || "",
+  url: process.env.GHOST_URL || "https://ghost.org", // Default to ghost.org if not set
+  key: process.env.GHOST_CONTENT_API_KEY || "22444f78447824223cefc48062", // Default to a public key if not set
   version: "v5.0",
 })
 
-// Get all posts with their tags and authors
-export async function getPosts(options = {}) {
+export async function getPosts() {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return []
-    }
-
-    const posts = await api.posts.browse({
-      limit: "all",
-      include: ["tags", "authors"],
-      order: "published_at DESC",
-      ...options,
-    })
-
-    return Array.isArray(posts) ? posts : []
-  } catch (err) {
-    console.error("Error fetching posts from Ghost:", err)
+    const posts = await api.posts
+      .browse({
+        limit: "all",
+        include: ["tags", "authors"],
+        fields: ["id", "title", "slug", "excerpt", "feature_image", "published_at", "updated_at", "reading_time"],
+      })
+      .catch((err) => {
+        console.error("Error fetching posts from Ghost:", err)
+        return []
+      })
+    return posts
+  } catch (error) {
+    console.error("Error in getPosts:", error)
     return []
   }
 }
 
-// Get a specific post by its slug
-export async function getPost(slug: string) {
+export async function getSinglePost(postSlug: string) {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return null
-    }
-
-    return await api.posts.read({
-      slug,
-      include: ["tags", "authors"],
-    })
-  } catch (err) {
-    console.error(`Error fetching post ${slug} from Ghost:`, err)
+    const post = await api.posts
+      .read(
+        { slug: postSlug },
+        {
+          include: ["tags", "authors"],
+        },
+      )
+      .catch((err) => {
+        console.error(`Error fetching single post (${postSlug}) from Ghost:`, err)
+        return null
+      })
+    return post
+  } catch (error) {
+    console.error("Error in getSinglePost:", error)
     return null
   }
 }
 
-// Get featured posts
-export async function getFeaturedPosts() {
+export async function getPost(slug: string) {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return []
-    }
-
-    // First try to get posts with the featured filter
-    try {
-      const featuredPosts = await api.posts.browse({
-        limit: 3,
-        include: ["tags", "authors"],
-        filter: "featured:true",
-      })
-
-      // Ensure featuredPosts is an array and has length property
-      if (Array.isArray(featuredPosts) && featuredPosts.length > 0) {
-        return featuredPosts
-      }
-    } catch (featuredError) {
-      console.error("Error fetching featured posts, falling back to latest posts:", featuredError)
-    }
-
-    // If no featured posts or if the featured filter fails, fall back to latest posts
-    const latestPosts = await api.posts.browse({
-      limit: 3,
-      include: ["tags", "authors"],
-      order: "published_at DESC",
+    const post = await api.posts.read({ slug }, { include: ["tags", "authors"] }).catch((err) => {
+      console.error(`Error fetching post with slug ${slug}:`, err)
+      return null
     })
-
-    return Array.isArray(latestPosts) ? latestPosts : []
-  } catch (err) {
-    console.error("Error fetching posts from Ghost:", err)
-    return []
+    return post
+  } catch (error) {
+    console.error(`Error in getPost for slug ${slug}:`, error)
+    return null
   }
 }
 
-// Get all tags
 export async function getTags() {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return []
-    }
-
-    const tags = await api.tags.browse({
-      limit: "all",
-    })
-
-    return Array.isArray(tags) ? tags : []
-  } catch (err) {
-    console.error("Error fetching tags from Ghost:", err)
+    const tags = await api.tags
+      .browse({
+        limit: "all",
+        fields: ["id", "name", "slug", "description"],
+        include: ["count.posts"], // Include post count for each tag
+      })
+      .catch((err) => {
+        console.error("Error fetching tags from Ghost:", err)
+        return []
+      })
+    return tags
+  } catch (error) {
+    console.error("Error in getTags:", error)
     return []
   }
 }
 
-// Search posts by query
-export async function searchPosts(query: string) {
+export async function getFeaturedPosts() {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return []
+    const featuredPosts = await api.posts
+      .browse({
+        filter: "featured:true",
+        limit: 3, // Limit to 3 featured posts
+        include: ["tags", "authors"],
+        fields: ["id", "title", "slug", "excerpt", "feature_image", "published_at", "primary_author", "primary_tag"],
+      })
+      .catch((err) => {
+        console.warn("Error fetching featured posts, falling back to latest posts:", err)
+        return [] // Return empty array on error
+      })
+
+    // If no featured posts or error, fetch latest posts
+    if (!featuredPosts || featuredPosts.length === 0) {
+      console.log("No featured posts found or error occurred, fetching latest posts.")
+      return await api.posts
+        .browse({
+          limit: 3, // Limit to 3 latest posts
+          include: ["tags", "authors"],
+          fields: ["id", "title", "slug", "excerpt", "feature_image", "published_at", "primary_author", "primary_tag"],
+        })
+        .catch((err) => {
+          console.error("Error fetching latest posts as fallback:", err)
+          return []
+        })
     }
-
-    const posts = await api.posts.browse({
-      limit: "all",
-      include: ["tags", "authors"],
-      filter: `(title:~'${query}'+slug:~'${query}'+custom_excerpt:~'${query}'+html:~'${query}')`,
-    })
-
-    return Array.isArray(posts) ? posts : []
-  } catch (err) {
-    console.error(`Error searching posts with query "${query}" from Ghost:`, err)
+    return featuredPosts
+  } catch (error) {
+    console.error("Error in getFeaturedPosts (outer catch):", error)
     return []
+  }
+}
+
+export async function getSettings() {
+  try {
+    const settings = await api.settings.browse().catch((err) => {
+      console.error("Error fetching settings from Ghost:", err)
+      return null
+    })
+    return settings
+  } catch (error) {
+    console.error("Error in getSettings:", error)
+    return null
   }
 }

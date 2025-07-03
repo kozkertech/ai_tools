@@ -19,18 +19,21 @@ export interface Post {
     slug: string
   }
   tags?: Array<{
+    id: string
     name: string
     slug: string
   }>
+  reading_time?: number
 }
 
 export interface Tag {
   id: string
   name: string
   slug: string
+  count?: { posts: number }
 }
 
-export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = []) {
+export function useBlogFilter(initialPosts: Post[] = [], initialTags: Tag[] = []) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [sortBy, setSortBy] = useState("newest")
@@ -39,33 +42,61 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
   const posts = Array.isArray(initialPosts) ? initialPosts : []
   const tags = Array.isArray(initialTags) ? initialTags : []
 
-  // Extract categories from posts and tags
+  // Extract and format categories from tags and posts
   const categories = useMemo(() => {
-    const categorySet = new Set(["all"])
+    const uniqueCategories = new Map<string, Tag>()
 
-    // Add categories from post tags
-    posts.forEach((post) => {
-      if (post?.tags && Array.isArray(post.tags)) {
-        post.tags.forEach((tag: any) => {
-          if (tag?.name) {
-            categorySet.add(tag.name)
-          }
+    // Add "All Categories" as the first option
+    uniqueCategories.set("all", { id: "all", name: "All Categories", slug: "all", count: { posts: posts.length } })
+
+    // Add categories from initialTags (from Ghost)
+    tags.forEach((tag) => {
+      if (tag?.slug && tag?.name) {
+        uniqueCategories.set(tag.slug, {
+          id: tag.id || tag.slug,
+          name: tag.name,
+          slug: tag.slug,
+          count: tag.count || { posts: 0 },
         })
       }
     })
 
-    // Add categories from initial tags
-    tags.forEach((tag) => {
-      if (tag?.name) {
-        categorySet.add(tag.name)
-      }
+    // Add categories from posts if they are not already in initialTags, and update counts
+    posts.forEach((post) => {
+      post.tags?.forEach((tag) => {
+        if (tag?.slug && tag?.name) {
+          const currentTag = uniqueCategories.get(tag.slug)
+          if (currentTag) {
+            // If tag already exists, increment its post count
+            uniqueCategories.set(tag.slug, {
+              ...currentTag,
+              count: { posts: (currentTag.count?.posts || 0) + 1 },
+            })
+          } else {
+            // If new tag, add it with count 1
+            uniqueCategories.set(tag.slug, {
+              id: tag.id || tag.slug,
+              name: tag.name,
+              slug: tag.slug,
+              count: { posts: 1 },
+            })
+          }
+        }
+      })
     })
 
-    return Array.from(categorySet)
+    // Sort categories alphabetically by name, keeping "All Categories" first
+    const sortedCategories = Array.from(uniqueCategories.values()).sort((a, b) => {
+      if (a.slug === "all") return -1
+      if (b.slug === "all") return 1
+      return a.name.localeCompare(b.name)
+    })
+
+    return sortedCategories
   }, [posts, tags])
 
   // Filter and sort posts
-  const filteredPosts = useMemo(() => {
+  const filteredAndSortedPosts = useMemo(() => {
     let filtered = [...posts]
 
     // Apply search filter
@@ -77,9 +108,14 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
         const title = post.title?.toLowerCase() || ""
         const excerpt = post.excerpt?.toLowerCase() || ""
         const customExcerpt = post.custom_excerpt?.toLowerCase() || ""
-        const slug = post.slug?.toLowerCase() || ""
+        const authorName = post.primary_author?.name?.toLowerCase() || ""
 
-        return title.includes(query) || excerpt.includes(query) || customExcerpt.includes(query) || slug.includes(query)
+        return (
+          title.includes(query) ||
+          excerpt.includes(query) ||
+          customExcerpt.includes(query) ||
+          authorName.includes(query)
+        )
       })
     }
 
@@ -87,7 +123,7 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
     if (selectedCategory !== "all") {
       filtered = filtered.filter((post) => {
         if (!post?.tags || !Array.isArray(post.tags)) return false
-        return post.tags.some((tag: any) => tag?.name === selectedCategory)
+        return post.tags.some((tag) => tag?.slug === selectedCategory)
       })
     }
 
@@ -111,7 +147,7 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
   }, [posts, searchQuery, selectedCategory, sortBy])
 
   return {
-    filteredPosts,
+    filteredPosts: filteredAndSortedPosts,
     searchQuery,
     setSearchQuery,
     selectedCategory,
