@@ -1,90 +1,113 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useEffect, useMemo } from "react"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 
-export interface Post {
-  id: string
-  title: string
-  slug: string
-  excerpt?: string
-  published_at: string
-  feature_image?: string
-  primary_author?: {
-    name: string
-    slug: string
-  }
-  primary_tag?: {
-    name: string
-    slug: string
-  }
-  tags?: Array<{
-    name: string
-    slug: string
-  }>
-}
+export function useBlogFilter(initialPosts: any[]) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
-export interface Tag {
-  id: string
-  name: string
-  slug: string
-}
+  // Get initial values from URL
+  const initialQuery = searchParams.get("q") || ""
+  const initialCategories = searchParams.get("categories")?.split(",").filter(Boolean) || []
+  const initialSort = searchParams.get("sort") || "newest"
 
-export function useBlogFilter(initialPosts: Post[] = [], initialTags: Tag[] = []) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [sortBy, setSortBy] = useState("newest")
+  // State
+  const [searchQuery, setSearchQuery] = useState(initialQuery)
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(initialCategories)
+  const [sortOption, setSortOption] = useState(initialSort)
+  const [posts, setPosts] = useState(initialPosts)
 
-  // Ensure we always have arrays to work with
-  const posts = Array.isArray(initialPosts) ? initialPosts : []
-  const tags = Array.isArray(initialTags) ? initialTags : []
+  // Filter and sort posts
+  const filteredPosts = useMemo(() => {
+    let result = [...initialPosts]
 
-  const filteredAndSortedPosts = useMemo(() => {
-    let filtered = [...posts]
-
-    // Filter by search term
-    if (searchTerm) {
-      filtered = filtered.filter(
+    // Filter by search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase()
+      result = result.filter(
         (post) =>
-          post?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post?.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post?.primary_author?.name?.toLowerCase().includes(searchTerm.toLowerCase()),
+          post.title.toLowerCase().includes(query) ||
+          (post.excerpt && post.excerpt.toLowerCase().includes(query)) ||
+          (post.html && post.html.toLowerCase().includes(query)),
       )
     }
 
-    // Filter by category
-    if (selectedCategory !== "all") {
-      filtered = filtered.filter(
-        (post) =>
-          post?.primary_tag?.slug === selectedCategory || post?.tags?.some((tag) => tag?.slug === selectedCategory),
-      )
+    // Filter by categories
+    if (selectedCategories.length > 0) {
+      result = result.filter((post) => post.tags?.some((tag: any) => selectedCategories.includes(tag.slug)))
     }
 
     // Sort posts
-    filtered.sort((a, b) => {
-      if (!a || !b) return 0
+    switch (sortOption) {
+      case "newest":
+        result.sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
+        break
+      case "oldest":
+        result.sort((a, b) => new Date(a.published_at).getTime() - new Date(b.published_at).getTime())
+        break
+      case "a-z":
+        result.sort((a, b) => a.title.localeCompare(b.title))
+        break
+      case "z-a":
+        result.sort((a, b) => b.title.localeCompare(a.title))
+        break
+    }
 
-      switch (sortBy) {
-        case "oldest":
-          return new Date(a.published_at || "").getTime() - new Date(b.published_at || "").getTime()
-        case "title":
-          return (a.title || "").localeCompare(b.title || "")
-        case "newest":
-        default:
-          return new Date(b.published_at || "").getTime() - new Date(a.published_at || "").getTime()
-      }
-    })
+    return result
+  }, [initialPosts, searchQuery, selectedCategories, sortOption])
 
-    return filtered
-  }, [posts, searchTerm, selectedCategory, sortBy])
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (searchQuery) {
+      params.set("q", searchQuery)
+    } else {
+      params.delete("q")
+    }
+
+    if (selectedCategories.length > 0) {
+      params.set("categories", selectedCategories.join(","))
+    } else {
+      params.delete("categories")
+    }
+
+    if (sortOption !== "newest") {
+      params.set("sort", sortOption)
+    } else {
+      params.delete("sort")
+    }
+
+    const newUrl = `${pathname}${params.toString() ? `?${params.toString()}` : ""}`
+    router.push(newUrl, { scroll: false })
+  }, [searchQuery, selectedCategories, sortOption, pathname, router, searchParams])
+
+  // Handle search
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+  }
+
+  // Handle category selection
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category],
+    )
+  }
+
+  // Handle sort selection
+  const handleSortSelect = (option: string) => {
+    setSortOption(option)
+  }
 
   return {
-    posts: filteredAndSortedPosts,
-    tags,
-    searchTerm,
-    setSearchTerm,
-    selectedCategory,
-    setSelectedCategory,
-    sortBy,
-    setSortBy,
+    posts: filteredPosts,
+    searchQuery,
+    selectedCategories,
+    sortOption,
+    handleSearch,
+    handleCategorySelect,
+    handleSortSelect,
   }
 }

@@ -18,10 +18,6 @@ export function BlogContainer({ initialPosts, initialTags }: BlogContainerProps)
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
   const searchParams = useSearchParams()
 
-  // Ensure props are always arrays
-  const safePosts = Array.isArray(initialPosts) ? initialPosts : []
-  const safeTags = Array.isArray(initialTags) ? initialTags : []
-
   const {
     posts: filteredPosts,
     searchQuery,
@@ -30,7 +26,7 @@ export function BlogContainer({ initialPosts, initialTags }: BlogContainerProps)
     handleSearch,
     handleCategorySelect,
     handleSortSelect,
-  } = useBlogFilter(safePosts)
+  } = useBlogFilter(initialPosts)
 
   // Sort options
   const sortOptions = [
@@ -41,7 +37,7 @@ export function BlogContainer({ initialPosts, initialTags }: BlogContainerProps)
   ]
 
   // If there are no posts or tags, show a message
-  if (safePosts.length === 0) {
+  if (initialPosts.length === 0) {
     return (
       <div className="mt-8 text-center py-12">
         <h2 className="text-xl font-medium mb-4">No posts available</h2>
@@ -62,12 +58,7 @@ export function BlogContainer({ initialPosts, initialTags }: BlogContainerProps)
             </p>
           )}
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="lg:hidden bg-transparent"
-          onClick={() => setIsMobileFilterOpen(true)}
-        >
+        <Button variant="outline" size="sm" className="lg:hidden" onClick={() => setIsMobileFilterOpen(true)}>
           <SlidersHorizontal className="mr-2 h-4 w-4" />
           Filters
         </Button>
@@ -77,7 +68,7 @@ export function BlogContainer({ initialPosts, initialTags }: BlogContainerProps)
         {/* Sidebar */}
         <div className="lg:col-span-1">
           <BlogSidebar
-            categories={safeTags}
+            categories={initialTags}
             selectedCategories={selectedCategories}
             onSelectCategory={handleCategorySelect}
             sortOptions={sortOptions}
@@ -105,6 +96,3 @@ export function BlogContainer({ initialPosts, initialTags }: BlogContainerProps)
     </div>
   )
 }
-
-// Also export as default for compatibility
-export default BlogContainer
