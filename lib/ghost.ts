@@ -15,12 +15,14 @@ export async function getPosts(options = {}) {
       return []
     }
 
-    return await api.posts.browse({
+    const posts = await api.posts.browse({
       limit: "all",
       include: ["tags", "authors"],
       order: "published_at DESC",
       ...options,
     })
+
+    return Array.isArray(posts) ? posts : []
   } catch (err) {
     console.error("Error fetching posts from Ghost:", err)
     return []
@@ -61,7 +63,8 @@ export async function getFeaturedPosts() {
         filter: "featured:true",
       })
 
-      if (featuredPosts.length > 0) {
+      // Ensure featuredPosts is an array and has length property
+      if (Array.isArray(featuredPosts) && featuredPosts.length > 0) {
         return featuredPosts
       }
     } catch (featuredError) {
@@ -69,11 +72,13 @@ export async function getFeaturedPosts() {
     }
 
     // If no featured posts or if the featured filter fails, fall back to latest posts
-    return await api.posts.browse({
+    const latestPosts = await api.posts.browse({
       limit: 3,
       include: ["tags", "authors"],
       order: "published_at DESC",
     })
+
+    return Array.isArray(latestPosts) ? latestPosts : []
   } catch (err) {
     console.error("Error fetching posts from Ghost:", err)
     return []
@@ -88,9 +93,11 @@ export async function getTags() {
       return []
     }
 
-    return await api.tags.browse({
+    const tags = await api.tags.browse({
       limit: "all",
     })
+
+    return Array.isArray(tags) ? tags : []
   } catch (err) {
     console.error("Error fetching tags from Ghost:", err)
     return []
@@ -105,11 +112,13 @@ export async function searchPosts(query: string) {
       return []
     }
 
-    return await api.posts.browse({
+    const posts = await api.posts.browse({
       limit: "all",
       include: ["tags", "authors"],
       filter: `(title:~'${query}'+slug:~'${query}'+custom_excerpt:~'${query}'+html:~'${query}')`,
     })
+
+    return Array.isArray(posts) ? posts : []
   } catch (err) {
     console.error(`Error searching posts with query "${query}" from Ghost:`, err)
     return []

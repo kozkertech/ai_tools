@@ -1,45 +1,74 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
-import { Search } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Search, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 interface SearchBarProps {
-  onSearch: (query: string) => void
+  searchQuery?: string
+  onSearchChange?: (query: string) => void
+  onSearch?: (query: string) => void
   initialQuery?: string
+  placeholder?: string
 }
 
-export function SearchBar({ onSearch, initialQuery = "" }: SearchBarProps) {
-  const [query, setQuery] = useState(initialQuery)
+export function SearchBar({
+  searchQuery = "",
+  onSearchChange,
+  onSearch,
+  initialQuery = "",
+  placeholder = "Search posts...",
+}: SearchBarProps) {
+  const [query, setQuery] = useState(initialQuery || searchQuery)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSearch(query)
+  useEffect(() => {
+    if (initialQuery !== undefined) {
+      setQuery(initialQuery)
+    }
+  }, [initialQuery])
+
+  const handleSearch = (value: string) => {
+    setQuery(value)
+    if (onSearchChange) {
+      onSearchChange(value)
+    }
+    if (onSearch) {
+      onSearch(value)
+    }
+  }
+
+  const clearSearch = () => {
+    setQuery("")
+    if (onSearchChange) {
+      onSearchChange("")
+    }
+    if (onSearch) {
+      onSearch("")
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="relative w-full">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Search articles..."
-          className="pl-10 pr-12"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+    <div className="relative">
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+      <Input
+        type="text"
+        placeholder={placeholder}
+        value={query}
+        onChange={(e) => handleSearch(e.target.value)}
+        className="pl-10 pr-10"
+      />
+      {query && (
         <Button
-          type="submit"
-          size="sm"
           variant="ghost"
-          className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
+          size="sm"
+          onClick={clearSearch}
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
         >
-          Search
+          <X className="h-4 w-4" />
+          <span className="sr-only">Clear search</span>
         </Button>
-      </div>
-    </form>
+      )}
+    </div>
   )
 }
