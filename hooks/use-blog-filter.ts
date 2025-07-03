@@ -41,27 +41,45 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
 
   // Extract categories from posts and tags
   const categories = useMemo(() => {
-    const categorySet = new Set(["all"])
+    const categoryMap = new Map()
 
     // Add categories from post tags
     posts.forEach((post) => {
       if (post?.tags && Array.isArray(post.tags)) {
         post.tags.forEach((tag: any) => {
-          if (tag?.name) {
-            categorySet.add(tag.name)
+          if (tag?.name && tag.name.trim()) {
+            categoryMap.set(tag.slug || tag.name, {
+              id: tag.id || tag.slug || tag.name,
+              name: tag.name,
+              slug: tag.slug || tag.name.toLowerCase().replace(/\s+/g, "-"),
+            })
           }
+        })
+      }
+
+      // Also check primary_tag
+      if (post?.primary_tag?.name && post.primary_tag.name.trim()) {
+        const tag = post.primary_tag
+        categoryMap.set(tag.slug || tag.name, {
+          id: tag.id || tag.slug || tag.name,
+          name: tag.name,
+          slug: tag.slug || tag.name.toLowerCase().replace(/\s+/g, "-"),
         })
       }
     })
 
     // Add categories from initial tags
     tags.forEach((tag) => {
-      if (tag?.name) {
-        categorySet.add(tag.name)
+      if (tag?.name && tag.name.trim()) {
+        categoryMap.set(tag.slug || tag.name, {
+          id: tag.id || tag.slug || tag.name,
+          name: tag.name,
+          slug: tag.slug || tag.name.toLowerCase().replace(/\s+/g, "-"),
+        })
       }
     })
 
-    return Array.from(categorySet)
+    return Array.from(categoryMap.values())
   }, [posts, tags])
 
   // Filter and sort posts
@@ -78,16 +96,34 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
         const excerpt = post.excerpt?.toLowerCase() || ""
         const customExcerpt = post.custom_excerpt?.toLowerCase() || ""
         const slug = post.slug?.toLowerCase() || ""
+        const authorName = post.primary_author?.name?.toLowerCase() || ""
 
-        return title.includes(query) || excerpt.includes(query) || customExcerpt.includes(query) || slug.includes(query)
+        return (
+          title.includes(query) ||
+          excerpt.includes(query) ||
+          customExcerpt.includes(query) ||
+          slug.includes(query) ||
+          authorName.includes(query)
+        )
       })
     }
 
     // Apply category filter
     if (selectedCategory !== "all") {
       filtered = filtered.filter((post) => {
-        if (!post?.tags || !Array.isArray(post.tags)) return false
-        return post.tags.some((tag: any) => tag?.name === selectedCategory)
+        if (!post) return false
+
+        // Check primary tag
+        if (post.primary_tag?.slug === selectedCategory || post.primary_tag?.name === selectedCategory) {
+          return true
+        }
+
+        // Check all tags
+        if (post.tags && Array.isArray(post.tags)) {
+          return post.tags.some((tag: any) => tag?.slug === selectedCategory || tag?.name === selectedCategory)
+        }
+
+        return false
       })
     }
 

@@ -80,7 +80,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
     }
 
     // Check if this is a guide post by looking for toc-guide tag
-    const isGuidePost = post.tags?.some((tag) => tag.slug === "toc-guide")
+    const isGuidePost = post.tags?.some((tag) => tag.slug = "hash-toc-guide")
 
     // Generate JSON-LD structured data
     const jsonLd = {

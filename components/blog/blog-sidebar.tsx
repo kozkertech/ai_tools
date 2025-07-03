@@ -1,5 +1,7 @@
 "use client"
 
+import React from "react"
+
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -37,9 +39,24 @@ export function BlogSidebar({
   onSortChange,
   tags = [],
 }: BlogSidebarProps) {
-  // Use the appropriate props based on what's provided
-  const finalCategories =
-    Array.isArray(categories) && categories.length > 0 ? categories : Array.isArray(tags) ? tags : []
+  // Process categories to ensure we have valid data
+  const processedCategories = React.useMemo(() => {
+    const allCategories = [...(Array.isArray(categories) ? categories : []), ...(Array.isArray(tags) ? tags : [])]
+
+    // Filter out invalid categories and ensure we have name property
+    return allCategories
+      .filter((cat) => {
+        if (!cat) return false
+        const name = cat.name || cat.title || cat.slug
+        return name && name.trim().length > 0
+      })
+      .map((cat) => ({
+        id: cat.id || cat.slug || cat.name,
+        name: cat.name || cat.title || cat.slug,
+        slug: cat.slug || cat.name?.toLowerCase().replace(/\s+/g, "-") || cat.id,
+      }))
+  }, [categories, tags])
+
   const finalOnSelectCategory = onSelectCategory || onCategoryChange
   const finalSortBy = selectedSortOption !== "newest" ? selectedSortOption : sortBy
   const finalOnSortChange = onSelectSortOption || onSortChange
@@ -61,17 +78,21 @@ export function BlogSidebar({
           >
             All Categories
           </Button>
-          {finalCategories.map((category) => (
-            <Button
-              key={category.id || category.slug || category.name}
-              variant={selectedCategory === (category.slug || category.name) ? "default" : "ghost"}
-              size="sm"
-              className="w-full justify-start"
-              onClick={() => finalOnSelectCategory && finalOnSelectCategory(category.slug || category.name)}
-            >
-              {category.name}
-            </Button>
-          ))}
+          {processedCategories.length > 0 ? (
+            processedCategories.map((category) => (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.slug ? "default" : "ghost"}
+                size="sm"
+                className="w-full justify-start"
+                onClick={() => finalOnSelectCategory && finalOnSelectCategory(category.slug)}
+              >
+                {category.name}
+              </Button>
+            ))
+          ) : (
+            <div className="text-sm text-muted-foreground p-2">No categories available</div>
+          )}
         </CardContent>
       </Card>
 

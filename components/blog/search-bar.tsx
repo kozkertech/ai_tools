@@ -8,31 +8,25 @@ import { Search, X } from "lucide-react"
 interface SearchBarProps {
   searchQuery?: string
   onSearchChange?: (query: string) => void
-  onSearch?: (query: string) => void
   initialQuery?: string
+  onSearch?: (query: string) => void
 }
 
-export function SearchBar({ searchQuery = "", onSearchChange, onSearch, initialQuery = "" }: SearchBarProps) {
-  const [query, setQuery] = useState(searchQuery || initialQuery)
+export function SearchBar({ searchQuery = "", onSearchChange, initialQuery = "", onSearch }: SearchBarProps) {
+  const [localQuery, setLocalQuery] = useState(searchQuery || initialQuery)
 
-  const handleSearch = (value: string) => {
-    setQuery(value)
+  const handleSearch = (query: string) => {
+    setLocalQuery(query)
     if (onSearchChange) {
-      onSearchChange(value)
+      onSearchChange(query)
     }
     if (onSearch) {
-      onSearch(value)
+      onSearch(query)
     }
   }
 
   const clearSearch = () => {
-    setQuery("")
-    if (onSearchChange) {
-      onSearchChange("")
-    }
-    if (onSearch) {
-      onSearch("")
-    }
+    handleSearch("")
   }
 
   return (
@@ -41,11 +35,11 @@ export function SearchBar({ searchQuery = "", onSearchChange, onSearch, initialQ
       <Input
         type="text"
         placeholder="Search posts..."
-        value={query}
+        value={localQuery}
         onChange={(e) => handleSearch(e.target.value)}
         className="pl-10 pr-10"
       />
-      {query && (
+      {localQuery && (
         <Button
           variant="ghost"
           size="sm"

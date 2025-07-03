@@ -11,7 +11,7 @@ export function BlogGrid({ posts = [], emptyMessage = "No posts found" }: BlogGr
   if (!Array.isArray(posts) || posts.length === 0) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-lg font-medium text-muted-foreground mb-2">No Posts Found</h3>
+        <h3 className="text-xl font-semibold mb-2">No Posts Found</h3>
         <p className="text-muted-foreground">{emptyMessage}</p>
       </div>
     )
