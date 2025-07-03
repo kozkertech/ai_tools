@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle, XCircle, Sparkles, FileText } from "lucide-react"
 
+import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
+
 interface FormData {
   name: string
   email: string
@@ -42,6 +44,9 @@ export default function BlogGenerator() {
       [name]: value,
     }))
   }
+
+    if (isLoading) {    
+        return < ContentLoadingScreen />  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -87,7 +92,11 @@ export default function BlogGenerator() {
         console.error("Error response:", errorText)
         setDebugInfo(`HTTP Error: ${response.status} - ${errorText}`)
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        
       }
+
+     
+
 
       const responseData = await response.json()
       console.log("Response data:", responseData)

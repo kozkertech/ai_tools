@@ -12,6 +12,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Mail, TrendingUp, Star } from "lucide-react"
 
+import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
+
+
 interface GeneratedLine {
   id: number
   subject: string
@@ -50,6 +53,8 @@ export default function EmailGenerator() {
   const [metadata, setMetadata] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  if (loading) {    
+        return < ContentLoadingScreen />  }
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -91,6 +96,8 @@ export default function EmailGenerator() {
     }
   }
 
+
+        
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
       case "urgency":
