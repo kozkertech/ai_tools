@@ -1,3 +1,5 @@
+"use client"
+
 import { PostCard } from "@/components/post-card"
 
 interface BlogGridProps {
@@ -6,19 +8,17 @@ interface BlogGridProps {
 }
 
 export function BlogGrid({ posts, emptyMessage = "No posts found" }: BlogGridProps) {
-  if (posts.length === 0) {
+  if (!posts || posts.length === 0) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-xl font-medium">{emptyMessage}</h2>
-        <p className="text-muted-foreground mt-2">
-          Try adjusting your search or filter to find what you're looking for.
-        </p>
+        <h3 className="text-lg font-medium text-muted-foreground mb-2">No Posts Found</h3>
+        <p className="text-muted-foreground">{emptyMessage}</p>
       </div>
     )
   }
 
   return (
-    <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
