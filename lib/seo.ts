@@ -6,6 +6,65 @@ export function getCanonicalUrl(path: string): string {
   return `${baseUrl}${path}`
 }
 
+// Generate SEO metadata for pages
+export function generateSEOMetadata({
+  title,
+  description,
+  path,
+  image,
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  tags,
+  author,
+}: {
+  title: string
+  description: string
+  path: string
+  image?: string
+  type?: "website" | "article"
+  publishedTime?: string
+  modifiedTime?: string
+  tags?: string[]
+  author?: string
+}) {
+  const canonicalUrl = getCanonicalUrl(path)
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
+  const defaultImage = `${baseUrl}/og-image.png`
+
+  return {
+    title,
+    description,
+    canonical: canonicalUrl,
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type,
+      images: [
+        {
+          url: image || defaultImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      ...(type === "article" && {
+        publishedTime,
+        modifiedTime,
+        authors: author ? [author] : undefined,
+        tags,
+      }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image || defaultImage],
+    },
+  }
+}
+
 // Generate structured data for breadcrumbs
 export function generateBreadcrumbSchema(items: { name: string; url: string }[]): any {
   return {
