@@ -1,14 +1,13 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { CalendarIcon, UserIcon, ClockIcon, BookOpenIcon, ChevronRightIcon } from "lucide-react"
+import { CalendarIcon, UserIcon, ClockIcon, BookOpenIcon, ListIcon } from "lucide-react"
 import { formatDate } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 
 interface GuideLayoutProps {
   post: {
@@ -45,11 +44,11 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
   const [tocItems, setTocItems] = useState<TocItem[]>([])
   const [activeId, setActiveId] = useState<string>("")
 
-  // Extract table of contents from the HTML content
+  // Extract table of contents from the HTML content (only h1 and h2)
   useEffect(() => {
     const parser = new DOMParser()
     const doc = parser.parseFromString(post.html, "text/html")
-    const headings = doc.querySelectorAll("h1, h2, h3, h4, h5, h6")
+    const headings = doc.querySelectorAll("h1, h2") // Only h1 and h2
 
     const items: TocItem[] = []
     headings.forEach((heading, index) => {
@@ -142,47 +141,41 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
             )}
 
             {/* Content */}
-            <div className="prose prose-lg max-w-none dark:prose-invert">{children}</div>
+            <div className="ghost-content">{children}</div>
           </article>
         </div>
 
-        {/* Table of Contents Sidebar */}
+        {/* Clean Table of Contents Sidebar */}
         <div className="lg:col-span-1">
           <div className="sticky top-8">
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="font-semibold text-lg mb-4 flex items-center">
-                  <BookOpenIcon className="mr-2 h-5 w-5" />
-                  Table of Contents
-                </h3>
+            {tocItems.length > 0 && (
+              <Card className="border-l-4 border-l-primary">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-6">
+                    <ListIcon className="h-5 w-5 text-primary" />
+                    <h3 className="font-semibold text-lg">Contents</h3>
+                  </div>
 
-                {tocItems.length > 0 ? (
-                  <nav className="space-y-2">
+                  <nav className="space-y-1">
                     {tocItems.map((item) => (
-                      <Button
+                      <button
                         key={item.id}
-                        variant="ghost"
-                        size="sm"
-                        className={`
-                          w-full justify-start text-left h-auto py-2 px-3
-                          ${item.level === 1 ? "font-medium" : ""}
-                          ${item.level === 2 ? "ml-4 text-sm" : ""}
-                          ${item.level === 3 ? "ml-8 text-sm" : ""}
-                          ${item.level >= 4 ? "ml-12 text-xs" : ""}
-                          ${activeId === item.id ? "bg-accent text-accent-foreground" : ""}
-                        `}
                         onClick={() => scrollToHeading(item.id)}
+                        className={cn(
+                          "block w-full text-left py-2 px-3 rounded-md transition-all duration-200 text-sm hover:bg-muted/50",
+                          item.level === 1 ? "font-medium" : "ml-4 text-muted-foreground",
+                          activeId === item.id
+                            ? "bg-primary/10 text-primary font-medium border-l-2 border-l-primary pl-2"
+                            : "hover:text-foreground",
+                        )}
                       >
-                        <ChevronRightIcon className="mr-1 h-3 w-3 flex-shrink-0" />
-                        <span className="truncate">{item.text}</span>
-                      </Button>
+                        {item.text}
+                      </button>
                     ))}
                   </nav>
-                ) : (
-                  <p className="text-sm text-muted-foreground">No headings found in this guide.</p>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>

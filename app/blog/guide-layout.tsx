@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CalendarIcon, UserIcon, BookOpen } from "lucide-react"
+import { CalendarIcon, UserIcon, BookOpen, ListIcon } from "lucide-react"
 
 interface TocItem {
   id: string
@@ -31,10 +31,8 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
   const [activeId, setActiveId] = useState<string>("")
 
   useEffect(() => {
-    // Extract headings from the content
-    const headings = document.querySelectorAll(
-      ".ghost-content h1, .ghost-content h2, .ghost-content h3, .ghost-content h4",
-    )
+    // Extract headings from the content (only h1 and h2)
+    const headings = document.querySelectorAll(".ghost-content h1, .ghost-content h2")
     const items: TocItem[] = []
 
     headings.forEach((heading, index) => {
@@ -83,36 +81,33 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
           {/* Table of Contents Sidebar */}
           <div className="lg:col-span-1 order-2 lg:order-1">
             <div className="sticky top-8">
-              <Card className="border-l-4 border-l-primary">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <BookOpen className="h-5 w-5 text-primary" />
-                    <h3 className="font-semibold text-lg">Table of Contents</h3>
-                  </div>
-                  <nav className="space-y-2">
-                    {tocItems.map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => scrollToHeading(item.id)}
-                        className={cn(
-                          "block w-full text-left text-sm py-2 px-3 rounded-md transition-colors hover:bg-muted",
-                          {
-                            "pl-3": item.level === 1,
-                            "pl-5": item.level === 2,
-                            "pl-7": item.level === 3,
-                            "pl-9": item.level === 4,
-                          },
-                          activeId === item.id
-                            ? "bg-primary/10 text-primary font-medium border-l-2 border-l-primary"
-                            : "text-muted-foreground hover:text-foreground",
-                        )}
-                      >
-                        {item.text}
-                      </button>
-                    ))}
-                  </nav>
-                </CardContent>
-              </Card>
+              {tocItems.length > 0 && (
+                <Card className="border-l-4 border-l-primary">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-2 mb-6">
+                      <ListIcon className="h-5 w-5 text-primary" />
+                      <h3 className="font-semibold text-lg">Contents</h3>
+                    </div>
+                    <nav className="space-y-1">
+                      {tocItems.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => scrollToHeading(item.id)}
+                          className={cn(
+                            "block w-full text-left py-2 px-3 rounded-md transition-all duration-200 text-sm hover:bg-muted/50",
+                            item.level === 1 ? "font-medium" : "ml-4 text-muted-foreground",
+                            activeId === item.id
+                              ? "bg-primary/10 text-primary font-medium border-l-2 border-l-primary pl-2"
+                              : "hover:text-foreground",
+                          )}
+                        >
+                          {item.text}
+                        </button>
+                      ))}
+                    </nav>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
 
@@ -123,7 +118,7 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
               <div className="space-y-6">
                 <div className="flex items-center gap-2">
                   {post.primary_tag && <Badge variant="secondary">{post.primary_tag.name}</Badge>}
-                  <Badge className="bg-blue-100 text-blue-700">
+                  <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200">
                     <BookOpen className="h-3 w-3 mr-1" />
                     Guide
                   </Badge>
@@ -155,7 +150,7 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
               )}
 
               {/* Post Content */}
-              <div className="prose prose-lg max-w-none">{children}</div>
+              <div className="ghost-content">{children}</div>
             </div>
           </div>
         </div>
