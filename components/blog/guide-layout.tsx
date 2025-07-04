@@ -176,7 +176,7 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
             )}
 
             {/* Content */}
-            <div className="ghost-content">{children}</div>
+            <div className="max-w-none">{children}</div>
           </article>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, UserIcon } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { GuideLayout } from "@/components/blog/guide-layout"
+import { GhostContent } from "@/components/ghost-content"
 import type { Metadata } from "next"
 
 export async function generateStaticParams() {
@@ -79,8 +80,14 @@ export default async function PostPage({ params }: { params: { slug: string } })
       notFound()
     }
 
-    // Check if this is a guide post by looking for toc-guide tag
-    const isGuidePost = post.tags?.some((tag) => tag.slug = "hash-toc-guide")
+    // Check if this is a guide post by looking for toc-guide tag (with or without #)
+    const isGuidePost = post.tags?.some(
+      (tag) =>
+        tag.slug === "toc-guide" ||
+        tag.slug === "hash-toc-guide" ||
+        tag.name === "#toc-guide" ||
+        tag.name === "toc-guide",
+    )
 
     // Generate JSON-LD structured data
     const jsonLd = {
@@ -109,7 +116,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
       },
     }
 
-    const postContent = <div className="ghost-content" dangerouslySetInnerHTML={{ __html: post.html }} />
+    const postContent = <GhostContent html={post.html} />
 
     // Use guide layout if it's a guide post
     if (isGuidePost) {
