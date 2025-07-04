@@ -1,13 +1,7 @@
-/* Ghost Content Styles with Syntax Highlighting */
-
+/* Ghost Content Styles */
 .ghost-content {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  line-height: 1.6;
-  color: #374151;
-}
-
-.dark .ghost-content {
-  color: #d1d5db;
+  @apply text-gray-900 dark:text-gray-100;
+  line-height: 1.7;
 }
 
 /* Typography */
@@ -17,250 +11,144 @@
 .ghost-content h4,
 .ghost-content h5,
 .ghost-content h6 {
-  font-weight: 700;
-  line-height: 1.25;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  color: #111827;
-}
-
-.dark .ghost-content h1,
-.dark .ghost-content h2,
-.dark .ghost-content h3,
-.dark .ghost-content h4,
-.dark .ghost-content h5,
-.dark .ghost-content h6 {
-  color: #f9fafb;
+  @apply font-bold text-gray-900 dark:text-gray-100 mb-4 mt-8;
+  line-height: 1.3;
 }
 
 .ghost-content h1 {
-  font-size: 2.25rem;
-  margin-top: 0;
+  @apply text-3xl md:text-4xl;
 }
 
 .ghost-content h2 {
-  font-size: 1.875rem;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 0.5rem;
-}
-
-.dark .ghost-content h2 {
-  border-bottom-color: #374151;
+  @apply text-2xl md:text-3xl;
 }
 
 .ghost-content h3 {
-  font-size: 1.5rem;
+  @apply text-xl md:text-2xl;
 }
 
 .ghost-content h4 {
-  font-size: 1.25rem;
+  @apply text-lg md:text-xl;
 }
 
 .ghost-content h5 {
-  font-size: 1.125rem;
+  @apply text-base md:text-lg;
 }
 
 .ghost-content h6 {
-  font-size: 1rem;
+  @apply text-sm md:text-base;
 }
 
-/* Paragraphs and text */
 .ghost-content p {
-  margin-bottom: 1.5rem;
+  @apply mb-6 text-gray-700 dark:text-gray-300;
+}
+
+.ghost-content a {
+  @apply text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline;
 }
 
 .ghost-content strong {
-  font-weight: 600;
-  color: #111827;
-}
-
-.dark .ghost-content strong {
-  color: #f9fafb;
+  @apply font-semibold text-gray-900 dark:text-gray-100;
 }
 
 .ghost-content em {
   font-style: italic;
 }
 
-/* Links */
-.ghost-content a {
-  color: #3b82f6;
-  text-decoration: underline;
-  text-decoration-color: #93c5fd;
-  text-underline-offset: 2px;
-  transition: all 0.2s ease;
-}
-
-.ghost-content a:hover {
-  color: #1d4ed8;
-  text-decoration-color: #3b82f6;
-}
-
-.dark .ghost-content a {
-  color: #60a5fa;
-  text-decoration-color: #3b82f6;
-}
-
-.dark .ghost-content a:hover {
-  color: #93c5fd;
-  text-decoration-color: #60a5fa;
-}
-
 /* Lists */
 .ghost-content ul,
 .ghost-content ol {
-  margin-bottom: 1.5rem;
-  padding-left: 1.5rem;
+  @apply mb-6 pl-6;
 }
 
 .ghost-content ul {
-  list-style-type: disc;
+  @apply list-disc;
 }
 
 .ghost-content ol {
-  list-style-type: decimal;
+  @apply list-decimal;
 }
 
 .ghost-content li {
-  margin-bottom: 0.5rem;
-}
-
-.ghost-content li > ul,
-.ghost-content li > ol {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  @apply mb-2 text-gray-700 dark:text-gray-300;
 }
 
 /* Blockquotes */
 .ghost-content blockquote {
-  border-left: 4px solid #e5e7eb;
-  padding-left: 1rem;
-  margin: 1.5rem 0;
+  @apply border-l-4 border-gray-300 dark:border-gray-600 pl-6 py-2 mb-6 bg-gray-50 dark:bg-gray-800 rounded-r-lg;
+}
+
+.ghost-content blockquote p {
+  @apply text-gray-600 dark:text-gray-400 mb-0;
   font-style: italic;
-  color: #6b7280;
-}
-
-.dark .ghost-content blockquote {
-  border-left-color: #4b5563;
-  color: #9ca3af;
-}
-
-/* Tables */
-.ghost-content table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.5rem 0;
-  font-size: 0.875rem;
-}
-
-.ghost-content th,
-.ghost-content td {
-  border: 1px solid #e5e7eb;
-  padding: 0.75rem;
-  text-align: left;
-}
-
-.dark .ghost-content th,
-.dark .ghost-content td {
-  border-color: #374151;
-}
-
-.ghost-content th {
-  background-color: #f9fafb;
-  font-weight: 600;
-  color: #111827;
-}
-
-.dark .ghost-content th {
-  background-color: #1f2937;
-  color: #f9fafb;
 }
 
 /* Images */
 .ghost-content img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 0.5rem;
-  margin: 1.5rem 0;
+  @apply rounded-lg shadow-md mb-6 max-w-full h-auto;
 }
 
 .ghost-content figure {
-  margin: 1.5rem 0;
+  @apply mb-8;
 }
 
 .ghost-content figcaption {
-  text-align: center;
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin-top: 0.5rem;
+  @apply text-sm text-gray-500 dark:text-gray-400 text-center mt-2;
+  font-style: italic;
 }
 
-.dark .ghost-content figcaption {
-  color: #9ca3af;
+/* Tables */
+.ghost-content table {
+  @apply w-full border-collapse border border-gray-300 dark:border-gray-600 mb-6 rounded-lg overflow-hidden;
 }
 
-/* Code blocks and inline code */
-.ghost-content code {
-  font-family: "Fira Code", "Monaco", "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-  font-size: 0.875rem;
+.ghost-content th,
+.ghost-content td {
+  @apply border border-gray-300 dark:border-gray-600 px-4 py-2 text-left;
 }
 
-.ghost-content :not(pre) > code {
-  background-color: #f3f4f6;
-  color: #dc2626;
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-  font-weight: 500;
+.ghost-content th {
+  @apply bg-gray-100 dark:bg-gray-700 font-semibold text-gray-900 dark:text-gray-100;
 }
 
-.dark .ghost-content :not(pre) > code {
-  background-color: #374151;
-  color: #fca5a5;
+.ghost-content td {
+  @apply text-gray-700 dark:text-gray-300;
 }
 
+/* Horizontal Rule */
+.ghost-content hr {
+  @apply border-0 border-t border-gray-300 dark:border-gray-600 my-8;
+}
+
+/* Code Blocks */
 .ghost-content pre {
-  background-color: #1f2937;
-  color: #f9fafb;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  margin: 1.5rem 0;
-  border: 1px solid #374151;
+  @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 rounded-lg overflow-x-auto mb-6 border border-gray-700;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 14px;
+  line-height: 1.5;
   position: relative;
 }
 
 .ghost-content pre code {
-  background: none;
-  color: inherit;
-  padding: 0;
-  border-radius: 0;
-  font-weight: normal;
+  @apply bg-transparent text-gray-100 p-0 rounded-none;
+  font-family: inherit;
 }
 
-/* Language label for code blocks */
-.ghost-content pre[data-language]::before {
-  content: attr(data-language);
-  position: absolute;
-  top: 0.5rem;
-  right: 0.75rem;
-  font-size: 0.75rem;
-  color: #9ca3af;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+.ghost-content code {
+  @apply bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-2 py-1 rounded text-sm;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
 }
 
-/* Syntax highlighting tokens */
+/* Syntax Highlighting */
 .ghost-content .token.comment,
 .ghost-content .token.prolog,
 .ghost-content .token.doctype,
 .ghost-content .token.cdata {
-  color: #6b7280;
-  font-style: italic;
+  color: #6a737d;
 }
 
 .ghost-content .token.punctuation {
-  color: #d1d5db;
+  color: #d1d5da;
 }
 
 .ghost-content .token.property,
@@ -270,7 +158,7 @@
 .ghost-content .token.constant,
 .ghost-content .token.symbol,
 .ghost-content .token.deleted {
-  color: #f87171;
+  color: #79b8ff;
 }
 
 .ghost-content .token.selector,
@@ -279,7 +167,7 @@
 .ghost-content .token.char,
 .ghost-content .token.builtin,
 .ghost-content .token.inserted {
-  color: #34d399;
+  color: #85e89d;
 }
 
 .ghost-content .token.operator,
@@ -287,128 +175,105 @@
 .ghost-content .token.url,
 .ghost-content .language-css .token.string,
 .ghost-content .style .token.string {
-  color: #60a5fa;
+  color: #d1d5da;
 }
 
 .ghost-content .token.atrule,
 .ghost-content .token.attr-value,
 .ghost-content .token.keyword {
-  color: #a78bfa;
+  color: #f97583;
 }
 
 .ghost-content .token.function,
 .ghost-content .token.class-name {
-  color: #fbbf24;
+  color: #b392f0;
 }
 
 .ghost-content .token.regex,
 .ghost-content .token.important,
 .ghost-content .token.variable {
-  color: #fb7185;
+  color: #ffab70;
 }
 
-.ghost-content .token.important,
-.ghost-content .token.bold {
-  font-weight: bold;
-}
-
-.ghost-content .token.italic {
-  font-style: italic;
-}
-
-.ghost-content .token.entity {
-  cursor: help;
-}
-
-/* Python specific highlighting */
-.ghost-content .language-python .token.keyword {
-  color: #a78bfa;
-}
-
-.ghost-content .language-python .token.string {
-  color: #34d399;
-}
-
-.ghost-content .language-python .token.function {
-  color: #fbbf24;
-}
-
-.ghost-content .language-python .token.number {
-  color: #f87171;
-}
-
-/* JavaScript specific highlighting */
-.ghost-content .language-javascript .token.keyword {
-  color: #a78bfa;
-}
-
-.ghost-content .language-javascript .token.string {
-  color: #34d399;
-}
-
-.ghost-content .language-javascript .token.function {
-  color: #fbbf24;
-}
-
-/* CSS specific highlighting */
-.ghost-content .language-css .token.property {
-  color: #60a5fa;
-}
-
-.ghost-content .language-css .token.string {
-  color: #34d399;
-}
-
-/* SQL specific highlighting */
-.ghost-content .language-sql .token.keyword {
-  color: #a78bfa;
+/* Language Labels */
+.ghost-content pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 12px;
+  color: #6a737d;
   text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-.ghost-content .language-sql .token.string {
-  color: #34d399;
-}
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .ghost-content .token.comment,
+  .ghost-content .token.prolog,
+  .ghost-content .token.doctype,
+  .ghost-content .token.cdata {
+    color: #8b949e;
+  }
 
-/* Horizontal rule */
-.ghost-content hr {
-  border: none;
-  border-top: 1px solid #e5e7eb;
-  margin: 2rem 0;
-}
+  .ghost-content .token.punctuation {
+    color: #c9d1d9;
+  }
 
-.dark .ghost-content hr {
-  border-top-color: #374151;
+  .ghost-content .token.property,
+  .ghost-content .token.tag,
+  .ghost-content .token.boolean,
+  .ghost-content .token.number,
+  .ghost-content .token.constant,
+  .ghost-content .token.symbol,
+  .ghost-content .token.deleted {
+    color: #79c0ff;
+  }
+
+  .ghost-content .token.selector,
+  .ghost-content .token.attr-name,
+  .ghost-content .token.string,
+  .ghost-content .token.char,
+  .ghost-content .token.builtin,
+  .ghost-content .token.inserted {
+    color: #a5f3fc;
+  }
+
+  .ghost-content .token.atrule,
+  .ghost-content .token.attr-value,
+  .ghost-content .token.keyword {
+    color: #ff7b72;
+  }
+
+  .ghost-content .token.function,
+  .ghost-content .token.class-name {
+    color: #d2a8ff;
+  }
+
+  .ghost-content .token.regex,
+  .ghost-content .token.important,
+  .ghost-content .token.variable {
+    color: #ffa657;
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .ghost-content {
-    font-size: 0.875rem;
+  .ghost-content pre {
+    font-size: 12px;
+    padding: 12px;
   }
 
   .ghost-content h1 {
-    font-size: 1.875rem;
+    @apply text-2xl;
   }
 
   .ghost-content h2 {
-    font-size: 1.5rem;
+    @apply text-xl;
   }
 
   .ghost-content h3 {
-    font-size: 1.25rem;
-  }
-
-  .ghost-content pre {
-    padding: 0.75rem;
-    margin: 1rem 0;
-  }
-
-  .ghost-content table {
-    font-size: 0.75rem;
-  }
-
-  .ghost-content th,
-  .ghost-content td {
-    padding: 0.5rem;
+    @apply text-lg;
   }
 }
