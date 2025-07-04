@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { useEffect, useState } from "react"
-import { ChevronRight } from "lucide-react"
 
 interface Heading {
   id: string
@@ -84,29 +83,31 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <div className="flex max-w-7xl mx-auto">
-        {/* Table of Contents - Left Sidebar */}
-        <aside className="hidden lg:block w-80 flex-shrink-0">
-          <div className="sticky top-8 p-6">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-              <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-2 border-b border-gray-200 dark:border-gray-600 pb-3">
-                <ChevronRight className="w-4 h-4" />
-                Table of Contents
+        {/* Main Content */}
+        <main className="flex-1 min-w-0 pr-8">{children}</main>
+
+        {/* Table of Contents - Right Sidebar */}
+        <aside className="hidden lg:block w-64 flex-shrink-0">
+          <div className="sticky top-8 py-8">
+            <div className="space-y-1">
+              <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+                ON THIS PAGE
               </h3>
 
               {headings.length > 0 ? (
                 <nav>
-                  <ul className="space-y-2">
+                  <ul className="space-y-1">
                     {headings.map((heading) => (
                       <li key={heading.id}>
                         <button
                           onClick={() => scrollToHeading(heading.id)}
                           className={`
-                            block w-full text-left text-sm py-2 px-3 rounded-md transition-all duration-200
-                            ${heading.level === 2 ? "ml-4 text-xs" : "font-medium"}
+                            block w-full text-left text-sm py-1 transition-colors duration-200
+                            ${heading.level === 2 ? "ml-4 text-xs" : ""}
                             ${
                               activeId === heading.id
-                                ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-l-2 border-blue-500"
-                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                                ? "text-gray-900 dark:text-gray-100 font-medium"
+                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
                             }
                           `}
                         >
@@ -122,9 +123,6 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
             </div>
           </div>
         </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 min-w-0">{children}</main>
       </div>
     </div>
   )
