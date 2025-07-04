@@ -1,50 +1,57 @@
 "use client"
 
 import { useState } from "react"
-import { Check, ChevronsUpDown, X } from "lucide-react"
+import { Check, ChevronDown, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
 
 interface CategoryFilterProps {
-  categories: { id: string; name: string; slug: string; count?: { posts: number } }[]
+  categories: Array<{
+    name: string
+    slug: string
+    count: number
+  }>
   selectedCategories: string[]
-  onSelectCategory: (category: string) => void
+  onCategoryChange: (categories: string[]) => void
 }
 
-export function CategoryFilter({ categories = [], selectedCategories = [], onSelectCategory }: CategoryFilterProps) {
+export function CategoryFilter({ categories, selectedCategories, onCategoryChange }: CategoryFilterProps) {
   const [open, setOpen] = useState(false)
 
-  // Filter out hashtag-style tags (tags that start with #)
+  // Filter out hashtag categories (those starting with #)
   const filteredCategories = categories.filter(
-    (category) =>
-      !category.name.startsWith("#") &&
-      !category.slug.startsWith("#") &&
-      category.name.toLowerCase() !== "hash-toc-guide" &&
-      category.name.toLowerCase() !== "hash-tools" &&
-      category.name.toLowerCase() !== "hash-notion",
+    (category) => !category.name.startsWith("#") && !category.slug.startsWith("#"),
   )
 
-  const safeCategories = Array.isArray(filteredCategories) ? filteredCategories : []
-  const safeSelectedCategories = Array.isArray(selectedCategories) ? selectedCategories : []
+  const handleCategoryToggle = (categorySlug: string) => {
+    const newCategories = selectedCategories.includes(categorySlug)
+      ? selectedCategories.filter((c) => c !== categorySlug)
+      : [...selectedCategories, categorySlug]
 
-  const selectedCategoryNames = safeSelectedCategories
-    .map((slug) => safeCategories.find((cat) => cat.slug === slug)?.name)
-    .filter(Boolean)
+    onCategoryChange(newCategories)
+  }
+
+  const clearAllCategories = () => {
+    onCategoryChange([])
+  }
+
+  const selectedCategoryNames = filteredCategories
+    .filter((cat) => selectedCategories.includes(cat.slug))
+    .map((cat) => cat.name)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold">Filter by Category</h3>
-        {safeSelectedCategories.length > 0 && (
+        <h3 className="font-semibold text-sm text-gray-900 dark:text-gray-100">Categories</h3>
+        {selectedCategories.length > 0 && (
           <Button
             variant="ghost"
             size="sm"
+            onClick={clearAllCategories}
             className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground"
-            onClick={() => safeSelectedCategories.forEach((cat) => onSelectCategory(cat))}
           >
             Clear all
           </Button>
@@ -57,54 +64,42 @@ export function CategoryFilter({ categories = [], selectedCategories = [], onSel
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between h-auto min-h-[40px] px-3 py-2 bg-transparent"
+            className="w-full justify-between text-left font-normal bg-transparent"
           >
-            <div className="flex flex-wrap gap-1 flex-1">
-              {safeSelectedCategories.length === 0 ? (
-                <span className="text-muted-foreground">Select categories...</span>
-              ) : (
-                selectedCategoryNames.slice(0, 2).map((name) => (
-                  <Badge key={name} variant="secondary" className="text-xs">
-                    {name}
-                  </Badge>
-                ))
-              )}
-              {safeSelectedCategories.length > 2 && (
-                <Badge variant="secondary" className="text-xs">
-                  +{safeSelectedCategories.length - 2} more
-                </Badge>
-              )}
-            </div>
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            {selectedCategories.length === 0 ? (
+              <span className="text-muted-foreground">Select categories...</span>
+            ) : (
+              <span className="truncate">
+                {selectedCategories.length === 1
+                  ? selectedCategoryNames[0]
+                  : `${selectedCategories.length} categories selected`}
+              </span>
+            )}
+            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
           <Command>
-            <CommandInput placeholder="Search categories..." className="h-9" />
+            <CommandInput placeholder="Search categories..." />
             <CommandList>
               <CommandEmpty>No categories found.</CommandEmpty>
               <CommandGroup>
                 <ScrollArea className="h-[200px]">
-                  {safeCategories.map((category) => (
+                  {filteredCategories.map((category) => (
                     <CommandItem
-                      key={category.id}
-                      value={category.slug}
-                      onSelect={() => {
-                        onSelectCategory(category.slug)
-                      }}
-                      className="flex items-center justify-between"
+                      key={category.slug}
+                      value={category.name}
+                      onSelect={() => handleCategoryToggle(category.slug)}
+                      className="flex items-center justify-between cursor-pointer"
                     >
-                      <div className="flex items-center">
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            safeSelectedCategories.includes(category.slug) ? "opacity-100" : "opacity-0",
-                          )}
-                        />
-                        <span>{category.name}</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="flex h-4 w-4 items-center justify-center">
+                          {selectedCategories.includes(category.slug) && <Check className="h-3 w-3" />}
+                        </div>
+                        <span className="truncate">{category.name}</span>
                       </div>
-                      <Badge variant="outline" className="text-xs">
-                        {category.count?.posts || 0}
+                      <Badge variant="secondary" className="ml-2 text-xs">
+                        {category.count}
                       </Badge>
                     </CommandItem>
                   ))}
@@ -115,27 +110,18 @@ export function CategoryFilter({ categories = [], selectedCategories = [], onSel
         </PopoverContent>
       </Popover>
 
-      {/* Selected Categories Display */}
-      {safeSelectedCategories.length > 0 && (
-        <div className="space-y-2">
-          <p className="text-xs text-muted-foreground">Selected categories:</p>
-          <div className="flex flex-wrap gap-2">
-            {safeSelectedCategories.map((slug) => {
-              const category = safeCategories.find((c) => c.slug === slug)
-              return (
-                <Badge key={slug} variant="default" className="flex items-center gap-1 text-xs">
-                  {category?.name}
-                  <button
-                    className="ml-1 rounded-full outline-none hover:bg-primary/20 p-0.5"
-                    onClick={() => onSelectCategory(slug)}
-                    aria-label={`Remove ${category?.name}`}
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </Badge>
-              )
-            })}
-          </div>
+      {/* Selected categories display */}
+      {selectedCategories.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {selectedCategoryNames.map((categoryName, index) => (
+            <Badge key={selectedCategories[index]} variant="secondary" className="text-xs flex items-center gap-1">
+              {categoryName}
+              <X
+                className="h-3 w-3 cursor-pointer hover:text-destructive"
+                onClick={() => handleCategoryToggle(selectedCategories[index])}
+              />
+            </Badge>
+          ))}
         </div>
       )}
     </div>

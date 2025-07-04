@@ -9,30 +9,36 @@ interface GhostContentProps {
 
 export function GhostContent({ html, className = "" }: GhostContentProps) {
   useEffect(() => {
-    // Add syntax highlighting after content is rendered
-    if (typeof window !== "undefined") {
-      // Load Prism.js dynamically for syntax highlighting
-      const loadPrism = async () => {
+    // Load Prism.js for syntax highlighting
+    const loadPrism = async () => {
+      if (typeof window !== "undefined") {
         try {
-          const Prism = await import("prismjs")
+          // Dynamically import Prism.js
+          const Prism = (await import("prismjs")).default
+
+          // Import common language support
           await import("prismjs/components/prism-javascript")
           await import("prismjs/components/prism-typescript")
           await import("prismjs/components/prism-jsx")
           await import("prismjs/components/prism-tsx")
           await import("prismjs/components/prism-css")
+          await import("prismjs/components/prism-scss")
           await import("prismjs/components/prism-json")
-          await import("prismjs/components/prism-bash")
           await import("prismjs/components/prism-python")
+          await import("prismjs/components/prism-bash")
           await import("prismjs/components/prism-sql")
+          await import("prismjs/components/prism-yaml")
+          await import("prismjs/components/prism-markdown")
 
+          // Highlight all code blocks
           Prism.highlightAll()
         } catch (error) {
-          console.log("Prism.js not available, using fallback styling")
+          console.warn("Failed to load Prism.js:", error)
         }
       }
-
-      loadPrism()
     }
+
+    loadPrism()
   }, [html])
 
   return <div className={`ghost-content ${className}`} dangerouslySetInnerHTML={{ __html: html }} />
