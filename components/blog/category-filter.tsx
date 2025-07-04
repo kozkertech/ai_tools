@@ -1,127 +1,123 @@
 "use client"
 
 import { useState } from "react"
-import { Check, ChevronDown, X } from "lucide-react"
+import { Check, ChevronsUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
+import { useTheme } from "next-themes"
 
 interface CategoryFilterProps {
-  categories: Array<{
-    name: string
-    slug: string
-    count: number
-  }>
+  categories: { id: string; name: string; slug: string; count?: { posts: number } }[]
   selectedCategories: string[]
-  onCategoryChange: (categories: string[]) => void
+  onSelectCategory: (category: string) => void
 }
 
-export function CategoryFilter({ categories, selectedCategories, onCategoryChange }: CategoryFilterProps) {
+export function CategoryFilter({ categories = [], selectedCategories = [], onSelectCategory }: CategoryFilterProps) {
   const [open, setOpen] = useState(false)
+  const { resolvedTheme } = useTheme()
+  const isDarkMode = resolvedTheme === "dark"
 
-  // Filter out hashtag categories (those starting with #)
-  const filteredCategories = categories.filter(
-    (category) => !category.name.startsWith("#") && !category.slug.startsWith("#"),
-  )
-
-  const handleCategoryToggle = (categorySlug: string) => {
-    const newCategories = selectedCategories.includes(categorySlug)
-      ? selectedCategories.filter((c) => c !== categorySlug)
-      : [...selectedCategories, categorySlug]
-
-    onCategoryChange(newCategories)
-  }
-
-  const clearAllCategories = () => {
-    onCategoryChange([])
-  }
-
-  const selectedCategoryNames = filteredCategories
-    .filter((cat) => selectedCategories.includes(cat.slug))
-    .map((cat) => cat.name)
+  // Ensure categories is always an array
+  const safeCategories = Array.isArray(categories) ? categories : []
+  const safeSelectedCategories = Array.isArray(selectedCategories) ? selectedCategories : []
 
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-sm text-gray-900 dark:text-gray-100">Categories</h3>
-        {selectedCategories.length > 0 && (
+        <h3 className="text-sm font-medium dark:text-white">Categories</h3>
+        {safeSelectedCategories.length > 0 && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={clearAllCategories}
-            className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground"
+            className="h-auto p-0 text-xs text-muted-foreground dark:text-gray-400 dark:hover:text-white"
+            onClick={() => safeSelectedCategories.forEach((cat) => onSelectCategory(cat))}
           >
             Clear all
           </Button>
         )}
       </div>
-
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between text-left font-normal bg-transparent"
+            className={cn("justify-between w-full", isDarkMode ? "border-gray-800 bg-gray-900" : "")}
           >
-            {selectedCategories.length === 0 ? (
-              <span className="text-muted-foreground">Select categories...</span>
-            ) : (
-              <span className="truncate">
-                {selectedCategories.length === 1
-                  ? selectedCategoryNames[0]
-                  : `${selectedCategories.length} categories selected`}
-              </span>
-            )}
-            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            {safeSelectedCategories.length > 0 ? `${safeSelectedCategories.length} selected` : "Select categories"}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0" align="start">
-          <Command>
-            <CommandInput placeholder="Search categories..." />
+        <PopoverContent className={cn("w-full p-0", isDarkMode ? "bg-gray-900 border-gray-800" : "")} align="start">
+          <Command className={isDarkMode ? "bg-gray-900" : ""}>
+            <CommandInput placeholder="Search categories..." className={isDarkMode ? "border-gray-800" : ""} />
             <CommandList>
               <CommandEmpty>No categories found.</CommandEmpty>
               <CommandGroup>
-                <ScrollArea className="h-[200px]">
-                  {filteredCategories.map((category) => (
-                    <CommandItem
-                      key={category.slug}
-                      value={category.name}
-                      onSelect={() => handleCategoryToggle(category.slug)}
-                      className="flex items-center justify-between cursor-pointer"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <div className="flex h-4 w-4 items-center justify-center">
-                          {selectedCategories.includes(category.slug) && <Check className="h-3 w-3" />}
-                        </div>
-                        <span className="truncate">{category.name}</span>
-                      </div>
-                      <Badge variant="secondary" className="ml-2 text-xs">
-                        {category.count}
-                      </Badge>
-                    </CommandItem>
-                  ))}
-                </ScrollArea>
+                {safeCategories.map((category) => (
+                  <CommandItem
+                    key={category.id}
+                    value={category.slug}
+                    onSelect={() => {
+                      onSelectCategory(category.slug)
+                      setOpen(false)
+                    }}
+                    className={isDarkMode ? "hover:bg-gray-800" : ""}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        safeSelectedCategories.includes(category.slug) ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                    <span className={isDarkMode ? "text-white" : ""}>{category.name}</span>
+                    <Badge variant="secondary" className="ml-auto">
+                      {category.count?.posts || 0}
+                    </Badge>
+                  </CommandItem>
+                ))}
               </CommandGroup>
             </CommandList>
           </Command>
         </PopoverContent>
       </Popover>
-
-      {/* Selected categories display */}
-      {selectedCategories.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {selectedCategoryNames.map((categoryName, index) => (
-            <Badge key={selectedCategories[index]} variant="secondary" className="text-xs flex items-center gap-1">
-              {categoryName}
-              <X
-                className="h-3 w-3 cursor-pointer hover:text-destructive"
-                onClick={() => handleCategoryToggle(selectedCategories[index])}
-              />
-            </Badge>
-          ))}
+      {safeSelectedCategories.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-2">
+          {safeSelectedCategories.map((slug) => {
+            const category = safeCategories.find((c) => c.slug === slug)
+            return (
+              <Badge
+                key={slug}
+                variant="secondary"
+                className="flex items-center gap-1 dark:bg-gray-800 dark:text-white"
+              >
+                {category?.name}
+                <button
+                  className="ml-1 rounded-full outline-none focus:ring-2 focus:ring-primary"
+                  onClick={() => onSelectCategory(slug)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                  </svg>
+                  <span className="sr-only">Remove {category?.name}</span>
+                </button>
+              </Badge>
+            )
+          })}
         </div>
       )}
     </div>

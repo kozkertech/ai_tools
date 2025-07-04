@@ -2,8 +2,38 @@
 
 import type React from "react"
 
-import { useEffect, useState } from "react"
-import { cn } from "@/lib/utils"
+import { useState, useEffect } from "react"
+import Image from "next/image"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { CalendarIcon, UserIcon, ClockIcon, BookOpenIcon, ChevronRightIcon } from "lucide-react"
+import { formatDate } from "@/lib/utils"
+
+interface GuideLayoutProps {
+  post: {
+    id: string
+    title: string
+    html: string
+    excerpt?: string
+    published_at: string
+    updated_at?: string
+    feature_image?: string
+    primary_author: {
+      name: string
+      slug: string
+    }
+    primary_tag?: {
+      name: string
+      slug: string
+    }
+    tags?: Array<{
+      name: string
+      slug: string
+    }>
+  }
+  children: React.ReactNode
+}
 
 interface TocItem {
   id: string
@@ -11,98 +41,153 @@ interface TocItem {
   level: number
 }
 
-interface GuideLayoutProps {
-  children: React.ReactNode
-  showToc?: boolean
-}
-
-export function GuideLayout({ children, showToc = true }: GuideLayoutProps) {
-  const [toc, setToc] = useState<TocItem[]>([])
+export function GuideLayout({ post, children }: GuideLayoutProps) {
+  const [tocItems, setTocItems] = useState<TocItem[]>([])
   const [activeId, setActiveId] = useState<string>("")
 
+  // Extract table of contents from the HTML content
   useEffect(() => {
-    // Extract headings from the content (only h1 and h2)
-    const headings = Array.from(document.querySelectorAll(".ghost-content h1, .ghost-content h2"))
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(post.html, "text/html")
+    const headings = doc.querySelectorAll("h1, h2, h3, h4, h5, h6")
 
-    const tocItems: TocItem[] = headings.map((heading) => ({
-      id: heading.id || heading.textContent?.toLowerCase().replace(/\s+/g, "-") || "",
-      text: heading.textContent || "",
-      level: Number.parseInt(heading.tagName.charAt(1)),
-    }))
-
-    // Set IDs for headings that don't have them
+    const items: TocItem[] = []
     headings.forEach((heading, index) => {
+      const id = heading.id || `heading-${index}`
+      const text = heading.textContent || ""
+      const level = Number.parseInt(heading.tagName.charAt(1))
+
+      // Add ID to heading if it doesn't have one
       if (!heading.id) {
-        heading.id = tocItems[index].id
+        heading.id = id
       }
+
+      items.push({ id, text, level })
     })
 
-    setToc(tocItems)
+    setTocItems(items)
+  }, [post.html])
 
-    // Set up intersection observer for active section
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id)
-          }
-        })
-      },
-      {
-        rootMargin: "-20% 0% -35% 0%",
-        threshold: 0,
-      },
-    )
+  // Handle scroll to update active heading
+  useEffect(() => {
+    const handleScroll = () => {
+      const headings = tocItems.map((item) => document.getElementById(item.id)).filter(Boolean)
 
-    headings.forEach((heading) => observer.observe(heading))
+      for (let i = headings.length - 1; i >= 0; i--) {
+        const heading = headings[i]
+        if (heading && heading.getBoundingClientRect().top <= 100) {
+          setActiveId(heading.id)
+          break
+        }
+      }
+    }
 
-    return () => observer.disconnect()
-  }, [])
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [tocItems])
 
   const scrollToHeading = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      })
+      element.scrollIntoView({ behavior: "smooth", block: "start" })
     }
   }
 
-  if (!showToc || toc.length === 0) {
-    return <div className="ghost-content">{children}</div>
-  }
-
   return (
-    <div className="flex gap-8 max-w-none">
-      {/* Main content */}
-      <div className="flex-1 min-w-0">
-        <div className="ghost-content">{children}</div>
-      </div>
+    <div className="container py-8 md:py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Main Content */}
+        <div className="lg:col-span-3">
+          <article className="space-y-8">
+            {/* Header */}
+            <div className="space-y-6">
+              {post.primary_tag && (
+                <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                  <BookOpenIcon className="mr-1 h-3 w-3" />
+                  {post.primary_tag.name}
+                </Badge>
+              )}
 
-      {/* Table of Contents */}
-      <div className="hidden xl:block w-64 flex-shrink-0">
-        <div className="sticky top-24">
-          <div className="border-l border-gray-200 dark:border-gray-700 pl-4">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Table of Contents</h3>
-            <nav className="space-y-1">
-              {toc.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToHeading(item.id)}
-                  className={cn(
-                    "block w-full text-left text-sm transition-colors hover:text-gray-900 dark:hover:text-gray-100",
-                    item.level === 1 ? "font-medium" : "font-normal pl-3",
-                    activeId === item.id ? "text-primary font-medium" : "text-gray-600 dark:text-gray-400",
-                  )}
-                >
-                  {item.text}
-                </button>
-              ))}
-            </nav>
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">{post.title}</h1>
+
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center">
+                  <UserIcon className="mr-1 h-4 w-4" />
+                  <span>{post.primary_author.name}</span>
+                </div>
+                <div className="flex items-center">
+                  <CalendarIcon className="mr-1 h-4 w-4" />
+                  <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
+                </div>
+                <div className="flex items-center">
+                  <ClockIcon className="mr-1 h-4 w-4" />
+                  <span>Guide</span>
+                </div>
+              </div>
+
+              {post.excerpt && <p className="text-lg text-muted-foreground leading-relaxed">{post.excerpt}</p>}
+            </div>
+
+            {/* Featured Image */}
+            {post.feature_image && (
+              <div className="relative aspect-video overflow-hidden rounded-lg">
+                <Image
+                  src={post.feature_image || "/placeholder.svg"}
+                  alt={`Featured image for ${post.title}`}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            )}
+
+            {/* Content */}
+            <div className="prose prose-lg max-w-none dark:prose-invert">{children}</div>
+          </article>
+        </div>
+
+        {/* Table of Contents Sidebar */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-8">
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-lg mb-4 flex items-center">
+                  <BookOpenIcon className="mr-2 h-5 w-5" />
+                  Table of Contents
+                </h3>
+
+                {tocItems.length > 0 ? (
+                  <nav className="space-y-2">
+                    {tocItems.map((item) => (
+                      <Button
+                        key={item.id}
+                        variant="ghost"
+                        size="sm"
+                        className={`
+                          w-full justify-start text-left h-auto py-2 px-3
+                          ${item.level === 1 ? "font-medium" : ""}
+                          ${item.level === 2 ? "ml-4 text-sm" : ""}
+                          ${item.level === 3 ? "ml-8 text-sm" : ""}
+                          ${item.level >= 4 ? "ml-12 text-xs" : ""}
+                          ${activeId === item.id ? "bg-accent text-accent-foreground" : ""}
+                        `}
+                        onClick={() => scrollToHeading(item.id)}
+                      >
+                        <ChevronRightIcon className="mr-1 h-3 w-3 flex-shrink-0" />
+                        <span className="truncate">{item.text}</span>
+                      </Button>
+                    ))}
+                  </nav>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No headings found in this guide.</p>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
     </div>
   )
 }
+
+export default GuideLayout
