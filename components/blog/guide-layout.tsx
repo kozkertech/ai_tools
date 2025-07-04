@@ -1,88 +1,96 @@
 "use client"
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import Image from "next/image"
+import { useEffect, useState } from "react"
+import { GhostContent } from "@/components/ghost-content"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 import { Badge } from "@/components/ui/badge"
-import { CalendarIcon, UserIcon, ClockIcon, BookOpenIcon, ListIcon } from "lucide-react"
-import { formatDate } from "@/lib/utils"
-import { cn } from "@/lib/utils"
+import { Calendar, User, Clock, List } from "lucide-react"
 
-interface GuideLayoutProps {
-  post: {
-    id: string
-    title: string
-    html: string
-    excerpt?: string
-    published_at: string
-    updated_at?: string
-    feature_image?: string
-    primary_author: {
-      name: string
-      slug: string
-    }
-    primary_tag?: {
-      name: string
-      slug: string
-    }
-    tags?: Array<{
-      name: string
-      slug: string
-    }>
-  }
-  children: React.ReactNode
-}
-
-interface TocItem {
+interface TOCItem {
   id: string
   text: string
   level: number
 }
 
-export function GuideLayout({ post, children }: GuideLayoutProps) {
-  const [tocItems, setTocItems] = useState<TocItem[]>([])
+interface GuideLayoutProps {
+  post: {
+    id: string
+    title: string
+    slug: string
+    html?: string
+    excerpt?: string
+    feature_image?: string
+    feature_image_alt?: string
+    published_at: string
+    updated_at: string
+    authors?: Array<{
+      id: string
+      name: string
+      slug: string
+    }>
+    tags?: Array<{
+      id: string
+      name: string
+      slug: string
+    }>
+  }
+}
+
+export function GuideLayout({ post }: GuideLayoutProps) {
+  const [tocItems, setTocItems] = useState<TOCItem[]>([])
   const [activeId, setActiveId] = useState<string>("")
 
-  // Extract table of contents from the HTML content (only h1 and h2)
   useEffect(() => {
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(post.html, "text/html")
-    const headings = doc.querySelectorAll("h1, h2") // Only h1 and h2
+    // Generate table of contents from HTML
+    if (post.html) {
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(post.html, "text/html")
+      const headings = doc.querySelectorAll("h1, h2")
 
-    const items: TocItem[] = []
-    headings.forEach((heading, index) => {
-      const id = heading.id || `heading-${index}`
-      const text = heading.textContent || ""
-      const level = Number.parseInt(heading.tagName.charAt(1))
+      const items: TOCItem[] = Array.from(headings).map((heading, index) => {
+        const level = Number.parseInt(heading.tagName.charAt(1))
+        const text = heading.textContent || ""
+        const id = heading.id || `heading-${index}`
 
-      // Add ID to heading if it doesn't have one
-      if (!heading.id) {
-        heading.id = id
-      }
+        // Ensure heading has an ID for linking
+        if (!heading.id) {
+          heading.id = id
+        }
 
-      items.push({ id, text, level })
-    })
+        return { id, text, level }
+      })
 
-    setTocItems(items)
+      setTocItems(items)
+    }
   }, [post.html])
 
-  // Handle scroll to update active heading
   useEffect(() => {
-    const handleScroll = () => {
-      const headings = tocItems.map((item) => document.getElementById(item.id)).filter(Boolean)
+    // Set up intersection observer for active section highlighting
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id)
+          }
+        })
+      },
+      {
+        rootMargin: "-20% 0% -35% 0%",
+        threshold: 0,
+      },
+    )
 
-      for (let i = headings.length - 1; i >= 0; i--) {
-        const heading = headings[i]
-        if (heading && heading.getBoundingClientRect().top <= 100) {
-          setActiveId(heading.id)
-          break
-        }
-      }
+    // Observe all headings after content is rendered
+    const timer = setTimeout(() => {
+      const headings = document.querySelectorAll("h1, h2")
+      headings.forEach((heading) => observer.observe(heading))
+    }, 500)
+
+    return () => {
+      clearTimeout(timer)
+      observer.disconnect()
     }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [tocItems])
+  }, [post.html])
 
   const scrollToHeading = (id: string) => {
     const element = document.getElementById(id)
@@ -91,19 +99,27 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
     }
   }
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: post.title, href: `/blog/${post.slug}` },
+  ]
+
+  const readingTime = Math.ceil((post.html?.length || 0) / 1000)
+
   return (
-    <div className="container py-8 md:py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Table of Contents Sidebar - Left Side */}
-        <div className="lg:col-span-1 order-1">
-          <div className="sticky top-8">
-            {tocItems.length > 0 && (
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <Breadcrumbs items={breadcrumbItems} />
+
+        <div className="flex gap-8 max-w-7xl mx-auto">
+          {/* Table of Contents - Left Sidebar */}
+          <aside className="w-64 flex-shrink-0 hidden lg:block">
+            <div className="sticky top-8">
+              <div className="bg-card border rounded-lg p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <ListIcon className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-                  <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 uppercase tracking-wide">
-                    Table of Contents
-                  </h3>
+                  <List className="h-5 w-5 text-primary" />
+                  <h3 className="font-semibold text-foreground">Table of Contents</h3>
                 </div>
 
                 <nav className="space-y-1">
@@ -111,77 +127,93 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
                     <button
                       key={item.id}
                       onClick={() => scrollToHeading(item.id)}
-                      className={cn(
-                        "block w-full text-left py-2 px-3 rounded-md transition-all duration-200 text-sm hover:bg-gray-100 dark:hover:bg-gray-800",
-                        item.level === 1
-                          ? "font-medium text-gray-900 dark:text-gray-100"
-                          : "font-normal pl-6 text-gray-600 dark:text-gray-400",
-                        activeId === item.id
-                          ? "bg-primary/10 text-primary font-medium border-l-2 border-l-primary"
-                          : "hover:text-gray-900 dark:hover:text-gray-100",
-                      )}
+                      className={`
+                        block w-full text-left px-3 py-2 text-sm rounded-md transition-colors
+                        ${item.level === 2 ? "ml-4" : ""}
+                        ${
+                          activeId === item.id
+                            ? "bg-primary/10 text-primary font-medium border-l-2 border-primary"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                        }
+                      `}
                     >
                       {item.text}
                     </button>
                   ))}
                 </nav>
               </div>
-            )}
-          </div>
-        </div>
-
-        {/* Main Content - Right Side */}
-        <div className="lg:col-span-3 order-2">
-          <article className="space-y-8">
-            {/* Header */}
-            <div className="space-y-6">
-              {post.primary_tag && (
-                <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                  <BookOpenIcon className="mr-1 h-3 w-3" />
-                  {post.primary_tag.name}
-                </Badge>
-              )}
-
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">{post.title}</h1>
-
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center">
-                  <UserIcon className="mr-1 h-4 w-4" />
-                  <span>{post.primary_author.name}</span>
-                </div>
-                <div className="flex items-center">
-                  <CalendarIcon className="mr-1 h-4 w-4" />
-                  <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
-                </div>
-                <div className="flex items-center">
-                  <ClockIcon className="mr-1 h-4 w-4" />
-                  <span>Guide</span>
-                </div>
-              </div>
-
-              {post.excerpt && <p className="text-lg text-muted-foreground leading-relaxed">{post.excerpt}</p>}
             </div>
+          </aside>
 
-            {/* Featured Image */}
-            {post.feature_image && (
-              <div className="relative aspect-video overflow-hidden rounded-lg">
-                <Image
-                  src={post.feature_image || "/placeholder.svg"}
-                  alt={`Featured image for ${post.title}`}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            )}
+          {/* Main Content */}
+          <main className="flex-1 min-w-0">
+            <article>
+              {/* Header */}
+              <header className="mb-8">
+                {post.feature_image && (
+                  <div className="mb-8">
+                    <img
+                      src={post.feature_image || "/placeholder.svg"}
+                      alt={post.feature_image_alt || post.title}
+                      className="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+                    />
+                  </div>
+                )}
 
-            {/* Content */}
-            <div className="ghost-content">{children}</div>
-          </article>
+                <div className="space-y-4">
+                  {/* Tags */}
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags
+                        .filter((tag) => !tag.name.startsWith("#") && !tag.name.includes("toc-guide"))
+                        .map((tag) => (
+                          <Badge key={tag.id} variant="secondary">
+                            {tag.name}
+                          </Badge>
+                        ))}
+                    </div>
+                  )}
+
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+                    {post.title}
+                  </h1>
+
+                  {post.excerpt && <p className="text-lg text-muted-foreground leading-relaxed">{post.excerpt}</p>}
+
+                  {/* Meta information */}
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                    {post.authors && post.authors.length > 0 && (
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        <span>{post.authors[0].name}</span>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      <time dateTime={post.published_at}>
+                        {new Date(post.published_at).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </time>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      <span>{readingTime} min read</span>
+                    </div>
+                  </div>
+                </div>
+              </header>
+
+              {/* Content */}
+              <div className="prose prose-lg max-w-none">{post.html && <GhostContent html={post.html} />}</div>
+            </article>
+          </main>
         </div>
       </div>
     </div>
   )
 }
-
-export default GuideLayout

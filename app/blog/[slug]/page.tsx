@@ -1,13 +1,18 @@
-import Image from "next/image"
-import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getPost, getPosts } from "@/lib/ghost"
-import { formatDate } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { CalendarIcon, UserIcon } from "lucide-react"
-import { Breadcrumbs } from "@/components/breadcrumbs"
-import { GuideLayout } from "@/components/blog/guide-layout"
 import type { Metadata } from "next"
+import { getPost, getPosts } from "@/lib/ghost"
+import { GhostContent } from "@/components/ghost-content"
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import { Badge } from "@/components/ui/badge"
+import { Calendar, User, Clock } from "lucide-react"
+import { GuideLayout } from "@/components/blog/guide-layout"
+import { SchemaMarkup } from "@/components/schema-markup"
+
+interface BlogPostPageProps {
+  params: {
+    slug: string
+  }
+}
 
 export async function generateStaticParams() {
   try {
@@ -16,62 +21,61 @@ export async function generateStaticParams() {
       slug: post.slug,
     }))
   } catch (error) {
-    console.error("Error generating static params for posts:", error)
+    console.error("Error generating static params:", error)
     return []
   }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   try {
     const post = await getPost(params.slug)
 
     if (!post) {
       return {
         title: "Post Not Found",
-        description: "The post you are looking for does not exist",
+        description: "The requested blog post could not be found.",
       }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"
-    const postUrl = `${baseUrl}/blog/${post.slug}`
-
     return {
       title: post.title,
-      description: post.excerpt,
-      authors: [{ name: post.primary_author.name }],
+      description: post.excerpt || post.meta_description,
       openGraph: {
         title: post.title,
-        description: post.excerpt,
-        url: postUrl,
-        siteName: "KozkerTech",
-        images: post.feature_image ? [{ url: post.feature_image }] : [],
-        locale: "en_US",
+        description: post.excerpt || post.meta_description,
         type: "article",
         publishedTime: post.published_at,
         modifiedTime: post.updated_at,
-        authors: [post.primary_author.name],
+        authors: post.authors?.map((author) => author.name) || [],
         tags: post.tags?.map((tag) => tag.name) || [],
+        images: post.feature_image
+          ? [
+              {
+                url: post.feature_image,
+                width: 1200,
+                height: 630,
+                alt: post.feature_image_alt || post.title,
+              },
+            ]
+          : [],
       },
       twitter: {
         card: "summary_large_image",
         title: post.title,
-        description: post.excerpt,
+        description: post.excerpt || post.meta_description,
         images: post.feature_image ? [post.feature_image] : [],
-      },
-      alternates: {
-        canonical: postUrl,
       },
     }
   } catch (error) {
-    console.error("Error generating metadata for post:", error)
+    console.error("Error generating metadata:", error)
     return {
-      title: "Blog Post",
-      description: "Read our latest blog post",
+      title: "Error",
+      description: "An error occurred while loading the post.",
     }
   }
 }
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
   try {
     const post = await getPost(params.slug)
 
@@ -79,102 +83,134 @@ export default async function PostPage({ params }: { params: { slug: string } })
       notFound()
     }
 
-    // Check if this is a guide post by looking for toc-guide tag
-    const isGuidePost = post.tags?.some((tag) => tag.slug = "hash-toc-guide")
+    // Check if this post should use the guide layout
+    const hasGuideTag =
+      post.tags?.some(
+        (tag) => tag.name === "toc-guide" || tag.name === "#toc-guide" || tag.name === "hash-toc-guide",
+      ) || false
 
-    // Generate JSON-LD structured data
+    const breadcrumbItems = [
+      { label: "Home", href: "/" },
+      { label: "Blog", href: "/blog" },
+      { label: post.title, href: `/blog/${post.slug}` },
+    ]
+
+    const readingTime = Math.ceil((post.html?.length || 0) / 1000)
+
     const jsonLd = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       headline: post.title,
-      description: post.excerpt,
-      image: post.feature_image ? [post.feature_image] : [],
-      datePublished: post.published_at,
-      dateModified: post.updated_at || post.published_at,
+      description: post.excerpt || post.meta_description,
+      image: post.feature_image,
       author: {
         "@type": "Person",
-        name: post.primary_author.name,
+        name: post.authors?.[0]?.name || "Anonymous",
       },
       publisher: {
         "@type": "Organization",
-        name: "KozkerTech",
+        name: "Your Site Name",
         logo: {
           "@type": "ImageObject",
-          url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/logo.png`,
+          url: "/logo.png",
         },
       },
+      datePublished: post.published_at,
+      dateModified: post.updated_at,
       mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/blog/${post.slug}`,
+        "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`,
       },
     }
 
-    const postContent = <div className="ghost-content" dangerouslySetInnerHTML={{ __html: post.html }} />
-
-    // Use guide layout if it's a guide post
-    if (isGuidePost) {
+    // If it has the guide tag, use the guide layout
+    if (hasGuideTag) {
       return (
         <>
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-          <Breadcrumbs className="container pt-8" />
-          <GuideLayout post={post}>{postContent}</GuideLayout>
+          <SchemaMarkup data={jsonLd} />
+          <GuideLayout post={post} />
         </>
       )
     }
 
-    // Regular post layout
+    // Otherwise, use the regular blog post layout
     return (
-      <article className="container py-8 md:py-12">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        <Breadcrumbs className="mb-8" />
-        <div className="mx-auto max-w-3xl space-y-8">
-          <div className="space-y-6">
-            {post.primary_tag && (
-              <Link href={`/tag/${post.primary_tag.slug}`}>
-                <Badge variant="secondary">{post.primary_tag.name}</Badge>
-              </Link>
-            )}
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">{post.title}</h1>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center">
-                <UserIcon className="mr-1 h-4 w-4" />
-                <span>{post.primary_author.name}</span>
-              </div>
-              <div className="flex items-center">
-                <CalendarIcon className="mr-1 h-4 w-4" />
-                <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
-              </div>
-            </div>
+      <>
+        <SchemaMarkup data={jsonLd} />
+        <div className="min-h-screen bg-background">
+          <div className="container mx-auto px-4 py-8">
+            <Breadcrumbs items={breadcrumbItems} />
+
+            <article className="max-w-4xl mx-auto">
+              {/* Header */}
+              <header className="mb-8">
+                {post.feature_image && (
+                  <div className="mb-8">
+                    <img
+                      src={post.feature_image || "/placeholder.svg"}
+                      alt={post.feature_image_alt || post.title}
+                      className="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+                    />
+                  </div>
+                )}
+
+                <div className="space-y-4">
+                  {/* Tags */}
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags
+                        .filter((tag) => !tag.name.startsWith("#") && !tag.name.includes("toc-guide"))
+                        .map((tag) => (
+                          <Badge key={tag.id} variant="secondary">
+                            {tag.name}
+                          </Badge>
+                        ))}
+                    </div>
+                  )}
+
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+                    {post.title}
+                  </h1>
+
+                  {post.excerpt && <p className="text-lg text-muted-foreground leading-relaxed">{post.excerpt}</p>}
+
+                  {/* Meta information */}
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                    {post.authors && post.authors.length > 0 && (
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        <span>{post.authors[0].name}</span>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      <time dateTime={post.published_at}>
+                        {new Date(post.published_at).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </time>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      <span>{readingTime} min read</span>
+                    </div>
+                  </div>
+                </div>
+              </header>
+
+              {/* Content */}
+              <div className="prose prose-lg max-w-none">{post.html && <GhostContent html={post.html} />}</div>
+            </article>
           </div>
-
-          {post.feature_image && (
-            <div className="relative aspect-video overflow-hidden rounded-lg">
-              <Image
-                src={post.feature_image || "/placeholder.svg"}
-                alt={`Featured image for ${post.title}`}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          )}
-
-          {postContent}
         </div>
-      </article>
+      </>
     )
   } catch (error) {
-    console.error("Error rendering post page:", error)
-    return (
-      <div className="container py-8 md:py-12">
-        <Breadcrumbs className="mb-8" />
-        <div className="mx-auto max-w-3xl text-center py-12">
-          <h2 className="text-xl font-medium">Error loading post</h2>
-          <p className="text-muted-foreground mt-2">
-            There was an error loading this post. Please check your Ghost CMS configuration.
-          </p>
-        </div>
-      </div>
-    )
+    console.error("Error loading blog post:", error)
+    notFound()
   }
 }
