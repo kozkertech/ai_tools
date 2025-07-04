@@ -85,10 +85,10 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <div className="flex max-w-7xl mx-auto">
         {/* Table of Contents - Left Sidebar */}
-        <aside className="hidden lg:block w-64 flex-shrink-0">
+        <aside className="hidden lg:block w-80 flex-shrink-0">
           <div className="sticky top-8 p-6">
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-2 border-b border-gray-200 dark:border-gray-600 pb-3">
                 <ChevronRight className="w-4 h-4" />
                 Table of Contents
               </h3>
@@ -101,12 +101,12 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
                         <button
                           onClick={() => scrollToHeading(heading.id)}
                           className={`
-                            block w-full text-left text-sm py-1 px-2 rounded transition-colors
-                            ${heading.level === 2 ? "ml-4" : ""}
+                            block w-full text-left text-sm py-2 px-3 rounded-md transition-all duration-200
+                            ${heading.level === 2 ? "ml-4 text-xs" : "font-medium"}
                             ${
                               activeId === heading.id
-                                ? "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-medium"
-                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-l-2 border-blue-500"
+                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                             }
                           `}
                         >

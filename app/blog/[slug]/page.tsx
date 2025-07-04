@@ -74,15 +74,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     return (
       <GuideLayout post={post}>
         <article className="max-w-4xl mx-auto px-4 py-8">
-          <Breadcrumbs items={breadcrumbItems} />
+          <div className="mb-8">
+            <Breadcrumbs items={breadcrumbItems} />
+          </div>
 
           {/* Post Header */}
           <header className="mb-8">
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-6">
                 {post.tags
-                  .filter((tag: any) => !tag.slug.includes("toc-guide"))
+                  .filter((tag: any) => !tag.slug.includes("toc-guide") && !tag.name.includes("#"))
                   .map((tag: any) => (
                     <Badge key={tag.id} variant="secondary">
                       {tag.name}
@@ -154,18 +156,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <article className="max-w-4xl mx-auto px-4 py-8">
-        <Breadcrumbs items={breadcrumbItems} />
+        <div className="mb-8">
+          <Breadcrumbs items={breadcrumbItems} />
+        </div>
 
         {/* Post Header */}
         <header className="mb-8">
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {post.tags.map((tag: any) => (
-                <Badge key={tag.id} variant="secondary">
-                  {tag.name}
-                </Badge>
-              ))}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {post.tags
+                .filter((tag: any) => !tag.name.includes("#"))
+                .map((tag: any) => (
+                  <Badge key={tag.id} variant="secondary">
+                    {tag.name}
+                  </Badge>
+                ))}
             </div>
           )}
 
