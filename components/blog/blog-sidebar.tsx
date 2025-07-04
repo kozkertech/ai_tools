@@ -39,15 +39,17 @@ export function BlogSidebar({
   onSortChange,
   tags = [],
 }: BlogSidebarProps) {
-  // Process categories to ensure we have valid data
+  // Process categories to ensure we have valid data and filter out tags with '#'
   const processedCategories = React.useMemo(() => {
     const allCategories = [...(Array.isArray(categories) ? categories : []), ...(Array.isArray(tags) ? tags : [])]
 
-    // Filter out invalid categories and ensure we have name property
+    // Filter out invalid categories and those with '#' symbol
     return allCategories
       .filter((cat) => {
         if (!cat) return false
         const name = cat.name || cat.title || cat.slug
+        // Skip categories/tags that contain '#' symbol
+        if (name && name.includes("#")) return false
         return name && name.trim().length > 0
       })
       .map((cat) => ({
