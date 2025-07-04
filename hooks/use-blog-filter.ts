@@ -39,7 +39,7 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
   const posts = Array.isArray(initialPosts) ? initialPosts : []
   const tags = Array.isArray(initialTags) ? initialTags : []
 
-  // Extract categories from posts and tags
+  // Extract categories from posts and tags, excluding those with '#'
   const categories = useMemo(() => {
     const categoryMap = new Map()
 
@@ -47,7 +47,7 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
     posts.forEach((post) => {
       if (post?.tags && Array.isArray(post.tags)) {
         post.tags.forEach((tag: any) => {
-          if (tag?.name && tag.name.trim()) {
+          if (tag?.name && tag.name.trim() && !tag.name.includes("#")) {
             categoryMap.set(tag.slug || tag.name, {
               id: tag.id || tag.slug || tag.name,
               name: tag.name,
@@ -58,7 +58,7 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
       }
 
       // Also check primary_tag
-      if (post?.primary_tag?.name && post.primary_tag.name.trim()) {
+      if (post?.primary_tag?.name && post.primary_tag.name.trim() && !post.primary_tag.name.includes("#")) {
         const tag = post.primary_tag
         categoryMap.set(tag.slug || tag.name, {
           id: tag.id || tag.slug || tag.name,
@@ -68,9 +68,9 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
       }
     })
 
-    // Add categories from initial tags
+    // Add categories from initial tags (excluding those with '#')
     tags.forEach((tag) => {
-      if (tag?.name && tag.name.trim()) {
+      if (tag?.name && tag.name.trim() && !tag.name.includes("#")) {
         categoryMap.set(tag.slug || tag.name, {
           id: tag.id || tag.slug || tag.name,
           name: tag.name,
@@ -108,17 +108,17 @@ export function useBlogFilter(initialPosts: any[] = [], initialTags: any[] = [])
       })
     }
 
-    // Apply category filter
+    // Apply category filter (including hidden tags with '#' in logic)
     if (selectedCategory !== "all") {
       filtered = filtered.filter((post) => {
         if (!post) return false
 
-        // Check primary tag
+        // Check primary tag (including hidden ones)
         if (post.primary_tag?.slug === selectedCategory || post.primary_tag?.name === selectedCategory) {
           return true
         }
 
-        // Check all tags
+        // Check all tags (including hidden ones)
         if (post.tags && Array.isArray(post.tags)) {
           return post.tags.some((tag: any) => tag?.slug === selectedCategory || tag?.name === selectedCategory)
         }

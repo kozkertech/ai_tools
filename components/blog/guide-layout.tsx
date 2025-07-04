@@ -1,128 +1,164 @@
 "use client"
 
 import type React from "react"
-
 import { useEffect, useState } from "react"
-
-interface Heading {
-  id: string
-  text: string
-  level: number
-}
+import Link from "next/link"
+import { ChevronLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 interface GuideLayoutProps {
   post: any
+  tableOfContents: Array<{
+    id: string
+    text: string
+    level: number
+  }>
   children: React.ReactNode
+  relatedPosts?: any[]
 }
 
-export function GuideLayout({ post, children }: GuideLayoutProps) {
-  const [headings, setHeadings] = useState<Heading[]>([])
+export function GuideLayout({ post, tableOfContents, children, relatedPosts = [] }: GuideLayoutProps) {
   const [activeId, setActiveId] = useState<string>("")
 
   useEffect(() => {
-    // Extract headings from the post content (only H1 and H2)
-    const extractHeadings = () => {
-      const headingElements = document.querySelectorAll("h1, h2")
-      const headingList: Heading[] = []
-
-      headingElements.forEach((heading, index) => {
-        const level = Number.parseInt(heading.tagName.charAt(1))
-        if (level <= 2) {
-          // Only include H1 and H2
-          const id = heading.id || `heading-${index}`
-          if (!heading.id) {
-            heading.id = id
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id)
           }
+        })
+      },
+      { rootMargin: "-20% 0% -35% 0%" },
+    )
 
-          headingList.push({
-            id,
-            text: heading.textContent || "",
-            level,
-          })
-        }
-      })
+    const headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6")
+    headings.forEach((heading) => observer.observe(heading))
 
-      setHeadings(headingList)
-    }
+    return () => observer.disconnect()
+  }, [])
 
-    // Wait for content to be rendered
-    const timer = setTimeout(extractHeadings, 100)
-    return () => clearTimeout(timer)
-  }, [post])
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: post.title, href: `/blog/${post.slug}` },
+  ]
 
-  useEffect(() => {
-    // Handle scroll to update active heading
-    const handleScroll = () => {
-      const headingElements = headings.map((h) => document.getElementById(h.id)).filter(Boolean)
-
-      for (let i = headingElements.length - 1; i >= 0; i--) {
-        const element = headingElements[i]
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          if (rect.top <= 100) {
-            setActiveId(element.id)
-            break
-          }
-        }
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    handleScroll() // Set initial active heading
-
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [headings])
-
-  const scrollToHeading = (id: string) => {
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" })
-    }
-  }
+  // Filter out tags that contain '#' symbol
+  const visibleTags = post.tags?.filter((tag: any) => !tag.name.includes("#")) || []
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      <div className="flex max-w-7xl mx-auto">
-        {/* Main Content */}
-        <main className="flex-1 min-w-0 pr-8">{children}</main>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex gap-8">
+          {/* Main Content */}
+          <div className="flex-1 pr-8">
+            {/* Breadcrumbs */}
+            <div className="mb-8">
+              <Breadcrumbs items={breadcrumbItems} />
+            </div>
 
-        {/* Table of Contents - Right Sidebar */}
-        <aside className="hidden lg:block w-64 flex-shrink-0">
-          <div className="sticky top-8 py-8">
-            <div className="space-y-1">
-              <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
-                ON THIS PAGE
-              </h3>
+            {/* Tags */}
+            {visibleTags.length > 0 && (
+              <div className="mb-6 flex flex-wrap gap-2">
+                {visibleTags.map((tag: any) => (
+                  <Badge key={tag.id} variant="secondary" className="text-sm">
+                    {tag.name}
+                  </Badge>
+                ))}
+              </div>
+            )}
 
-              {headings.length > 0 ? (
-                <nav>
-                  <ul className="space-y-1">
-                    {headings.map((heading) => (
-                      <li key={heading.id}>
-                        <button
-                          onClick={() => scrollToHeading(heading.id)}
-                          className={`
-                            block w-full text-left text-sm py-1 transition-colors duration-200
-                            ${heading.level === 2 ? "ml-4 text-xs" : ""}
-                            ${
-                              activeId === heading.id
-                                ? "text-gray-900 dark:text-gray-100 font-medium"
-                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                            }
-                          `}
-                        >
-                          {heading.text}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              ) : (
-                <p className="text-sm text-gray-500 dark:text-gray-400">No headings found</p>
-              )}
+            {/* Post Header */}
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold tracking-tight mb-4">{post.title}</h1>
+              {post.excerpt && <p className="text-xl text-muted-foreground mb-6">{post.excerpt}</p>}
+
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                {post.primary_author && (
+                  <div className="flex items-center gap-2">
+                    <span>By {post.primary_author.name}</span>
+                  </div>
+                )}
+                {post.published_at && (
+                  <time dateTime={post.published_at}>
+                    {new Date(post.published_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                )}
+                {post.reading_time && <span>{post.reading_time} min read</span>}
+              </div>
+            </div>
+
+            {/* Post Content */}
+            <div className="prose prose-lg max-w-none dark:prose-invert">{children}</div>
+
+            {/* Related Posts */}
+            {relatedPosts.length > 0 && (
+              <div className="mt-12 pt-8 border-t">
+                <h2 className="text-2xl font-bold mb-6">Related Posts</h2>
+                <div className="grid gap-6 md:grid-cols-2">
+                  {relatedPosts.slice(0, 4).map((relatedPost) => (
+                    <Link
+                      key={relatedPost.id}
+                      href={`/blog/${relatedPost.slug}`}
+                      className="group block p-4 rounded-lg border hover:border-primary/50 transition-colors"
+                    >
+                      <h3 className="font-semibold group-hover:text-primary transition-colors">{relatedPost.title}</h3>
+                      {relatedPost.excerpt && (
+                        <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{relatedPost.excerpt}</p>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Navigation */}
+            <div className="flex justify-between items-center mt-12 pt-8 border-t">
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/blog">
+                  <ChevronLeft className="w-4 h-4 mr-2" />
+                  Back to Blog
+                </Link>
+              </Button>
             </div>
           </div>
-        </aside>
+
+          {/* Table of Contents - Right Sidebar */}
+          {tableOfContents.length > 0 && (
+            <div className="hidden lg:block w-64 shrink-0">
+              <div className="sticky top-8">
+                <div className="space-y-2">
+                  <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4">
+                    ON THIS PAGE
+                  </h3>
+                  <nav className="space-y-1">
+                    {tableOfContents.map((item) => (
+                      <a
+                        key={item.id}
+                        href={`#${item.id}`}
+                        className={`block text-sm transition-colors hover:text-foreground ${
+                          activeId === item.id ? "text-foreground font-medium" : "text-muted-foreground"
+                        } ${item.level === 2 ? "pl-0" : item.level === 3 ? "pl-4" : "pl-6"}`}
+                        style={{
+                          paddingLeft: `${(item.level - 2) * 16}px`,
+                        }}
+                      >
+                        {item.text}
+                      </a>
+                    ))}
+                  </nav>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

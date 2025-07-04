@@ -81,7 +81,9 @@ export default async function BlogPage() {
   return (
     <div className="container py-8 md:py-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between md:gap-8">
+
+      {/* Header Section */}
+      <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between md:gap-8 mb-8">
         <div className="flex-1 space-y-4">
           <h1 className="inline-block text-4xl font-bold tracking-tight lg:text-5xl">Digital Insights</h1>
           <p className="text-xl text-muted-foreground">
