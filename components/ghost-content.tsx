@@ -29,10 +29,6 @@ export function GhostContent({ html, className = "" }: GhostContentProps) {
           await import("prismjs/components/prism-sql")
           await import("prismjs/components/prism-yaml")
           await import("prismjs/components/prism-markdown")
-          await import("prismjs/components/prism-php")
-          await import("prismjs/components/prism-java")
-          await import("prismjs/components/prism-c")
-          await import("prismjs/components/prism-cpp")
 
           // Highlight all code blocks
           Prism.highlightAll()

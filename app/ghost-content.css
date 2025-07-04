@@ -1,147 +1,161 @@
-/* Ghost Content Styles */
+/* Ghost Content Styling */
+
+/* Main content container */
 .ghost-content {
-  @apply text-gray-900 dark:text-gray-100;
-  line-height: 1.7;
+  width: 100%;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
+/* Typography */
 .ghost-content h1,
 .ghost-content h2,
 .ghost-content h3,
 .ghost-content h4,
 .ghost-content h5,
 .ghost-content h6 {
-  @apply font-bold text-gray-900 dark:text-gray-100 mt-8 mb-4;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 700;
   line-height: 1.3;
 }
 
 .ghost-content h1 {
-  @apply text-3xl md:text-4xl;
+  font-size: 2.25rem;
 }
 
 .ghost-content h2 {
-  @apply text-2xl md:text-3xl;
+  font-size: 1.875rem;
 }
 
 .ghost-content h3 {
-  @apply text-xl md:text-2xl;
+  font-size: 1.5rem;
 }
 
 .ghost-content h4 {
-  @apply text-lg md:text-xl;
+  font-size: 1.25rem;
 }
 
 .ghost-content h5 {
-  @apply text-base md:text-lg;
+  font-size: 1.125rem;
 }
 
 .ghost-content h6 {
-  @apply text-sm md:text-base;
+  font-size: 1rem;
 }
 
 .ghost-content p {
-  @apply mb-6 text-gray-700 dark:text-gray-300;
+  margin-bottom: 1.5em;
+  line-height: 1.75;
 }
 
 .ghost-content a {
-  @apply text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline;
+  color: #ff6e30;
+  text-decoration: underline;
+  transition: color 0.2s ease;
 }
 
+.ghost-content a:hover {
+  color: #e05a20;
+}
+
+/* Lists */
 .ghost-content ul,
 .ghost-content ol {
-  @apply mb-6 pl-6;
+  margin: 1.5em 0;
+  padding-left: 1.5em;
 }
 
 .ghost-content ul {
-  @apply list-disc;
+  list-style: disc;
 }
 
 .ghost-content ol {
-  @apply list-decimal;
+  list-style: decimal;
 }
 
 .ghost-content li {
-  @apply mb-2 text-gray-700 dark:text-gray-300;
+  margin-bottom: 0.5em;
+  line-height: 1.75;
 }
 
+.ghost-content li > ul,
+.ghost-content li > ol {
+  margin: 0.5em 0 0.5em 1.5em;
+}
+
+/* Blockquotes */
 .ghost-content blockquote {
-  @apply border-l-4 border-gray-300 dark:border-gray-600 pl-6 py-2 mb-6 italic text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-r-lg;
+  margin: 1.5em 0;
+  padding: 0 1.5em;
+  border-left: 3px solid #ff6e30;
+  font-style: italic;
+  color: #6b7280;
 }
 
-.ghost-content img {
-  @apply rounded-lg shadow-md mb-6 max-w-full h-auto;
+.ghost-content blockquote p {
+  margin-bottom: 0.75em;
 }
 
-.ghost-content figure {
-  @apply mb-6;
+.ghost-content blockquote cite {
+  font-style: normal;
+  font-weight: 600;
 }
 
-.ghost-content figcaption {
-  @apply text-sm text-gray-500 dark:text-gray-400 text-center mt-2 italic;
-}
-
-.ghost-content table {
-  @apply w-full border-collapse border border-gray-300 dark:border-gray-600 mb-6 rounded-lg overflow-hidden;
-}
-
-.ghost-content th,
-.ghost-content td {
-  @apply border border-gray-300 dark:border-gray-600 px-4 py-2 text-left;
-}
-
-.ghost-content th {
-  @apply bg-gray-100 dark:bg-gray-700 font-semibold text-gray-900 dark:text-gray-100;
-}
-
-.ghost-content td {
-  @apply text-gray-700 dark:text-gray-300;
-}
-
-.ghost-content hr {
-  @apply border-0 border-t border-gray-300 dark:border-gray-600 my-8;
-}
-
-/* Code Syntax Highlighting */
+/* Enhanced Code blocks with syntax highlighting */
 .ghost-content pre {
-  @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 rounded-lg overflow-x-auto mb-6 border border-gray-700;
+  margin: 1.5em 0;
+  padding: 1.5em;
+  background-color: #1e293b;
+  border-radius: 0.5rem;
+  overflow-x: auto;
   font-family: "Fira Code", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
-  font-size: 14px;
-  line-height: 1.5;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .ghost-content code {
   font-family: "Fira Code", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
-  font-size: 0.9em;
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  border: 1px solid #e2e8f0;
 }
 
-.ghost-content p code,
-.ghost-content li code {
-  @apply bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-2 py-1 rounded text-sm border border-gray-200 dark:border-gray-700;
+.ghost-content pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.875em;
+  color: #e2e8f0;
+  border: none;
 }
 
-/* Prism.js Token Styles */
+/* Syntax highlighting tokens */
 .ghost-content .token.comment,
 .ghost-content .token.prolog,
 .ghost-content .token.doctype,
 .ghost-content .token.cdata {
-  color: #6a737d;
+  color: #64748b;
   font-style: italic;
 }
 
 .ghost-content .token.punctuation {
-  color: #f8f8f2;
+  color: #94a3b8;
 }
 
 .ghost-content .token.property,
 .ghost-content .token.tag,
+.ghost-content .token.boolean,
+.ghost-content .token.number,
 .ghost-content .token.constant,
 .ghost-content .token.symbol,
 .ghost-content .token.deleted {
-  color: #f92672;
-}
-
-.ghost-content .token.boolean,
-.ghost-content .token.number {
-  color: #ae81ff;
+  color: #f87171;
 }
 
 .ghost-content .token.selector,
@@ -150,127 +164,481 @@
 .ghost-content .token.char,
 .ghost-content .token.builtin,
 .ghost-content .token.inserted {
-  color: #a6e22e;
+  color: #34d399;
 }
 
 .ghost-content .token.operator,
 .ghost-content .token.entity,
 .ghost-content .token.url,
 .ghost-content .language-css .token.string,
-.ghost-content .style .token.string,
-.ghost-content .token.variable {
-  color: #f8f8f2;
+.ghost-content .style .token.string {
+  color: #fbbf24;
 }
 
 .ghost-content .token.atrule,
 .ghost-content .token.attr-value,
-.ghost-content .token.function,
-.ghost-content .token.class-name {
-  color: #e6db74;
+.ghost-content .token.keyword {
+  color: #60a5fa;
 }
 
-.ghost-content .token.keyword {
-  color: #66d9ef;
+.ghost-content .token.function,
+.ghost-content .token.class-name {
+  color: #a78bfa;
 }
 
 .ghost-content .token.regex,
-.ghost-content .token.important {
-  color: #fd971f;
-}
-
 .ghost-content .token.important,
-.ghost-content .token.bold {
-  font-weight: bold;
-}
-
-.ghost-content .token.italic {
-  font-style: italic;
-}
-
-.ghost-content .token.entity {
-  cursor: help;
+.ghost-content .token.variable {
+  color: #fb923c;
 }
 
 /* Language-specific highlighting */
 .ghost-content .language-python .token.keyword {
-  color: #ff7b72;
-}
-
-.ghost-content .language-python .token.string {
-  color: #a5d6ff;
-}
-
-.ghost-content .language-python .token.function {
-  color: #d2a8ff;
+  color: #3b82f6;
 }
 
 .ghost-content .language-javascript .token.keyword,
-.ghost-content .language-typescript .token.keyword {
-  color: #ff7b72;
-}
-
-.ghost-content .language-javascript .token.string,
-.ghost-content .language-typescript .token.string {
-  color: #a5d6ff;
+.ghost-content .language-js .token.keyword {
+  color: #f59e0b;
 }
 
 .ghost-content .language-css .token.property {
-  color: #79c0ff;
+  color: #06b6d4;
 }
 
-.ghost-content .language-css .token.string {
-  color: #a5d6ff;
+/* Tables */
+.ghost-content table {
+  width: 100%;
+  margin: 1.5em 0;
+  border-collapse: collapse;
 }
 
-/* Code block enhancements */
-.ghost-content pre[class*="language-"] {
+.ghost-content th {
+  padding: 0.75em;
+  border-bottom: 2px solid #e5e7eb;
+  font-weight: 600;
+  text-align: left;
+}
+
+.ghost-content td {
+  padding: 0.75em;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Images */
+.ghost-content img,
+.ghost-content .kg-image {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5em 0;
+  border-radius: 0.375rem;
+}
+
+.ghost-content figcaption {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 0.5em;
+}
+
+/* Image card with caption */
+.ghost-content .kg-image-card {
+  margin: 1.5em 0;
+}
+
+.ghost-content .kg-image-card figcaption {
+  margin-top: 0.5em;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+/* Gallery card */
+.ghost-content .kg-gallery-container {
+  display: flex;
+  flex-direction: column;
+  margin: 1.5em 0;
+}
+
+.ghost-content .kg-gallery-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.ghost-content .kg-gallery-image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+/* Bookmark card */
+.ghost-content .kg-bookmark-card {
+  margin: 1.5em 0;
+}
+
+.ghost-content .kg-bookmark-container {
+  display: flex;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  overflow: hidden;
+  text-decoration: none !important;
+}
+
+.ghost-content .kg-bookmark-content {
+  flex-grow: 1;
+  padding: 1em;
+}
+
+.ghost-content .kg-bookmark-title {
+  font-weight: 600;
+  color: #111827;
+}
+
+.ghost-content .kg-bookmark-description {
+  color: #6b7280;
+  margin-top: 0.5em;
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.ghost-content .kg-bookmark-metadata {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5em;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.ghost-content .kg-bookmark-icon {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+}
+
+.ghost-content .kg-bookmark-thumbnail {
+  flex-shrink: 0;
+  width: 33.333%;
   position: relative;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.ghost-content pre[class*="language-"]:before {
-  content: attr(class);
+.ghost-content .kg-bookmark-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   position: absolute;
   top: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-bottom-left-radius: 4px;
-  text-transform: uppercase;
+  left: 0;
+  margin: 0;
+  border-radius: 0;
+}
+
+/* Callout card */
+.ghost-content .kg-callout-card {
+  margin: 1.5em 0;
+  padding: 1.5em;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+}
+
+.ghost-content .kg-callout-card.kg-callout-card-grey {
+  background-color: #f3f4f6;
+}
+
+.ghost-content .kg-callout-card.kg-callout-card-white {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.ghost-content .kg-callout-card.kg-callout-card-blue {
+  background-color: #eff6ff;
+}
+
+.ghost-content .kg-callout-card.kg-callout-card-green {
+  background-color: #ecfdf5;
+}
+
+.ghost-content .kg-callout-card.kg-callout-card-yellow {
+  background-color: #fffbeb;
+}
+
+.ghost-content .kg-callout-card.kg-callout-card-red {
+  background-color: #fef2f2;
+}
+
+.ghost-content .kg-callout-card.kg-callout-card-pink {
+  background-color: #fdf2f8;
+}
+
+.ghost-content .kg-callout-card.kg-callout-card-purple {
+  background-color: #f5f3ff;
+}
+
+.ghost-content .kg-callout-card.kg-callout-card-accent {
+  background-color: #fff1eb;
+}
+
+.ghost-content .kg-callout-emoji {
+  font-size: 1.25rem;
+  line-height: 1;
+  margin-right: 0.75em;
+}
+
+.ghost-content .kg-callout-text {
+  flex-grow: 1;
+}
+
+/* Toggle card */
+.ghost-content .kg-toggle-card {
+  margin: 1.5em 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.ghost-content .kg-toggle-heading {
+  padding: 1em;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9fafb;
+}
+
+.ghost-content .kg-toggle-heading h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.ghost-content .kg-toggle-content {
+  padding: 1em;
+}
+
+.ghost-content .kg-toggle-card[data-kg-toggle-state="close"] .kg-toggle-content {
+  display: none;
+}
+
+/* File card */
+.ghost-content .kg-file-card {
+  margin: 1.5em 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.ghost-content .kg-file-card-container {
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  background-color: #f9fafb;
+}
+
+.ghost-content .kg-file-card-icon {
+  margin-right: 1em;
+}
+
+.ghost-content .kg-file-card-title {
+  font-weight: 600;
+  margin: 0;
+}
+
+.ghost-content .kg-file-card-caption {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 0.25em;
+}
+
+.ghost-content .kg-file-card-filesize {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-top: 0.25em;
+}
+
+/* Product card */
+.ghost-content .kg-product-card {
+  margin: 1.5em 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.ghost-content .kg-product-card-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.ghost-content .kg-product-card-image {
+  width: 100%;
+}
+
+.ghost-content .kg-product-card-image img {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  border-radius: 0;
+}
+
+.ghost-content .kg-product-card-content {
+  padding: 1em;
+}
+
+.ghost-content .kg-product-card-title {
+  font-weight: 600;
+  margin: 0 0 0.5em 0;
+}
+
+.ghost-content .kg-product-card-description {
+  margin-bottom: 1em;
+}
+
+.ghost-content .kg-product-card-button {
+  display: inline-block;
+  padding: 0.5em 1em;
+  background-color: #ff6e30;
+  color: white;
+  border-radius: 0.25rem;
+  text-decoration: none;
   font-weight: 500;
-  letter-spacing: 0.5px;
+  transition: background-color 0.2s ease;
 }
 
-.ghost-content pre.language-python:before {
-  content: "Python";
+.ghost-content .kg-product-card-button:hover {
+  background-color: #e05a20;
+  color: white;
 }
 
-.ghost-content pre.language-javascript:before {
-  content: "JavaScript";
+/* Dark mode adjustments */
+.dark .ghost-content a {
+  color: #ff8e50;
 }
 
-.ghost-content pre.language-typescript:before {
-  content: "TypeScript";
+.dark .ghost-content a:hover {
+  color: #ffa570;
 }
 
-.ghost-content pre.language-css:before {
-  content: "CSS";
+.dark .ghost-content blockquote {
+  color: #9ca3af;
+  border-left-color: #ff8e50;
 }
 
-.ghost-content pre.language-html:before {
-  content: "HTML";
+.dark .ghost-content pre {
+  background-color: #0f172a;
+  border-color: #1e293b;
 }
 
-.ghost-content pre.language-json:before {
-  content: "JSON";
+.dark .ghost-content code {
+  background-color: #1e293b;
+  color: #cbd5e1;
+  border-color: #334155;
 }
 
-.ghost-content pre.language-bash:before {
-  content: "Bash";
+.dark .ghost-content th {
+  border-bottom-color: #374151;
 }
 
-.ghost-content pre.language-sql:before {
-  content: "SQL";
+.dark .ghost-content td {
+  border-bottom-color: #374151;
+}
+
+.dark .ghost-content figcaption {
+  color: #9ca3af;
+}
+
+.dark .ghost-content .kg-bookmark-container {
+  border-color: #374151;
+  background-color: #111827;
+}
+
+.dark .ghost-content .kg-bookmark-title {
+  color: #f9fafb;
+}
+
+.dark .ghost-content .kg-bookmark-description,
+.dark .ghost-content .kg-bookmark-metadata {
+  color: #9ca3af;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-grey {
+  background-color: #1f2937;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-white {
+  background-color: #111827;
+  border-color: #374151;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-blue {
+  background-color: #172554;
+  color: #bfdbfe;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-green {
+  background-color: #14532d;
+  color: #bbf7d0;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-yellow {
+  background-color: #713f12;
+  color: #fef08a;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-red {
+  background-color: #7f1d1d;
+  color: #fecaca;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-pink {
+  background-color: #831843;
+  color: #fbcfe8;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-purple {
+  background-color: #4c1d95;
+  color: #ddd6fe;
+}
+
+.dark .ghost-content .kg-callout-card.kg-callout-card-accent {
+  background-color: #7c2d12;
+  color: #ffedd5;
+}
+
+.dark .ghost-content .kg-toggle-card {
+  border-color: #374151;
+}
+
+.dark .ghost-content .kg-toggle-heading {
+  background-color: #1f2937;
+}
+
+.dark .ghost-content .kg-file-card {
+  border-color: #374151;
+}
+
+.dark .ghost-content .kg-file-card-container {
+  background-color: #1f2937;
+}
+
+.dark .ghost-content .kg-file-card-caption,
+.dark .ghost-content .kg-file-card-filesize {
+  color: #9ca3af;
+}
+
+.dark .ghost-content .kg-product-card {
+  border-color: #374151;
+}
+
+.dark .ghost-content .kg-product-card-button {
+  background-color: #ff8e50;
+}
+
+.dark .ghost-content .kg-product-card-button:hover {
+  background-color: #ffa570;
 }
