@@ -1,14 +1,12 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { CalendarIcon, UserIcon, ClockIcon, BookOpenIcon, ChevronRightIcon } from "lucide-react"
+import { CalendarIcon, UserIcon, ClockIcon, BookOpenIcon, ListIcon } from "lucide-react"
 import { formatDate } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 
 interface GuideLayoutProps {
   post: {
@@ -45,11 +43,11 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
   const [tocItems, setTocItems] = useState<TocItem[]>([])
   const [activeId, setActiveId] = useState<string>("")
 
-  // Extract table of contents from the HTML content
+  // Extract table of contents from the HTML content (only h1 and h2)
   useEffect(() => {
     const parser = new DOMParser()
     const doc = parser.parseFromString(post.html, "text/html")
-    const headings = doc.querySelectorAll("h1, h2, h3, h4, h5, h6")
+    const headings = doc.querySelectorAll("h1, h2") // Only h1 and h2
 
     const items: TocItem[] = []
     headings.forEach((heading, index) => {
@@ -96,8 +94,44 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
   return (
     <div className="container py-8 md:py-12">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-3">
+        {/* Table of Contents Sidebar - Left Side */}
+        <div className="lg:col-span-1 order-1">
+          <div className="sticky top-8">
+            {tocItems.length > 0 && (
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-2 mb-4">
+                  <ListIcon className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                  <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 uppercase tracking-wide">
+                    Table of Contents
+                  </h3>
+                </div>
+
+                <nav className="space-y-1">
+                  {tocItems.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => scrollToHeading(item.id)}
+                      className={cn(
+                        "block w-full text-left py-2 px-3 rounded-md transition-all duration-200 text-sm hover:bg-gray-100 dark:hover:bg-gray-800",
+                        item.level === 1
+                          ? "font-medium text-gray-900 dark:text-gray-100"
+                          : "font-normal pl-6 text-gray-600 dark:text-gray-400",
+                        activeId === item.id
+                          ? "bg-primary/10 text-primary font-medium border-l-2 border-l-primary"
+                          : "hover:text-gray-900 dark:hover:text-gray-100",
+                      )}
+                    >
+                      {item.text}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Main Content - Right Side */}
+        <div className="lg:col-span-3 order-2">
           <article className="space-y-8">
             {/* Header */}
             <div className="space-y-6">
@@ -142,48 +176,8 @@ export function GuideLayout({ post, children }: GuideLayoutProps) {
             )}
 
             {/* Content */}
-            <div className="prose prose-lg max-w-none dark:prose-invert">{children}</div>
+            <div className="ghost-content">{children}</div>
           </article>
-        </div>
-
-        {/* Table of Contents Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-8">
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="font-semibold text-lg mb-4 flex items-center">
-                  <BookOpenIcon className="mr-2 h-5 w-5" />
-                  Table of Contents
-                </h3>
-
-                {tocItems.length > 0 ? (
-                  <nav className="space-y-2">
-                    {tocItems.map((item) => (
-                      <Button
-                        key={item.id}
-                        variant="ghost"
-                        size="sm"
-                        className={`
-                          w-full justify-start text-left h-auto py-2 px-3
-                          ${item.level === 1 ? "font-medium" : ""}
-                          ${item.level === 2 ? "ml-4 text-sm" : ""}
-                          ${item.level === 3 ? "ml-8 text-sm" : ""}
-                          ${item.level >= 4 ? "ml-12 text-xs" : ""}
-                          ${activeId === item.id ? "bg-accent text-accent-foreground" : ""}
-                        `}
-                        onClick={() => scrollToHeading(item.id)}
-                      >
-                        <ChevronRightIcon className="mr-1 h-3 w-3 flex-shrink-0" />
-                        <span className="truncate">{item.text}</span>
-                      </Button>
-                    ))}
-                  </nav>
-                ) : (
-                  <p className="text-sm text-muted-foreground">No headings found in this guide.</p>
-                )}
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </div>
     </div>
