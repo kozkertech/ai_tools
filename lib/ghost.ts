@@ -124,3 +124,66 @@ export async function searchPosts(query: string) {
     return []
   }
 }
+
+// Add these functions to your existing lib/ghost.ts file
+
+// Get all case studies (posts with 'case-study' tag)
+export async function getCaseStudies() {
+  try {
+    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
+      console.error("Ghost API credentials are missing. Please check your environment variables.")
+      return []
+    }
+
+    return await api.posts.browse({
+      limit: "all",
+      include: ["tags", "authors"],
+      filter: "tag:case-study",
+      order: "published_at DESC",
+    })
+  } catch (err) {
+    console.error("Error fetching case studies from Ghost:", err)
+    return []
+  }
+}
+
+// Get a specific case study by slug
+export async function getCaseStudy(slug: string) {
+  try {
+    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
+      console.error("Ghost API credentials are missing. Please check your environment variables.")
+      return null
+    }
+
+    const posts = await api.posts.browse({
+      limit: "all",
+      include: ["tags", "authors"],
+      filter: `tag:case-study+slug:${slug}`,
+    })
+
+    return posts.length > 0 ? posts[0] : null
+  } catch (err) {
+    console.error(`Error fetching case study ${slug} from Ghost:`, err)
+    return null
+  }
+}
+
+// Get featured case studies
+export async function getFeaturedCaseStudies(limit = 3) {
+  try {
+    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
+      console.error("Ghost API credentials are missing. Please check your environment variables.")
+      return []
+    }
+
+    return await api.posts.browse({
+      limit,
+      include: ["tags", "authors"],
+      filter: "tag:case-study+featured:true",
+      order: "published_at DESC",
+    })
+  } catch (err) {
+    console.error("Error fetching featured case studies from Ghost:", err)
+    return []
+  }
+}
