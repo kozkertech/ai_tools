@@ -2,7 +2,7 @@ name: 📌 Ticket
 description: One quick form for bugs, features, or copy tweaks
 title: "[TICKET] "
 labels: needs triage
-assignees: ''
+assignees: [ ]
 
 body:
   - type: dropdown
