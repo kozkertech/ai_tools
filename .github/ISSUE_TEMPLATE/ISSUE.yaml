@@ -1,10 +1,9 @@
----
+
 name: Issue
 description: One quick form for bugs, features, or copy tweaks
 title: "[ISSUE]"
 labels: "features, needs triage, bugs, content"
 assignees: [ ]
----
 
 body:
   - type: dropdown
