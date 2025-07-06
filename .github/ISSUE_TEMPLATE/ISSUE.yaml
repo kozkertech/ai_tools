@@ -2,7 +2,7 @@ name: Issue
 description: One quick form for bugs, features, or copy tweaks
 title: "[ISSUE]"
 labels: "features, needs triage, bugs, content"
-assignees: ''
+assignees: [ ]
 
 body:
   - type: dropdown
