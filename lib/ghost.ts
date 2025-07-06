@@ -146,7 +146,7 @@ export async function getCaseStudies() {
       result = await api.posts.browse({
         limit: "all",
         include: ["tags", "authors"],
-        filter: "tag:case-study",
+        filter: "tag:hash-case-study",
         order: "published_at DESC",
       })
       
@@ -171,7 +171,7 @@ export async function getCaseStudies() {
 
       const caseStudyPosts = allPosts.filter(post => {
         const hasCaseStudyTag = post.tags?.some(tag => 
-          tag.slug === 'case-study' || tag.name?.toLowerCase() === 'case-study'
+          tag.slug === 'case-study' || tag.name?.toLowerCase() === 'hash-case-study'
         )
         
         if (hasCaseStudyTag) {
