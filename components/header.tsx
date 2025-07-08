@@ -161,12 +161,14 @@ export default function Header() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link
-                  href="/webinars"
+                <a
+                  href="https://events.kozker.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary"
                 >
                   Webinars & Events
-                </Link>
+                </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link
@@ -250,11 +252,11 @@ export default function Header() {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="fixed inset-0 top-16 z-50 grid h-[calc(100vh-4rem)] grid-flow-row auto-rows-max overflow-auto p-6 pb-32 shadow-md animate-in md:hidden bg-background/95 backdrop-blur-md">
+        <div className="fixed inset-0 top-16 z-50 grid h-[calc(100vh-4rem)] grid-flow-row auto-rows-max overflow-auto p-6 pb-32 shadow-md animate-in md:hidden bg-background/98 backdrop-blur-md border-t">
           <div className="relative z-20 grid gap-6 rounded-xl p-4 bg-background">
             <Link
               href="/"
-              className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
+              className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10 hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
             >
               <span className="text-base font-medium">Home</span>
@@ -304,13 +306,15 @@ export default function Header() {
                 >
                   <span className="text-sm font-medium">Blog</span>
                 </Link>
-                <Link
-                  href="/webinars"
+                <a
+                  href="https://events.kozker.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <span className="text-sm font-medium">Webinars & Events</span>
-                </Link>
+                </a>
                 <Link
                   href="/case-studies"
                   className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"

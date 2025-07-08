@@ -1,282 +1,284 @@
 import GhostContentAPI from "@tryghost/content-api"
 
-// Initialize the Ghost Content API client with proper error handling
+// Create API instance with site credentials
 const api = new GhostContentAPI({
   url: process.env.GHOST_URL || "",
   key: process.env.GHOST_CONTENT_API_KEY || "",
   version: "v5.0",
 })
 
-// Get all posts with their tags and authors
-export async function getPosts(options = {}) {
-  try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return []
-    }
+export interface GhostPost {
+  id: string
+  title: string
+  slug: string
+  html: string
+  feature_image: string | null
+  excerpt: string
+  published_at: string
+  updated_at: string
+  created_at: string
+  tags: GhostTag[]
+  authors: GhostAuthor[]
+  primary_author: GhostAuthor
+  primary_tag: GhostTag | null
+  url: string
+  canonical_url: string | null
+  meta_title: string | null
+  meta_description: string | null
+  og_image: string | null
+  og_title: string | null
+  og_description: string | null
+  twitter_image: string | null
+  twitter_title: string | null
+  twitter_description: string | null
+  reading_time: number
+  featured: boolean
+}
 
+export interface GhostTag {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  feature_image: string | null
+  visibility: string
+  meta_title: string | null
+  meta_description: string | null
+  url: string
+  count?: {
+    posts: number
+  }
+}
+
+export interface GhostAuthor {
+  id: string
+  name: string
+  slug: string
+  bio: string | null
+  cover_image: string | null
+  profile_image: string | null
+  location: string | null
+  website: string | null
+  twitter: string | null
+  facebook: string | null
+  url: string
+  count?: {
+    posts: number
+  }
+}
+
+export interface GhostSettings {
+  title: string
+  description: string
+  logo: string | null
+  cover_image: string | null
+  icon: string | null
+  accent_color: string | null
+  locale: string
+  timezone: string
+  codeinjection_head: string | null
+  codeinjection_foot: string | null
+  navigation: Array<{
+    label: string
+    url: string
+  }>
+  secondary_navigation: Array<{
+    label: string
+    url: string
+  }>
+  meta_title: string | null
+  meta_description: string | null
+  og_image: string | null
+  og_title: string | null
+  og_description: string | null
+  twitter_image: string | null
+  twitter_title: string | null
+  twitter_description: string | null
+}
+
+// Get all posts
+export async function getPosts(limit?: number): Promise<GhostPost[]> {
+  try {
     const posts = await api.posts.browse({
-      limit: "all",
+      limit: limit || "all",
       include: ["tags", "authors"],
       order: "published_at DESC",
-      ...options,
     })
-
-    return Array.isArray(posts) ? posts : []
-  } catch (err) {
-    console.error("Error fetching posts from Ghost:", err)
+    return posts as GhostPost[]
+  } catch (error) {
+    console.error("Error fetching posts:", error)
     return []
   }
 }
 
-// Get a specific post by its slug
-export async function getPost(slug: string) {
+// Get single post by slug
+export async function getPost(slug: string): Promise<GhostPost | null> {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return null
-    }
-
-    return await api.posts.read({
-      slug,
-      include: ["tags", "authors"],
-    })
-  } catch (err) {
-    console.error(`Error fetching post ${slug} from Ghost:`, err)
+    const post = await api.posts.read({ slug }, { include: ["tags", "authors"] })
+    return post as GhostPost
+  } catch (error) {
+    console.error("Error fetching post:", error)
     return null
-  }
-}
-
-// Get featured posts
-export async function getFeaturedPosts() {
-  try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return []
-    }
-
-    // First try to get posts with the featured filter
-    try {
-      const featuredPosts = await api.posts.browse({
-        limit: 3,
-        include: ["tags", "authors"],
-        filter: "featured:true",
-      })
-
-      // Ensure featuredPosts is an array and has length property
-      if (Array.isArray(featuredPosts) && featuredPosts.length > 0) {
-        return featuredPosts
-      }
-    } catch (featuredError) {
-      console.error("Error fetching featured posts, falling back to latest posts:", featuredError)
-    }
-
-    // If no featured posts or if the featured filter fails, fall back to latest posts
-    const latestPosts = await api.posts.browse({
-      limit: 3,
-      include: ["tags", "authors"],
-      order: "published_at DESC",
-    })
-
-    return Array.isArray(latestPosts) ? latestPosts : []
-  } catch (err) {
-    console.error("Error fetching posts from Ghost:", err)
-    return []
   }
 }
 
 // Get all tags
-export async function getTags() {
+export async function getTags(): Promise<GhostTag[]> {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return []
-    }
-
     const tags = await api.tags.browse({
       limit: "all",
+      include: ["count.posts"],
     })
-
-    return Array.isArray(tags) ? tags : []
-  } catch (err) {
-    console.error("Error fetching tags from Ghost:", err)
+    return tags as GhostTag[]
+  } catch (error) {
+    console.error("Error fetching tags:", error)
     return []
   }
 }
 
-// Search posts by query
-export async function searchPosts(query: string) {
+// Get single tag by slug
+export async function getTag(slug: string): Promise<GhostTag | null> {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.error("Ghost API credentials are missing. Please check your environment variables.")
-      return []
-    }
+    const tag = await api.tags.read({ slug }, { include: ["count.posts"] })
+    return tag as GhostTag
+  } catch (error) {
+    console.error("Error fetching tag:", error)
+    return null
+  }
+}
 
+// Get posts by tag
+export async function getPostsByTag(tagSlug: string, limit?: number): Promise<GhostPost[]> {
+  try {
     const posts = await api.posts.browse({
-      limit: "all",
+      limit: limit || "all",
+      filter: `tag:${tagSlug}`,
       include: ["tags", "authors"],
-      filter: `(title:~'${query}'+slug:~'${query}'+custom_excerpt:~'${query}'+html:~'${query}')`,
+      order: "published_at DESC",
     })
-
-    return Array.isArray(posts) ? posts : []
-  } catch (err) {
-    console.error(`Error searching posts with query "${query}" from Ghost:`, err)
+    return posts as GhostPost[]
+  } catch (error) {
+    console.error("Error fetching posts by tag:", error)
     return []
   }
 }
 
-// Get all case studies (posts with 'case-study' tag)
-export async function getCaseStudies() {
+// Get featured posts
+export async function getFeaturedPosts(limit = 3): Promise<GhostPost[]> {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.warn("Ghost API credentials are missing.")
-      return []
-    }
-
-    if (!api) {
-      console.error("Ghost API client is not initialized")
-      return []
-    }
-
-    // Try multiple approaches to get case studies
-    let result = []
-
-    try {
-      // Method 1: Direct filter with case-study tag
-      result = await api.posts.browse({
-        limit: "all",
-        include: ["tags", "authors"],
-        filter: "tag:hash-case-study",
-        order: "published_at DESC",
-      })
-      
-      if (result && result.length > 0) {
-        console.log("Found case studies with direct filter:", result.length)
-        return result
-      }
-    } catch (error) {
-      console.warn("Direct filter failed:", error.message)
-    }
-
-    try {
-      // Method 2: Get all posts and filter manually
-      console.log("Trying manual filter...")
-      const allPosts = await api.posts.browse({
-        limit: "all",
-        include: ["tags", "authors"],
-        order: "published_at DESC",
-      })
-
-      console.log("Total posts found:", allPosts.length)
-
-      const caseStudyPosts = allPosts.filter(post => {
-        const hasCaseStudyTag = post.tags?.some(tag => 
-          tag.slug === 'case-study' || tag.name?.toLowerCase() === 'hash-case-study'
-        )
-        
-        if (hasCaseStudyTag) {
-          console.log("Found case study post:", post.title, "with tags:", post.tags?.map(t => t.slug))
-        }
-        
-        return hasCaseStudyTag
-      })
-
-      console.log("Case studies found after manual filter:", caseStudyPosts.length)
-      return caseStudyPosts
-
-    } catch (error) {
-      console.error("Manual filter also failed:", error.message)
-    }
-
-    return []
-
-  } catch (err) {
-    console.error("Error fetching case studies from Ghost:", err)
+    const posts = await api.posts.browse({
+      limit,
+      filter: "featured:true",
+      include: ["tags", "authors"],
+      order: "published_at DESC",
+    })
+    return posts as GhostPost[]
+  } catch (error) {
+    console.error("Error fetching featured posts:", error)
     return []
   }
 }
 
-// Debug function to see all posts and their tags
-export async function debugAllPosts() {
+// Get site settings
+export async function getSettings(): Promise<GhostSettings | null> {
   try {
-    const allPosts = await api.posts.browse({
-      limit: "all",
+    const settings = await api.settings.browse()
+    return settings as GhostSettings
+  } catch (error) {
+    console.error("Error fetching settings:", error)
+    return null
+  }
+}
+
+// Search posts
+export async function searchPosts(query: string, limit = 10): Promise<GhostPost[]> {
+  try {
+    const posts = await api.posts.browse({
+      limit,
+      filter: `title:~'${query}',excerpt:~'${query}'`,
+      include: ["tags", "authors"],
+      order: "published_at DESC",
+    })
+    return posts as GhostPost[]
+  } catch (error) {
+    console.error("Error searching posts:", error)
+    return []
+  }
+}
+
+// Get recent posts
+export async function getRecentPosts(limit = 5): Promise<GhostPost[]> {
+  try {
+    const posts = await api.posts.browse({
+      limit,
+      include: ["tags", "authors"],
+      order: "published_at DESC",
+    })
+    return posts as GhostPost[]
+  } catch (error) {
+    console.error("Error fetching recent posts:", error)
+    return []
+  }
+}
+
+// Get related posts (posts with similar tags)
+export async function getRelatedPosts(currentPost: GhostPost, limit = 3): Promise<GhostPost[]> {
+  try {
+    if (!currentPost.tags || currentPost.tags.length === 0) {
+      return getRecentPosts(limit)
+    }
+
+    const tagSlugs = currentPost.tags.map((tag) => tag.slug).join(",")
+    const posts = await api.posts.browse({
+      limit: limit + 1, // Get one extra to exclude current post
+      filter: `tag:[${tagSlugs}]+id:-${currentPost.id}`,
       include: ["tags", "authors"],
       order: "published_at DESC",
     })
 
-    console.log("=== DEBUG: All Posts ===")
-    allPosts.forEach(post => {
-      console.log(`Post: "${post.title}"`)
-      console.log(`  Slug: ${post.slug}`)
-      console.log(`  Tags: ${post.tags?.map(t => `${t.name} (${t.slug})`).join(', ') || 'No tags'}`)
-      console.log(`  Published: ${post.published_at}`)
-      console.log("---")
-    })
-
-    const caseStudyPosts = allPosts.filter(post => 
-      post.tags?.some(tag => tag.slug === 'hash-case-study')
-    )
-
-    console.log(`\nFound ${caseStudyPosts.length} case study posts out of ${allPosts.length} total posts`)
-    
-    return {
-      totalPosts: allPosts.length,
-      caseStudyPosts: caseStudyPosts.length,
-      allPosts: allPosts.map(post => ({
-        title: post.title,
-        slug: post.slug,
-        tags: post.tags?.map(t => ({ name: t.name, slug: t.slug })) || []
-      }))
-    }
-
+    return (posts as GhostPost[]).slice(0, limit)
   } catch (error) {
-    console.error("Debug function failed:", error)
-    return { error: error.message }
+    console.error("Error fetching related posts:", error)
+    return []
   }
 }
 
-// Get a specific case study by slug
-export async function getCaseStudy(slug: string) {
+// Get case studies (posts with 'case-study' tag)
+export async function getCaseStudies(limit?: number): Promise<GhostPost[]> {
   try {
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      console.warn("Ghost API credentials are missing.")
-      return null
-    }
+    const posts = await api.posts.browse({
+      limit: limit || "all",
+      filter: "tag:case-study",
+      include: ["tags", "authors"],
+      order: "published_at DESC",
+    })
+    return posts as GhostPost[]
+  } catch (error) {
+    console.error("Error fetching case studies:", error)
+    return []
+  }
+}
 
-    if (!api) {
-      console.error("Ghost API client is not initialized")
-      return null
-    }
-
-    if (!slug) {
-      console.error("No slug provided to getCaseStudy")
-      return null
-    }
-
-    // Method 1: Try to get the post directly by slug
-    try {
-      const post = await api.posts.read({
-        slug,
+// Get single case study by slug
+export async function getCaseStudy(slug: string): Promise<GhostPost | null> {
+  try {
+    const post = await api.posts.read(
+      { slug },
+      {
         include: ["tags", "authors"],
-      })
-
-      // Check if it has case-study tag
-      if (post && post.tags?.some(tag => tag.slug === 'hash-case-study')) {
-        return post
-      }
-    } catch (error) {
-      console.warn("Direct read failed:", error.message)
-    }
-
-    // Method 2: Get all case studies and find by slug
-    const allCaseStudies = await getCaseStudies()
-    const foundStudy = allCaseStudies.find(study => study.slug === slug)
-    
-    return foundStudy || null
-
-  } catch (err) {
-    console.error(`Error fetching case study ${slug} from Ghost:`, err)
+        filter: "tag:case-study",
+      },
+    )
+    return post as GhostPost
+  } catch (error) {
+    console.error("Error fetching case study:", error)
     return null
   }
 }
+
+// Export aliases for missing exports
+export const getAllPosts = getPosts
+export const getAllTags = getTags
+
+// Export default
+export default api

@@ -3,7 +3,23 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, ArrowRight, Zap, Users, TrendingUp, Brain, Rocket, Target, BarChart3, Star } from "lucide-react"
+import {
+  CheckCircle,
+  ArrowRight,
+  Zap,
+  Users,
+  TrendingUp,
+  Brain,
+  Rocket,
+  Target,
+  BarChart3,
+  Star,
+  Globe,
+  Sparkles,
+  Bot,
+  Type,
+  LayoutTemplate,
+} from "lucide-react"
 import { getFeaturedPosts } from "@/lib/ghost"
 import { PostCard } from "@/components/post-card"
 
@@ -91,7 +107,12 @@ export default async function Home() {
                 <Button asChild size="lg" className="text-lg px-8">
                   <Link href="/contact">Get Started Today</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="text-lg px-8">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="text-lg px-8 bg-transparent hover:bg-primary hover:text-white border-primary text-primary"
+                >
                   <Link href="/solutions">Explore Solutions</Link>
                 </Button>
               </div>
@@ -174,7 +195,11 @@ export default async function Home() {
                     <span className="text-sm">Basic automation setup</span>
                   </li>
                 </ul>
-                <Button asChild variant="outline" className="w-full group-hover:bg-green-50">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full group-hover:bg-green-50 bg-transparent hover:bg-green-500 hover:text-white border-green-500 text-green-600"
+                >
                   <Link href="/solutions/launchpad">
                     Explore LaunchPad <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -208,7 +233,11 @@ export default async function Home() {
                     <span className="text-sm">Conversion optimization</span>
                   </li>
                 </ul>
-                <Button asChild variant="outline" className="w-full group-hover:bg-blue-50">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full group-hover:bg-blue-50 bg-transparent hover:bg-blue-500 hover:text-white border-blue-500 text-blue-600"
+                >
                   <Link href="/solutions/growthsuite">
                     Explore GrowthSuite <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -242,7 +271,11 @@ export default async function Home() {
                     <span className="text-sm">Data integration services</span>
                   </li>
                 </ul>
-                <Button asChild variant="outline" className="w-full group-hover:bg-purple-50">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full group-hover:bg-purple-50 bg-transparent hover:bg-purple-500 hover:text-white border-purple-500 text-purple-600"
+                >
                   <Link href="/solutions/intelligence">
                     Explore Intelligence <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -297,9 +330,164 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Free Tools Section */}
+      <section className="py-20">
+        <div className="container">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <Badge className="px-4 py-2 text-sm bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 border-orange-200 mb-4">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Free AI-Powered Tools
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Start Your Journey with Our Free Tools</h2>
+            <p className="text-xl text-muted-foreground">
+              Get a taste of our AI-powered solutions with our collection of free business tools. Perfect for testing
+              the waters before diving deeper.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            {/* Featured Tool - Domain Name Genie */}
+            <div className="space-y-6">
+              <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-orange-50 hover:border-primary/40 transition-all">
+                <CardHeader>
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-orange-500 rounded-xl flex items-center justify-center">
+                      <Globe className="h-8 w-8 text-white" />
+                    </div>
+                    <div>
+                      <Badge className="bg-green-100 text-green-700 border-green-200 mb-2">Most Popular</Badge>
+                      <CardTitle className="text-2xl">Domain Name Genie</CardTitle>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-lg text-muted-foreground">
+                    Find your perfect domain with AI-powered suggestions based on your business description. Get
+                    real-time availability checks and multiple TLD options.
+                  </p>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">AI-powered domain suggestions</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Real-time availability checking</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Multiple TLD options (.com, .net, .org, etc.)</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Direct purchase links</span>
+                    </li>
+                  </ul>
+                  <Button asChild size="lg" className="w-full text-lg">
+                    <Link href="/tools/domain-name-generator">
+                      Try Domain Name Genie Free <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Other Tools Preview */}
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold mb-6">More Free Tools Available</h3>
+
+              <div className="grid gap-4">
+                <Card className="border hover:border-primary/40 transition-all cursor-pointer group">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <Type className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold group-hover:text-primary transition-colors">
+                          Tagline & Value-Prop Creator
+                        </h4>
+                        <p className="text-sm text-muted-foreground">Create punchy taglines and value propositions</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border hover:border-primary/40 transition-all cursor-pointer group">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <LayoutTemplate className="h-5 w-5 text-green-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold group-hover:text-primary transition-colors">
+                          Landing Page Hero Copy Generator
+                        </h4>
+                        <p className="text-sm text-muted-foreground">Generate compelling headlines and CTAs</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border hover:border-primary/40 transition-all cursor-pointer group">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-purple-100 rounded-lg">
+                        <Bot className="h-5 w-5 text-purple-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold group-hover:text-primary transition-colors">
+                          AI Business Plan Generator
+                        </h4>
+                        <p className="text-sm text-muted-foreground">Create comprehensive business plans with AI</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="text-center pt-4">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="bg-transparent hover:bg-primary hover:text-white border-primary text-primary"
+                >
+                  <Link href="/tools">
+                    View All 12 Free Tools <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Tools CTA */}
+          <div className="text-center bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-8 border border-blue-100 dark:border-slate-700">
+            <h3 className="text-2xl font-bold mb-4">Ready to Accelerate Your Business?</h3>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
+              Start with our free tools to get a taste of AI-powered business solutions, then explore our comprehensive
+              service packages when you're ready to scale.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg">
+                <Link href="/tools/domain-name-generator">Start with Domain Name Genie</Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="bg-transparent hover:bg-primary hover:text-white border-primary text-primary"
+              >
+                <Link href="https://cal.com/kozker">Schedule a Consultation</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Blog Posts */}
       {featuredPosts && featuredPosts.length > 0 && (
-        <section className="py-20">
+        <section className="py-20 bg-muted/50">
           <div className="container">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Latest Insights</h2>
@@ -315,7 +503,11 @@ export default async function Home() {
             </div>
 
             <div className="text-center mt-12">
-              <Button asChild>
+              <Button
+                asChild
+                variant="outline"
+                className="bg-transparent hover:bg-primary hover:text-white border-primary text-primary"
+              >
                 <Link href="/blog">
                   View All Articles <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -326,7 +518,7 @@ export default async function Home() {
       )}
 
       {/* Social Proof Section */}
-      <section className="py-20 bg-muted/50">
+      <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Trusted by Growing Businesses</h2>
@@ -390,7 +582,12 @@ export default async function Home() {
                 <Button asChild size="lg" variant="secondary" className="text-primary">
                   <Link href="/contact">Get Started Today</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="border-white hover:bg-white/10 text-primary">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="border-white hover:bg-white hover:text-primary text-white bg-transparent"
+                >
                   <Link href="/solutions">Explore All Solutions</Link>
                 </Button>
               </div>

@@ -1,4 +1,3 @@
-// app/case-studies/page.tsx - Enhanced version with content parsing
 import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
@@ -16,20 +15,21 @@ export const metadata: Metadata = {
     "Discover how businesses have transformed their operations and achieved remarkable growth with KozkerTech's digital solutions.",
 }
 
-// Fallback mock data (same as before)
+// Fallback mock data with placeholder images
 const mockCaseStudies = [
   {
     id: "1",
     title: "Local Restaurant Chain Increases Online Orders by 300%",
     slug: "restaurant-chain-300-percent-increase",
-    excerpt: "How we helped Spice Garden Restaurants transform their business during the pandemic with our LaunchPad solution.",
-    feature_image: "/case-study-restaurant.png",
+    excerpt:
+      "How we helped Spice Garden Restaurants transform their business during the pandemic with our LaunchPad solution.",
+    feature_image: "/placeholder.svg?height=300&width=400",
     published_at: "2024-01-15T10:00:00.000Z",
     primary_author: { name: "KozkerTech Team" },
     tags: [
       { name: "Case Study", slug: "case-study" },
       { name: "LaunchPad", slug: "launchpad" },
-      { name: "Food & Beverage", slug: "food-beverage" }
+      { name: "Food & Beverage", slug: "food-beverage" },
     ],
     mockData: {
       client: "Spice Garden Restaurants",
@@ -43,22 +43,86 @@ const mockCaseStudies = [
         "Expanded to 3 new locations",
       ],
       timeline: "6 weeks",
-      testimonial: "KozkerTech's LaunchPad solution saved our business during the pandemic. The WhatsApp ordering system was a game-changer.",
+      testimonial:
+        "KozkerTech's LaunchPad solution saved our business during the pandemic. The WhatsApp ordering system was a game-changer.",
       clientName: "Rajesh Kumar",
       clientTitle: "Owner, Spice Garden Restaurants",
-    }
+    },
   },
-  // ... other mock data
+  {
+    id: "2",
+    title: "E-commerce Store Boosts Conversion Rate by 45%",
+    slug: "ecommerce-conversion-rate-boost",
+    excerpt:
+      "TechGadgets Pro transformed their customer experience with our GrowthSuite solution, achieving remarkable results.",
+    feature_image: "/placeholder.svg?height=300&width=400",
+    published_at: "2024-02-10T10:00:00.000Z",
+    primary_author: { name: "KozkerTech Team" },
+    tags: [
+      { name: "Case Study", slug: "case-study" },
+      { name: "GrowthSuite", slug: "growthsuite" },
+      { name: "E-commerce", slug: "ecommerce" },
+    ],
+    mockData: {
+      client: "TechGadgets Pro",
+      industry: "E-commerce",
+      solution: "GrowthSuite",
+      challenge: "Low conversion rates and poor customer engagement despite quality products",
+      results: [
+        "45% increase in conversion rate",
+        "60% reduction in cart abandonment",
+        "40% increase in customer lifetime value",
+        "2x improvement in customer support efficiency",
+      ],
+      timeline: "8 weeks",
+      testimonial:
+        "The AI chatbot and WhatsApp automation transformed our customer experience. Sales have never been better.",
+      clientName: "Priya Sharma",
+      clientTitle: "Founder, TechGadgets Pro",
+    },
+  },
+  {
+    id: "3",
+    title: "Manufacturing Company Achieves 40% ROI Increase",
+    slug: "manufacturing-roi-increase",
+    excerpt:
+      "Precision Engineering Ltd gained real-time visibility across all operations with our Intelligence solution.",
+    feature_image: "/placeholder.svg?height=300&width=400",
+    published_at: "2024-03-05T10:00:00.000Z",
+    primary_author: { name: "KozkerTech Team" },
+    tags: [
+      { name: "Case Study", slug: "case-study" },
+      { name: "Intelligence", slug: "intelligence" },
+      { name: "Manufacturing", slug: "manufacturing" },
+    ],
+    mockData: {
+      client: "Precision Engineering Ltd",
+      industry: "Manufacturing",
+      solution: "Intelligence",
+      challenge: "Lack of data visibility across operations and difficulty making data-driven decisions",
+      results: [
+        "40% increase in ROI",
+        "30% reduction in production waste",
+        "50% faster decision-making process",
+        "Real-time visibility across all operations",
+      ],
+      timeline: "12 weeks",
+      testimonial:
+        "The Power BI dashboards gave us insights we never had before. We can now optimize our operations in real-time.",
+      clientName: "Amit Patel",
+      clientTitle: "Operations Director, Precision Engineering Ltd",
+    },
+  },
 ]
 
 export default async function CaseStudiesPage() {
   let caseStudies = []
   let usingMockData = false
   let errorMessage = ""
-  
+
   try {
     const fetchedCaseStudies = await getCaseStudies()
-    
+
     if (Array.isArray(fetchedCaseStudies) && fetchedCaseStudies.length > 0) {
       // Enhance case studies with parsed content
       caseStudies = enhanceCaseStudies(fetchedCaseStudies)
@@ -80,7 +144,7 @@ export default async function CaseStudiesPage() {
 
   return (
     <>
-      {/* Hero Section - same as before */}
+      {/* Hero Section */}
       <section className="py-20 md:py-28 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-950/20 dark:to-blue-950/20">
         <div className="container">
           <div className="text-center max-w-4xl mx-auto">
@@ -108,12 +172,8 @@ export default async function CaseStudiesPage() {
         <section className="py-4 bg-yellow-50 dark:bg-yellow-900/20 border-b border-yellow-200 dark:border-yellow-800">
           <div className="container">
             <div className="text-center text-sm text-yellow-800 dark:text-yellow-200">
-              <strong>Demo Mode:</strong> Showing sample case studies. 
-              {errorMessage && (
-                <span className="block mt-1 text-xs">
-                  Error: {errorMessage}
-                </span>
-              )}
+              <strong>Demo Mode:</strong> Showing sample case studies.
+              {errorMessage && <span className="block mt-1 text-xs">Error: {errorMessage}</span>}
               <span className="block mt-1">
                 Create posts in Ghost CMS with the #case-study tag to display real content.
               </span>
@@ -122,7 +182,7 @@ export default async function CaseStudiesPage() {
         </section>
       )}
 
-      {/* Results Overview - same as before */}
+      {/* Results Overview */}
       <section className="py-16 bg-muted/50">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -160,47 +220,58 @@ export default async function CaseStudiesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {caseStudies.map((study) => {
                 // Extract metadata from tags or parsed content
-                const solutionTag = study.tags?.find(tag => 
-                  ['launchpad', 'growthsuite', 'intelligence'].includes(tag.slug)
+                const solutionTag = study.tags?.find((tag) =>
+                  ["launchpad", "growthsuite", "intelligence"].includes(tag.slug),
                 )
-                const industryTag = study.tags?.find(tag => 
-                  tag.slug !== 'case-study' && tag.slug !== solutionTag?.slug
+                const industryTag = study.tags?.find(
+                  (tag) => tag.slug !== "case-study" && tag.slug !== solutionTag?.slug,
                 )
 
                 // Use parsed data, mock data, or fallbacks
                 const parsedData = study.parsed
                 const mockData = study.mockData
-                
+
                 const client = parsedData?.client || mockData?.client || "Client"
                 const solution = parsedData?.solution || solutionTag?.name || mockData?.solution || "Solution"
                 const industry = parsedData?.industry || industryTag?.name || mockData?.industry || "Industry"
-                const challenge = parsedData?.challenge || mockData?.challenge || study.excerpt || "Case study details..."
+                const challenge =
+                  parsedData?.challenge || mockData?.challenge || study.excerpt || "Case study details..."
                 const timeline = parsedData?.timeline || mockData?.timeline || "Project Timeline"
                 const results = parsedData?.results || mockData?.results
-                const testimonial = parsedData?.testimonial || (mockData?.testimonial ? {
-                  quote: mockData.testimonial,
-                  author: mockData.clientName,
-                  title: mockData.clientTitle
-                } : null)
+                const testimonial =
+                  parsedData?.testimonial ||
+                  (mockData?.testimonial
+                    ? {
+                        quote: mockData.testimonial,
+                        author: mockData.clientName,
+                        title: mockData.clientTitle,
+                      }
+                    : null)
 
                 return (
                   <Card key={study.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                     {study.feature_image && (
                       <div className="relative h-48">
-                        <Image 
-                          src={study.feature_image || "/placeholder.svg"} 
-                          alt={study.title} 
-                          fill 
-                          className="object-cover" 
+                        <Image
+                          src={study.feature_image || "/placeholder.svg"}
+                          alt={study.title}
+                          fill
+                          className="object-cover"
+                          onError={(e) => {
+                            // Fallback to placeholder if image fails to load
+                            e.currentTarget.src = "/placeholder.svg?height=300&width=400"
+                          }}
                         />
                         <div className="absolute top-4 left-4">
-                          <Badge className={
-                            solutionTag?.slug === "intelligence" || solution === "Intelligence"
-                              ? "bg-purple-100 text-purple-700"
-                              : solutionTag?.slug === "growthsuite" || solution === "GrowthSuite"
-                                ? "bg-blue-100 text-blue-700"
-                                : "bg-green-100 text-green-700"
-                          }>
+                          <Badge
+                            className={
+                              solutionTag?.slug === "intelligence" || solution === "Intelligence"
+                                ? "bg-purple-100 text-purple-700"
+                                : solutionTag?.slug === "growthsuite" || solution === "GrowthSuite"
+                                  ? "bg-blue-100 text-blue-700"
+                                  : "bg-green-100 text-green-700"
+                            }
+                          >
                             {solution}
                           </Badge>
                         </div>
@@ -219,9 +290,7 @@ export default async function CaseStudiesPage() {
                         </div>
                         <div className="flex items-center">
                           <CalendarIcon className="mr-1 h-4 w-4" />
-                          <time dateTime={study.published_at}>
-                            {formatDate(study.published_at)}
-                          </time>
+                          <time dateTime={study.published_at}>{formatDate(study.published_at)}</time>
                         </div>
                       </div>
                       {client !== "Client" && (
@@ -235,9 +304,7 @@ export default async function CaseStudiesPage() {
                       {/* Challenge */}
                       <div>
                         <h4 className="font-semibold mb-2">Challenge</h4>
-                        <p className="text-sm text-muted-foreground line-clamp-3">
-                          {challenge}
-                        </p>
+                        <p className="text-sm text-muted-foreground line-clamp-3">{challenge}</p>
                       </div>
 
                       {/* Results */}
@@ -273,13 +340,14 @@ export default async function CaseStudiesPage() {
                           "{testimonial.quote}"
                           {testimonial.author && (
                             <footer className="mt-2 text-xs text-muted-foreground">
-                              — {testimonial.author}{testimonial.title ? `, ${testimonial.title}` : ''}
+                              — {testimonial.author}
+                              {testimonial.title ? `, ${testimonial.title}` : ""}
                             </footer>
                           )}
                         </blockquote>
                       )}
 
-                      <Button asChild variant="outline" className="w-full">
+                      <Button asChild variant="outline" className="w-full bg-transparent">
                         <Link href={`/case-studies/${study.slug}`}>
                           Read Full Case Study <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
@@ -300,7 +368,7 @@ export default async function CaseStudiesPage() {
         </div>
       </section>
 
-      {/* Industry Filter Section - same as before */}
+      {/* Industry Filter Section */}
       <section className="py-20 bg-muted/50">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -311,7 +379,11 @@ export default async function CaseStudiesPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {["Healthcare", "E-commerce", "Manufacturing", "Food & Beverage", "Digital Marketing", "Retail"].map(
               (industry) => (
-                <Button key={industry} variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Button
+                  key={industry}
+                  variant="outline"
+                  className="h-auto p-4 flex flex-col items-center gap-2 bg-transparent"
+                >
                   <span className="font-medium">{industry}</span>
                 </Button>
               ),
@@ -320,7 +392,7 @@ export default async function CaseStudiesPage() {
         </div>
       </section>
 
-      {/* CTA Section - same as before */}
+      {/* CTA Section */}
       <section className="py-20 bg-primary text-white">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto">
@@ -332,7 +404,13 @@ export default async function CaseStudiesPage() {
               <Button asChild size="lg" variant="secondary" className="text-primary">
                 <Link href="/contact">Start Your Transformation</Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-white hover:bg-white/10 text-black"><Link href="/solutions">Explore Our Solutions</Link>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="border-white hover:bg-white hover:text-primary text-white bg-transparent"
+              >
+                <Link href="/solutions">Explore Our Solutions</Link>
               </Button>
             </div>
           </div>

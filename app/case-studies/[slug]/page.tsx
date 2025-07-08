@@ -1,4 +1,3 @@
-// app/case-studies/[slug]/page.tsx
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -10,21 +9,22 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import { Button } from "@/components/ui/button"
 import type { Metadata } from "next"
 
-// Mock data for fallback (same as in main page)
+// Mock data for fallback
 const mockCaseStudies = {
   "restaurant-chain-300-percent-increase": {
     id: "1",
     title: "Local Restaurant Chain Increases Online Orders by 300%",
     slug: "restaurant-chain-300-percent-increase",
-    excerpt: "How we helped Spice Garden Restaurants transform their business during the pandemic with our LaunchPad solution.",
-    feature_image: "/case-study-restaurant.png",
+    excerpt:
+      "How we helped Spice Garden Restaurants transform their business during the pandemic with our LaunchPad solution.",
+    feature_image: "/placeholder.svg?height=600&width=800",
     published_at: "2024-01-15T10:00:00.000Z",
     updated_at: "2024-01-15T10:00:00.000Z",
     primary_author: { name: "KozkerTech Team" },
     tags: [
       { name: "Case Study", slug: "case-study" },
       { name: "LaunchPad", slug: "launchpad" },
-      { name: "Food & Beverage", slug: "food-beverage" }
+      { name: "Food & Beverage", slug: "food-beverage" },
     ],
     html: `
       <h2>The Challenge</h2>
@@ -57,21 +57,22 @@ const mockCaseStudies = {
       
       <h2>Long-term Impact</h2>
       <p>The success of the digital transformation allowed Spice Garden Restaurants not only to survive the pandemic but to thrive and expand their operations to new locations.</p>
-    `
+    `,
   },
   "ecommerce-conversion-rate-boost": {
     id: "2",
     title: "E-commerce Store Boosts Conversion Rate by 45%",
     slug: "ecommerce-conversion-rate-boost",
-    excerpt: "TechGadgets Pro transformed their customer experience with our GrowthSuite solution, achieving remarkable results.",
-    feature_image: "/case-study-ecommerce.png",
+    excerpt:
+      "TechGadgets Pro transformed their customer experience with our GrowthSuite solution, achieving remarkable results.",
+    feature_image: "/placeholder.svg?height=600&width=800",
     published_at: "2024-02-10T10:00:00.000Z",
     updated_at: "2024-02-10T10:00:00.000Z",
     primary_author: { name: "KozkerTech Team" },
     tags: [
       { name: "Case Study", slug: "case-study" },
       { name: "GrowthSuite", slug: "growthsuite" },
-      { name: "E-commerce", slug: "ecommerce" }
+      { name: "E-commerce", slug: "ecommerce" },
     ],
     html: `
       <h2>The Challenge</h2>
@@ -98,21 +99,22 @@ const mockCaseStudies = {
         <p>"The AI chatbot and WhatsApp automation transformed our customer experience. Sales have never been better."</p>
         <footer>— Priya Sharma, Founder, TechGadgets Pro</footer>
       </blockquote>
-    `
+    `,
   },
   "manufacturing-roi-increase": {
     id: "3",
     title: "Manufacturing Company Achieves 40% ROI Increase",
     slug: "manufacturing-roi-increase",
-    excerpt: "Precision Engineering Ltd gained real-time visibility across all operations with our Intelligence solution.",
-    feature_image: "/case-study-manufacturing.png",
+    excerpt:
+      "Precision Engineering Ltd gained real-time visibility across all operations with our Intelligence solution.",
+    feature_image: "/placeholder.svg?height=600&width=800",
     published_at: "2024-03-05T10:00:00.000Z",
     updated_at: "2024-03-05T10:00:00.000Z",
     primary_author: { name: "KozkerTech Team" },
     tags: [
       { name: "Case Study", slug: "case-study" },
       { name: "Intelligence", slug: "intelligence" },
-      { name: "Manufacturing", slug: "manufacturing" }
+      { name: "Manufacturing", slug: "manufacturing" },
     ],
     html: `
       <h2>The Challenge</h2>
@@ -139,8 +141,8 @@ const mockCaseStudies = {
         <p>"The Power BI dashboards gave us insights we never had before. We can now optimize our operations in real-time."</p>
         <footer>— Amit Patel, Operations Director, Precision Engineering Ltd</footer>
       </blockquote>
-    `
-  }
+    `,
+  },
 }
 
 export async function generateStaticParams() {
@@ -149,22 +151,22 @@ export async function generateStaticParams() {
     const params = caseStudies.map((study) => ({
       slug: study.slug,
     }))
-    
+
     // Add mock case study slugs as fallback
-    const mockSlugs = Object.keys(mockCaseStudies).map(slug => ({ slug }))
-    
+    const mockSlugs = Object.keys(mockCaseStudies).map((slug) => ({ slug }))
+
     return [...params, ...mockSlugs]
   } catch (error) {
     console.error("Error generating static params for case studies:", error)
     // Return mock slugs as fallback
-    return Object.keys(mockCaseStudies).map(slug => ({ slug }))
+    return Object.keys(mockCaseStudies).map((slug) => ({ slug }))
   }
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   try {
     let caseStudy = await getCaseStudy(params.slug)
-    
+
     // Fallback to mock data if not found in Ghost
     if (!caseStudy && mockCaseStudies[params.slug]) {
       caseStudy = mockCaseStudies[params.slug]
@@ -220,7 +222,7 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
   try {
     let caseStudy = await getCaseStudy(params.slug)
     let isUsingMockData = false
-    
+
     // Fallback to mock data if not found in Ghost
     if (!caseStudy && mockCaseStudies[params.slug]) {
       caseStudy = mockCaseStudies[params.slug]
@@ -232,12 +234,8 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
     }
 
     // Extract metadata from tags
-    const solutionTag = caseStudy.tags?.find(tag => 
-      ['launchpad', 'growthsuite', 'intelligence'].includes(tag.slug)
-    )
-    const industryTag = caseStudy.tags?.find(tag => 
-      tag.slug !== 'case-study' && tag.slug !== solutionTag?.slug
-    )
+    const solutionTag = caseStudy.tags?.find((tag) => ["launchpad", "growthsuite", "intelligence"].includes(tag.slug))
+    const industryTag = caseStudy.tags?.find((tag) => tag.slug !== "case-study" && tag.slug !== solutionTag?.slug)
 
     // Generate JSON-LD structured data
     const jsonLd = {
@@ -269,12 +267,13 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
     return (
       <article className="container py-8 md:py-12">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        
+
         {/* Admin Notice for Mock Data */}
         {isUsingMockData && (
           <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <div className="text-sm text-yellow-800">
-              <strong>Demo Mode:</strong> This is sample content. Create a post in Ghost CMS with the #case-study tag and slug "{params.slug}" to replace this content.
+              <strong>Demo Mode:</strong> This is sample content. Create a post in Ghost CMS with the #case-study tag
+              and slug "{params.slug}" to replace this content.
             </div>
           </div>
         )}
@@ -296,25 +295,23 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
             <div className="flex flex-wrap gap-2">
               <Badge className="bg-blue-100 text-blue-700">Case Study</Badge>
               {solutionTag && (
-                <Badge className={
-                  solutionTag.slug === "intelligence"
-                    ? "bg-purple-100 text-purple-700"
-                    : solutionTag.slug === "growthsuite"
-                      ? "bg-blue-100 text-blue-700"
-                      : "bg-green-100 text-green-700"
-                }>
+                <Badge
+                  className={
+                    solutionTag.slug === "intelligence"
+                      ? "bg-purple-100 text-purple-700"
+                      : solutionTag.slug === "growthsuite"
+                        ? "bg-blue-100 text-blue-700"
+                        : "bg-green-100 text-green-700"
+                  }
+                >
                   {solutionTag.name}
                 </Badge>
               )}
-              {industryTag && (
-                <Badge variant="secondary">{industryTag.name}</Badge>
-              )}
+              {industryTag && <Badge variant="secondary">{industryTag.name}</Badge>}
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-              {caseStudy.title}
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">{caseStudy.title}</h1>
 
             {/* Meta Information */}
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -324,35 +321,36 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
               </div>
               <div className="flex items-center">
                 <CalendarIcon className="mr-1 h-4 w-4" />
-                <time dateTime={caseStudy.published_at}>
-                  {formatDate(caseStudy.published_at)}
-                </time>
+                <time dateTime={caseStudy.published_at}>{formatDate(caseStudy.published_at)}</time>
               </div>
             </div>
 
             {/* Excerpt */}
-            {caseStudy.excerpt && (
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                {caseStudy.excerpt}
-              </p>
-            )}
+            {caseStudy.excerpt && <p className="text-xl text-muted-foreground leading-relaxed">{caseStudy.excerpt}</p>}
           </div>
 
           {/* Featured Image */}
           {caseStudy.feature_image && (
             <div className="relative aspect-video overflow-hidden rounded-lg">
               <Image
-                src={caseStudy.feature_image}
+                src={caseStudy.feature_image || "/placeholder.svg"}
                 alt={`Featured image for ${caseStudy.title}`}
                 fill
                 className="object-cover"
                 priority
+                onError={(e) => {
+                  // Fallback to placeholder if image fails to load
+                  e.currentTarget.src = "/placeholder.svg?height=600&width=800"
+                }}
               />
             </div>
           )}
 
           {/* Content */}
-          <div className="ghost-content prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: caseStudy.html }} />
+          <div
+            className="ghost-content prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: caseStudy.html }}
+          />
 
           {/* Call to Action */}
           <div className="mt-12 p-8 bg-muted/50 rounded-lg text-center">
