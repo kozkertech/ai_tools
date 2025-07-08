@@ -47,6 +47,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "" ? 1 : 0.8,
   }))
 
+  // Add mock case study pages
+  const mockCaseStudies = [
+    "restaurant-chain-300-percent-increase",
+    "ecommerce-conversion-rate-boost",
+    "manufacturing-roi-increase",
+  ]
+
+  const caseStudySitemap = mockCaseStudies.map((slug) => ({
+    url: `${baseUrl}/case-studies/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }))
+
   try {
     // Dynamic blog posts
     const posts = await getAllPosts()
@@ -66,9 +80,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.4,
     }))
 
-    return [...staticSitemap, ...postSitemap, ...tagSitemap]
+    return [...staticSitemap, ...caseStudySitemap, ...postSitemap, ...tagSitemap]
   } catch (error) {
     console.error("Error generating sitemap:", error)
-    return staticSitemap
+    return [...staticSitemap, ...caseStudySitemap]
   }
 }

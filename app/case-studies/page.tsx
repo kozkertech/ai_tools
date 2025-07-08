@@ -5,9 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, TrendingUp, Clock, Target, CalendarIcon, UserIcon } from "lucide-react"
-import { getCaseStudies } from "@/lib/ghost"
-import { enhanceCaseStudies } from "@/lib/parseGhostContent"
-import { formatDate } from "@/lib/utils"
 
 export const metadata: Metadata = {
   title: "Case Studies - Real Results from Real Clients | KozkerTech",
@@ -15,7 +12,7 @@ export const metadata: Metadata = {
     "Discover how businesses have transformed their operations and achieved remarkable growth with KozkerTech's digital solutions.",
 }
 
-// Fallback mock data with placeholder images
+// Mock data for demonstration
 const mockCaseStudies = [
   {
     id: "1",
@@ -23,7 +20,7 @@ const mockCaseStudies = [
     slug: "restaurant-chain-300-percent-increase",
     excerpt:
       "How we helped Spice Garden Restaurants transform their business during the pandemic with our LaunchPad solution.",
-    feature_image: "/placeholder.svg?height=300&width=400",
+    feature_image: "/case-study-restaurant.png",
     published_at: "2024-01-15T10:00:00.000Z",
     primary_author: { name: "KozkerTech Team" },
     tags: [
@@ -43,10 +40,12 @@ const mockCaseStudies = [
         "Expanded to 3 new locations",
       ],
       timeline: "6 weeks",
-      testimonial:
-        "KozkerTech's LaunchPad solution saved our business during the pandemic. The WhatsApp ordering system was a game-changer.",
-      clientName: "Rajesh Kumar",
-      clientTitle: "Owner, Spice Garden Restaurants",
+      testimonial: {
+        quote:
+          "KozkerTech's LaunchPad solution saved our business during the pandemic. The WhatsApp ordering system was a game-changer.",
+        author: "Rajesh Kumar",
+        title: "Owner, Spice Garden Restaurants",
+      },
     },
   },
   {
@@ -55,7 +54,7 @@ const mockCaseStudies = [
     slug: "ecommerce-conversion-rate-boost",
     excerpt:
       "TechGadgets Pro transformed their customer experience with our GrowthSuite solution, achieving remarkable results.",
-    feature_image: "/placeholder.svg?height=300&width=400",
+    feature_image: "/case-study-ecommerce.png",
     published_at: "2024-02-10T10:00:00.000Z",
     primary_author: { name: "KozkerTech Team" },
     tags: [
@@ -75,10 +74,12 @@ const mockCaseStudies = [
         "2x improvement in customer support efficiency",
       ],
       timeline: "8 weeks",
-      testimonial:
-        "The AI chatbot and WhatsApp automation transformed our customer experience. Sales have never been better.",
-      clientName: "Priya Sharma",
-      clientTitle: "Founder, TechGadgets Pro",
+      testimonial: {
+        quote:
+          "The AI chatbot and WhatsApp automation transformed our customer experience. Sales have never been better.",
+        author: "Priya Sharma",
+        title: "Founder, TechGadgets Pro",
+      },
     },
   },
   {
@@ -87,7 +88,7 @@ const mockCaseStudies = [
     slug: "manufacturing-roi-increase",
     excerpt:
       "Precision Engineering Ltd gained real-time visibility across all operations with our Intelligence solution.",
-    feature_image: "/placeholder.svg?height=300&width=400",
+    feature_image: "/case-study-manufacturing.png",
     published_at: "2024-03-05T10:00:00.000Z",
     primary_author: { name: "KozkerTech Team" },
     tags: [
@@ -107,40 +108,26 @@ const mockCaseStudies = [
         "Real-time visibility across all operations",
       ],
       timeline: "12 weeks",
-      testimonial:
-        "The Power BI dashboards gave us insights we never had before. We can now optimize our operations in real-time.",
-      clientName: "Amit Patel",
-      clientTitle: "Operations Director, Precision Engineering Ltd",
+      testimonial: {
+        quote:
+          "The Power BI dashboards gave us insights we never had before. We can now optimize our operations in real-time.",
+        author: "Amit Patel",
+        title: "Operations Director, Precision Engineering Ltd",
+      },
     },
   },
 ]
 
-export default async function CaseStudiesPage() {
-  let caseStudies = []
-  let usingMockData = false
-  let errorMessage = ""
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}
 
-  try {
-    const fetchedCaseStudies = await getCaseStudies()
-
-    if (Array.isArray(fetchedCaseStudies) && fetchedCaseStudies.length > 0) {
-      // Enhance case studies with parsed content
-      caseStudies = enhanceCaseStudies(fetchedCaseStudies)
-    } else {
-      caseStudies = mockCaseStudies
-      usingMockData = true
-    }
-  } catch (error) {
-    console.error("Error fetching case studies:", error)
-    caseStudies = mockCaseStudies
-    usingMockData = true
-    errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
-  }
-
-  if (!Array.isArray(caseStudies)) {
-    caseStudies = mockCaseStudies
-    usingMockData = true
-  }
+export default function CaseStudiesPage() {
+  const caseStudies = mockCaseStudies
 
   return (
     <>
@@ -167,21 +154,6 @@ export default async function CaseStudiesPage() {
         </div>
       </section>
 
-      {/* Admin Notice for Mock Data */}
-      {usingMockData && (
-        <section className="py-4 bg-yellow-50 dark:bg-yellow-900/20 border-b border-yellow-200 dark:border-yellow-800">
-          <div className="container">
-            <div className="text-center text-sm text-yellow-800 dark:text-yellow-200">
-              <strong>Demo Mode:</strong> Showing sample case studies.
-              {errorMessage && <span className="block mt-1 text-xs">Error: {errorMessage}</span>}
-              <span className="block mt-1">
-                Create posts in Ghost CMS with the #case-study tag to display real content.
-              </span>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Results Overview */}
       <section className="py-16 bg-muted/50">
         <div className="container">
@@ -206,7 +178,7 @@ export default async function CaseStudiesPage() {
         </div>
       </section>
 
-      {/* Enhanced Case Studies Grid */}
+      {/* Case Studies Grid */}
       <section id="case-studies" className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -216,155 +188,127 @@ export default async function CaseStudiesPage() {
             </p>
           </div>
 
-          {caseStudies.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {caseStudies.map((study) => {
-                // Extract metadata from tags or parsed content
-                const solutionTag = study.tags?.find((tag) =>
-                  ["launchpad", "growthsuite", "intelligence"].includes(tag.slug),
-                )
-                const industryTag = study.tags?.find(
-                  (tag) => tag.slug !== "case-study" && tag.slug !== solutionTag?.slug,
-                )
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {caseStudies.map((study) => {
+              const solutionTag = study.tags?.find((tag) =>
+                ["launchpad", "growthsuite", "intelligence"].includes(tag.slug),
+              )
+              const industryTag = study.tags?.find((tag) => tag.slug !== "case-study" && tag.slug !== solutionTag?.slug)
 
-                // Use parsed data, mock data, or fallbacks
-                const parsedData = study.parsed
-                const mockData = study.mockData
+              const mockData = study.mockData
+              const client = mockData?.client || "Client"
+              const solution = solutionTag?.name || mockData?.solution || "Solution"
+              const industry = industryTag?.name || mockData?.industry || "Industry"
+              const challenge = mockData?.challenge || study.excerpt || "Case study details..."
+              const timeline = mockData?.timeline || "Project Timeline"
+              const results = mockData?.results
+              const testimonial = mockData?.testimonial
 
-                const client = parsedData?.client || mockData?.client || "Client"
-                const solution = parsedData?.solution || solutionTag?.name || mockData?.solution || "Solution"
-                const industry = parsedData?.industry || industryTag?.name || mockData?.industry || "Industry"
-                const challenge =
-                  parsedData?.challenge || mockData?.challenge || study.excerpt || "Case study details..."
-                const timeline = parsedData?.timeline || mockData?.timeline || "Project Timeline"
-                const results = parsedData?.results || mockData?.results
-                const testimonial =
-                  parsedData?.testimonial ||
-                  (mockData?.testimonial
-                    ? {
-                        quote: mockData.testimonial,
-                        author: mockData.clientName,
-                        title: mockData.clientTitle,
-                      }
-                    : null)
+              return (
+                <Card key={study.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  {study.feature_image && (
+                    <div className="relative h-48">
+                      <Image
+                        src={study.feature_image || "/placeholder.svg"}
+                        alt={study.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-4 left-4">
+                        <Badge
+                          className={
+                            solutionTag?.slug === "intelligence" || solution === "Intelligence"
+                              ? "bg-purple-100 text-purple-700"
+                              : solutionTag?.slug === "growthsuite" || solution === "GrowthSuite"
+                                ? "bg-blue-100 text-blue-700"
+                                : "bg-green-100 text-green-700"
+                          }
+                        >
+                          {solution}
+                        </Badge>
+                      </div>
+                      <div className="absolute top-4 right-4">
+                        <Badge variant="secondary">{industry}</Badge>
+                      </div>
+                    </div>
+                  )}
 
-                return (
-                  <Card key={study.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                    {study.feature_image && (
-                      <div className="relative h-48">
-                        <Image
-                          src={study.feature_image || "/placeholder.svg"}
-                          alt={study.title}
-                          fill
-                          className="object-cover"
-                          onError={(e) => {
-                            // Fallback to placeholder if image fails to load
-                            e.currentTarget.src = "/placeholder.svg?height=300&width=400"
-                          }}
-                        />
-                        <div className="absolute top-4 left-4">
-                          <Badge
-                            className={
-                              solutionTag?.slug === "intelligence" || solution === "Intelligence"
-                                ? "bg-purple-100 text-purple-700"
-                                : solutionTag?.slug === "growthsuite" || solution === "GrowthSuite"
-                                  ? "bg-blue-100 text-blue-700"
-                                  : "bg-green-100 text-green-700"
-                            }
-                          >
-                            {solution}
-                          </Badge>
-                        </div>
-                        <div className="absolute top-4 right-4">
-                          <Badge variant="secondary">{industry}</Badge>
-                        </div>
+                  <CardHeader>
+                    <CardTitle className="line-clamp-2">{study.title}</CardTitle>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <div className="flex items-center">
+                        <UserIcon className="mr-1 h-4 w-4" />
+                        <span>{study.primary_author?.name || "Author"}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <CalendarIcon className="mr-1 h-4 w-4" />
+                        <time dateTime={study.published_at}>{formatDate(study.published_at)}</time>
+                      </div>
+                    </div>
+                    {client !== "Client" && (
+                      <p className="text-sm text-muted-foreground">
+                        <strong>{client}</strong> • {industry}
+                      </p>
+                    )}
+                  </CardHeader>
+
+                  <CardContent className="space-y-4">
+                    {/* Challenge */}
+                    <div>
+                      <h4 className="font-semibold mb-2">Challenge</h4>
+                      <p className="text-sm text-muted-foreground line-clamp-3">{challenge}</p>
+                    </div>
+
+                    {/* Results */}
+                    {results && results.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-2">Key Results</h4>
+                        <ul className="space-y-1">
+                          {results.slice(0, 3).map((result, index) => (
+                            <li key={index} className="text-sm flex items-center gap-2">
+                              <TrendingUp className="h-3 w-3 text-green-500" />
+                              <span>{result}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     )}
 
-                    <CardHeader>
-                      <CardTitle className="line-clamp-2">{study.title}</CardTitle>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center">
-                          <UserIcon className="mr-1 h-4 w-4" />
-                          <span>{study.primary_author?.name || "Author"}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <CalendarIcon className="mr-1 h-4 w-4" />
-                          <time dateTime={study.published_at}>{formatDate(study.published_at)}</time>
-                        </div>
+                    {/* Timeline and Solution */}
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-4 w-4" />
+                        <span>{timeline}</span>
                       </div>
-                      {client !== "Client" && (
-                        <p className="text-sm text-muted-foreground">
-                          <strong>{client}</strong> • {industry}
-                        </p>
-                      )}
-                    </CardHeader>
-
-                    <CardContent className="space-y-4">
-                      {/* Challenge */}
-                      <div>
-                        <h4 className="font-semibold mb-2">Challenge</h4>
-                        <p className="text-sm text-muted-foreground line-clamp-3">{challenge}</p>
+                      <div className="flex items-center gap-1">
+                        <Target className="h-4 w-4" />
+                        <span>{solution}</span>
                       </div>
+                    </div>
 
-                      {/* Results */}
-                      {results && results.length > 0 && (
-                        <div>
-                          <h4 className="font-semibold mb-2">Key Results</h4>
-                          <ul className="space-y-1">
-                            {results.slice(0, 3).map((result, index) => (
-                              <li key={index} className="text-sm flex items-center gap-2">
-                                <TrendingUp className="h-3 w-3 text-green-500" />
-                                <span>{result}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                    {/* Testimonial */}
+                    {testimonial && (
+                      <blockquote className="border-l-4 border-primary pl-4 italic text-sm">
+                        "{testimonial.quote}"
+                        {testimonial.author && (
+                          <footer className="mt-2 text-xs text-muted-foreground">
+                            — {testimonial.author}
+                            {testimonial.title ? `, ${testimonial.title}` : ""}
+                          </footer>
+                        )}
+                      </blockquote>
+                    )}
 
-                      {/* Timeline and Solution */}
-                      <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          <span>{timeline}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Target className="h-4 w-4" />
-                          <span>{solution}</span>
-                        </div>
-                      </div>
-
-                      {/* Testimonial */}
-                      {testimonial && (
-                        <blockquote className="border-l-4 border-primary pl-4 italic text-sm">
-                          "{testimonial.quote}"
-                          {testimonial.author && (
-                            <footer className="mt-2 text-xs text-muted-foreground">
-                              — {testimonial.author}
-                              {testimonial.title ? `, ${testimonial.title}` : ""}
-                            </footer>
-                          )}
-                        </blockquote>
-                      )}
-
-                      <Button asChild variant="outline" className="w-full bg-transparent">
-                        <Link href={`/case-studies/${study.slug}`}>
-                          Read Full Case Study <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <h3 className="text-xl font-medium mb-4">No Case Studies Available</h3>
-              <p className="text-muted-foreground">
-                Case studies will appear here once they are published in Ghost CMS with the #case-study tag.
-              </p>
-            </div>
-          )}
+                    <Button asChild variant="outline" className="w-full bg-transparent">
+                      <Link href={`/case-studies/${study.slug}`}>
+                        Read Full Case Study <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
         </div>
       </section>
 
