@@ -7,6 +7,8 @@ import { CurrencyProvider } from "@/contexts/currency-context"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import Analytics from "@/components/analytics"
+import ChatWidget from '@/components/ChatWidget';
+
 import { Suspense } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -86,6 +88,7 @@ export default function RootLayout({
                 <Footer />
               </div>
               <Analytics />
+              <ChatWidget />
             </Suspense>
           </CurrencyProvider>
         </ThemeProvider>
