@@ -53,6 +53,89 @@ const ChatWidget = () => {
     }
   }, [])
 
+  const addMobileEnhancements = useCallback(() => {
+    const widget = document.querySelector(".n8n-chat-widget") as HTMLElement
+    if (!widget) return false
+
+    try {
+      // Add mobile-specific functionality
+      const chatContainer = widget.querySelector(".chat-container")
+      const textarea = widget.querySelector("textarea")
+      const toggleButton = widget.querySelector(".chat-toggle")
+
+      // Prevent body scroll when chat is open on mobile
+      const preventBodyScroll = () => {
+        if (window.innerWidth <= 768) {
+          document.body.style.overflow = "hidden"
+        }
+      }
+
+      // Restore body scroll when chat is closed
+      const restoreBodyScroll = () => {
+        document.body.style.overflow = ""
+      }
+
+      // Handle chat container open/close
+      if (chatContainer) {
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+              const target = mutation.target as HTMLElement
+              if (target.classList.contains('open')) {
+                preventBodyScroll()
+              } else {
+                restoreBodyScroll()
+              }
+            }
+          })
+        })
+
+        observer.observe(chatContainer, { attributes: true })
+      }
+
+      // Handle textarea auto-resize on mobile
+      if (textarea) {
+        const autoResize = () => {
+          textarea.style.height = "auto"
+          textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px"
+        }
+
+        textarea.addEventListener("input", autoResize)
+        textarea.addEventListener("focus", autoResize)
+      }
+
+      // Add touch feedback for mobile
+      const addTouchFeedback = (element: Element) => {
+        element.addEventListener("touchstart", () => {
+          element.classList.add("touch-active")
+        })
+        element.addEventListener("touchend", () => {
+          setTimeout(() => element.classList.remove("touch-active"), 150)
+        })
+      }
+
+      // Apply touch feedback to interactive elements
+      widget.querySelectorAll(".chat-toggle, .new-chat-btn, .chat-input button").forEach(addTouchFeedback)
+
+      // Handle viewport height on mobile browsers
+      const setViewportHeight = () => {
+        if (window.innerWidth <= 768) {
+          const vh = window.innerHeight * 0.01
+          document.documentElement.style.setProperty("--vh", `${vh}px`)
+        }
+      }
+
+      window.addEventListener("resize", setViewportHeight)
+      setViewportHeight()
+
+      console.log("✅ Mobile enhancements applied")
+      return true
+    } catch (error) {
+      console.error("❌ Error applying mobile enhancements:", error)
+      return false
+    }
+  }, [])
+
   const initializeWidget = useCallback(() => {
     // Set global configuration with error handling
     try {
@@ -89,17 +172,19 @@ const ChatWidget = () => {
     // Initialize configuration immediately
     initializeWidget()
 
-    // Function to check and apply styling repeatedly
-    const tryApplyStyling = () => {
-      const success = applyKozkerStyling()
-      if (!success) {
-        // If widget not found or styling failed, try again later
-        setTimeout(tryApplyStyling, 1000)
+    // Function to apply all enhancements
+    const applyAllEnhancements = () => {
+      const stylingSuccess = applyKozkerStyling()
+      const mobileSuccess = addMobileEnhancements()
+      
+      if (!stylingSuccess || !mobileSuccess) {
+        // If enhancements failed, try again later
+        setTimeout(applyAllEnhancements, 1000)
       }
     }
 
-    // Initial delay before trying to apply styles
-    setTimeout(tryApplyStyling, 500)
+    // Initial delay before trying to apply enhancements
+    setTimeout(applyAllEnhancements, 500)
 
     // Set up observer for dynamic widget creation
     const observer = new MutationObserver((mutations) => {
@@ -110,8 +195,11 @@ const ChatWidget = () => {
               const element = node as Element
               if (element.classList?.contains('n8n-chat-widget') || 
                   element.querySelector?.('.n8n-chat-widget')) {
-                console.log("📊 Chat widget detected in DOM")
-                setTimeout(applyKozkerStyling, 100)
+                console.log("📱 Chat widget detected in DOM")
+                setTimeout(() => {
+                  applyKozkerStyling()
+                  addMobileEnhancements()
+                }, 100)
               }
             }
           })
@@ -124,12 +212,51 @@ const ChatWidget = () => {
       subtree: true 
     })
 
-    // Cleanup
-    return () => observer.disconnect()
-  }, [applyKozkerStyling, initializeWidget])
+    // Cleanup function
+    return () => {
+      observer.disconnect()
+      // Restore body scroll on cleanup
+      document.body.style.overflow = ""
+    }
+  }, [applyKozkerStyling, addMobileEnhancements, initializeWidget])
 
   return (
     <>
+      {/* Add mobile viewport meta tag styles */}
+      <style jsx global>{`
+        /* Mobile viewport height fix */
+        @media (max-width: 768px) {
+          .n8n-chat-widget .chat-container.open {
+            height: calc(var(--vh, 1vh) * 100) !important;
+          }
+        }
+
+        /* Touch feedback styles */
+        .touch-active {
+          opacity: 0.8 !important;
+          transform: scale(0.98) !important;
+        }
+
+        /* Prevent text selection on mobile buttons */
+        .n8n-chat-widget .chat-toggle,
+        .n8n-chat-widget .new-chat-btn,
+        .n8n-chat-widget .chat-input button {
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
+          -khtml-user-select: none !important;
+          -moz-user-select: none !important;
+          -ms-user-select: none !important;
+          user-select: none !important;
+        }
+
+        /* Prevent zoom on input focus on iOS */
+        @media (max-width: 768px) {
+          .n8n-chat-widget .chat-input textarea {
+            font-size: 16px !important;
+          }
+        }
+      `}</style>
+
       {/* Configuration Script - Load first */}
       <Script 
         id="kozker-chat-config"
@@ -160,7 +287,7 @@ const ChatWidget = () => {
                 fontColor: '#333333'
               }
             };
-            console.log('🔧 Kozker chat configuration loaded:', window.ChatWidgetConfig);
+            console.log('📱 Kozker mobile chat configuration loaded');
           `,
         }}
       />
@@ -170,34 +297,25 @@ const ChatWidget = () => {
         src="https://cdn.jsdelivr.net/gh/WayneSimpson/n8n-chatbot-template@ba944c3/chat-widget.js"
         strategy="afterInteractive"
         onLoad={() => {
-          console.log("🚀 Chat widget script loaded successfully")
+          console.log("📱 Mobile-optimized chat widget loaded")
           
-          // Apply styling after script loads
+          // Apply all enhancements after script loads
           setTimeout(() => {
-            const applied = applyKozkerStyling()
-            if (applied) {
-              console.log("🎨 Initial styling applied on script load")
+            const stylingApplied = applyKozkerStyling()
+            const mobileApplied = addMobileEnhancements()
+            
+            if (stylingApplied && mobileApplied) {
+              console.log("🎨 Mobile styling and enhancements applied on load")
             }
           }, 300)
 
-          // Verify widget configuration after load
-          setTimeout(() => {
-            const widget = document.querySelector(".n8n-chat-widget") as HTMLElement
-            if (widget) {
-              const computedStyle = getComputedStyle(widget)
-              console.log("🔍 Widget verification:", {
-                found: "✅",
-                primaryColor: computedStyle.getPropertyValue("--n8n-chat-primary-color") || "❌ Not set",
-                secondaryColor: computedStyle.getPropertyValue("--n8n-chat-secondary-color") || "❌ Not set",
-                branding: widget.querySelector(".brand-header span")?.textContent || "❌ Not set"
-              })
-            } else {
-              console.log("⚠️ Widget not found after script load")
-            }
-          }, 1000)
+          // Mobile-specific initialization
+          if (window.innerWidth <= 768) {
+            console.log("📱 Mobile device detected - full responsive mode enabled")
+          }
         }}
         onError={(error) => {
-          console.error("❌ Failed to load chat widget script:", error)
+          console.error("❌ Failed to load mobile chat widget:", error)
         }}
       />
     </>

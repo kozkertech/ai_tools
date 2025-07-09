@@ -260,7 +260,7 @@ export default function PricingPage() {
             {/* CTA Button */}
             <Button
               asChild
-              className={`w-full ${plan.popular ? "bg-primary hover:bg-primary/90" : "bg-secondary hover:bg-secondary/80"}`}
+              className={`w-full ${plan.popular ? "bg-primary hover:bg-primary/90" : "bg-secondary hover:bg-secondary/80 text-foreground"}`}
             >
               <Link href="/contact">Get Started</Link>
             </Button>
