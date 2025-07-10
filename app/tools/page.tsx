@@ -254,7 +254,7 @@ export default function ToolsPage() {
               asChild
               size="lg"
               variant="outline"
-              className="text-lg px-8 border-white hover:bg-white hover:text-primary text-slate-600"
+              className="text-lg px-8 border-white text-white hover:bg-white hover:text-primary"
             >
               <Link href="/contact">Request Custom Tool</Link>
             </Button>

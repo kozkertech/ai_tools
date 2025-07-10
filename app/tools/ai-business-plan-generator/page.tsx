@@ -9,8 +9,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, Sparkles, CheckCircle, XCircle, Download } from "lucide-react"
 
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
 interface FormData {
   name: string
   email: string
@@ -182,9 +180,6 @@ export default function BusinessPlanGenerator() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
- if (isLoading) {   
-        return < ContentLoadingScreen />  }
-        
   const extractBusinessPlanContent = (data: any): string | null => {
     // Handle array response (your webhook returns an array)
     if (Array.isArray(data) && data.length > 0) {
@@ -243,9 +238,6 @@ export default function BusinessPlanGenerator() {
 
       // Extract the business plan content
       const businessPlanContent = extractBusinessPlanContent(data)
-
-     
-      
 
       if (businessPlanContent) {
         setResponse({ output: businessPlanContent })

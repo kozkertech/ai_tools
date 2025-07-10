@@ -11,9 +11,6 @@ import { Label } from "@/components/ui/label"
 import { Loader2, Copy, CheckCircle, Sparkles } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
-
 interface GeneratedCopy {
   adCopy: string
   ctas: string[]
@@ -30,9 +27,6 @@ export default function HeroCopyGenerator() {
   const [generatedCopy, setGeneratedCopy] = useState<GeneratedCopy | null>(null)
   const [copiedText, setCopiedText] = useState<string | null>(null)
   const { toast } = useToast()
-
-   if (isLoading) {    
-        return < ContentLoadingScreen />  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -51,7 +45,6 @@ export default function HeroCopyGenerator() {
     const ctaSection = parts[1] || ""
     const ctaMatches = ctaSection.match(/\*\*(.*?)\*\*/g) || []
     const ctas = ctaMatches.map((cta) => cta.replace(/\*\*/g, ""))
-    
 
     return { adCopy, ctas }
   }
@@ -77,8 +70,6 @@ export default function HeroCopyGenerator() {
         throw new Error("Failed to generate copy")
       }
 
-
-        
       const data = await response.json()
 
       // Parse the response based on the expected format

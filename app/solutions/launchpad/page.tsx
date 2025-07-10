@@ -4,7 +4,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, Rocket, Globe, Calendar, MessageSquare, MapPin, Star, ArrowRight, Sparkles } from "lucide-react"
+import { CheckCircle, Rocket, Globe, Calendar, MessageSquare, MapPin, Star } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "LaunchPad - Digital Solutions for Startups & Local SMBs | KozkerTech",
@@ -44,7 +44,7 @@ export default function LaunchPadPage() {
                   <Link href="/contact?solution=launchpad">Get Started Free</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
-                  <Link href="#free-tool">Try Our Free Tool</Link>
+                  <Link href="/pricing">View Pricing</Link>
                 </Button>
               </div>
             </div>
@@ -294,93 +294,52 @@ export default function LaunchPadPage() {
         </div>
       </section>
 
-      {/* Free Tool Section - Domain Name Genie */}
-      <section
-        id="free-tool"
-        className="py-20 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20"
-      >
+      {/* Pricing Preview */}
+      <section className="py-20 bg-muted/50">
         <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
-              Free Tool for LaunchPad Users
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Start with the Perfect Domain Name</h2>
-            <p className="text-xl text-muted-foreground">
-              Before launching your business, find the perfect domain name with our AI-powered Domain Name Genie
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Simple, Transparent Pricing</h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              Everything you need to get started, with no hidden fees
             </p>
-          </div>
 
-          <div className="max-w-4xl mx-auto">
-            <Card className="p-8 border-2 border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/50 dark:to-emerald-950/50">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center">
-                      <Globe className="h-8 w-8 text-green-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold">Domain Name Genie</h3>
-                      <Badge className="mt-1 bg-green-600 hover:bg-green-700">Most Popular for Startups</Badge>
-                    </div>
-                  </div>
+            <Card className="p-8 border-2 border-green-200">
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold">LaunchPad Starter</h3>
+                <div className="text-4xl font-bold text-green-600 mt-2">₹4,999</div>
+                <p className="text-muted-foreground">One-time setup + ₹499/month</p>
+              </div>
 
-                  <p className="text-lg text-muted-foreground">
-                    Get AI-powered domain name suggestions based on your business description. Perfect for startups and
-                    local businesses looking to establish their online presence.
-                  </p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span>FREE 1-page website</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span>Local SEO optimization</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span>Basic WhatsApp automation</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span>Appointment booking system</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span>Email support</span>
+                </li>
+              </ul>
 
-                  <ul className="space-y-3">
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>AI-powered domain suggestions</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>Real-time availability checking</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>Multiple TLD options (.com, .in, .org)</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>Brand-friendly suggestions</span>
-                    </li>
-                  </ul>
-
-                  <Button asChild size="lg" className="w-full bg-green-600 hover:bg-green-700">
-                    <Link href="/tools/domain-name-generator">
-                      Try Domain Name Genie Free
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Link>
-                  </Button>
-                </div>
-
-                <div className="relative">
-                  <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-lg border">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        Live Preview
-                      </div>
-                      <div className="space-y-3">
-                        <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded border-l-4 border-green-500">
-                          <div className="font-medium text-green-700 dark:text-green-300">techstartup.com</div>
-                          <div className="text-sm text-green-600 dark:text-green-400">Available ✓</div>
-                        </div>
-                        <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded border-l-4 border-blue-500">
-                          <div className="font-medium text-blue-700 dark:text-blue-300">innovatetech.in</div>
-                          <div className="text-sm text-blue-600 dark:text-blue-400">Available ✓</div>
-                        </div>
-                        <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded border-l-4 border-purple-500">
-                          <div className="font-medium text-purple-700 dark:text-purple-300">digitallaunch.org</div>
-                          <div className="text-sm text-purple-600 dark:text-purple-400">Available ✓</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild size="lg" className="flex-1 bg-green-600 hover:bg-green-700">
+                  <Link href="/contact?solution=launchpad">Get Started Free</Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="flex-1">
+                  <Link href="/pricing">View All Plans</Link>
+                </Button>
               </div>
             </Card>
           </div>
@@ -393,22 +352,16 @@ export default function LaunchPadPage() {
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Launch Your Digital Presence?</h2>
             <p className="text-xl opacity-90 mb-8">
-              Start with our free Domain Name Genie, then let us build your complete digital presence with LaunchPad
+              Join hundreds of local businesses who have successfully launched with LaunchPad
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" variant="secondary" className="text-green-600">
-                <Link href="/contact?solution=launchpad">Get Your Free Consultation</Link>
+                <Link href="/contact?solution=launchpad">Start Your Free Consultation</Link>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="border-white hover:bg-white hover:text-green-600 text-white bg-transparent"
-              >
-                <Link href="/tools">Explore All Free Tools</Link>
+              <Button asChild variant="outline" size="lg" className="text-white border-white hover:bg-white/10">
+                <Link href="/case-studies?filter=launchpad">See Success Stories</Link>
               </Button>
             </div>
-            <p className="text-sm opacity-75 mt-4">No commitment required • Free consultation • Launch in 3-5 days</p>
           </div>
         </div>
       </section>

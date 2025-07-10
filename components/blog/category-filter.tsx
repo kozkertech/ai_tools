@@ -15,25 +15,21 @@ interface CategoryFilterProps {
   onSelectCategory: (category: string) => void
 }
 
-export function CategoryFilter({ categories = [], selectedCategories = [], onSelectCategory }: CategoryFilterProps) {
+export function CategoryFilter({ categories, selectedCategories, onSelectCategory }: CategoryFilterProps) {
   const [open, setOpen] = useState(false)
   const { resolvedTheme } = useTheme()
   const isDarkMode = resolvedTheme === "dark"
-
-  // Ensure categories is always an array
-  const safeCategories = Array.isArray(categories) ? categories : []
-  const safeSelectedCategories = Array.isArray(selectedCategories) ? selectedCategories : []
 
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium dark:text-white">Categories</h3>
-        {safeSelectedCategories.length > 0 && (
+        {selectedCategories.length > 0 && (
           <Button
             variant="ghost"
             size="sm"
             className="h-auto p-0 text-xs text-muted-foreground dark:text-gray-400 dark:hover:text-white"
-            onClick={() => safeSelectedCategories.forEach((cat) => onSelectCategory(cat))}
+            onClick={() => selectedCategories.forEach((cat) => onSelectCategory(cat))}
           >
             Clear all
           </Button>
@@ -47,7 +43,7 @@ export function CategoryFilter({ categories = [], selectedCategories = [], onSel
             aria-expanded={open}
             className={cn("justify-between w-full", isDarkMode ? "border-gray-800 bg-gray-900" : "")}
           >
-            {safeSelectedCategories.length > 0 ? `${safeSelectedCategories.length} selected` : "Select categories"}
+            {selectedCategories.length > 0 ? `${selectedCategories.length} selected` : "Select categories"}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -57,7 +53,7 @@ export function CategoryFilter({ categories = [], selectedCategories = [], onSel
             <CommandList>
               <CommandEmpty>No categories found.</CommandEmpty>
               <CommandGroup>
-                {safeCategories.map((category) => (
+                {categories.map((category) => (
                   <CommandItem
                     key={category.id}
                     value={category.slug}
@@ -70,7 +66,7 @@ export function CategoryFilter({ categories = [], selectedCategories = [], onSel
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        safeSelectedCategories.includes(category.slug) ? "opacity-100" : "opacity-0",
+                        selectedCategories.includes(category.slug) ? "opacity-100" : "opacity-0",
                       )}
                     />
                     <span className={isDarkMode ? "text-white" : ""}>{category.name}</span>
@@ -84,10 +80,10 @@ export function CategoryFilter({ categories = [], selectedCategories = [], onSel
           </Command>
         </PopoverContent>
       </Popover>
-      {safeSelectedCategories.length > 0 && (
+      {selectedCategories.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-2">
-          {safeSelectedCategories.map((slug) => {
-            const category = safeCategories.find((c) => c.slug === slug)
+          {selectedCategories.map((slug) => {
+            const category = categories.find((c) => c.slug === slug)
             return (
               <Badge
                 key={slug}

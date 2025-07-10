@@ -38,16 +38,11 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   }
 
   const convertPrice = (amount: number): number => {
-    // Ensure amount is a valid number
-    if (typeof amount !== "number" || isNaN(amount)) {
-      return 0
-    }
-
     if (currency === "INR") {
       return amount
     } else {
       // Convert INR to USD
-      return Math.round((amount / USD_TO_INR) * 100) / 100
+      return Number.parseFloat((amount / USD_TO_INR).toFixed(2))
     }
   }
 

@@ -1,7 +1,6 @@
 import Link from "next/link"
-import { getTags } from "@/lib/ghost"
+import { getTags } from "@/lib/blog-data"
 import { Badge } from "@/components/ui/badge"
-import { GhostPlaceholder } from "@/components/ghost-placeholder"
 
 export const metadata = {
   title: "Blog Tags - Browse Topics by Category",
@@ -22,15 +21,6 @@ export const metadata = {
 
 export default async function TagsPage() {
   try {
-    // Check if Ghost API is configured
-    if (!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY) {
-      return (
-        <div className="container py-8 md:py-12">
-          <GhostPlaceholder />
-        </div>
-      )
-    }
-
     const tags = await getTags()
 
     // Add structured data for the tags page
@@ -83,9 +73,7 @@ export default async function TagsPage() {
       <div className="container py-8 md:py-12">
         <div className="text-center py-12">
           <h2 className="text-xl font-medium">Error loading tags</h2>
-          <p className="text-muted-foreground mt-2">
-            There was an error loading tags. Please check your Ghost CMS configuration.
-          </p>
+          <p className="text-muted-foreground mt-2">There was an error loading tags. Please try again later.</p>
         </div>
       </div>
     )

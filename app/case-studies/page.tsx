@@ -4,7 +4,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, TrendingUp, Clock, Target, CalendarIcon, UserIcon } from "lucide-react"
+import { ArrowRight, TrendingUp, Clock, Target } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Case Studies - Real Results from Real Clients | KozkerTech",
@@ -12,123 +12,130 @@ export const metadata: Metadata = {
     "Discover how businesses have transformed their operations and achieved remarkable growth with KozkerTech's digital solutions.",
 }
 
-// Mock data for demonstration
-const mockCaseStudies = [
+// Mock data for case studies - in a real app, this would come from a CMS or API
+const caseStudies = [
   {
-    id: "1",
+    id: 1,
     title: "Local Restaurant Chain Increases Online Orders by 300%",
-    slug: "restaurant-chain-300-percent-increase",
-    excerpt:
-      "How we helped Spice Garden Restaurants transform their business during the pandemic with our LaunchPad solution.",
-    feature_image: "/case-study-restaurant.png",
-    published_at: "2024-01-15T10:00:00.000Z",
-    primary_author: { name: "KozkerTech Team" },
-    tags: [
-      { name: "Case Study", slug: "case-study" },
-      { name: "LaunchPad", slug: "launchpad" },
-      { name: "Food & Beverage", slug: "food-beverage" },
+    client: "Spice Garden Restaurants",
+    industry: "Food & Beverage",
+    solution: "LaunchPad",
+    challenge: "Limited online presence and no digital ordering system during COVID-19 pandemic",
+    results: [
+      "300% increase in online orders",
+      "50% reduction in phone order errors",
+      "25% increase in average order value",
+      "Expanded to 3 new locations",
     ],
-    mockData: {
-      client: "Spice Garden Restaurants",
-      industry: "Food & Beverage",
-      solution: "LaunchPad",
-      challenge: "Limited online presence and no digital ordering system during COVID-19 pandemic",
-      results: [
-        "300% increase in online orders",
-        "50% reduction in phone order errors",
-        "25% increase in average order value",
-        "Expanded to 3 new locations",
-      ],
-      timeline: "6 weeks",
-      testimonial: {
-        quote:
-          "KozkerTech's LaunchPad solution saved our business during the pandemic. The WhatsApp ordering system was a game-changer.",
-        author: "Rajesh Kumar",
-        title: "Owner, Spice Garden Restaurants",
-      },
-    },
+    timeline: "6 weeks",
+    image: "/case-study-restaurant.png",
+    testimonial:
+      "KozkerTech's LaunchPad solution saved our business during the pandemic. The WhatsApp ordering system was a game-changer.",
+    clientName: "Rajesh Kumar",
+    clientTitle: "Owner, Spice Garden Restaurants",
   },
   {
-    id: "2",
+    id: 2,
     title: "E-commerce Store Boosts Conversion Rate by 45%",
-    slug: "ecommerce-conversion-rate-boost",
-    excerpt:
-      "TechGadgets Pro transformed their customer experience with our GrowthSuite solution, achieving remarkable results.",
-    feature_image: "/case-study-ecommerce.png",
-    published_at: "2024-02-10T10:00:00.000Z",
-    primary_author: { name: "KozkerTech Team" },
-    tags: [
-      { name: "Case Study", slug: "case-study" },
-      { name: "GrowthSuite", slug: "growthsuite" },
-      { name: "E-commerce", slug: "ecommerce" },
+    client: "TechGadgets Pro",
+    industry: "E-commerce",
+    solution: "GrowthSuite",
+    challenge: "Low conversion rates and poor customer engagement on their existing website",
+    results: [
+      "45% increase in conversion rate",
+      "60% reduction in cart abandonment",
+      "40% increase in customer lifetime value",
+      "2x improvement in customer support efficiency",
     ],
-    mockData: {
-      client: "TechGadgets Pro",
-      industry: "E-commerce",
-      solution: "GrowthSuite",
-      challenge: "Low conversion rates and poor customer engagement despite quality products",
-      results: [
-        "45% increase in conversion rate",
-        "60% reduction in cart abandonment",
-        "40% increase in customer lifetime value",
-        "2x improvement in customer support efficiency",
-      ],
-      timeline: "8 weeks",
-      testimonial: {
-        quote:
-          "The AI chatbot and WhatsApp automation transformed our customer experience. Sales have never been better.",
-        author: "Priya Sharma",
-        title: "Founder, TechGadgets Pro",
-      },
-    },
+    timeline: "8 weeks",
+    image: "/case-study-ecommerce.png",
+    testimonial:
+      "The AI chatbot and WhatsApp automation transformed our customer experience. Sales have never been better.",
+    clientName: "Priya Sharma",
+    clientTitle: "Founder, TechGadgets Pro",
   },
   {
-    id: "3",
+    id: 3,
     title: "Manufacturing Company Achieves 40% ROI Increase",
-    slug: "manufacturing-roi-increase",
-    excerpt:
-      "Precision Engineering Ltd gained real-time visibility across all operations with our Intelligence solution.",
-    feature_image: "/case-study-manufacturing.png",
-    published_at: "2024-03-05T10:00:00.000Z",
-    primary_author: { name: "KozkerTech Team" },
-    tags: [
-      { name: "Case Study", slug: "case-study" },
-      { name: "Intelligence", slug: "intelligence" },
-      { name: "Manufacturing", slug: "manufacturing" },
+    client: "Precision Engineering Ltd",
+    industry: "Manufacturing",
+    solution: "Intelligence",
+    challenge: "Lack of data visibility across operations and inability to make data-driven decisions",
+    results: [
+      "40% increase in ROI",
+      "30% reduction in production waste",
+      "50% faster decision-making process",
+      "Real-time visibility across all operations",
     ],
-    mockData: {
-      client: "Precision Engineering Ltd",
-      industry: "Manufacturing",
-      solution: "Intelligence",
-      challenge: "Lack of data visibility across operations and difficulty making data-driven decisions",
-      results: [
-        "40% increase in ROI",
-        "30% reduction in production waste",
-        "50% faster decision-making process",
-        "Real-time visibility across all operations",
-      ],
-      timeline: "12 weeks",
-      testimonial: {
-        quote:
-          "The Power BI dashboards gave us insights we never had before. We can now optimize our operations in real-time.",
-        author: "Amit Patel",
-        title: "Operations Director, Precision Engineering Ltd",
-      },
-    },
+    timeline: "12 weeks",
+    image: "/case-study-manufacturing.png",
+    testimonial:
+      "The Power BI dashboards gave us insights we never had before. We can now optimize our operations in real-time.",
+    clientName: "Amit Patel",
+    clientTitle: "Operations Director, Precision Engineering Ltd",
+  },
+  {
+    id: 4,
+    title: "Healthcare Clinic Reduces No-Shows by 70%",
+    client: "City Health Clinic",
+    industry: "Healthcare",
+    solution: "LaunchPad",
+    challenge: "High patient no-show rates and inefficient appointment scheduling system",
+    results: [
+      "70% reduction in no-shows",
+      "80% of appointments now booked online",
+      "50% reduction in administrative workload",
+      "95% patient satisfaction score",
+    ],
+    timeline: "4 weeks",
+    image: "/case-study-healthcare.png",
+    testimonial: "The automated appointment system and WhatsApp reminders have transformed our practice efficiency.",
+    clientName: "Dr. Sarah Johnson",
+    clientTitle: "Director, City Health Clinic",
+  },
+  {
+    id: 5,
+    title: "Digital Agency Scales Operations by 200%",
+    client: "Creative Solutions Agency",
+    industry: "Digital Marketing",
+    solution: "GrowthSuite",
+    challenge: "Manual client communication and project management processes limiting growth",
+    results: [
+      "200% increase in client capacity",
+      "75% reduction in manual tasks",
+      "90% improvement in client satisfaction",
+      "3x faster project delivery",
+    ],
+    timeline: "10 weeks",
+    image: "/case-study-agency.png",
+    testimonial:
+      "The automation suite allowed us to scale without hiring additional staff. Our clients love the improved communication.",
+    clientName: "Michael Chen",
+    clientTitle: "CEO, Creative Solutions Agency",
+  },
+  {
+    id: 6,
+    title: "Retail Chain Optimizes Inventory with Data Analytics",
+    client: "Fashion Forward Stores",
+    industry: "Retail",
+    solution: "Intelligence",
+    challenge: "Poor inventory management leading to stockouts and overstock situations",
+    results: [
+      "35% reduction in inventory costs",
+      "90% improvement in stock availability",
+      "25% increase in profit margins",
+      "Real-time inventory tracking across 15 stores",
+    ],
+    timeline: "14 weeks",
+    image: "/case-study-retail.png",
+    testimonial:
+      "The analytics dashboard helps us make smarter inventory decisions. We've eliminated most stockouts and reduced waste significantly.",
+    clientName: "Lisa Rodriguez",
+    clientTitle: "Operations Manager, Fashion Forward Stores",
   },
 ]
 
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
-}
-
 export default function CaseStudiesPage() {
-  const caseStudies = mockCaseStudies
-
   return (
     <>
       {/* Hero Section */}
@@ -159,8 +166,8 @@ export default function CaseStudiesPage() {
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="space-y-2">
-              <div className="text-4xl font-bold text-primary">{caseStudies.length}+</div>
-              <p className="text-muted-foreground">Success Stories</p>
+              <div className="text-4xl font-bold text-primary">200+</div>
+              <p className="text-muted-foreground">Successful Projects</p>
             </div>
             <div className="space-y-2">
               <div className="text-4xl font-bold text-primary">40%</div>
@@ -189,125 +196,79 @@ export default function CaseStudiesPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {caseStudies.map((study) => {
-              const solutionTag = study.tags?.find((tag) =>
-                ["launchpad", "growthsuite", "intelligence"].includes(tag.slug),
-              )
-              const industryTag = study.tags?.find((tag) => tag.slug !== "case-study" && tag.slug !== solutionTag?.slug)
+            {caseStudies.map((study) => (
+              <Card key={study.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="relative h-48">
+                  <Image src={study.image || "/placeholder.svg"} alt={study.title} fill className="object-cover" />
+                  <div className="absolute top-4 left-4">
+                    <Badge
+                      className={
+                        study.solution === "Intelligence"
+                          ? "bg-purple-100 text-purple-700"
+                          : study.solution === "GrowthSuite"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-green-100 text-green-700"
+                      }
+                    >
+                      {study.solution}
+                    </Badge>
+                  </div>
+                  <div className="absolute top-4 right-4">
+                    <Badge variant="secondary">{study.industry}</Badge>
+                  </div>
+                </div>
 
-              const mockData = study.mockData
-              const client = mockData?.client || "Client"
-              const solution = solutionTag?.name || mockData?.solution || "Solution"
-              const industry = industryTag?.name || mockData?.industry || "Industry"
-              const challenge = mockData?.challenge || study.excerpt || "Case study details..."
-              const timeline = mockData?.timeline || "Project Timeline"
-              const results = mockData?.results
-              const testimonial = mockData?.testimonial
+                <CardHeader>
+                  <CardTitle className="line-clamp-2">{study.title}</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    <strong>{study.client}</strong> • {study.industry}
+                  </p>
+                </CardHeader>
 
-              return (
-                <Card key={study.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  {study.feature_image && (
-                    <div className="relative h-48">
-                      <Image
-                        src={study.feature_image || "/placeholder.svg"}
-                        alt={study.title}
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute top-4 left-4">
-                        <Badge
-                          className={
-                            solutionTag?.slug === "intelligence" || solution === "Intelligence"
-                              ? "bg-purple-100 text-purple-700"
-                              : solutionTag?.slug === "growthsuite" || solution === "GrowthSuite"
-                                ? "bg-blue-100 text-blue-700"
-                                : "bg-green-100 text-green-700"
-                          }
-                        >
-                          {solution}
-                        </Badge>
-                      </div>
-                      <div className="absolute top-4 right-4">
-                        <Badge variant="secondary">{industry}</Badge>
-                      </div>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Challenge</h4>
+                    <p className="text-sm text-muted-foreground">{study.challenge}</p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold mb-2">Key Results</h4>
+                    <ul className="space-y-1">
+                      {study.results.slice(0, 3).map((result, index) => (
+                        <li key={index} className="text-sm flex items-center gap-2">
+                          <TrendingUp className="h-3 w-3 text-green-500" />
+                          <span>{result}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{study.timeline}</span>
                     </div>
-                  )}
-
-                  <CardHeader>
-                    <CardTitle className="line-clamp-2">{study.title}</CardTitle>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center">
-                        <UserIcon className="mr-1 h-4 w-4" />
-                        <span>{study.primary_author?.name || "Author"}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <CalendarIcon className="mr-1 h-4 w-4" />
-                        <time dateTime={study.published_at}>{formatDate(study.published_at)}</time>
-                      </div>
+                    <div className="flex items-center gap-1">
+                      <Target className="h-4 w-4" />
+                      <span>{study.solution}</span>
                     </div>
-                    {client !== "Client" && (
-                      <p className="text-sm text-muted-foreground">
-                        <strong>{client}</strong> • {industry}
-                      </p>
-                    )}
-                  </CardHeader>
+                  </div>
 
-                  <CardContent className="space-y-4">
-                    {/* Challenge */}
-                    <div>
-                      <h4 className="font-semibold mb-2">Challenge</h4>
-                      <p className="text-sm text-muted-foreground line-clamp-3">{challenge}</p>
-                    </div>
+                  <blockquote className="border-l-4 border-primary pl-4 italic text-sm">
+                    "{study.testimonial}"
+                    <footer className="mt-2 text-xs text-muted-foreground">
+                      — {study.clientName}, {study.clientTitle}
+                    </footer>
+                  </blockquote>
 
-                    {/* Results */}
-                    {results && results.length > 0 && (
-                      <div>
-                        <h4 className="font-semibold mb-2">Key Results</h4>
-                        <ul className="space-y-1">
-                          {results.slice(0, 3).map((result, index) => (
-                            <li key={index} className="text-sm flex items-center gap-2">
-                              <TrendingUp className="h-3 w-3 text-green-500" />
-                              <span>{result}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* Timeline and Solution */}
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{timeline}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Target className="h-4 w-4" />
-                        <span>{solution}</span>
-                      </div>
-                    </div>
-
-                    {/* Testimonial */}
-                    {testimonial && (
-                      <blockquote className="border-l-4 border-primary pl-4 italic text-sm">
-                        "{testimonial.quote}"
-                        {testimonial.author && (
-                          <footer className="mt-2 text-xs text-muted-foreground">
-                            — {testimonial.author}
-                            {testimonial.title ? `, ${testimonial.title}` : ""}
-                          </footer>
-                        )}
-                      </blockquote>
-                    )}
-
-                    <Button asChild variant="outline" className="w-full bg-transparent">
-                      <Link href={`/case-studies/${study.slug}`}>
-                        Read Full Case Study <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              )
-            })}
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href={`/case-studies/${study.id}`}>
+                      Read Full Case Study <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -323,11 +284,7 @@ export default function CaseStudiesPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {["Healthcare", "E-commerce", "Manufacturing", "Food & Beverage", "Digital Marketing", "Retail"].map(
               (industry) => (
-                <Button
-                  key={industry}
-                  variant="outline"
-                  className="h-auto p-4 flex flex-col items-center gap-2 bg-transparent"
-                >
+                <Button key={industry} variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
                   <span className="font-medium">{industry}</span>
                 </Button>
               ),
@@ -348,12 +305,7 @@ export default function CaseStudiesPage() {
               <Button asChild size="lg" variant="secondary" className="text-primary">
                 <Link href="/contact">Start Your Transformation</Link>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="border-white hover:bg-white hover:text-primary text-white bg-transparent"
-              >
+              <Button asChild variant="outline" size="lg" className="text-white border-white hover:bg-white/10">
                 <Link href="/solutions">Explore Our Solutions</Link>
               </Button>
             </div>

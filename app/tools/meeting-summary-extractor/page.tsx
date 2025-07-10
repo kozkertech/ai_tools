@@ -11,9 +11,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle, XCircle, FileText } from "lucide-react"
 
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
-
 interface FormData {
   name: string
   email: string
@@ -56,8 +53,7 @@ export default function MeetingSummaryExtractor() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string; data?: WebhookResponse } | null>(
     null,
   )
-  if (isLoading) {    
-        return < ContentLoadingScreen />  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({
@@ -92,8 +88,6 @@ export default function MeetingSummaryExtractor() {
         const errorData = await response.text()
         throw new Error(errorData || "Failed to submit transcript")
       }
-
-        
     } catch (error) {
       setMessage({
         type: "error",

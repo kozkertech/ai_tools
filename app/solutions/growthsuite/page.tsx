@@ -4,18 +4,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import {
-  CheckCircle,
-  TrendingUp,
-  MessageSquare,
-  Bot,
-  BarChart3,
-  Target,
-  Zap,
-  ArrowRight,
-  Sparkles,
-  Share2,
-} from "lucide-react"
+import { CheckCircle, TrendingUp, MessageSquare, Bot, BarChart3, Target, Zap } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "GrowthSuite - Digital Solutions for Growing SMBs | KozkerTech",
@@ -55,7 +44,7 @@ export default function GrowthSuitePage() {
                   <Link href="/contact?solution=growthsuite">Request Demo</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
-                  <Link href="#free-tool">Try Our Free Tool</Link>
+                  <Link href="/pricing">See Pricing</Link>
                 </Button>
               </div>
             </div>
@@ -302,99 +291,50 @@ export default function GrowthSuitePage() {
         </div>
       </section>
 
-      {/* Free Tool Section - Social Media Caption & Hashtag Suggester */}
-      <section
-        id="free-tool"
-        className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20"
-      >
+      {/* Pricing Preview */}
+      <section className="py-20 bg-muted/50">
         <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
-              Free Tool for Growing Businesses
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Boost Your Social Media Engagement</h2>
-            <p className="text-xl text-muted-foreground">
-              Create compelling social media content that drives engagement with our AI-powered caption and hashtag
-              generator
-            </p>
-          </div>
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Scalable Pricing for Growth</h2>
+            <p className="text-xl text-muted-foreground mb-8">Flexible plans that grow with your business</p>
 
-          <div className="max-w-4xl mx-auto">
-            <Card className="p-8 border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
-                      <Share2 className="h-8 w-8 text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold">Social Media Caption & Hashtag Suggester</h3>
-                      <Badge className="mt-1 bg-blue-600 hover:bg-blue-700">Perfect for Growing Brands</Badge>
-                    </div>
-                  </div>
+            <Card className="p-8 border-2 border-blue-200">
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold">GrowthSuite Pro</h3>
+                <div className="text-4xl font-bold text-blue-600 mt-2">₹9,999</div>
+                <p className="text-muted-foreground">One-time setup + ₹1,499/month</p>
+              </div>
 
-                  <p className="text-lg text-muted-foreground">
-                    Generate platform-specific captions and trending hashtags that maximize your social media reach and
-                    engagement. Perfect for businesses scaling their digital presence.
-                  </p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-blue-500" />
+                  <span>Advanced web design & CRO</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-blue-500" />
+                  <span>WhatsApp CRM automation</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-blue-500" />
+                  <span>AI chatbot integration</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-blue-500" />
+                  <span>24/7 support suite</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-blue-500" />
+                  <span>Priority support & updates</span>
+                </li>
+              </ul>
 
-                  <ul className="space-y-3">
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-blue-500 flex-shrink-0" />
-                      <span>Platform-tailored captions (Instagram, Facebook, LinkedIn)</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-blue-500 flex-shrink-0" />
-                      <span>Trending hashtag suggestions</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-blue-500 flex-shrink-0" />
-                      <span>Engagement optimization tips</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-blue-500 flex-shrink-0" />
-                      <span>Industry-specific content ideas</span>
-                    </li>
-                  </ul>
-
-                  <Button asChild size="lg" className="w-full bg-blue-600 hover:bg-blue-700">
-                    <Link href="/tools/social-media-suggester">
-                      Try Social Media Tool Free
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Link>
-                  </Button>
-                </div>
-
-                <div className="relative">
-                  <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-lg border">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        Sample Output
-                      </div>
-                      <div className="space-y-4">
-                        <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg">
-                          <div className="font-medium text-blue-700 dark:text-blue-300 mb-2">Instagram Caption:</div>
-                          <div className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                            "🚀 Ready to scale your business? Our automation tools help SMBs save 60% of their time on
-                            customer service. What would you do with those extra hours?"
-                          </div>
-                          <div className="text-xs text-blue-600 dark:text-blue-400">
-                            #BusinessAutomation #SMBGrowth #Productivity #DigitalTransformation #BusinessTips
-                          </div>
-                        </div>
-                        <div className="bg-green-50 dark:bg-green-950/20 p-4 rounded-lg">
-                          <div className="font-medium text-green-700 dark:text-green-300 mb-2">LinkedIn Version:</div>
-                          <div className="text-sm text-gray-700 dark:text-gray-300">
-                            "Growing businesses need smart solutions. Our latest case study shows how automation can
-                            reduce customer service workload by 60%..."
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild size="lg" className="flex-1 bg-blue-600 hover:bg-blue-700">
+                  <Link href="/contact?solution=growthsuite">Request Demo</Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="flex-1">
+                  <Link href="/pricing">Compare Plans</Link>
+                </Button>
               </div>
             </Card>
           </div>
@@ -407,22 +347,16 @@ export default function GrowthSuitePage() {
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Scale Your Business?</h2>
             <p className="text-xl opacity-90 mb-8">
-              Start with our free Social Media tool, then let us build your complete growth automation suite
+              Join successful SMBs who have transformed their operations with GrowthSuite
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" variant="secondary" className="text-blue-600">
                 <Link href="/contact?solution=growthsuite">Request Your Demo</Link>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="border-white hover:bg-white hover:text-blue-600 text-white bg-transparent"
-              >
-                <Link href="/tools">Explore All Free Tools</Link>
+              <Button asChild variant="outline" size="lg" className="text-white border-white hover:bg-white/10">
+                <Link href="/case-studies?filter=growthsuite">View Success Stories</Link>
               </Button>
             </div>
-            <p className="text-sm opacity-75 mt-4">Free demo available • No long-term contracts • Results in 30 days</p>
           </div>
         </div>
       </section>

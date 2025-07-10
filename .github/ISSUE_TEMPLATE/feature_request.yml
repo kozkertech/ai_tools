@@ -1,0 +1,108 @@
+name: Feature Request
+description: Suggest a new feature or improvement for the Kozker Tech website
+title: "[FEATURE] "
+labels: ["enhancement"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Your ideas help us improve the Kozker Tech website and better serve our clients.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: What feature would you like to add?
+      description: Describe the new functionality you'd like to see
+      placeholder: "Example: Add a live chat widget to provide instant customer support"
+    validations:
+      required: true
+
+  - type: textarea
+    id: business-justification
+    attributes:
+      label: Why do we need this?
+      description: What business problem does this solve? How will it help our users or business?
+      placeholder: "This will reduce response time for customer inquiries and increase conversion rates"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: page-location
+    attributes:
+      label: Where should this appear on the website?
+      description: Which page(s) or section(s) should include this feature?
+      multiple: true
+      options:
+        - "Homepage"
+        - "About page"
+        - "Services pages"
+        - "Contact page"
+        - "Blog"
+        - "Case studies"
+        - "All pages (global feature)"
+        - "New page needed"
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-experience
+    attributes:
+      label: How should it work?
+      description: Describe the user experience - what should happen when someone uses this feature?
+      placeholder: |
+        1. User visits any page and sees chat widget in bottom right
+        2. User clicks on widget and chat window opens
+        3. User can type message and get instant response
+        4. System routes complex queries to human support
+    validations:
+      required: true
+
+  - type: textarea
+    id: design-ideas
+    attributes:
+      label: Design ideas or examples
+      description: Any specific design ideas, or examples from other websites you like?
+      placeholder: "Similar to Intercom's chat widget, or attach mockups/screenshots"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: technical-requirements
+    attributes:
+      label: Technical considerations
+      description: Any specific integrations, tools, or technical requirements?
+      options:
+        - label: Chatbot integration (AI-powered responses)
+        - label: Form builder integration
+        - label: Analytics tracking needed
+        - label: Mobile responsiveness required
+        - label: Email integration
+        - label: WhatsApp integration
+        - label: Third-party service integration
+        - label: Database changes needed
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority and timeline
+      description: How important and urgent is this feature?
+      options:
+        - "High - Needed for upcoming launch or campaign"
+        - "Medium - Important for business goals"
+        - "Low - Nice-to-have improvement"
+      default: 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: success-criteria
+    attributes:
+      label: Success criteria
+      description: How will we know this feature is working well? What metrics matter?
+      placeholder: |
+        - Increase in contact form submissions by 25%
+        - Reduce average response time to under 1 hour
+        - Positive user feedback on ease of use
+    validations:
+      required: false

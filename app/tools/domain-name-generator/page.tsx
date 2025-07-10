@@ -26,9 +26,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
 
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
-
 interface FormDataState {
   name: string
   email: string
@@ -63,10 +60,6 @@ export default function DomainCheckerPage() {
   const [favorites, setFavorites] = useState<string[]>([])
   const [searchHistory, setSearchHistory] = useState<string[]>([])
   const { toast } = useToast()
-
-  if (isLoading) {    
-        return < ContentLoadingScreen />  
-    }
 
   const validateForm = (): boolean => {
     const newErrors: Partial<FormDataState> = {}
@@ -119,12 +112,7 @@ export default function DomainCheckerPage() {
     setApiError("")
     setSearchFilter("")
 
-    
-
     try {
-
-     
-
       const webhookUrl = "https://n8n.srv832341.hstgr.cloud/webhook/6f7b288e-1efe-4504-a6fd-660931327269"
       const params = new URLSearchParams({
         name: formData.name,
@@ -152,8 +140,6 @@ export default function DomainCheckerPage() {
           return
         }
 
-          
-        
         const sanitizedResponse = responseText.trim()
         try {
           const parsedJson = JSON.parse(sanitizedResponse)

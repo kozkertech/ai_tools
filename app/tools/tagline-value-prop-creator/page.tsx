@@ -11,8 +11,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Sparkles, Target, Users, Building2 } from "lucide-react"
 
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
 interface FormData {
   name: string
   email: string
@@ -129,9 +127,6 @@ export default function TaglineCreator() {
       setIsLoading(false)
     }
   }
-
-   if (isLoading) {    
-        return < ContentLoadingScreen />  }
 
   const resetForm = () => {
     setFormData({

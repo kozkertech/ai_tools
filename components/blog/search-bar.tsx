@@ -1,54 +1,45 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
+import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, X } from "lucide-react"
 
 interface SearchBarProps {
-  searchQuery?: string
-  onSearchChange?: (query: string) => void
+  onSearch: (query: string) => void
   initialQuery?: string
-  onSearch?: (query: string) => void
 }
 
-export function SearchBar({ searchQuery = "", onSearchChange, initialQuery = "", onSearch }: SearchBarProps) {
-  const [localQuery, setLocalQuery] = useState(searchQuery || initialQuery)
+export function SearchBar({ onSearch, initialQuery = "" }: SearchBarProps) {
+  const [query, setQuery] = useState(initialQuery)
 
-  const handleSearch = (query: string) => {
-    setLocalQuery(query)
-    if (onSearchChange) {
-      onSearchChange(query)
-    }
-    if (onSearch) {
-      onSearch(query)
-    }
-  }
-
-  const clearSearch = () => {
-    handleSearch("")
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSearch(query)
   }
 
   return (
-    <div className="relative">
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-      <Input
-        type="text"
-        placeholder="Search posts..."
-        value={localQuery}
-        onChange={(e) => handleSearch(e.target.value)}
-        className="pl-10 pr-10"
-      />
-      {localQuery && (
+    <form onSubmit={handleSubmit} className="relative w-full">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="Search articles..."
+          className="pl-10 pr-12"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
         <Button
-          variant="ghost"
+          type="submit"
           size="sm"
-          onClick={clearSearch}
-          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+          variant="ghost"
+          className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
         >
-          <X className="h-4 w-4" />
+          Search
         </Button>
-      )}
-    </div>
+      </div>
+    </form>
   )
 }

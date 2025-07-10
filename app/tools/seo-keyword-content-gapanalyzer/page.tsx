@@ -23,9 +23,6 @@ import {
   Mail,
 } from "lucide-react"
 
-import { SEOLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
-
 interface KeywordData {
   word: string
   count: number
@@ -110,10 +107,6 @@ export default function SEOAnalyzer() {
     setFormData({ email: "", website_url: "", main_topic: "" })
     setError("")
   }
-
-  // Show loading screen when loading 
-   if (isLoading) {  
-     return < SEOLoadingScreen />  }
 
   if (result) {
     return (

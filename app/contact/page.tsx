@@ -42,9 +42,7 @@ export default function ContactPage() {
               <MapPin className="h-6 w-6 text-primary" />
             </div>
             <h3 className="text-lg font-medium mb-2">HQ</h3>
-            <p className="text-muted-foreground">
-              1st Floor, Adithya Shopping Complex, Thoppumpady, Kochi, Kerala, India, P.O 682005
-            </p>
+            <p className="text-muted-foreground">1st Floor, Adithya Shopping Complex, Thoppumpady, Kochi, Kerala, India, P.O 682005</p>
             <p className="text-muted-foreground">India</p>
           </div>
         </div>
@@ -75,7 +73,7 @@ export default function ContactPage() {
               href="https://www.facebook.com/KozkerTech/"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-card p-3 border hover:bg-primary hover:text-white transition-colors"
+              className="rounded-full bg-card p-3 border hover:bg-accent transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +95,7 @@ export default function ContactPage() {
               href="https://x.com/KozkerTech"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-card p-3 border hover:bg-primary hover:text-white transition-colors"
+              className="rounded-full bg-card p-3 border hover:bg-accent transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +117,7 @@ export default function ContactPage() {
               href="https://www.linkedin.com/company/kozker-tech"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-card p-3 border hover:bg-primary hover:text-white transition-colors"
+              className="rounded-full bg-card p-3 border hover:bg-accent transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +141,7 @@ export default function ContactPage() {
               href="https://www.instagram.com/kozkertech/"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-card p-3 border hover:bg-primary hover:text-white transition-colors"
+              className="rounded-full bg-card p-3 border hover:bg-accent transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

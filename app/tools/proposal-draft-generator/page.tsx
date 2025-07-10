@@ -11,9 +11,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { CheckCircle, AlertCircle, Loader2, FileText, Download, Copy } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
-
 interface FormData {
   name: string
   cost: string
@@ -148,8 +145,6 @@ export default function ProposalGenerator() {
       setIsLoading(false)
     }
   }
-   if (isLoading) {    
-        return < ContentLoadingScreen />  }
 
   const markdownContent = webhookResponse ? extractMarkdownContent(webhookResponse) : null
 
