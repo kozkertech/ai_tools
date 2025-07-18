@@ -1,460 +1,385 @@
 "use client"
-
-import type React from "react"
-
-import { useState } from "react"
+import { useState, type FormEvent } from "react"
+import { Copy, Loader2, CheckCircle, XCircle, Wand2, Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Loader2, Copy, CheckCircle, Sparkles } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { Textarea } from "@/components/ui/textarea"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { ContentLoadingScreen } from "@/components/loading-screen"
 
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
-
-interface GeneratedCopy {
-  adCopy: string
-  ctas: string[]
+interface FormData {
+  name: string
+  email: string
+  product: string
+  targetAudience: string
+  tone: string
 }
 
-export default function HeroCopyGenerator() {
-  const [formData, setFormData] = useState({
+interface ResponseType {
+  output: string
+  [key: string]: any
+}
+
+interface Message {
+  type: "success" | "error"
+  text: string
+}
+
+export default function CopyGenerator() {
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
-    productName: "",
-    productFeatures: "",
+    product: "",
+    targetAudience: "",
+    tone: "",
   })
+
   const [isLoading, setIsLoading] = useState(false)
-  const [generatedCopy, setGeneratedCopy] = useState<GeneratedCopy | null>(null)
-  const [copiedText, setCopiedText] = useState<string | null>(null)
-  const { toast } = useToast()
+  const [copyResponse, setCopyResponse] = useState<ResponseType | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [message, setMessage] = useState<Message | null>(null)
+  const [debugInfo, setDebugInfo] = useState<string>("")
 
-   if (isLoading) {    
-        return < ContentLoadingScreen />  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+  const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [field]: value,
     }))
   }
 
-  const parseBackendResponse = (responseText: string): GeneratedCopy => {
-    // Split by **CTAs:** to separate ad copy from CTAs
-    const parts = responseText.split("**CTAs:**")
-    const adCopy = parts[0].replace("**Ad Copy:**", "").trim()
-
-    // Extract CTAs
-    const ctaSection = parts[1] || ""
-    const ctaMatches = ctaSection.match(/\*\*(.*?)\*\*/g) || []
-    const ctas = ctaMatches.map((cta) => cta.replace(/\*\*/g, ""))
-    
-
-    return { adCopy, ctas }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setGeneratedCopy(null)
+    setError(null)
+    setCopyResponse(null)
+    setMessage(null)
+    setDebugInfo("")
 
     try {
-      const response = await fetch(
-        "https://n8n.srv832341.hstgr.cloud/webhook/6b699db4-53f1-45ae-b155-390996beb2b5",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/785ebaf0-797f-4c57-9a13-706fb085b748", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      )
+        body: JSON.stringify(formData),
+      })
 
       if (!response.ok) {
         throw new Error("Failed to generate copy")
       }
 
+      const responseData = await response.json()
+      setDebugInfo(JSON.stringify(responseData, null, 2))
 
-        
-      const data = await response.json()
-
-      // Parse the response based on the expected format
-      if (data && data.length > 0 && data[0]["SoMe Text"]) {
-        const parsedCopy = parseBackendResponse(data[0]["SoMe Text"])
-        setGeneratedCopy(parsedCopy)
-        toast({
-          title: "Success!",
-          description: "Your hero copy has been generated successfully.",
-        })
-      } else {
-        throw new Error("Invalid response format")
-      }
-    } catch (error) {
-      console.error("Error:", error)
-      toast({
-        title: "Error",
-        description: "Failed to generate copy. Please try again.",
-        variant: "destructive",
+      setCopyResponse(responseData)
+      setMessage({
+        type: "success",
+        text: "Copy generated successfully!",
       })
+    } catch (err) {
+      const errorMessage = "Failed to generate copy. Please try again."
+      setError(errorMessage)
+      setMessage({
+        type: "error",
+        text: errorMessage,
+      })
+      console.error("Error:", err)
     } finally {
       setIsLoading(false)
     }
   }
 
-  const copyToClipboard = async (text: string, type: string) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopiedText(type)
-      setTimeout(() => setCopiedText(null), 2000)
-      toast({
-        title: "Copied!",
-        description: `${type} copied to clipboard.`,
-      })
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to copy to clipboard.",
-        variant: "destructive",
-      })
-    }
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      email: "",
+      product: "",
+      targetAudience: "",
+      tone: "",
+    })
+    setCopyResponse(null)
+    setError(null)
+    setMessage(null)
+    setDebugInfo("")
   }
 
-  const isFormValid = formData.name && formData.email && formData.productName && formData.productFeatures
+  const parseMarkdownToHTML = (markdown: string) => {
+    if (!markdown) return ""
+    return markdown
+      .replace(
+        /^### (.*$)/gim,
+        '<h3 class="text-lg font-semibold text-gray-900 dark:text-white font-poppins mb-2 mt-4">$1</h3>',
+      )
+      .replace(
+        /^## (.*$)/gim,
+        '<h2 class="text-xl font-semibold text-gray-900 dark:text-white font-poppins mb-3 mt-6">$1</h2>',
+      )
+      .replace(
+        /^# (.*$)/gim,
+        '<h1 class="text-2xl font-bold text-gray-900 dark:text-white font-poppins mb-4 mt-8 first:mt-0">$1</h1>',
+      )
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900 dark:text-white">$1</strong>')
+      .split(/\n\s*\n/)
+      .map((paragraph) => {
+        const trimmed = paragraph.trim()
+        if (!trimmed) return ""
+        if (trimmed.match(/^<h[1-6]/)) return trimmed
+        const withBreaks = trimmed.replace(/\n/g, "<br />")
+        return `<p class="text-gray-500 dark:text-gray-400 font-inter mb-4 leading-relaxed">${withBreaks}</p>`
+      })
+      .filter(Boolean)
+      .join("")
+  }
+
+  const renderCopyOutput = () => {
+    if (!copyResponse) return null
+
+    let content = ""
+    if (Array.isArray(copyResponse)) {
+      const firstItem = copyResponse[0]
+      if (firstItem && typeof firstItem === "object") {
+        content = firstItem.output || firstItem.message || firstItem.copy || ""
+      }
+    } else {
+      content =
+        copyResponse.output ||
+        copyResponse.copy ||
+        copyResponse.content ||
+        copyResponse.message ||
+        copyResponse.data?.output ||
+        copyResponse.data?.content
+    }
+
+    if (!content) {
+      return (
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-poppins">Your generated copy</h2>
+          <div className="bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+            <p className="text-yellow-800 dark:text-yellow-100 font-inter mb-2">
+              Response received but no content found
+            </p>
+            <details className="text-sm">
+              <summary className="cursor-pointer text-yellow-600 dark:text-yellow-300 font-medium">
+                View Raw Response
+              </summary>
+              <pre className="mt-2 text-xs text-yellow-700 dark:text-yellow-200 whitespace-pre-wrap">
+                {JSON.stringify(copyResponse, null, 2)}
+              </pre>
+            </details>
+          </div>
+        </div>
+      )
+    }
+
+    const htmlContent = parseMarkdownToHTML(content)
+
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-poppins">Your generated copy</h2>
+          <Button
+            onClick={() => navigator.clipboard.writeText(content)}
+            variant="outline"
+            size="sm"
+            className="flex items-center space-x-2"
+          >
+            <Copy className="w-4 h-4" />
+            <span>Copy</span>
+          </Button>
+        </div>
+        <div
+          className="prose prose-lg max-w-none dark:prose-invert"
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
+        />
+      </div>
+    )
+  }
+
+  if (isLoading) {
+    return <ContentLoadingScreen />
+  }
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(90deg, #FFF7ED 0%, #FFF9F6 100%)" }}>
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="h-8 w-8" style={{ color: "#FF7435" }} />
-            <h1
-              className="text-4xl font-bold"
-              style={{
-                fontFamily:
-                  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                color: "#111827",
-              }}
-            >
-              Hero Copy Generator
-            </h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 border-b border-gray-200 dark:border-gray-800">
+        <div className="max-w-6xl mx-auto px-6 py-8 text-center">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="w-10 h-10 bg-[#FF7435] rounded-lg flex items-center justify-center">
+              <Wand2 className="w-6 h-6 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold font-poppins">AI Copy Generator</h1>
           </div>
-          <p
-            className="text-lg"
-            style={{
-              color: "#6B7280",
-              fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-            }}
-          >
-            Generate compelling landing page copy for your product in seconds
+          <p className="text-gray-500 dark:text-gray-400 font-inter text-lg max-w-2xl mx-auto">
+            Craft marketing copy tailored to your product, audience, and tone of voice
           </p>
         </div>
+      </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          {/* Input Form */}
-          <Card className="shadow-lg border-0" style={{ backgroundColor: "#F9FAFB" }}>
-            <CardHeader>
-              <CardTitle
-                style={{
-                  fontFamily:
-                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                  color: "#111827",
-                }}
-              >
-                Product Details
-              </CardTitle>
-              <CardDescription
-                style={{
-                  color: "#6B7280",
-                  fontFamily:
-                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                }}
-              >
-                Tell us about your product to generate personalized copy
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+      {/* Main Content */}
+      <div className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-180px)]">
+        {/* Form Section */}
+        <div className="w-full md:w-1/2 bg-gray-50 dark:bg-[#0a0a0a] p-8 overflow-y-auto">
+          <div className="max-w-md mx-auto">
+            <div className="bg-white dark:bg-[#111111] rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-800">
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold font-poppins mb-2">Generate Product Copy</h2>
+                <p className="text-gray-500 dark:text-gray-400 font-inter">
+                  Fill out the form below to create compelling marketing copy
+                </p>
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="name"
-                    style={{
-                      color: "#111827",
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Your Name
+                  <Label htmlFor="name" className="font-medium font-inter">
+                    Name
                   </Label>
                   <Input
                     id="name"
                     name="name"
                     type="text"
-                    placeholder="Enter your name"
                     value={formData.name}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
                     required
-                    className="border-gray-200 focus:border-[#FF7435] focus:ring-[#FF7435]"
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg"
+                    placeholder="Enter your name"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="email"
-                    style={{
-                      color: "#111827",
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Email Address
+                  <Label htmlFor="email" className="font-medium font-inter">
+                    Email
                   </Label>
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="Enter your email"
                     value={formData.email}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     required
-                    className="border-gray-200 focus:border-[#FF7435] focus:ring-[#FF7435]"
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg"
+                    placeholder="Enter your email"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="productName"
-                    style={{
-                      color: "#111827",
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Product Name
-                  </Label>
-                  <Input
-                    id="productName"
-                    name="productName"
-                    type="text"
-                    placeholder="Enter your product name"
-                    value={formData.productName}
-                    onChange={handleInputChange}
-                    required
-                    className="border-gray-200 focus:border-[#FF7435] focus:ring-[#FF7435]"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="productFeatures"
-                    style={{
-                      color: "#111827",
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Product Features
+                  <Label htmlFor="product" className="font-medium font-inter">
+                    Product or Service
                   </Label>
                   <Textarea
-                    id="productFeatures"
-                    name="productFeatures"
-                    placeholder="Describe your product's key features and benefits..."
-                    value={formData.productFeatures}
-                    onChange={handleInputChange}
+                    id="product"
+                    name="product"
+                    value={formData.product}
+                    onChange={(e) => handleInputChange("product", e.target.value)}
                     required
                     rows={4}
-                    className="border-gray-200 focus:border-[#FF7435] focus:ring-[#FF7435] resize-none"
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter resize-none rounded-lg"
+                    placeholder="Describe your product or service..."
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="targetAudience" className="font-medium font-inter">
+                    Target Audience
+                  </Label>
+                  <Textarea
+                    id="targetAudience"
+                    name="targetAudience"
+                    value={formData.targetAudience}
+                    onChange={(e) => handleInputChange("targetAudience", e.target.value)}
+                    required
+                    rows={3}
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter resize-none rounded-lg"
+                    placeholder="Describe your target audience..."
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tone" className="font-medium font-inter">
+                    Tone of Voice
+                  </Label>
+                  <Input
+                    id="tone"
+                    name="tone"
+                    type="text"
+                    value={formData.tone}
+                    onChange={(e) => handleInputChange("tone", e.target.value)}
+                    required
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg"
+                    placeholder="e.g., Professional, Friendly, Casual"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  disabled={!isFormValid || isLoading}
-                  className="w-full text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 hover:shadow-lg"
-                  style={{
-                    backgroundColor: "#FF7435",
-                    fontFamily:
-                      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    fontWeight: 600,
-                    padding: "16px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#E6661F"
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#FF7435"
-                  }}
+                  disabled={isLoading}
+                  className="w-full bg-[#FF7435] hover:bg-[#E6681F] dark:hover:bg-[#d45616] text-white font-semibold rounded-lg transition-colors duration-200 font-inter"
+                  style={{ padding: "16px", fontWeight: 600 }}
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating Copy...
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Generating...
                     </>
                   ) : (
-                    <>
-                      <Sparkles className="mr-2 h-4 w-4" />
-                      Generate Hero Copy
-                    </>
+                    "Generate Copy"
                   )}
                 </Button>
               </form>
-            </CardContent>
-          </Card>
 
-          {/* Generated Copy Display */}
-          <div className="space-y-6">
-            {generatedCopy ? (
-              <>
-                {/* Ad Copy Section */}
-                <Card className="shadow-lg border-0" style={{ backgroundColor: "#F9FAFB" }}>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <div>
-                      <CardTitle
-                        style={{
-                          fontFamily:
-                            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                          color: "#111827",
-                        }}
-                      >
-                        Generated Ad Copy
-                      </CardTitle>
-                      <CardDescription
-                        style={{
-                          color: "#6B7280",
-                          fontFamily:
-                            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                        }}
-                      >
-                        Your personalized hero section copy
-                      </CardDescription>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => copyToClipboard(generatedCopy.adCopy, "Ad Copy")}
-                      className="shrink-0"
-                    >
-                      {copiedText === "Ad Copy" ? (
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                      ) : (
-                        <Copy className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="p-4 rounded-lg border-l-4 bg-white" style={{ borderLeftColor: "#FF7435" }}>
-                      <p
-                        className="text-sm leading-relaxed whitespace-pre-line"
-                        style={{
-                          color: "#111827",
-                          fontFamily:
-                            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                        }}
-                      >
-                        {generatedCopy.adCopy}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
+              {message && (
+                <Alert
+                  className={`mt-4 ${
+                    message.type === "success"
+                      ? "bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800 text-green-800 dark:text-green-100"
+                      : "bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800 text-red-800 dark:text-red-100"
+                  }`}
+                >
+                  <div className="flex items-center">
+                    {message.type === "success" ? (
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                    ) : (
+                      <XCircle className="w-4 h-4 mr-2" />
+                    )}
+                    <AlertDescription className="font-inter">{message.text}</AlertDescription>
+                  </div>
+                </Alert>
+              )}
 
-                {/* CTAs Section */}
-                {generatedCopy.ctas.length > 0 && (
-                  <Card className="shadow-lg border-0" style={{ backgroundColor: "#F9FAFB" }}>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                      <div>
-                        <CardTitle
-                          style={{
-                            fontFamily:
-                              "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                            color: "#111827",
-                          }}
-                        >
-                          Call-to-Action Buttons
-                        </CardTitle>
-                        <CardDescription
-                          style={{
-                            color: "#6B7280",
-                            fontFamily:
-                              "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                          }}
-                        >
-                          Ready-to-use CTA suggestions
-                        </CardDescription>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => copyToClipboard(generatedCopy.ctas.join("\n"), "CTAs")}
-                        className="shrink-0"
-                      >
-                        {copiedText === "CTAs" ? (
-                          <CheckCircle className="h-4 w-4 text-green-600" />
-                        ) : (
-                          <Copy className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        {generatedCopy.ctas.map((cta, index) => (
-                          <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg border">
-                            <span
-                              className="font-medium"
-                              style={{
-                                color: "#111827",
-                                fontFamily:
-                                  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                              }}
-                            >
-                              {cta}
-                            </span>
-                            <Button variant="ghost" size="sm" onClick={() => copyToClipboard(cta, `CTA ${index + 1}`)}>
-                              {copiedText === `CTA ${index + 1}` ? (
-                                <CheckCircle className="h-4 w-4 text-green-600" />
-                              ) : (
-                                <Copy className="h-4 w-4" />
-                              )}
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </>
+              {debugInfo && (
+                <details className="mt-4 text-xs">
+                  <summary className="cursor-pointer text-gray-500 dark:text-gray-400 font-inter">Debug Info</summary>
+                  <pre className="mt-2 p-2 bg-gray-100 dark:bg-zinc-800 rounded text-gray-600 dark:text-gray-300 whitespace-pre-wrap overflow-auto max-h-32">
+                    {debugInfo}
+                  </pre>
+                </details>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Output Section */}
+        <div className="w-full md:w-1/2 bg-white dark:bg-[#111111] p-8 overflow-y-auto border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-800">
+          <div className="max-w-2xl mx-auto">
+            {copyResponse ? (
+              renderCopyOutput()
             ) : (
-              <Card className="shadow-lg border-0" style={{ backgroundColor: "#F9FAFB" }}>
-                <CardContent className="flex flex-col items-center justify-center py-12">
-                  <Sparkles className="h-12 w-12 mb-4" style={{ color: "#FF7435" }} />
-                  <h3
-                    className="text-lg font-semibold mb-2"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      color: "#111827",
-                    }}
-                  >
-                    Ready to Generate Copy?
-                  </h3>
-                  <p
-                    className="text-center"
-                    style={{
-                      color: "#6B7280",
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    Fill out the form to generate compelling hero copy for your landing page.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="flex items-center justify-center h-full min-h-[400px]">
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 bg-gray-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto">
+                    <Megaphone className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-poppins mb-2">
+                      Your generated copy will appear here
+                    </h3>
+                    <p className="text-gray-500 dark:text-gray-400 font-inter">
+                      Fill out the form and click generate to get started.
+                    </p>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>

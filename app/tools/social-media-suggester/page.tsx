@@ -10,8 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle, XCircle, Hash, MessageSquare } from "lucide-react"
-
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
+import { ContentLoadingScreen } from "@/components/loading-screen"
 
 interface FormData {
   name: string
@@ -73,7 +72,6 @@ export default function CaptionGenerator() {
       setResponse(data)
       setSuccess(true)
 
-      // Reset form after successful submission
       setFormData({
         name: "",
         email: "",
@@ -88,11 +86,12 @@ export default function CaptionGenerator() {
     }
   }
 
-   if (isLoading) {    
-        return < ContentLoadingScreen />  }
+  if (isLoading) {
+    return <ContentLoadingScreen />
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-orange-100 to-amber-50 p-4">
+    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] p-4 text-gray-900 dark:text-white">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="text-center py-8 animate-fade-in">
@@ -100,59 +99,48 @@ export default function CaptionGenerator() {
             <MessageSquare className="h-8 w-8 text-orange-500" />
             <Hash className="h-8 w-8 text-orange-500" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-poppins">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-poppins">
             Caption & Hashtag Generator
           </h1>
-          <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto">
+          <p className="text-gray-600 dark:text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
             Create engaging social media captions and hashtags tailored to your audience and tone
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Form Card */}
-          <Card className="backdrop-blur-lg bg-white/95 border-gray-200 shadow-2xl animate-slide-up">
-            <CardHeader className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-t-lg">
-              <CardTitle className="text-gray-900 text-2xl font-poppins">Generate Your Content</CardTitle>
-              <CardDescription className="text-gray-600">
+          <Card className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-2xl animate-slide-up">
+            <CardHeader className="bg-gray-100 dark:bg-zinc-800 rounded-t-lg">
+              <CardTitle className="text-2xl font-poppins">Generate Your Content</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-400">
                 Fill in the details below to create perfect captions and hashtags
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-gray-900 font-medium font-poppins">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-all duration-300"
-                    placeholder="Enter your name"
-                  />
-                </div>
+                {[
+                  { id: "name", label: "Name", type: "text", placeholder: "Enter your name" },
+                  { id: "email", label: "Email", type: "email", placeholder: "Enter your email" },
+                  { id: "targetAudience", label: "Target Audience", type: "text", placeholder: "e.g., young professionals" },
+                  { id: "tonality", label: "Tonality", type: "text", placeholder: "e.g., formal, humorous, persuasive" },
+                ].map(({ id, label, type, placeholder }) => (
+                  <div className="space-y-2" key={id}>
+                    <Label htmlFor={id} className="font-medium font-poppins">{label}</Label>
+                    <Input
+                      id={id}
+                      name={id}
+                      type={type}
+                      value={(formData as any)[id]}
+                      onChange={handleInputChange}
+                      required
+                      className="bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 transition-all duration-300"
+                      placeholder={placeholder}
+                    />
+                  </div>
+                ))}
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-900 font-medium font-poppins">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-all duration-300"
-                    placeholder="Enter your email"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="postDetails" className="text-gray-900 font-medium font-poppins">
+                  <Label htmlFor="postDetails" className="font-medium font-poppins">
                     Post Details
                   </Label>
                   <Textarea
@@ -162,40 +150,8 @@ export default function CaptionGenerator() {
                     onChange={handleInputChange}
                     required
                     rows={4}
-                    className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-all duration-300 resize-none"
+                    className="bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 transition-all duration-300 resize-none"
                     placeholder="Describe what your post is about..."
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="targetAudience" className="text-gray-900 font-medium font-poppins">
-                    Target Audience
-                  </Label>
-                  <Input
-                    id="targetAudience"
-                    name="targetAudience"
-                    type="text"
-                    value={formData.targetAudience}
-                    onChange={handleInputChange}
-                    required
-                    className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-all duration-300"
-                    placeholder="e.g., young professionals, fitness enthusiasts"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="tonality" className="text-gray-900 font-medium font-poppins">
-                    Tonality
-                  </Label>
-                  <Input
-                    id="tonality"
-                    name="tonality"
-                    type="text"
-                    value={formData.tonality}
-                    onChange={handleInputChange}
-                    required
-                    className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-all duration-300"
-                    placeholder="e.g., formal, humorous, casual, persuasive"
                   />
                 </div>
 
@@ -217,111 +173,59 @@ export default function CaptionGenerator() {
             </CardContent>
           </Card>
 
-          {/* Results Card */}
+          {/* Results */}
           <div className="space-y-6">
-            {/* Status Messages */}
             {error && (
-              <Alert className="bg-red-50 border-red-200 animate-fade-in">
+              <Alert className="bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800 animate-fade-in">
                 <XCircle className="h-4 w-4 text-red-500" />
-                <AlertDescription className="text-red-700">{error}</AlertDescription>
+                <AlertDescription className="text-red-700 dark:text-red-100">{error}</AlertDescription>
               </Alert>
             )}
 
-            {success && !error && (
-              <Alert className="bg-green-50 border-green-200 animate-fade-in">
+            {success && response?.output && (
+              <Alert className="bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800 animate-fade-in">
                 <CheckCircle className="h-4 w-4 text-green-500" />
-                <AlertDescription className="text-green-700">
+                <AlertDescription className="text-green-700 dark:text-green-100">
                   Caption and hashtags generated successfully!
                 </AlertDescription>
               </Alert>
             )}
 
-            {/* Response Display */}
-            {response && (
-              <div className="space-y-6">
-                {/* Clean heading like in the photo */}
-                <div className="text-left">
-                  <h2 className="text-2xl font-bold text-gray-900 font-poppins">
-                    Your Social media caption with hashtags
-                  </h2>
-                </div>
-
-                <Card className="backdrop-blur-lg bg-white/95 border-gray-200 shadow-lg">
-                  <CardContent className="p-6">
-                    {response.output && (
-                      <div className="space-y-4">
-                        <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
-                          <div className="prose prose-gray max-w-none">
-                            {response.output.split("\n").map((line, index) => {
-                              if (line.trim() === "") {
-                                return <br key={index} />
-                              }
-
-                              // Check if line contains hashtags
-                              const hashtagRegex = /#[\w]+/g
-                              const parts = line.split(hashtagRegex)
-                              const hashtags = line.match(hashtagRegex) || []
-
-                              return (
-                                <p key={index} className="text-gray-700 leading-relaxed mb-3 last:mb-0">
-                                  {parts.map((part, partIndex) => (
-                                    <span key={partIndex}>
-                                      {part}
-                                      {hashtags[partIndex] && (
-                                        <span className="inline-flex items-center bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-sm font-medium mx-1">
-                                          {hashtags[partIndex]}
-                                        </span>
-                                      )}
-                                    </span>
-                                  ))}
-                                </p>
-                              )
-                            })}
-                          </div>
-                        </div>
-
-                        {/* Copy to Clipboard Button */}
-                        <Button
-                          onClick={() => navigator.clipboard.writeText(response.output || "")}
-                          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-300 transform hover:scale-105"
-                        >
-                          Copy to Clipboard
-                        </Button>
-                      </div>
-                    )}
-
-                    {response.message && (
-                      <div className="space-y-2 mt-4">
-                        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-                          <p className="text-gray-700">{response.message}</p>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
+            {response?.output && (
+              <Card className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 shadow-lg">
+                <CardContent className="p-6">
+                  <div className="bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl p-6">
+                    <div className="prose prose-gray dark:prose-invert max-w-none">
+                      {response.output.split("\n").map((line, index) => (
+                        <p key={index} className="leading-relaxed mb-3 last:mb-0">
+                          {line}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => navigator.clipboard.writeText(response.output || "")}
+                    className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-300 transform hover:scale-105"
+                  >
+                    Copy to Clipboard
+                  </Button>
+                </CardContent>
+              </Card>
             )}
 
-            {/* Placeholder when no content */}
-            {!response && !error && !isLoading && (
-              <div className="space-y-6">
-                <div className="text-left">
-                  <h2 className="text-2xl font-bold text-gray-400 font-poppins">
-                    Your Social media caption with hashtags
-                  </h2>
-                </div>
-
-                <Card className="backdrop-blur-lg bg-gray-50 border-gray-200 shadow-lg">
-                  <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                    <div className="flex items-center gap-2 mb-4 opacity-50">
-                      <MessageSquare className="h-8 w-8 text-gray-400" />
-                      <Hash className="h-8 w-8 text-gray-400" />
-                    </div>
-                    <p className="text-gray-500 text-lg">Your generated content will appear here</p>
-                    <p className="text-gray-400 text-sm mt-2">Fill out the form and click generate to get started</p>
-                  </CardContent>
-                </Card>
-              </div>
+            {!response?.output && !isLoading && !error && (
+              <Card className="bg-gray-50 dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 shadow-lg">
+                <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="flex items-center gap-2 mb-4 opacity-50">
+                    <MessageSquare className="h-8 w-8 text-gray-400" />
+                    <Hash className="h-8 w-8 text-gray-400" />
+                  </div>
+                  <p className="text-gray-500 dark:text-gray-400 text-lg">Your generated content will appear here</p>
+                  <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
+                    Fill out the form and click generate to get started
+                  </p>
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>

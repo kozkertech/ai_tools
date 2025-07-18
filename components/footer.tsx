@@ -134,29 +134,29 @@ export default function Footer() {
               <li className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-primary" />
                 <Link
-                  href="mailto:hello@kozkertech.com"
+                  href="mailto:info@kozkertech.com"
                   className="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
                 >
-                  hello@kozkertech.com
+                  info@kozkertech.com
                 </Link>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-primary" />
                 <Link
-                  href="tel:+917306261147"
+                  href="tel:+91 7306261147"
                   className="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
                 >
-                  +91-7306261147
+                  +91 73062-61147 
                 </Link>
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin className="h-4 w-4 text-primary mt-0.5" />
                 <span className="text-gray-600 dark:text-gray-300 text-sm">
-                  11/1927, 1st Floor, Adithya Shopping Complex
+                  11/927,1st Floor Adithya Shopping Complex
                   <br />
-                  Kochupally Road, Thoppumpady,
-                  <br />
-                  Kochi, Kerala,India, PO. 682005
+                  IKochupally Road , Thoppumpady
+                  <br/>
+                  Kochi, Kerala, India, PO. 682005
                 </span>
               </li>
             </ul>

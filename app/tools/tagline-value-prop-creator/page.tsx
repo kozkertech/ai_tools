@@ -98,16 +98,13 @@ export default function TaglineCreator() {
     setError(null)
 
     try {
-      const response = await fetch(
-        "https://n8n.srv832341.hstgr.cloud/webhook/785ebaf0-797f-4c57-9a13-706fb085b748",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/785ebaf0-797f-4c57-9a13-706fb085b748", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      )
+        body: JSON.stringify(formData),
+      })
 
       if (!response.ok) {
         throw new Error("Failed to generate tagline")
@@ -130,8 +127,9 @@ export default function TaglineCreator() {
     }
   }
 
-   if (isLoading) {    
-        return < ContentLoadingScreen />  }
+  if (isLoading) {
+    return <ContentLoadingScreen />
+  }
 
   const resetForm = () => {
     setFormData({
@@ -149,33 +147,26 @@ export default function TaglineCreator() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#F9FAFB" }}>
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-800">
       {/* Header */}
-      <div
-        className="py-12 px-4"
-        style={{
-          background: "linear-gradient(90deg, #FFF7ED 0%, #FFF9F6 100%)",
-        }}
-      >
+      <div className="py-12 px-4 bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900">
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center mb-4">
             <Sparkles className="w-8 h-8 mr-3" style={{ color: "#FF7435" }} />
             <h1
-              className="text-4xl font-bold"
+              className="text-4xl font-bold text-gray-900 dark:text-white"
               style={{
                 fontFamily:
                   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                color: "#111827",
               }}
             >
               AI Tagline Creator
             </h1>
           </div>
           <p
-            className="text-lg max-w-2xl mx-auto"
+            className="text-lg max-w-2xl mx-auto text-gray-500 dark:text-gray-400"
             style={{
               fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-              color: "#6B7280",
             }}
           >
             Create compelling taglines and unique value propositions that capture your brand's essence and resonate with
@@ -187,22 +178,21 @@ export default function TaglineCreator() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Form Section */}
-          <Card className="shadow-lg border-0">
+          <Card className="shadow-lg border border-gray-100 dark:border-gray-800">
             <CardHeader>
               <CardTitle
-                className="text-2xl flex items-center"
+                className="text-2xl flex items-center text-gray-900 dark:text-white"
                 style={{
                   fontFamily:
                     "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                  color: "#111827",
                 }}
               >
                 <Building2 className="w-6 h-6 mr-2" style={{ color: "#FF7435" }} />
                 Tell Us About Your Business
               </CardTitle>
               <CardDescription
+                className="text-gray-500 dark:text-gray-400"
                 style={{
-                  color: "#6B7280",
                   fontFamily:
                     "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                 }}
@@ -216,8 +206,8 @@ export default function TaglineCreator() {
                   <div className="space-y-2">
                     <Label
                       htmlFor="name"
+                      className="text-gray-900 dark:text-white"
                       style={{
-                        color: "#111827",
                         fontFamily:
                           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                       }}
@@ -235,8 +225,8 @@ export default function TaglineCreator() {
                   <div className="space-y-2">
                     <Label
                       htmlFor="email"
+                      className="text-gray-900 dark:text-white"
                       style={{
-                        color: "#111827",
                         fontFamily:
                           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                       }}
@@ -257,8 +247,8 @@ export default function TaglineCreator() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="companyName"
+                    className="text-gray-900 dark:text-white"
                     style={{
-                      color: "#111827",
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                     }}
@@ -277,8 +267,8 @@ export default function TaglineCreator() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="industry"
+                    className="text-gray-900 dark:text-white"
                     style={{
-                      color: "#111827",
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                     }}
@@ -302,8 +292,8 @@ export default function TaglineCreator() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="targetAudience"
+                    className="text-gray-900 dark:text-white"
                     style={{
-                      color: "#111827",
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                     }}
@@ -323,8 +313,8 @@ export default function TaglineCreator() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="keyProductsServices"
+                    className="text-gray-900 dark:text-white"
                     style={{
-                      color: "#111827",
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                     }}
@@ -344,8 +334,8 @@ export default function TaglineCreator() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="differentiator"
+                    className="text-gray-900 dark:text-white"
                     style={{
-                      color: "#111827",
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                     }}
@@ -365,8 +355,8 @@ export default function TaglineCreator() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="tonePreference"
+                    className="text-gray-900 dark:text-white"
                     style={{
-                      color: "#111827",
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                     }}
@@ -427,10 +417,10 @@ export default function TaglineCreator() {
           {/* Results Section */}
           <div className="space-y-6">
             {error && (
-              <Card className="border-red-200 bg-red-50">
+              <Card className="border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900">
                 <CardContent className="pt-6">
                   <p
-                    className="text-red-600"
+                    className="text-red-600 dark:text-red-400"
                     style={{
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
@@ -443,14 +433,13 @@ export default function TaglineCreator() {
             )}
 
             {result && (
-              <Card className="shadow-lg border-0">
+              <Card className="shadow-lg border border-gray-100 dark:border-gray-800">
                 <CardHeader>
                   <CardTitle
-                    className="text-2xl flex items-center"
+                    className="text-2xl flex items-center text-gray-900 dark:text-white"
                     style={{
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      color: "#111827",
                     }}
                   >
                     <Target className="w-6 h-6 mr-2" style={{ color: "#FF7435" }} />
@@ -458,13 +447,12 @@ export default function TaglineCreator() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="p-6 rounded-lg" style={{ backgroundColor: "#FFF7ED" }}>
+                  <div className="p-6 rounded-lg bg-orange-50 dark:bg-zinc-900">
                     <h3
-                      className="text-lg font-semibold mb-3"
+                      className="text-lg font-semibold mb-3 text-gray-900 dark:text-white"
                       style={{
                         fontFamily:
                           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                        color: "#111827",
                       }}
                     >
                       Tagline
@@ -481,36 +469,32 @@ export default function TaglineCreator() {
                     </p>
                   </div>
 
-                  <div className="p-6 rounded-lg" style={{ backgroundColor: "#F9FAFB" }}>
+                  <div className="p-6 rounded-lg bg-gray-50 dark:bg-zinc-800">
                     <h3
-                      className="text-lg font-semibold mb-3 flex items-center"
+                      className="text-lg font-semibold mb-3 flex items-center text-gray-900 dark:text-white"
                       style={{
                         fontFamily:
                           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                        color: "#111827",
                       }}
                     >
                       <Users className="w-5 h-5 mr-2" style={{ color: "#FF7435" }} />
                       Unique Value Proposition
                     </h3>
                     <p
-                      className="text-base leading-relaxed"
+                      className="text-base leading-relaxed text-gray-500 dark:text-gray-400"
                       style={{
                         fontFamily:
                           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                        color: "#6B7280",
                       }}
                     >
                       {result.uvp}
                     </p>
                   </div>
 
-                  
-
                   <Button
                     onClick={resetForm}
                     variant="outline"
-                    className="w-full font-semibold py-4 rounded-lg"
+                    className="w-full font-semibold py-4 rounded-lg bg-transparent"
                     style={{
                       borderColor: "#FF7435",
                       color: "#FF7435",
@@ -527,14 +511,13 @@ export default function TaglineCreator() {
             )}
 
             {!result && !isLoading && (
-              <Card className="shadow-lg border-0 opacity-50">
+              <Card className="shadow-lg border border-gray-100 dark:border-gray-800 opacity-50">
                 <CardHeader>
                   <CardTitle
-                    className="text-2xl flex items-center"
+                    className="text-2xl flex items-center text-gray-900 dark:text-white"
                     style={{
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      color: "#111827",
                     }}
                   >
                     <Target className="w-6 h-6 mr-2" style={{ color: "#FF7435" }} />
@@ -543,10 +526,10 @@ export default function TaglineCreator() {
                 </CardHeader>
                 <CardContent>
                   <p
+                    className="text-gray-500 dark:text-gray-400"
                     style={{
                       fontFamily:
                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      color: "#6B7280",
                     }}
                   >
                     Fill out the form and click "Generate My Tagline" to see your personalized tagline and unique value

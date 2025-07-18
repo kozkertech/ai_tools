@@ -11,9 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Mail, TrendingUp, Star } from "lucide-react"
-
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
+import { ContentLoadingScreen } from "@/components/loading-screen"
 
 interface GeneratedLine {
   id: number
@@ -53,8 +51,10 @@ export default function EmailGenerator() {
   const [metadata, setMetadata] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  if (loading) {    
-        return < ContentLoadingScreen />  }
+
+  if (loading) {
+    return <ContentLoadingScreen />
+  }
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -96,37 +96,33 @@ export default function EmailGenerator() {
     }
   }
 
-
-        
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
       case "urgency":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100"
       case "offer":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100"
       case "general":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100"
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-orange-50 to-orange-25">
+    <div className="min-h-screen bg-gradient-to-r from-orange-50 to-orange-25 dark:from-[#0a0a0a] dark:to-[#111111] text-gray-900 dark:text-white">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 font-poppins">Email Subject-Line Generator</h1>
-          <p className="text-gray-600 text-lg font-inter">
+          <h1 className="text-4xl font-bold mb-2 font-poppins">Email Subject-Line Generator</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg font-inter">
             Generate high-converting email subject lines and preview text with AI
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Input Form */}
-          <Card className="bg-white shadow-lg">
+          <Card className="bg-white dark:bg-zinc-900 shadow-lg border border-gray-200 dark:border-zinc-800">
             <CardHeader>
-              <CardTitle className="text-gray-900 font-poppins flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2">
                 <Mail className="w-5 h-5 text-orange-500" />
                 Campaign Details
               </CardTitle>
@@ -134,9 +130,7 @@ export default function EmailGenerator() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="campaign_type" className="text-gray-900 font-medium">
-                    Campaign Type
-                  </Label>
+                  <Label>Campaign Type</Label>
                   <Select onValueChange={(value) => handleInputChange("campaign_type", value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select campaign type" />
@@ -152,35 +146,28 @@ export default function EmailGenerator() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="target_audience" className="text-gray-900 font-medium">
-                    Target Audience
-                  </Label>
+                  <Label>Target Audience</Label>
                   <Textarea
-                    id="target_audience"
-                    placeholder="e.g., young e-commerce founders who want to boost sales using automation"
+                    placeholder="e.g., young e-commerce founders..."
                     value={formData.target_audience}
                     onChange={(e) => handleInputChange("target_audience", e.target.value)}
-                    className="min-h-[80px]"
+                    className="min-h-[80px] bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="product_service" className="text-gray-900 font-medium">
-                    Product/Service
-                  </Label>
+                  <Label>Product/Service</Label>
                   <Input
-                    id="product_service"
                     placeholder="e.g., AI-powered email automation platform"
                     value={formData.product_service}
                     onChange={(e) => handleInputChange("product_service", e.target.value)}
+                    className="bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="brand_voice" className="text-gray-900 font-medium">
-                      Brand Voice
-                    </Label>
+                    <Label>Brand Voice</Label>
                     <Select onValueChange={(value) => handleInputChange("brand_voice", value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select voice" />
@@ -196,9 +183,7 @@ export default function EmailGenerator() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="industry" className="text-gray-900 font-medium">
-                      Industry
-                    </Label>
+                    <Label>Industry</Label>
                     <Select onValueChange={(value) => handleInputChange("industry", value)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select industry" />
@@ -216,32 +201,28 @@ export default function EmailGenerator() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="best_subject" className="text-gray-900 font-medium">
-                    Best Performing Subject (Optional)
-                  </Label>
+                  <Label>Best Performing Subject (Optional)</Label>
                   <Input
-                    id="best_subject"
-                    placeholder="e.g., Unlock smarter outreach with AI – Try free today!"
+                    placeholder="e.g., Unlock smarter outreach with AI..."
                     value={formData.best_subject}
                     onChange={(e) => handleInputChange("best_subject", e.target.value)}
+                    className="bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="average_open_rate" className="text-gray-900 font-medium">
-                    Current Average Open Rate (%)
-                  </Label>
+                  <Label>Current Average Open Rate (%)</Label>
                   <Input
-                    id="average_open_rate"
                     type="number"
                     step="0.1"
                     placeholder="20.6"
                     value={formData.average_open_rate}
                     onChange={(e) => handleInputChange("average_open_rate", e.target.value)}
+                    className="bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white"
                   />
                 </div>
 
-                {error && <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">{error}</div>}
+                {error && <div className="text-red-600 dark:text-red-300 text-sm bg-red-50 dark:bg-red-900 p-3 rounded-lg">{error}</div>}
 
                 <Button
                   type="submit"
@@ -261,27 +242,26 @@ export default function EmailGenerator() {
             </CardContent>
           </Card>
 
-          {/* Results */}
           <div className="space-y-6">
             {metadata && (
-              <Card className="bg-white shadow-lg">
+              <Card className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-gray-900 font-poppins flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2">
                     <TrendingUp className="w-5 h-5 text-orange-500" />
                     Performance Overview
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 bg-gray-50 rounded-lg">
-                      <div className="text-2xl font-bold text-gray-900 font-poppins">{metadata.total_options}</div>
-                      <div className="text-sm text-gray-600">Generated Options</div>
+                    <div className="text-center p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg">
+                      <div className="text-2xl font-bold font-poppins">{metadata.total_options}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Generated Options</div>
                     </div>
-                    <div className="text-center p-4 bg-gray-50 rounded-lg">
+                    <div className="text-center p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg">
                       <div className="text-2xl font-bold text-orange-500 font-poppins">
                         {metadata.avg_predicted_open_rate}
                       </div>
-                      <div className="text-sm text-gray-600">Avg. Open Rate</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Avg. Open Rate</div>
                     </div>
                   </div>
                 </CardContent>
@@ -289,9 +269,9 @@ export default function EmailGenerator() {
             )}
 
             {results.length > 0 && (
-              <Card className="bg-white shadow-lg">
+              <Card className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-gray-900 font-poppins flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2">
                     <Star className="w-5 h-5 text-orange-500" />
                     Generated Subject Lines
                   </CardTitle>
@@ -303,7 +283,7 @@ export default function EmailGenerator() {
                       .map((line, index) => (
                         <div
                           key={line.id}
-                          className="p-4 border border-gray-200 rounded-lg hover:border-orange-200 transition-colors"
+                          className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-orange-300 dark:hover:border-orange-600 transition-colors"
                         >
                           <div className="flex items-start justify-between mb-2">
                             <Badge className={getCategoryColor(line.category)}>{line.category}</Badge>
@@ -315,17 +295,21 @@ export default function EmailGenerator() {
 
                           <div className="space-y-2">
                             <div>
-                              <div className="text-xs text-gray-500 mb-1">SUBJECT LINE</div>
-                              <div className="font-semibold text-gray-900 font-inter">{line.subject}</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">SUBJECT LINE</div>
+                              <div className="font-semibold text-gray-900 dark:text-white font-inter">{line.subject}</div>
                             </div>
 
                             <div>
-                              <div className="text-xs text-gray-500 mb-1">PREVIEW TEXT</div>
-                              <div className="text-gray-600 text-sm font-inter">{line.preview}</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">PREVIEW TEXT</div>
+                              <div className="text-gray-600 dark:text-gray-300 text-sm font-inter">{line.preview}</div>
                             </div>
                           </div>
 
-                          {index === 0 && <Badge className="mt-2 bg-orange-100 text-orange-800">Best Performing</Badge>}
+                          {index === 0 && (
+                            <Badge className="mt-2 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200">
+                              Best Performing
+                            </Badge>
+                          )}
                         </div>
                       ))}
                   </div>
@@ -334,10 +318,10 @@ export default function EmailGenerator() {
             )}
 
             {results.length === 0 && !loading && (
-              <Card className="bg-white shadow-lg">
+              <Card className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg">
                 <CardContent className="text-center py-12">
-                  <Mail className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 font-inter">
+                  <Mail className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                  <p className="text-gray-500 dark:text-gray-400 font-inter">
                     Fill out the form and click "Generate Subject Lines" to see your results here.
                   </p>
                 </CardContent>

@@ -10,9 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle, AlertCircle, Loader2, FileText, Download, Copy } from "lucide-react"
 import ReactMarkdown from "react-markdown"
-
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
+import { ContentLoadingScreen } from "@/components/loading-screen"
 
 interface FormData {
   name: string
@@ -57,35 +55,19 @@ export default function ProposalGenerator() {
   }
 
   const extractMarkdownContent = (response: any): string | null => {
-    // Handle array response format
-    if (Array.isArray(response) && response.length > 0) {
-      const firstItem = response[0]
-      if (firstItem.markdown) {
-        return firstItem.markdown
+    if (Array.isArray(response) && response.length > 0 && response[0].markdown) return response[0].markdown
+    if (response?.markdown) return response.markdown
+    for (const key in response) {
+      if (typeof response[key] === "string" && response[key].includes("# Business Proposal")) {
+        return response[key]
       }
     }
-
-    // Handle direct object format
-    if (response && typeof response === "object" && response.markdown) {
-      return response.markdown
-    }
-
-    // Handle nested structures
-    if (response && typeof response === "object") {
-      for (const key in response) {
-        if (typeof response[key] === "string" && response[key].includes("# Business Proposal")) {
-          return response[key]
-        }
-      }
-    }
-
     return null
   }
 
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
-      // You could add a toast notification here
     } catch (err) {
       console.error("Failed to copy text: ", err)
     }
@@ -111,16 +93,11 @@ export default function ProposalGenerator() {
     setWebhookResponse(null)
 
     try {
-      const response = await fetch(
-        "https://n8n.srv832341.hstgr.cloud/webhook/fdf6b12c-513e-4fd8-a13c-b3049fc958f7",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        },
-      )
+      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/fdf6b12c-513e-4fd8-a13c-b3049fc958f7", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
 
       if (response.ok) {
         const responseData = await response.json()
@@ -148,32 +125,26 @@ export default function ProposalGenerator() {
       setIsLoading(false)
     }
   }
-   if (isLoading) {    
-        return < ContentLoadingScreen />  }
+
+  if (isLoading) return <ContentLoadingScreen />
 
   const markdownContent = webhookResponse ? extractMarkdownContent(webhookResponse) : null
 
   const preprocessMarkdown = (content: string): string => {
-    // Ensure proper markdown formatting
-    return content
-      .replace(/\*\*(.*?)\*\*/g, "**$1**") // Ensure bold formatting is consistent
-      .replace(/\*(.*?)\*/g, "*$1*") // Ensure italic formatting is consistent
-      .trim()
+    return content.replace(/\*\*(.*?)\*\*/g, "**$1**").replace(/\*(.*?)\*/g, "*$1*").trim()
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8 py-8 px-6 rounded-2xl bg-gradient-to-r from-orange-50 to-orange-100/50 backdrop-blur-sm">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 font-poppins mb-4">Client Proposal Generator</h1>
-          <p className="text-lg text-gray-600 font-inter max-w-2xl mx-auto">
+        <div className="text-center mb-8 py-8 px-6 rounded-2xl bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-gray-800 dark:to-gray-700 backdrop-blur-sm">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white font-poppins mb-4">Client Proposal Generator</h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 font-inter max-w-2xl mx-auto">
             Fill out the form below to generate your professional client proposal instantly
           </p>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-          {/* Form Section */}
           <Card className="bg-white/80 backdrop-blur-sm border-gray-200 shadow-xl">
             <CardHeader className="space-y-2">
               <CardTitle className="text-2xl font-bold text-gray-900 font-poppins">Proposal Details</CardTitle>

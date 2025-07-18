@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, type FormEvent } from "react"
+import { useState, useEffect, type FormEvent } from "react"
 import {
   Search,
   Globe,
@@ -28,7 +28,6 @@ import { useToast } from "@/hooks/use-toast"
 
 import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
 
-
 interface FormDataState {
   name: string
   email: string
@@ -44,7 +43,50 @@ interface DomainAPIResult {
 type ViewMode = "grid" | "list"
 type FilterMode = "all" | "available" | "unavailable"
 
+// Theme-aware color system
+const getThemeColors = (isDark: boolean) => ({
+  background: isDark ? '#0F172A' : '#F9FAFB',
+  cardBackground: isDark ? '#1E293B' : '#FFFFFF',
+  headerBackground: isDark ? 'linear-gradient(90deg, #1E293B 0%, #334155 100%)' : 'linear-gradient(90deg, #FFF7ED 0%, #FFF9F6 100%)',
+  textPrimary: isDark ? '#F1F5F9' : '#111827',
+  textSecondary: isDark ? '#94A3B8' : '#6B7280',
+  textTertiary: isDark ? '#64748B' : '#9CA3AF',
+  border: isDark ? '#334155' : '#E5E7EB',
+  inputBackground: isDark ? '#334155' : '#FFFFFF',
+  hoverBackground: isDark ? '#334155' : '#F9FAFB',
+  accent: '#FF7435', // Keep brand color consistent
+  accentHover: '#E6651E',
+  success: isDark ? '#059669' : '#10B981',
+  successBackground: isDark ? '#064E3B' : '#D1FAE5',
+  successBorder: isDark ? '#047857' : '#A7F3D0',
+  error: isDark ? '#DC2626' : '#EF4444',
+  errorBackground: isDark ? '#7F1D1D' : '#FEE2E2',
+  errorBorder: isDark ? '#B91C1C' : '#FECACA',
+})
+
 export default function DomainCheckerPage() {
+  const [isDark, setIsDark] = useState(false)
+  
+  // Detect theme changes from external navbar toggle
+  useEffect(() => {
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains('dark'))
+    }
+    
+    checkTheme() // Initial check
+    
+    // Watch for theme changes
+    const observer = new MutationObserver(checkTheme)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+    
+    return () => observer.disconnect()
+  }, [])
+  
+  const colors = getThemeColors(isDark)
+  
   const [formData, setFormData] = useState<FormDataState>({
     name: "",
     email: "",
@@ -119,12 +161,7 @@ export default function DomainCheckerPage() {
     setApiError("")
     setSearchFilter("")
 
-    
-
     try {
-
-     
-
       const webhookUrl = "https://n8n.srv832341.hstgr.cloud/webhook/6f7b288e-1efe-4504-a6fd-660931327269"
       const params = new URLSearchParams({
         name: formData.name,
@@ -152,8 +189,6 @@ export default function DomainCheckerPage() {
           return
         }
 
-          
-        
         const sanitizedResponse = responseText.trim()
         try {
           const parsedJson = JSON.parse(sanitizedResponse)
@@ -319,7 +354,11 @@ export default function DomainCheckerPage() {
   const renderDomainCard = (result: DomainAPIResult, index: number) => (
     <Card
       key={index}
-      className="transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg cursor-pointer border border-gray-200 bg-white"
+      className="transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg cursor-pointer border"
+      style={{ 
+        backgroundColor: colors.cardBackground,
+        borderColor: colors.border
+      }}
       onClick={() => handleDomainCardClick(result)}
     >
       <CardContent className="p-4">
@@ -328,8 +367,8 @@ export default function DomainCheckerPage() {
             variant={result.Availability === "Available" ? "default" : "secondary"}
             className={`${
               result.Availability === "Available"
-                ? "bg-green-100 text-green-800 border-green-200"
-                : "bg-red-100 text-red-800 border-red-200"
+                ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100 dark:border-green-800"
+                : "bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-100 dark:border-red-800"
             } flex items-center gap-1 text-xs font-medium`}
           >
             {result.Availability === "Available" ? <CheckCircle size={12} /> : <XCircle size={12} />}
@@ -338,7 +377,10 @@ export default function DomainCheckerPage() {
           <Button
             variant="ghost"
             size="icon"
-            className="text-gray-400 hover:text-[#FF7435] hover:bg-orange-50 w-6 h-6"
+            className="w-6 h-6 transition-colors"
+            style={{ 
+              color: favorites.includes(result.Domain) ? colors.accent : colors.textTertiary 
+            }}
             onClick={(e) => {
               e.stopPropagation()
               toggleFavorite(result.Domain)
@@ -347,19 +389,30 @@ export default function DomainCheckerPage() {
             <Heart
               size={14}
               className={`transition-all ${
-                favorites.includes(result.Domain) ? "fill-[#FF7435] text-[#FF7435]" : "text-gray-400"
+                favorites.includes(result.Domain) ? "fill-current" : ""
               }`}
             />
           </Button>
         </div>
-        <h3 className="font-semibold text-lg mb-2 break-all leading-tight text-[#111827] font-['Poppins']">
+        <h3 className="font-semibold text-lg mb-2 break-all leading-tight font-['Poppins']" style={{ color: colors.textPrimary }}>
           {result.Domain}
         </h3>
         <div className="flex gap-2 mt-3">
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 border-gray-200 text-[#6B7280] hover:bg-gray-50 text-xs py-2 px-4 font-medium"
+            className="flex-1 text-xs py-2 px-4 font-medium transition-colors"
+            style={{ 
+              borderColor: colors.border,
+              color: colors.textSecondary,
+              backgroundColor: 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.hoverBackground
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent'
+            }}
             onClick={(e) => {
               e.stopPropagation()
               copyToClipboard(result.Domain)
@@ -370,7 +423,16 @@ export default function DomainCheckerPage() {
           {result.Availability === "Available" && (
             <Button
               size="sm"
-              className="flex-1 bg-[#FF7435] hover:bg-[#E6682F] text-white text-xs py-2 px-4 font-semibold rounded"
+              className="flex-1 text-white text-xs py-2 px-4 font-semibold rounded transition-colors"
+              style={{ 
+                backgroundColor: colors.accent,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.accentHover
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = colors.accent
+              }}
               onClick={(e) => {
                 e.stopPropagation()
                 handleDomainCardClick(result)
@@ -387,7 +449,17 @@ export default function DomainCheckerPage() {
   const renderDomainRow = (result: DomainAPIResult, index: number) => (
     <div
       key={index}
-      className="flex items-center justify-between p-4 rounded-lg border border-gray-200 cursor-pointer transition-all duration-300 hover:bg-gray-50 bg-white"
+      className="flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-all duration-300"
+      style={{ 
+        backgroundColor: colors.cardBackground,
+        borderColor: colors.border
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = colors.hoverBackground
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = colors.cardBackground
+      }}
       onClick={() => handleDomainCardClick(result)}
     >
       <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -395,22 +467,25 @@ export default function DomainCheckerPage() {
           variant={result.Availability === "Available" ? "default" : "secondary"}
           className={`${
             result.Availability === "Available"
-              ? "bg-green-100 text-green-800 border-green-200"
-              : "bg-red-100 text-red-800 border-red-200"
+              ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100 dark:border-green-800"
+              : "bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-100 dark:border-red-800"
           } flex items-center gap-1 text-xs font-medium shrink-0`}
         >
           {result.Availability === "Available" ? <CheckCircle size={12} /> : <XCircle size={12} />}
           {result.Availability}
         </Badge>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-[#111827] text-lg break-all font-['Poppins']">{result.Domain}</h3>
+          <h3 className="font-semibold text-lg break-all font-['Poppins']" style={{ color: colors.textPrimary }}>{result.Domain}</h3>
         </div>
       </div>
       <div className="flex items-center gap-2 shrink-0">
         <Button
           variant="ghost"
           size="icon"
-          className="text-gray-400 hover:text-[#FF7435] hover:bg-orange-50 w-8 h-8"
+          className="w-8 h-8 transition-colors"
+          style={{ 
+            color: favorites.includes(result.Domain) ? colors.accent : colors.textTertiary 
+          }}
           onClick={(e) => {
             e.stopPropagation()
             toggleFavorite(result.Domain)
@@ -419,14 +494,25 @@ export default function DomainCheckerPage() {
           <Heart
             size={16}
             className={`transition-all ${
-              favorites.includes(result.Domain) ? "fill-[#FF7435] text-[#FF7435]" : "text-gray-400"
+              favorites.includes(result.Domain) ? "fill-current" : ""
             }`}
           />
         </Button>
         <Button
           variant="outline"
           size="sm"
-          className="border-gray-200 text-[#6B7280] hover:bg-gray-50 font-medium"
+          className="font-medium transition-colors"
+          style={{ 
+            borderColor: colors.border,
+            color: colors.textSecondary,
+            backgroundColor: 'transparent'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = colors.hoverBackground
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent'
+          }}
           onClick={(e) => {
             e.stopPropagation()
             copyToClipboard(result.Domain)
@@ -437,7 +523,16 @@ export default function DomainCheckerPage() {
         {result.Availability === "Available" && (
           <Button
             size="sm"
-            className="bg-[#FF7435] hover:bg-[#E6682F] text-white font-semibold rounded px-4"
+            className="text-white font-semibold rounded px-4 transition-colors"
+            style={{ 
+              backgroundColor: colors.accent,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.accentHover
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = colors.accent
+            }}
             onClick={(e) => {
               e.stopPropagation()
               handleDomainCardClick(result)
@@ -451,34 +546,34 @@ export default function DomainCheckerPage() {
   )
 
   return (
-    <div className="min-h-screen w-full bg-[#F9FAFB] font-['Inter']">
+    <div className="min-h-screen w-full font-['Inter'] transition-colors duration-200" style={{ backgroundColor: colors.background }}>
       {/* Header Section with Gradient */}
       <div
         className="w-full p-4 md:p-8 flex flex-col items-center"
-        style={{ background: "linear-gradient(90deg, #FFF7ED 0%, #FFF9F6 100%)" }}
+        style={{ background: colors.headerBackground }}
       >
         <header className="text-center mb-8 md:mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#FF7435] rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4" style={{ backgroundColor: colors.accent }}>
             <Globe className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 text-[#111827] font-['Poppins']">Domain Name Genie</h1>
-          <p className="text-lg md:text-xl text-[#6B7280]">Find your perfect domain with a touch of magic!</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-2 font-['Poppins']" style={{ color: colors.textPrimary }}>Domain Name Genie</h1>
+          <p className="text-lg md:text-xl" style={{ color: colors.textSecondary }}>Find your perfect domain with a touch of magic!</p>
         </header>
 
-        <Card className="w-full max-w-2xl mb-8 md:mb-12 bg-white border border-gray-200 shadow-lg">
+        <Card className="w-full max-w-2xl mb-8 md:mb-12 border shadow-lg transition-colors" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
           <CardHeader>
-            <CardTitle className="text-2xl font-semibold text-[#111827] flex items-center gap-2 font-['Poppins']">
-              <Search className="text-[#FF7435]" />
+            <CardTitle className="text-2xl font-semibold flex items-center gap-2 font-['Poppins']" style={{ color: colors.textPrimary }}>
+              <Search style={{ color: colors.accent }} />
               Uncover Your Domain
             </CardTitle>
-            <CardDescription className="text-[#6B7280]">Enter your details to generate domain ideas.</CardDescription>
+            <CardDescription style={{ color: colors.textSecondary }}>Enter your details to generate domain ideas.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-[#111827] flex items-center gap-1.5 font-medium">
-                    <User size={16} className="text-[#FF7435]" /> Name
+                  <Label htmlFor="name" className="flex items-center gap-1.5 font-medium" style={{ color: colors.textPrimary }}>
+                    <User size={16} style={{ color: colors.accent }} /> Name
                   </Label>
                   <Input
                     id="name"
@@ -487,20 +582,25 @@ export default function DomainCheckerPage() {
                     placeholder="Your Name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`border-gray-300 text-[#111827] placeholder:text-[#6B7280] focus:border-[#FF7435] focus:ring-[#FF7435] ${
+                    className={`transition-colors ${
                       errors.name ? "border-red-400 ring-red-400" : ""
                     }`}
+                    style={{ 
+                      backgroundColor: colors.inputBackground,
+                      borderColor: errors.name ? '#F87171' : colors.border,
+                      color: colors.textPrimary
+                    }}
                   />
                   {errors.name && (
-                    <p className="text-sm text-red-600 flex items-center gap-1">
+                    <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
                       <AlertTriangle size={14} />
                       {errors.name}
                     </p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-[#111827] flex items-center gap-1.5 font-medium">
-                    <Mail size={16} className="text-[#FF7435]" /> Email
+                  <Label htmlFor="email" className="flex items-center gap-1.5 font-medium" style={{ color: colors.textPrimary }}>
+                    <Mail size={16} style={{ color: colors.accent }} /> Email
                   </Label>
                   <Input
                     id="email"
@@ -509,12 +609,17 @@ export default function DomainCheckerPage() {
                     placeholder="your.email@example.com"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`border-gray-300 text-[#111827] placeholder:text-[#6B7280] focus:border-[#FF7435] focus:ring-[#FF7435] ${
+                    className={`transition-colors ${
                       errors.email ? "border-red-400 ring-red-400" : ""
                     }`}
+                    style={{ 
+                      backgroundColor: colors.inputBackground,
+                      borderColor: errors.email ? '#F87171' : colors.border,
+                      color: colors.textPrimary
+                    }}
                   />
                   {errors.email && (
-                    <p className="text-sm text-red-600 flex items-center gap-1">
+                    <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
                       <AlertTriangle size={14} />
                       {errors.email}
                     </p>
@@ -522,7 +627,7 @@ export default function DomainCheckerPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="keywords" className="text-[#111827] font-medium">
+                <Label htmlFor="keywords" className="font-medium" style={{ color: colors.textPrimary }}>
                   Keywords / Business Description
                 </Label>
                 <Textarea
@@ -531,12 +636,17 @@ export default function DomainCheckerPage() {
                   placeholder="e.g., artisanal bakery, AI-powered travel, sustainable pet food..."
                   value={formData.keywords}
                   onChange={handleInputChange}
-                  className={`min-h-[100px] border-gray-300 text-[#111827] placeholder:text-[#6B7280] focus:border-[#FF7435] focus:ring-[#FF7435] ${
+                  className={`min-h-[100px] transition-colors ${
                     errors.keywords ? "border-red-400 ring-red-400" : ""
                   }`}
+                  style={{ 
+                    backgroundColor: colors.inputBackground,
+                    borderColor: errors.keywords ? '#F87171' : colors.border,
+                    color: colors.textPrimary
+                  }}
                 />
                 {errors.keywords && (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
+                  <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
                     <AlertTriangle size={14} />
                     {errors.keywords}
                   </p>
@@ -545,7 +655,20 @@ export default function DomainCheckerPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full text-lg py-4 px-4 bg-[#FF7435] hover:bg-[#E6682F] text-white font-semibold rounded transition-all duration-300 ease-in-out transform hover:scale-105"
+                className="w-full text-lg py-4 px-4 text-white font-semibold rounded transition-all duration-300 ease-in-out transform hover:scale-105"
+                style={{ 
+                  backgroundColor: colors.accent,
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLoading) {
+                    e.currentTarget.style.backgroundColor = colors.accentHover
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isLoading) {
+                    e.currentTarget.style.backgroundColor = colors.accent
+                  }
+                }}
               >
                 {isLoading ? (
                   <>
@@ -567,25 +690,28 @@ export default function DomainCheckerPage() {
       {/* Main Content Area */}
       <div className="w-full p-4 md:p-8 flex flex-col items-center">
         {apiError && (
-          <Card className="w-full max-w-2xl mb-8 md:mb-12 bg-red-50 border border-red-200">
+          <Card className="w-full max-w-2xl mb-8 md:mb-12 border transition-colors" style={{ backgroundColor: colors.errorBackground, borderColor: colors.errorBorder }}>
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-red-800 flex items-center gap-2 font-['Poppins']">
+              <CardTitle className="text-xl font-semibold flex items-center gap-2 font-['Poppins']" style={{ color: colors.error }}>
                 <AlertTriangle /> API Error
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-red-700">{apiError}</p>
+              <p style={{ color: colors.error }}>{apiError}</p>
             </CardContent>
           </Card>
         )}
 
         {rawApiResponse && domainResults.length === 0 && (
-          <Card className="w-full max-w-2xl mb-8 md:mb-12 bg-white border border-gray-200">
+          <Card className="w-full max-w-2xl mb-8 md:mb-12 border transition-colors" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-[#111827] font-['Poppins']">Raw API Response</CardTitle>
+              <CardTitle className="text-xl font-semibold font-['Poppins']" style={{ color: colors.textPrimary }}>Raw API Response</CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="text-[#6B7280] text-sm whitespace-pre-wrap break-all max-h-60 overflow-y-auto p-4 bg-gray-50 rounded-md">
+              <pre className="text-sm whitespace-pre-wrap break-all max-h-60 overflow-y-auto p-4 rounded-md transition-colors" style={{ 
+                color: colors.textSecondary,
+                backgroundColor: colors.hoverBackground
+              }}>
                 {rawApiResponse}
               </pre>
             </CardContent>
@@ -596,8 +722,8 @@ export default function DomainCheckerPage() {
           <section className="w-full max-w-7xl mb-8 md:mb-12">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <div>
-                <h2 className="text-3xl font-bold text-[#111827] mb-2 font-['Poppins']">Domain Suggestions</h2>
-                <p className="text-[#6B7280]">
+                <h2 className="text-3xl font-bold mb-2 font-['Poppins']" style={{ color: colors.textPrimary }}>Domain Suggestions</h2>
+                <p style={{ color: colors.textSecondary }}>
                   Showing {filteredDomains.length} of {domainResults.length} domains
                 </p>
               </div>
@@ -607,20 +733,44 @@ export default function DomainCheckerPage() {
                     placeholder="Search domains..."
                     value={searchFilter}
                     onChange={(e) => setSearchFilter(e.target.value)}
-                    className="border-gray-300 text-[#111827] placeholder:text-[#6B7280] focus:border-[#FF7435] focus:ring-[#FF7435] pr-10"
+                    className="pr-10 transition-colors"
+                    style={{ 
+                      backgroundColor: colors.inputBackground,
+                      borderColor: colors.border,
+                      color: colors.textPrimary
+                    }}
                   />
-                  <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#6B7280] w-4 h-4" />
+                  <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: colors.textSecondary }} />
                 </div>
                 <div className="flex gap-2">
                   <Button
                     variant={filterMode === "all" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setFilterMode("all")}
-                    className={`font-semibold px-4 rounded ${
+                    className={`font-semibold px-4 rounded transition-colors ${
                       filterMode === "all"
-                        ? "bg-[#FF7435] hover:bg-[#E6682F] text-white"
-                        : "border-gray-300 text-[#6B7280] hover:bg-gray-50"
+                        ? "text-white"
+                        : ""
                     }`}
+                    style={{ 
+                      backgroundColor: filterMode === "all" ? colors.accent : 'transparent',
+                      borderColor: colors.border,
+                      color: filterMode === "all" ? 'white' : colors.textSecondary
+                    }}
+                    onMouseEnter={(e) => {
+                      if (filterMode === "all") {
+                        e.currentTarget.style.backgroundColor = colors.accentHover
+                      } else {
+                        e.currentTarget.style.backgroundColor = colors.hoverBackground
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filterMode === "all") {
+                        e.currentTarget.style.backgroundColor = colors.accent
+                      } else {
+                        e.currentTarget.style.backgroundColor = 'transparent'
+                      }
+                    }}
                   >
                     All
                   </Button>
@@ -628,11 +778,30 @@ export default function DomainCheckerPage() {
                     variant={filterMode === "available" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setFilterMode("available")}
-                    className={`font-semibold px-4 rounded ${
+                    className={`font-semibold px-4 rounded transition-colors ${
                       filterMode === "available"
                         ? "bg-green-600 hover:bg-green-700 text-white"
-                        : "border-gray-300 text-[#6B7280] hover:bg-gray-50"
+                        : ""
                     }`}
+                    style={{ 
+                      backgroundColor: filterMode === "available" ? '#059669' : 'transparent',
+                      borderColor: colors.border,
+                      color: filterMode === "available" ? 'white' : colors.textSecondary
+                    }}
+                    onMouseEnter={(e) => {
+                      if (filterMode === "available") {
+                        e.currentTarget.style.backgroundColor = '#047857'
+                      } else {
+                        e.currentTarget.style.backgroundColor = colors.hoverBackground
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filterMode === "available") {
+                        e.currentTarget.style.backgroundColor = '#059669'
+                      } else {
+                        e.currentTarget.style.backgroundColor = 'transparent'
+                      }
+                    }}
                   >
                     Available
                   </Button>
@@ -640,23 +809,46 @@ export default function DomainCheckerPage() {
                     variant={filterMode === "unavailable" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setFilterMode("unavailable")}
-                    className={`font-semibold px-4 rounded ${
+                    className={`font-semibold px-4 rounded transition-colors ${
                       filterMode === "unavailable"
                         ? "bg-red-600 hover:bg-red-700 text-white"
-                        : "border-gray-300 text-[#6B7280] hover:bg-gray-50"
+                        : ""
                     }`}
+                    style={{ 
+                      backgroundColor: filterMode === "unavailable" ? '#DC2626' : 'transparent',
+                      borderColor: colors.border,
+                      color: filterMode === "unavailable" ? 'white' : colors.textSecondary
+                    }}
+                    onMouseEnter={(e) => {
+                      if (filterMode === "unavailable") {
+                        e.currentTarget.style.backgroundColor = '#B91C1C'
+                      } else {
+                        e.currentTarget.style.backgroundColor = colors.hoverBackground
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filterMode === "unavailable") {
+                        e.currentTarget.style.backgroundColor = '#DC2626'
+                      } else {
+                        e.currentTarget.style.backgroundColor = 'transparent'
+                      }
+                    }}
                   >
                     Unavailable
                   </Button>
                 </div>
-                <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
+                <div className="flex gap-1 rounded-lg p-1 transition-colors" style={{ backgroundColor: colors.hoverBackground }}>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setViewMode("grid")}
-                    className={`${
-                      viewMode === "grid" ? "bg-white text-[#FF7435] shadow-sm" : "text-[#6B7280] hover:text-[#111827]"
+                    className={`transition-colors ${
+                      viewMode === "grid" ? "shadow-sm" : ""
                     }`}
+                    style={{ 
+                      backgroundColor: viewMode === "grid" ? colors.cardBackground : 'transparent',
+                      color: viewMode === "grid" ? colors.accent : colors.textSecondary
+                    }}
                   >
                     <Grid size={16} />
                   </Button>
@@ -664,9 +856,13 @@ export default function DomainCheckerPage() {
                     variant="ghost"
                     size="sm"
                     onClick={() => setViewMode("list")}
-                    className={`${
-                      viewMode === "list" ? "bg-white text-[#FF7435] shadow-sm" : "text-[#6B7280] hover:text-[#111827]"
+                    className={`transition-colors ${
+                      viewMode === "list" ? "shadow-sm" : ""
                     }`}
+                    style={{ 
+                      backgroundColor: viewMode === "list" ? colors.cardBackground : 'transparent',
+                      color: viewMode === "list" ? colors.accent : colors.textSecondary
+                    }}
                   >
                     <List size={16} />
                   </Button>
@@ -686,14 +882,25 @@ export default function DomainCheckerPage() {
             </div>
             {filteredDomains.length === 0 && domainResults.length > 0 && (
               <div className="text-center py-8">
-                <p className="text-[#6B7280] text-lg">No domains match your current filters.</p>
+                <p className="text-lg" style={{ color: colors.textSecondary }}>No domains match your current filters.</p>
                 <Button
                   variant="outline"
                   onClick={() => {
                     setFilterMode("all")
                     setSearchFilter("")
                   }}
-                  className="mt-4 border-gray-300 text-[#6B7280] hover:bg-gray-50 font-semibold px-4 rounded"
+                  className="mt-4 font-semibold px-4 rounded transition-colors"
+                  style={{ 
+                    borderColor: colors.border,
+                    color: colors.textSecondary,
+                    backgroundColor: 'transparent'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.hoverBackground
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent'
+                  }}
                 >
                   Clear Filters
                 </Button>
@@ -703,10 +910,10 @@ export default function DomainCheckerPage() {
         )}
 
         {searchHistory.length > 0 && (
-          <Card className="w-full max-w-2xl bg-white border border-gray-200">
+          <Card className="w-full max-w-2xl border transition-colors" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-[#111827] flex items-center gap-2 font-['Poppins']">
-                <History className="text-[#FF7435]" /> Recent Searches
+              <CardTitle className="text-xl font-semibold flex items-center gap-2 font-['Poppins']" style={{ color: colors.textPrimary }}>
+                <History style={{ color: colors.accent }} /> Recent Searches
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -715,7 +922,17 @@ export default function DomainCheckerPage() {
                   <Badge
                     key={index}
                     variant="secondary"
-                    className="bg-gray-100 text-[#6B7280] hover:bg-gray-200 cursor-pointer px-3 py-1 text-sm font-medium"
+                    className="cursor-pointer px-3 py-1 text-sm font-medium transition-colors"
+                    style={{ 
+                      backgroundColor: colors.hoverBackground,
+                      color: colors.textSecondary
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = colors.border
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = colors.hoverBackground
+                    }}
                     onClick={() => {
                       setFormData((prev) => ({ ...prev, keywords: searchTerm }))
                       toast({ description: `Loaded search: "${searchTerm}"` })
@@ -729,8 +946,7 @@ export default function DomainCheckerPage() {
           </Card>
         )}
 
-        <footer className="text
-        -center mt-8 md:mt-12 text-[#6B7280] text-sm">
+        <footer className="text-center mt-8 md:mt-12 text-sm" style={{ color: colors.textSecondary }}>
           <p>&copy; {new Date().getFullYear()} Domain Name Genie. All rights reserved.</p>
           <p>Powered by Your Imagination & n8n!</p>
         </footer>
