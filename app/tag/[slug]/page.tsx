@@ -1,4 +1,4 @@
-import { getTags, getPosts } from "@/lib/blog-data"
+import { getTags, getPosts } from "@/lib/ghost"
 import { PostCard } from "@/components/post-card"
 import { notFound } from "next/navigation"
 import { Breadcrumbs } from "@/components/breadcrumbs"
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
     const tagUrl = `${baseUrl}/tag/${tag.slug}`
 
     return {
@@ -55,6 +55,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
+// Add structured data at the beginning of the component
 export default async function TagPage({ params }: { params: { slug: string } }) {
   try {
     const tags = await getTags()
@@ -68,7 +69,7 @@ export default async function TagPage({ params }: { params: { slug: string } }) 
     const taggedPosts = posts.filter((post) => post.tags?.some((t) => t.slug === params.slug))
 
     // Add structured data for the tag page
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
     const jsonLd = {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
@@ -121,7 +122,9 @@ export default async function TagPage({ params }: { params: { slug: string } }) 
         <Breadcrumbs className="mb-8" />
         <div className="text-center py-12">
           <h2 className="text-xl font-medium">Error loading tag</h2>
-          <p className="text-muted-foreground mt-2">There was an error loading this tag. Please try again later.</p>
+          <p className="text-muted-foreground mt-2">
+            There was an error loading this tag. Please check your Ghost CMS configuration.
+          </p>
         </div>
       </div>
     )

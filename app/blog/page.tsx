@@ -1,4 +1,4 @@
-import { getPosts, getTags } from "@/lib/blog-data"
+import { getPosts, getTags } from "@/lib/ghost"
 import { BlogContainer } from "./blog-container"
 
 export const metadata = {
@@ -61,18 +61,21 @@ export default async function BlogPage() {
         url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"}/logo.png`,
       },
     },
-    blogPost: posts.slice(0, 10).map((post) => ({
-      "@type": "BlogPosting",
-      headline: post.title,
-      description: post.excerpt || "",
-      datePublished: post.published_at,
-      dateModified: post.updated_at || post.published_at,
-      author: {
-        "@type": "Person",
-        name: post.primary_author.name,
-      },
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`,
-    })),
+    blogPost:
+      posts && posts.length > 0
+        ? posts.slice(0, 10).map((post) => ({
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.excerpt || "",
+            datePublished: post.published_at,
+            dateModified: post.updated_at || post.published_at,
+            author: {
+              "@type": "Person",
+              name: post.primary_author?.name || "KozkerTech",
+            },
+            url: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`,
+          }))
+        : [],
   }
 
   return (
@@ -87,7 +90,16 @@ export default async function BlogPage() {
         </div>
       </div>
 
-      <BlogContainer initialPosts={posts} initialTags={tags} />
+      {!process.env.GHOST_URL || !process.env.GHOST_CONTENT_API_KEY ? (
+        <div className="mt-12 text-center">
+          <h2 className="text-2xl font-bold mb-4">Ghost CMS Configuration Missing</h2>
+          <p className="text-muted-foreground mb-6">
+            Please check your environment variables to ensure GHOST_URL and GHOST_CONTENT_API_KEY are properly set.
+          </p>
+        </div>
+      ) : (
+        <BlogContainer initialPosts={posts} initialTags={tags} />
+      )}
     </div>
   )
 }

@@ -10,6 +10,9 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
+import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
+
+
 interface FormData {
   name: string
   email: string
@@ -39,6 +42,8 @@ export default function DataAnalyzer() {
 
   const [dragActive, setDragActive] = useState(false)
 
+  if (submissionState.isLoading) {    
+    return < ContentLoadingScreen />  }     
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({
@@ -168,6 +173,8 @@ export default function DataAnalyzer() {
     }
   }
 
+
+        
   const formatAnalysisOutput = (output: string) => {
     // Split the output into sections and format them
     const sections = output.split(/###\s*\d+\.\s*/)

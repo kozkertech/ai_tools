@@ -11,9 +11,12 @@ interface PriceDisplayProps {
 export function PriceDisplay({ amount, period, className = "" }: PriceDisplayProps) {
   const { formatPrice } = useCurrency()
 
+  // Ensure amount is a valid number
+  const validAmount = typeof amount === "number" && !isNaN(amount) ? amount : 0
+
   return (
     <div className={className}>
-      <span className="text-3xl font-bold">{formatPrice(amount)}</span>
+      <span className="text-3xl font-bold">{formatPrice(validAmount)}</span>
       {period && <span className="text-gray-500">{period}</span>}
     </div>
   )

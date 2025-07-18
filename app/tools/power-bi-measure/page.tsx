@@ -10,6 +10,9 @@ import { Label } from "@/components/ui/label"
 import { Loader2, Copy, CheckCircle, BarChart3, TrendingUp } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
+import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
+
+
 interface GeneratedKPI {
   title: string
   daxMeasure: string
@@ -23,7 +26,8 @@ export default function PowerBIMeasureGenerator() {
   const [generatedContent, setGeneratedContent] = useState<string>("")
   const [parsedKPIs, setParsedKPIs] = useState<GeneratedKPI[]>([])
   const { toast } = useToast()
-
+ if (isLoading) {    
+        return < ContentLoadingScreen />  }
   const parseKPIContent = (content: string): GeneratedKPI[] => {
     const kpis: GeneratedKPI[] = []
     const sections = content.split("---").filter((section) => section.trim())
@@ -102,6 +106,8 @@ export default function PowerBIMeasureGenerator() {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
+
+        
       const data = await response.json()
 
       if (data && Array.isArray(data) && data.length > 0 && data[0].text) {

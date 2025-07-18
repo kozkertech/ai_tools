@@ -1,100 +1,80 @@
 "use client"
 
 import { useState } from "react"
-import { BlogGrid } from "@/components/blog/blog-grid"
-import { BlogSidebar } from "@/components/blog/blog-sidebar"
 import { SearchBar } from "@/components/blog/search-bar"
-import { FeaturedPost } from "@/components/featured-post"
-import { Button } from "@/components/ui/button"
-import { Filter } from "lucide-react"
+import { BlogSidebar } from "@/components/blog/blog-sidebar"
+import { BlogGrid } from "@/components/blog/blog-grid"
 import { useBlogFilter } from "@/hooks/use-blog-filter"
-import { searchPosts } from "@/lib/blog-data"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Filter } from "lucide-react"
 
 interface BlogContainerProps {
   initialPosts: any[]
   initialTags: any[]
 }
 
-export function BlogContainer({ initialPosts, initialTags }: BlogContainerProps) {
-  const [searchResults, setSearchResults] = useState<any[]>([])
-  const [isSearching, setIsSearching] = useState(false)
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
+export function BlogContainer({ initialPosts = [], initialTags = [] }: BlogContainerProps) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
-  const { filteredPosts, selectedCategories, selectedSortOption, handleCategorySelect, handleSortSelect, sortOptions } =
-    useBlogFilter(searchResults.length > 0 ? searchResults : initialPosts, initialTags)
-
-  const handleSearch = async (query: string) => {
-    if (!query.trim()) {
-      setSearchResults([])
-      setIsSearching(false)
-      return
-    }
-
-    setIsSearching(true)
-    try {
-      const results = await searchPosts(query)
-      setSearchResults(results)
-    } catch (error) {
-      console.error("Search error:", error)
-      setSearchResults([])
-    } finally {
-      setIsSearching(false)
-    }
-  }
-
-  const featuredPost = initialPosts[0]
+  const {
+    filteredPosts,
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    setSelectedCategory,
+    sortBy,
+    setSortBy,
+    categories,
+  } = useBlogFilter(initialPosts, initialTags)
 
   return (
-    <div className="mt-8 md:mt-12">
-      {/* Featured Post */}
-      {featuredPost && !searchResults.length && (
-        <div className="mb-12">
-          <FeaturedPost post={featuredPost} />
-        </div>
-      )}
-
-      {/* Search Bar */}
-      <div className="mb-8">
-        <SearchBar onSearch={handleSearch} isLoading={isSearching} />
-      </div>
-
+    <div className="container py-8">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Mobile Filter Button */}
         <div className="lg:hidden">
-          <Button variant="outline" onClick={() => setIsMobileFilterOpen(true)} className="w-full justify-start">
-            <Filter className="mr-2 h-4 w-4" />
-            Filters & Sort
-          </Button>
+          <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" className="w-full bg-transparent">
+                <Filter className="mr-2 h-4 w-4" />
+                Filters & Search
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-80">
+              <div className="space-y-6">
+                <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+                <BlogSidebar
+                  categories={categories}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+
+        {/* Desktop Sidebar */}
+        <div className="hidden lg:block lg:w-80 space-y-6">
+          <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+          <BlogSidebar
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+          />
         </div>
 
         {/* Main Content */}
         <div className="flex-1">
-          <BlogGrid
-            posts={filteredPosts}
-            emptyMessage={
-              searchResults.length > 0
-                ? "No posts found matching your search"
-                : selectedCategories.length > 0
-                  ? "No posts found for selected categories"
-                  : "No posts available"
-            }
-          />
-        </div>
-
-        {/* Sidebar */}
-        <div className="lg:w-80">
-          <BlogSidebar
-            categories={initialTags}
-            selectedCategories={selectedCategories}
-            onSelectCategory={handleCategorySelect}
-            sortOptions={sortOptions}
-            selectedSortOption={selectedSortOption}
-            onSelectSortOption={handleSortSelect}
-            isMobileFilterOpen={isMobileFilterOpen}
-            onCloseMobileFilter={() => setIsMobileFilterOpen(false)}
-          />
+          <BlogGrid posts={filteredPosts} />
         </div>
       </div>
     </div>
   )
 }
+
+// Named export for compatibility
+export { BlogContainer as default }

@@ -11,6 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle, XCircle, Hash, MessageSquare } from "lucide-react"
 
+import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
+
 interface FormData {
   name: string
   email: string
@@ -85,6 +87,9 @@ export default function CaptionGenerator() {
       setIsLoading(false)
     }
   }
+
+   if (isLoading) {    
+        return < ContentLoadingScreen />  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-orange-100 to-amber-50 p-4">

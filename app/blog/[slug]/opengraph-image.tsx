@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og"
-import { getPost } from "@/lib/blog-data"
+import { getPost } from "@/lib/ghost"
 
 // Route segment config
 export const runtime = "edge"

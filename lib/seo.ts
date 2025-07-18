@@ -1,93 +1,72 @@
-// SEO utility functions
+import type { Metadata } from "next"
 
-// Generate a canonical URL
-export function getCanonicalUrl(path: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourblog.com"
-  return `${baseUrl}${path}`
+export interface SEOData {
+  title?: string
+  description?: string
+  image?: string
+  url?: string
+  type?: string
+  publishedTime?: string
+  modifiedTime?: string
+  author?: string
+  tags?: string[]
 }
 
-// Generate structured data for breadcrumbs
-export function generateBreadcrumbSchema(items: { name: string; url: string }[]): any {
-  return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.name,
-      item: item.url,
-    })),
-  }
-}
+export function generateSEOMetadata(data: SEOData): Metadata {
+  const {
+    title = "Ghost Netlify Starter",
+    description = "A modern Ghost CMS starter built with Next.js and Netlify",
+    image = "/placeholder.svg?height=630&width=1200",
+    url = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com",
+    type = "website",
+    publishedTime,
+    modifiedTime,
+    author,
+    tags = [],
+  } = data
 
-// Generate structured data for FAQ
-export function generateFaqSchema(questions: { question: string; answer: string }[]): any {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: questions.map((q) => ({
-      "@type": "Question",
-      name: q.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: q.answer,
-      },
-    })),
-  }
-}
-
-// Generate structured data for local business
-export function generateLocalBusinessSchema(data: {
-  name: string
-  image: string
-  telephone: string
-  address: {
-    streetAddress?: string
-    addressLocality: string
-    addressRegion: string
-    postalCode?: string
-    addressCountry: string
-  }
-  geo?: {
-    latitude: number
-    longitude: number
-  }
-  url: string
-  description: string
-  priceRange?: string
-  openingHours?: string[]
-}): any {
-  return {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: data.name,
-    image: data.image,
-    telephone: data.telephone,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: data.address.streetAddress,
-      addressLocality: data.address.addressLocality,
-      addressRegion: data.address.addressRegion,
-      postalCode: data.address.postalCode,
-      addressCountry: data.address.addressCountry,
+  const metadata: Metadata = {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      type: type as any,
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      ...(publishedTime && { publishedTime }),
+      ...(modifiedTime && { modifiedTime }),
+      ...(author && { authors: [author] }),
     },
-    ...(data.geo && {
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: data.geo.latitude,
-        longitude: data.geo.longitude,
-      },
-    }),
-    url: data.url,
-    description: data.description,
-    ...(data.priceRange && { priceRange: data.priceRange }),
-    ...(data.openingHours && {
-      openingHoursSpecification: data.openingHours.map((hours) => ({
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: hours.split(" ")[0],
-        opens: hours.split(" ")[1].split("-")[0],
-        closes: hours.split(" ")[1].split("-")[1],
-      })),
-    }),
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+    keywords: tags.join(", "),
   }
+
+  return metadata
+}
+
+export function generateBlogPostMetadata(post: any): Metadata {
+  return generateSEOMetadata({
+    title: post.title,
+    description: post.excerpt || post.meta_description,
+    image: post.feature_image || "/placeholder.svg?height=630&width=1200",
+    url: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`,
+    type: "article",
+    publishedTime: post.published_at,
+    modifiedTime: post.updated_at,
+    author: post.primary_author?.name,
+    tags: post.tags?.map((tag: any) => tag.name) || [],
+  })
 }
