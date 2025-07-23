@@ -57,7 +57,7 @@ export default function CopyGenerator() {
     setDebugInfo("")
 
     try {
-      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/785ebaf0-797f-4c57-9a13-706fb085b748", {
+      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/6b699db4-53f1-45ae-b155-390996beb2b5", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
