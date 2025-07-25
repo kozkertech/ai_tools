@@ -3,52 +3,48 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-const CollapsibleContext = React.createContext<{
-  open: boolean
-  onOpenChange: (open: boolean) => void
-} | null>(null)
-
 interface CollapsibleProps {
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
   children: React.ReactNode
   className?: string
 }
 
-const Collapsible = React.forwardRef<HTMLDivElement, CollapsibleProps>(
-  ({ open: controlledOpen, onOpenChange, children, className, ...props }, ref) => {
-    const [internalOpen, setInternalOpen] = React.useState(false)
+interface CollapsibleContextType {
+  open: boolean
+  setOpen: (open: boolean) => void
+}
 
-    const open = controlledOpen !== undefined ? controlledOpen : internalOpen
-    const handleOpenChange = onOpenChange || setInternalOpen
+const CollapsibleContext = React.createContext<CollapsibleContextType | undefined>(undefined)
 
-    return (
-      <CollapsibleContext.Provider value={{ open, onOpenChange: handleOpenChange }}>
-        <div ref={ref} className={cn("", className)} {...props}>
-          {children}
-        </div>
-      </CollapsibleContext.Provider>
-    )
-  },
-)
+const Collapsible = React.forwardRef<
+  HTMLDivElement,
+  CollapsibleProps & { open?: boolean; onOpenChange?: (open: boolean) => void }
+>(({ className, children, open: controlledOpen, onOpenChange, ...props }, ref) => {
+  const [internalOpen, setInternalOpen] = React.useState(false)
+
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen
+  const setOpen = onOpenChange || setInternalOpen
+
+  return (
+    <CollapsibleContext.Provider value={{ open, setOpen }}>
+      <div ref={ref} className={cn("", className)} {...props}>
+        {children}
+      </div>
+    </CollapsibleContext.Provider>
+  )
+})
 Collapsible.displayName = "Collapsible"
 
 const CollapsibleTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
   ({ className, children, ...props }, ref) => {
     const context = React.useContext(CollapsibleContext)
-
     if (!context) {
       throw new Error("CollapsibleTrigger must be used within a Collapsible")
     }
 
+    const { open, setOpen } = context
+
     return (
-      <button
-        ref={ref}
-        type="button"
-        className={cn("", className)}
-        onClick={() => context.onOpenChange(!context.open)}
-        {...props}
-      >
+      <button ref={ref} className={cn("", className)} onClick={() => setOpen(!open)} {...props}>
         {children}
       </button>
     )
@@ -59,18 +55,23 @@ CollapsibleTrigger.displayName = "CollapsibleTrigger"
 const CollapsibleContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => {
     const context = React.useContext(CollapsibleContext)
-
     if (!context) {
       throw new Error("CollapsibleContent must be used within a Collapsible")
     }
 
-    if (!context.open) {
-      return null
-    }
+    const { open } = context
 
     return (
-      <div ref={ref} className={cn("overflow-hidden", className)} {...props}>
-        {children}
+      <div
+        ref={ref}
+        className={cn(
+          "overflow-hidden transition-all duration-200 ease-in-out",
+          open ? "animate-in slide-in-from-top-1" : "animate-out slide-out-to-top-1 hidden",
+          className,
+        )}
+        {...props}
+      >
+        {open && children}
       </div>
     )
   },

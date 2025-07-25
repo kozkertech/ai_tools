@@ -1,62 +1,91 @@
+"use client"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Copy, Download } from "lucide-react"
+
 interface FormattedOutputProps {
+  title?: string
   content: string
+  type?: "html" | "text" | "markdown"
+  showCopyButton?: boolean
+  showDownloadButton?: boolean
+  className?: string
 }
 
-export function FormattedOutput({ content }: FormattedOutputProps) {
-  // Handle different content formats
-  const formatContent = (text: string) => {
-    // If content looks like HTML, render it as HTML
-    if (text.includes("<") && text.includes(">")) {
-      return <div className="prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: text }} />
+export function FormattedOutput({
+  title = "Generated Content",
+  content,
+  type = "text",
+  showCopyButton = true,
+  showDownloadButton = false,
+  className = "",
+}: FormattedOutputProps) {
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(content)
+      // You could add a toast notification here
+    } catch (err) {
+      console.error("Failed to copy text: ", err)
     }
-
-    // Otherwise, format as plain text with basic formatting
-    const lines = text.split("\n")
-    return (
-      <div className="space-y-2">
-        {lines.map((line, index) => {
-          // Handle headers (lines that end with :)
-          if (line.trim().endsWith(":") && line.trim().length > 1) {
-            return (
-              <h3 key={index} className="font-semibold text-lg mt-4 mb-2 text-gray-900 dark:text-white">
-                {line.trim()}
-              </h3>
-            )
-          }
-
-          // Handle bullet points
-          if (line.trim().startsWith("•") || line.trim().startsWith("-") || line.trim().startsWith("*")) {
-            return (
-              <div key={index} className="ml-4 text-gray-700 dark:text-gray-300">
-                {line.trim()}
-              </div>
-            )
-          }
-
-          // Handle numbered lists
-          if (/^\d+\./.test(line.trim())) {
-            return (
-              <div key={index} className="ml-4 text-gray-700 dark:text-gray-300">
-                {line.trim()}
-              </div>
-            )
-          }
-
-          // Handle empty lines
-          if (line.trim() === "") {
-            return <div key={index} className="h-2" />
-          }
-
-          // Regular paragraphs
-          return (
-            <p key={index} className="text-gray-800 dark:text-gray-200 leading-relaxed">
-              {line.trim()}
-            </p>
-          )
-        })}
-      </div>
-    )
   }
 
-  return <div className="formatted-output">{formatContent(content)}</div>
+  const downloadContent = () => {
+    const element = document.createElement("a")
+    const file = new Blob([content], { type: "text/plain" })
+    element.href = URL.createObjectURL(file)
+    element.download = `${title.toLowerCase().replace(/\s+/g, "-")}.txt`
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
+
+  const renderContent = () => {
+    switch (type) {
+      case "html":
+        return <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
+      case "markdown":
+        return (
+          <pre className="whitespace-pre-wrap text-sm font-mono bg-gray-50 p-4 rounded-lg overflow-auto">{content}</pre>
+        )
+      default:
+        return <div className="whitespace-pre-wrap text-sm leading-relaxed">{content}</div>
+    }
+  }
+
+  return (
+    <Card className={`w-full ${className}`}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+        <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+        <div className="flex gap-2">
+          {showCopyButton && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={copyToClipboard}
+              className="flex items-center gap-2 bg-transparent"
+            >
+              <Copy className="w-4 h-4" />
+              Copy
+            </Button>
+          )}
+          {showDownloadButton && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={downloadContent}
+              className="flex items-center gap-2 bg-transparent"
+            >
+              <Download className="w-4 h-4" />
+              Download
+            </Button>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="max-h-96 overflow-auto border rounded-lg p-4 bg-white">{renderContent()}</div>
+      </CardContent>
+    </Card>
+  )
 }
+
+export default FormattedOutput
