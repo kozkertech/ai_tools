@@ -13,7 +13,6 @@ import { useToast } from "@/hooks/use-toast"
 
 import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
 
-
 interface GeneratedCopy {
   adCopy: string
   ctas: string[]
@@ -31,8 +30,9 @@ export default function HeroCopyGenerator() {
   const [copiedText, setCopiedText] = useState<string | null>(null)
   const { toast } = useToast()
 
-   if (isLoading) {    
-        return < ContentLoadingScreen />  }
+  if (isLoading) {
+    return <ContentLoadingScreen />
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -51,7 +51,6 @@ export default function HeroCopyGenerator() {
     const ctaSection = parts[1] || ""
     const ctaMatches = ctaSection.match(/\*\*(.*?)\*\*/g) || []
     const ctas = ctaMatches.map((cta) => cta.replace(/\*\*/g, ""))
-    
 
     return { adCopy, ctas }
   }
@@ -62,23 +61,18 @@ export default function HeroCopyGenerator() {
     setGeneratedCopy(null)
 
     try {
-      const response = await fetch(
-        "https://n8n.srv832341.hstgr.cloud/webhook/6b699db4-53f1-45ae-b155-390996beb2b5",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/6b699db4-53f1-45ae-b155-390996beb2b5", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      )
+        body: JSON.stringify(formData),
+      })
 
       if (!response.ok) {
         throw new Error("Failed to generate copy")
       }
 
-
-        
       const data = await response.json()
 
       // Parse the response based on the expected format
@@ -131,9 +125,7 @@ export default function HeroCopyGenerator() {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles className="h-8 w-8 text-orange-500 dark:text-orange-400" />
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white font-system">
-              Hero Copy Generator
-            </h1>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white font-system">Hero Copy Generator</h1>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-300 font-system">
             Generate compelling landing page copy for your product in seconds
@@ -144,9 +136,7 @@ export default function HeroCopyGenerator() {
           {/* Input Form */}
           <Card className="shadow-lg border-0 bg-gray-50 dark:bg-gray-800">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-white font-system">
-                Product Details
-              </CardTitle>
+              <CardTitle className="text-gray-900 dark:text-white font-system">Product Details</CardTitle>
               <CardDescription className="text-gray-600 dark:text-gray-300 font-system">
                 Tell us about your product to generate personalized copy
               </CardDescription>
@@ -154,10 +144,7 @@ export default function HeroCopyGenerator() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="name"
-                    className="text-gray-900 dark:text-white font-system font-semibold"
-                  >
+                  <Label htmlFor="name" className="text-gray-900 dark:text-white font-system font-semibold">
                     Your Name
                   </Label>
                   <Input
@@ -173,10 +160,7 @@ export default function HeroCopyGenerator() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="email"
-                    className="text-gray-900 dark:text-white font-system font-semibold"
-                  >
+                  <Label htmlFor="email" className="text-gray-900 dark:text-white font-system font-semibold">
                     Email Address
                   </Label>
                   <Input
@@ -192,10 +176,7 @@ export default function HeroCopyGenerator() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="productName"
-                    className="text-gray-900 dark:text-white font-system font-semibold"
-                  >
+                  <Label htmlFor="productName" className="text-gray-900 dark:text-white font-system font-semibold">
                     Product Name
                   </Label>
                   <Input
@@ -211,10 +192,7 @@ export default function HeroCopyGenerator() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="productFeatures"
-                    className="text-gray-900 dark:text-white font-system font-semibold"
-                  >
+                  <Label htmlFor="productFeatures" className="text-gray-900 dark:text-white font-system font-semibold">
                     Product Features
                   </Label>
                   <Textarea
@@ -258,9 +236,7 @@ export default function HeroCopyGenerator() {
                 <Card className="shadow-lg border-0 bg-gray-50 dark:bg-gray-800">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <div>
-                      <CardTitle className="text-gray-900 dark:text-white font-system">
-                        Generated Ad Copy
-                      </CardTitle>
+                      <CardTitle className="text-gray-900 dark:text-white font-system">Generated Ad Copy</CardTitle>
                       <CardDescription className="text-gray-600 dark:text-gray-300 font-system">
                         Your personalized hero section copy
                       </CardDescription>
@@ -315,13 +291,14 @@ export default function HeroCopyGenerator() {
                     <CardContent>
                       <div className="space-y-3">
                         {generatedCopy.ctas.map((cta, index) => (
-                          <div key={index} className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
-                            <span className="font-medium text-gray-900 dark:text-white font-system">
-                              {cta}
-                            </span>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600"
+                          >
+                            <span className="font-medium text-gray-900 dark:text-white font-system">{cta}</span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
                               onClick={() => copyToClipboard(cta, `CTA ${index + 1}`)}
                               className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                             >
@@ -356,3 +333,4 @@ export default function HeroCopyGenerator() {
       </div>
     </div>
   )
+}
