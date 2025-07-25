@@ -1,389 +1,358 @@
 "use client"
-import { useState, type FormEvent } from "react"
-import { Copy, Loader2, CheckCircle, XCircle, Wand2, Megaphone } from "lucide-react"
+
+import type React from "react"
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ContentLoadingScreen } from "@/components/loading-screen"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Loader2, Copy, CheckCircle, Sparkles } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
-interface FormData {
-  name: string
-  email: string
-  product: string
-  targetAudience: string
-  tone: string
+import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
+
+
+interface GeneratedCopy {
+  adCopy: string
+  ctas: string[]
 }
 
-interface ResponseType {
-  output: string
-  [key: string]: any
-}
-
-interface Message {
-  type: "success" | "error"
-  text: string
-}
-
-export default function CopyGenerator() {
-  const [formData, setFormData] = useState<FormData>({
+export default function HeroCopyGenerator() {
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
-    product: "",
-    targetAudience: "",
-    tone: "",
+    productName: "",
+    productFeatures: "",
   })
-
   const [isLoading, setIsLoading] = useState(false)
-  const [copyResponse, setCopyResponse] = useState<ResponseType | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [message, setMessage] = useState<Message | null>(null)
-  const [debugInfo, setDebugInfo] = useState<string>("")
+  const [generatedCopy, setGeneratedCopy] = useState<GeneratedCopy | null>(null)
+  const [copiedText, setCopiedText] = useState<string | null>(null)
+  const { toast } = useToast()
 
-  const handleInputChange = (field: string, value: string) => {
+   if (isLoading) {    
+        return < ContentLoadingScreen />  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [name]: value,
     }))
   }
 
-  const handleSubmit = async (e: FormEvent) => {
+  const parseBackendResponse = (responseText: string): GeneratedCopy => {
+    // Split by **CTAs:** to separate ad copy from CTAs
+    const parts = responseText.split("**CTAs:**")
+    const adCopy = parts[0].replace("**Ad Copy:**", "").trim()
+
+    // Extract CTAs
+    const ctaSection = parts[1] || ""
+    const ctaMatches = ctaSection.match(/\*\*(.*?)\*\*/g) || []
+    const ctas = ctaMatches.map((cta) => cta.replace(/\*\*/g, ""))
+    
+
+    return { adCopy, ctas }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError(null)
-    setCopyResponse(null)
-    setMessage(null)
-    setDebugInfo("")
+    setGeneratedCopy(null)
 
     try {
-      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/6b699db4-53f1-45ae-b155-390996beb2b5", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://n8n.srv832341.hstgr.cloud/webhook/6b699db4-53f1-45ae-b155-390996beb2b5",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      })
+      )
 
       if (!response.ok) {
         throw new Error("Failed to generate copy")
       }
 
-      const responseData = await response.json()
-      setDebugInfo(JSON.stringify(responseData, null, 2))
 
-      setCopyResponse(responseData)
-      setMessage({
-        type: "success",
-        text: "Copy generated successfully!",
+        
+      const data = await response.json()
+
+      // Parse the response based on the expected format
+      if (data && data.length > 0 && data[0]["SoMe Text"]) {
+        const parsedCopy = parseBackendResponse(data[0]["SoMe Text"])
+        setGeneratedCopy(parsedCopy)
+        toast({
+          title: "Success!",
+          description: "Your hero copy has been generated successfully.",
+        })
+      } else {
+        throw new Error("Invalid response format")
+      }
+    } catch (error) {
+      console.error("Error:", error)
+      toast({
+        title: "Error",
+        description: "Failed to generate copy. Please try again.",
+        variant: "destructive",
       })
-    } catch (err) {
-      const errorMessage = "Failed to generate copy. Please try again."
-      setError(errorMessage)
-      setMessage({
-        type: "error",
-        text: errorMessage,
-      })
-      console.error("Error:", err)
     } finally {
       setIsLoading(false)
     }
   }
 
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      email: "",
-      product: "",
-      targetAudience: "",
-      tone: "",
-    })
-    setCopyResponse(null)
-    setError(null)
-    setMessage(null)
-    setDebugInfo("")
-  }
-
-  const parseMarkdownToHTML = (markdown: string) => {
-    if (!markdown) return ""
-    return markdown
-      .replace(
-        /^### (.*$)/gim,
-        '<h3 class="text-lg font-semibold text-gray-900 dark:text-white font-poppins mb-2 mt-4">$1</h3>',
-      )
-      .replace(
-        /^## (.*$)/gim,
-        '<h2 class="text-xl font-semibold text-gray-900 dark:text-white font-poppins mb-3 mt-6">$1</h2>',
-      )
-      .replace(
-        /^# (.*$)/gim,
-        '<h1 class="text-2xl font-bold text-gray-900 dark:text-white font-poppins mb-4 mt-8 first:mt-0">$1</h1>',
-      )
-      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900 dark:text-white">$1</strong>')
-      .split(/\n\s*\n/)
-      .map((paragraph) => {
-        const trimmed = paragraph.trim()
-        if (!trimmed) return ""
-        if (trimmed.match(/^<h[1-6]/)) return trimmed
-        const withBreaks = trimmed.replace(/\n/g, "<br />")
-        return `<p class="text-gray-500 dark:text-gray-400 font-inter mb-4 leading-relaxed">${withBreaks}</p>`
+  const copyToClipboard = async (text: string, type: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedText(type)
+      setTimeout(() => setCopiedText(null), 2000)
+      toast({
+        title: "Copied!",
+        description: `${type} copied to clipboard.`,
       })
-      .filter(Boolean)
-      .join("")
-  }
-
-  const renderCopyOutput = () => {
-    if (!copyResponse) return null
-
-    let content = ""
-    if (Array.isArray(copyResponse)) {
-      const firstItem = copyResponse[0]
-      if (firstItem && typeof firstItem === "object") {
-        content = firstItem.output || firstItem.message || firstItem.copy || ""
-      }
-    } else {
-      content =
-        copyResponse.output ||
-        copyResponse.copy ||
-        copyResponse.content ||
-        copyResponse.message ||
-        copyResponse.data?.output ||
-        copyResponse.data?.content
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to copy to clipboard.",
+        variant: "destructive",
+      })
     }
-
-    if (!content) {
-      return (
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-poppins">Your generated copy</h2>
-          <div className="bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-            <p className="text-yellow-800 dark:text-yellow-100 font-inter mb-2">
-              Response received but no content found
-            </p>
-            <details className="text-sm">
-              <summary className="cursor-pointer text-yellow-600 dark:text-yellow-300 font-medium">
-                View Raw Response
-              </summary>
-              <pre className="mt-2 text-xs text-yellow-700 dark:text-yellow-200 whitespace-pre-wrap">
-                {JSON.stringify(copyResponse, null, 2)}
-              </pre>
-            </details>
-          </div>
-        </div>
-      )
-    }
-
-    const htmlContent = parseMarkdownToHTML(content)
-
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-poppins">Your generated copy</h2>
-          <Button
-            onClick={() => navigator.clipboard.writeText(content)}
-            variant="outline"
-            size="sm"
-            className="flex items-center space-x-2"
-          >
-            <Copy className="w-4 h-4" />
-            <span>Copy</span>
-          </Button>
-        </div>
-        <div
-          className="prose prose-lg max-w-none dark:prose-invert"
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-        />
-      </div>
-    )
   }
 
-  if (isLoading) {
-    return <ContentLoadingScreen />
-  }
+  const isFormValid = formData.name && formData.email && formData.productName && formData.productFeatures
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto px-6 py-8 text-center">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-10 h-10 bg-[#FF7435] rounded-lg flex items-center justify-center">
-              <Wand2 className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold font-poppins">AI Copy Generator</h1>
+    <div className="min-h-screen bg-gradient-to-r from-orange-50 to-orange-25 dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Sparkles className="h-8 w-8 text-orange-500 dark:text-orange-400" />
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white font-system">
+              Hero Copy Generator
+            </h1>
           </div>
-          <p className="text-gray-500 dark:text-gray-400 font-inter text-lg max-w-2xl mx-auto">
-            Craft marketing copy tailored to your product, audience, and tone of voice
+          <p className="text-lg text-gray-600 dark:text-gray-300 font-system">
+            Generate compelling landing page copy for your product in seconds
           </p>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-180px)]">
-        {/* Form Section */}
-        <div className="w-full md:w-1/2 bg-gray-50 dark:bg-[#0a0a0a] p-8 overflow-y-auto">
-          <div className="max-w-md mx-auto">
-            <div className="bg-white dark:bg-[#111111] rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-800">
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold font-poppins mb-2">Generate Product Copy</h2>
-                <p className="text-gray-500 dark:text-gray-400 font-inter">
-                  Fill out the form below to create compelling marketing copy
-                </p>
-              </div>
-
+        <div className="grid gap-8 lg:grid-cols-2">
+          {/* Input Form */}
+          <Card className="shadow-lg border-0 bg-gray-50 dark:bg-gray-800">
+            <CardHeader>
+              <CardTitle className="text-gray-900 dark:text-white font-system">
+                Product Details
+              </CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-300 font-system">
+                Tell us about your product to generate personalized copy
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="font-medium font-inter">
-                    Name
+                  <Label
+                    htmlFor="name"
+                    className="text-gray-900 dark:text-white font-system font-semibold"
+                  >
+                    Your Name
                   </Label>
                   <Input
                     id="name"
                     name="name"
                     type="text"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    required
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg"
                     placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 dark:focus:border-orange-400 dark:focus:ring-orange-400"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="font-medium font-inter">
-                    Email
+                  <Label
+                    htmlFor="email"
+                    className="text-gray-900 dark:text-white font-system font-semibold"
+                  >
+                    Email Address
                   </Label>
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    required
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg"
                     placeholder="Enter your email"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="product" className="font-medium font-inter">
-                    Product or Service
-                  </Label>
-                  <Textarea
-                    id="product"
-                    name="product"
-                    value={formData.product}
-                    onChange={(e) => handleInputChange("product", e.target.value)}
+                    value={formData.email}
+                    onChange={handleInputChange}
                     required
-                    rows={4}
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter resize-none rounded-lg"
-                    placeholder="Describe your product or service..."
+                    className="border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 dark:focus:border-orange-400 dark:focus:ring-orange-400"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="targetAudience" className="font-medium font-inter">
-                    Target Audience
-                  </Label>
-                  <Textarea
-                    id="targetAudience"
-                    name="targetAudience"
-                    value={formData.targetAudience}
-                    onChange={(e) => handleInputChange("targetAudience", e.target.value)}
-                    required
-                    rows={3}
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter resize-none rounded-lg"
-                    placeholder="Describe your target audience..."
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="tone" className="font-medium font-inter">
-                    Tone of Voice
+                  <Label
+                    htmlFor="productName"
+                    className="text-gray-900 dark:text-white font-system font-semibold"
+                  >
+                    Product Name
                   </Label>
                   <Input
-                    id="tone"
-                    name="tone"
+                    id="productName"
+                    name="productName"
                     type="text"
-                    value={formData.tone}
-                    onChange={(e) => handleInputChange("tone", e.target.value)}
+                    placeholder="Enter your product name"
+                    value={formData.productName}
+                    onChange={handleInputChange}
                     required
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg"
-                    placeholder="e.g., Professional, Friendly, Casual"
+                    className="border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 dark:focus:border-orange-400 dark:focus:ring-orange-400"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="productFeatures"
+                    className="text-gray-900 dark:text-white font-system font-semibold"
+                  >
+                    Product Features
+                  </Label>
+                  <Textarea
+                    id="productFeatures"
+                    name="productFeatures"
+                    placeholder="Describe your product's key features and benefits..."
+                    value={formData.productFeatures}
+                    onChange={handleInputChange}
+                    required
+                    rows={4}
+                    className="border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 dark:focus:border-orange-400 dark:focus:ring-orange-400 resize-none"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-[#FF7435] hover:bg-[#E6681F] dark:hover:bg-[#d45616] text-white font-semibold rounded-lg transition-colors duration-200 font-inter"
-                  style={{ padding: "16px", fontWeight: 600 }}
+                  disabled={!isFormValid || isLoading}
+                  className="w-full bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 hover:shadow-lg font-system disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Generating...
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Generating Copy...
                     </>
                   ) : (
-                    "Generate Copy"
+                    <>
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      Generate Hero Copy
+                    </>
                   )}
                 </Button>
               </form>
+            </CardContent>
+          </Card>
 
-              {message && (
-                <Alert
-                  className={`mt-4 ${
-                    message.type === "success"
-                      ? "bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800 text-green-800 dark:text-green-100"
-                      : "bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800 text-red-800 dark:text-red-100"
-                  }`}
-                >
-                  <div className="flex items-center">
-                    {message.type === "success" ? (
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                    ) : (
-                      <XCircle className="w-4 h-4 mr-2" />
-                    )}
-                    <AlertDescription className="font-inter">{message.text}</AlertDescription>
-                  </div>
-                </Alert>
-              )}
+          {/* Generated Copy Display */}
+          <div className="space-y-6">
+            {generatedCopy ? (
+              <>
+                {/* Ad Copy Section */}
+                <Card className="shadow-lg border-0 bg-gray-50 dark:bg-gray-800">
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <div>
+                      <CardTitle className="text-gray-900 dark:text-white font-system">
+                        Generated Ad Copy
+                      </CardTitle>
+                      <CardDescription className="text-gray-600 dark:text-gray-300 font-system">
+                        Your personalized hero section copy
+                      </CardDescription>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(generatedCopy.adCopy, "Ad Copy")}
+                      className="shrink-0 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600"
+                    >
+                      {copiedText === "Ad Copy" ? (
+                        <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="p-4 rounded-lg border-l-4 border-l-orange-500 dark:border-l-orange-400 bg-white dark:bg-gray-700">
+                      <p className="text-sm leading-relaxed whitespace-pre-line text-gray-900 dark:text-white font-system">
+                        {generatedCopy.adCopy}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
 
-              {debugInfo && (
-                <details className="mt-4 text-xs">
-                  <summary className="cursor-pointer text-gray-500 dark:text-gray-400 font-inter">Debug Info</summary>
-                  <pre className="mt-2 p-2 bg-gray-100 dark:bg-zinc-800 rounded text-gray-600 dark:text-gray-300 whitespace-pre-wrap overflow-auto max-h-32">
-                    {debugInfo}
-                  </pre>
-                </details>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Output Section */}
-        <div className="w-full md:w-1/2 bg-white dark:bg-[#111111] p-8 overflow-y-auto border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-800">
-          <div className="max-w-2xl mx-auto">
-            {copyResponse ? (
-              renderCopyOutput()
+                {/* CTAs Section */}
+                {generatedCopy.ctas.length > 0 && (
+                  <Card className="shadow-lg border-0 bg-gray-50 dark:bg-gray-800">
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle className="text-gray-900 dark:text-white font-system">
+                          Call-to-Action Buttons
+                        </CardTitle>
+                        <CardDescription className="text-gray-600 dark:text-gray-300 font-system">
+                          Ready-to-use CTA suggestions
+                        </CardDescription>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => copyToClipboard(generatedCopy.ctas.join("\n"), "CTAs")}
+                        className="shrink-0 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600"
+                      >
+                        {copiedText === "CTAs" ? (
+                          <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {generatedCopy.ctas.map((cta, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                            <span className="font-medium text-gray-900 dark:text-white font-system">
+                              {cta}
+                            </span>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => copyToClipboard(cta, `CTA ${index + 1}`)}
+                              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                            >
+                              {copiedText === `CTA ${index + 1}` ? (
+                                <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                              ) : (
+                                <Copy className="h-4 w-4" />
+                              )}
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </>
             ) : (
-              <div className="flex items-center justify-center h-full min-h-[400px]">
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-gray-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto">
-                    <Megaphone className="w-8 h-8 text-gray-400 dark:text-gray-500" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-poppins mb-2">
-                      Your generated copy will appear here
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400 font-inter">
-                      Fill out the form and click generate to get started.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <Card className="shadow-lg border-0 bg-gray-50 dark:bg-gray-800">
+                <CardContent className="flex flex-col items-center justify-center py-12">
+                  <Sparkles className="h-12 w-12 mb-4 text-orange-500 dark:text-orange-400" />
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white font-system">
+                    Ready to Generate Copy?
+                  </h3>
+                  <p className="text-center text-gray-600 dark:text-gray-300 font-system">
+                    Fill out the form to generate compelling hero copy for your landing page.
+                  </p>
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>
       </div>
     </div>
   )
-}

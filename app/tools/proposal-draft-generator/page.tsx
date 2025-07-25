@@ -157,7 +157,7 @@ export default function ProposalGenerator() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="name" className="text-gray-900 dark:text-gray-100 font-medium font-inter">
                       Name *
                     </Label>
                     <Input
@@ -173,7 +173,7 @@ export default function ProposalGenerator() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="companyName" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="companyName" className="text-gray-900 dark:text-gray-100 font-medium font-inter">
                       Company Name *
                     </Label>
                     <Input
@@ -191,7 +191,7 @@ export default function ProposalGenerator() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="email" className="text-gray-900 dark:text-gray-100 font-medium font-inter">
                       Email *
                     </Label>
                     <Input
@@ -207,7 +207,7 @@ export default function ProposalGenerator() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="cost" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="cost" className="text-gray-900 dark:text-gray-100 font-medium font-inter">
                       Cost *
                     </Label>
                     <Input
@@ -225,7 +225,7 @@ export default function ProposalGenerator() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="website" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="website" className="text-gray-900 dark:text-gray-100 font-medium font-inter">
                       Website *
                     </Label>
                     <Input
@@ -241,7 +241,7 @@ export default function ProposalGenerator() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="howSoon" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="howSoon" className="text-gray-900 dark:text-gray-100 font-medium font-inter">
                       How Soon? *
                     </Label>
                     <Input
@@ -258,7 +258,7 @@ export default function ProposalGenerator() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="scope" className="text-gray-900 font-medium font-inter">
+                  <Label htmlFor="scope" className="text-gray-900 dark:text-gray-100 font-medium font-inter">
                     Scope *
                   </Label>
                   <Textarea
@@ -274,7 +274,7 @@ export default function ProposalGenerator() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="problem" className="text-gray-900 font-medium font-inter">
+                  <Label htmlFor="problem" className="text-gray-900 dark:text-gray-100 font-medium font-inter">
                     Problem *
                   </Label>
                   <Textarea
@@ -290,7 +290,7 @@ export default function ProposalGenerator() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="solution" className="text-gray-900 font-medium font-inter">
+                  <Label htmlFor="solution" className="text-gray-900 dark:text-gray-100 font-medium font-inter">
                     Solution *
                   </Label>
                   <Textarea
