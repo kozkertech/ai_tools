@@ -1,27 +1,41 @@
-import { Skeleton } from "@/components/ui/skeleton"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Loading() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white dark:from-zinc-900 dark:to-zinc-900">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
+        {/* Header Skeleton */}
         <div className="text-center mb-8">
-          <Skeleton className="h-10 w-80 mx-auto mb-2" />
+          <Skeleton className="h-10 w-64 mx-auto mb-2" />
           <Skeleton className="h-6 w-96 mx-auto" />
         </div>
 
-        {/* Form Card */}
+        {/* Form Skeleton */}
         <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
           <CardHeader>
-            <Skeleton className="h-6 w-48" />
+            <div className="flex items-center gap-2">
+              <Skeleton className="w-5 h-5" />
+              <Skeleton className="h-6 w-48" />
+            </div>
             <Skeleton className="h-4 w-80" />
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Form Fields */}
+            {/* Basic Information Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+              <div className="space-y-2">
                 <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-36" />
                 <Skeleton className="h-10 w-full" />
               </div>
               <div className="space-y-2">
@@ -30,18 +44,35 @@ export default function Loading() {
               </div>
             </div>
 
+            {/* Textarea Fields */}
             <div className="space-y-2">
-              <Skeleton className="h-4 w-40" />
-              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-32 w-full" />
+              <Skeleton className="h-3 w-80" />
             </div>
 
             <div className="space-y-2">
-              <Skeleton className="h-4 w-36" />
+              <Skeleton className="h-4 w-44" />
               <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-3 w-72" />
             </div>
 
-            {/* Submit Button */}
-            <Skeleton className="h-10 w-32" />
+            {/* Submit Buttons */}
+            <div className="flex gap-4">
+              <Skeleton className="h-10 w-32" />
+              <Skeleton className="h-10 w-24" />
+            </div>
+
+            {/* Tips Section */}
+            <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
+              <Skeleton className="h-5 w-48 mb-2" />
+              <div className="space-y-1">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-5/6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
