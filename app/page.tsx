@@ -346,51 +346,54 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-            {/* Featured Tool - Domain Name Genie */}
-            <div className="space-y-6">
-              <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-orange-50 hover:border-primary/40 transition-all">
-                <CardHeader>
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-orange-500 rounded-xl flex items-center justify-center">
-                      <Globe className="h-8 w-8 text-white" />
-                    </div>
-                    <div>
-                      <Badge className="bg-green-100 text-green-700 border-green-200 mb-2">Most Popular</Badge>
-                      <CardTitle className="text-2xl">Domain Name Genie</CardTitle>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-lg text-muted-foreground">
-                    Find your perfect domain with AI-powered suggestions based on your business description. Get
-                    real-time availability checks and multiple TLD options.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span className="text-sm">AI-powered domain suggestions</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span className="text-sm">Real-time availability checking</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span className="text-sm">Multiple TLD options (.com, .net, .org, etc.)</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span className="text-sm">Direct purchase links</span>
-                    </li>
-                  </ul>
-                  <Button asChild size="lg" className="w-full text-lg">
-                    <Link href="/tools/domain-name-generator">
-                      Try Domain Name Genie Free <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
+  {/* Featured Tool - Domain Name Genie */}
+  <div className="space-y-6">
+    <Card className="border-2 border-primary/20 dark:border-orange-500/20 bg-gradient-to-br from-primary/5 to-orange-50 dark:from-orange-900/10 dark:to-zinc-900 hover:border-primary/40 dark:hover:border-orange-500/40 transition-all bg-white dark:bg-[#111111]">
+      <CardHeader>
+        <div className="flex items-center gap-4 mb-4">
+          <div className="w-16 h-16 bg-gradient-to-br from-primary to-orange-500 rounded-xl flex items-center justify-center">
+            <Globe className="h-8 w-8 text-white" />
+          </div>
+          <div>
+            <Badge className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-100 border-green-200 dark:border-green-800 mb-2">
+              Most Popular
+            </Badge>
+            <CardTitle className="text-2xl text-gray-900 dark:text-white">Domain Name Genie</CardTitle>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <p className="text-lg text-gray-600 dark:text-gray-400">
+          Find your perfect domain with AI-powered suggestions based on your business description. Get
+          real-time availability checks and multiple TLD options.
+        </p>
+        <ul className="space-y-2">
+          <li className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 text-green-500" />
+            <span className="text-sm text-gray-700 dark:text-gray-300">AI-powered domain suggestions</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 text-green-500" />
+            <span className="text-sm text-gray-700 dark:text-gray-300">Real-time availability checking</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 text-green-500" />
+            <span className="text-sm text-gray-700 dark:text-gray-300">Multiple TLD options (.com, .net, .org, etc.)</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 text-green-500" />
+            <span className="text-sm text-gray-700 dark:text-gray-300">Direct purchase links</span>
+          </li>
+        </ul>
+        <Button asChild size="lg" className="w-full text-lg bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white">
+          <Link href="/tools/domain-name-generator">
+            Try Domain Name Genie Free <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
+  </div>
+
 
             {/* Other Tools Preview */}
             <div className="space-y-6">

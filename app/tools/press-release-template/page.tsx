@@ -168,7 +168,7 @@ export default function PressReleaseGenerator() {
         const paragraphText = currentParagraph.join(' ').trim()
         if (paragraphText) {
           elements.push(
-            <p key={elements.length} className="text-gray-700 leading-relaxed mb-4 font-inter">
+            <p key={elements.length} className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 font-inter">
               {renderInlineFormatting(paragraphText)}
             </p>
           )
@@ -190,7 +190,7 @@ export default function PressReleaseGenerator() {
         flushParagraph()
         const headingText = trimmedLine.substring(2).trim()
         elements.push(
-          <h1 key={elements.length} className="text-3xl font-bold text-gray-900 mb-6 font-poppins">
+          <h1 key={elements.length} className="text-3xl font-bold text-gray-900 dark:text-white mb-6 font-poppins">
             {renderInlineFormatting(headingText)}
           </h1>
         )
@@ -198,7 +198,7 @@ export default function PressReleaseGenerator() {
         flushParagraph()
         const headingText = trimmedLine.substring(3).trim()
         elements.push(
-          <h2 key={elements.length} className="text-2xl font-bold text-gray-900 mb-4 mt-6 font-poppins">
+          <h2 key={elements.length} className="text-2xl font-bold text-gray-900 dark:text-white mb-4 mt-6 font-poppins">
             {renderInlineFormatting(headingText)}
           </h2>
         )
@@ -206,7 +206,7 @@ export default function PressReleaseGenerator() {
         flushParagraph()
         const headingText = trimmedLine.substring(4).trim()
         elements.push(
-          <h3 key={elements.length} className="text-xl font-bold text-gray-900 mb-3 mt-5 font-poppins">
+          <h3 key={elements.length} className="text-xl font-bold text-gray-900 dark:text-white mb-3 mt-5 font-poppins">
             {renderInlineFormatting(headingText)}
           </h3>
         )
@@ -229,13 +229,13 @@ export default function PressReleaseGenerator() {
     return parts.map((part, index) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return (
-          <strong key={index} className="font-semibold text-gray-900">
+          <strong key={index} className="font-semibold text-gray-900 dark:text-white">
             {part.slice(2, -2)}
           </strong>
         )
       } else if (part.startsWith('__') && part.endsWith('__')) {
         return (
-          <strong key={index} className="font-semibold text-gray-900">
+          <strong key={index} className="font-semibold text-gray-900 dark:text-white">
             {part.slice(2, -2)}
           </strong>
         )
@@ -272,18 +272,18 @@ export default function PressReleaseGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a]">
       {/* Header with gradient background */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-25 border-b border-gray-200">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-25 dark:from-zinc-900 dark:to-zinc-900 border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto max-w-6xl px-4 py-12">
           <div className="text-center">
             <div className="inline-flex items-center gap-3 mb-6">
               <div className="p-3 rounded-full bg-orange-500 shadow-lg">
                 <FileText className="h-8 w-8 text-white" />
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 font-poppins">Press Release Generator</h1>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white font-poppins">Press Release Generator</h1>
             </div>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto font-inter">
+            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto font-inter">
               Transform your news and events into professional press releases with AI assistance
             </p>
           </div>
@@ -293,17 +293,17 @@ export default function PressReleaseGenerator() {
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Form Section */}
-          <Card className="bg-white shadow-lg border border-gray-200">
-            <CardHeader className="bg-gray-50 border-b border-gray-200">
-              <CardTitle className="text-gray-900 text-2xl font-poppins font-semibold">Event Details</CardTitle>
-              <CardDescription className="text-gray-600 font-inter">
+          <Card className="bg-white dark:bg-[#111111] shadow-lg border border-gray-200 dark:border-gray-800">
+            <CardHeader className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-gray-800">
+              <CardTitle className="text-gray-900 dark:text-white text-2xl font-poppins font-semibold">Event Details</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-400 font-inter">
                 Fill in the details to generate your press release
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="eventNews" className="text-gray-900 font-medium font-inter">
+                  <Label htmlFor="eventNews" className="text-gray-900 dark:text-white font-medium font-inter">
                     Event/News *
                   </Label>
                   <Textarea
@@ -313,13 +313,13 @@ export default function PressReleaseGenerator() {
                     onChange={handleInputChange}
                     placeholder="Describe your news or event..."
                     required
-                    className="border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500/20 min-h-[100px] resize-none font-inter"
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 min-h-[100px] resize-none font-inter"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="companyName" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="companyName" className="text-gray-900 dark:text-white font-medium font-inter">
                       Company Name *
                     </Label>
                     <Input
@@ -329,12 +329,12 @@ export default function PressReleaseGenerator() {
                       onChange={handleInputChange}
                       placeholder="Your company name"
                       required
-                      className="border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="industry" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="industry" className="text-gray-900 dark:text-white font-medium font-inter">
                       Industry *
                     </Label>
                     <Input
@@ -344,14 +344,14 @@ export default function PressReleaseGenerator() {
                       onChange={handleInputChange}
                       placeholder="e.g., Technology, Healthcare"
                       required
-                      className="border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="dateOfRelease" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="dateOfRelease" className="text-gray-900 dark:text-white font-medium font-inter">
                       Date of Release *
                     </Label>
                     <Input
@@ -361,12 +361,12 @@ export default function PressReleaseGenerator() {
                       value={formData.dateOfRelease}
                       onChange={handleInputChange}
                       required
-                      className="border-gray-300 text-gray-900 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500/20 font-inter"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="location" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="location" className="text-gray-900 dark:text-white font-medium font-inter">
                       Location *
                     </Label>
                     <Input
@@ -376,13 +376,13 @@ export default function PressReleaseGenerator() {
                       onChange={handleInputChange}
                       placeholder="City, State/Country"
                       required
-                      className="border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="boilerplate" className="text-gray-900 font-medium font-inter">
+                  <Label htmlFor="boilerplate" className="text-gray-900 dark:text-white font-medium font-inter">
                     Company Description/Boilerplate *
                   </Label>
                   <Textarea
@@ -392,13 +392,13 @@ export default function PressReleaseGenerator() {
                     onChange={handleInputChange}
                     placeholder="Brief description of your company..."
                     required
-                    className="border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500/20 min-h-[80px] resize-none font-inter"
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 min-h-[80px] resize-none font-inter"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="mediaContactName" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="mediaContactName" className="text-gray-900 dark:text-white font-medium font-inter">
                       Media Contact Name & Designation *
                     </Label>
                     <Input
@@ -408,12 +408,12 @@ export default function PressReleaseGenerator() {
                       onChange={handleInputChange}
                       placeholder="John Doe, PR Manager"
                       required
-                      className="border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="mediaContactEmail" className="text-gray-900 font-medium font-inter">
+                    <Label htmlFor="mediaContactEmail" className="text-gray-900 dark:text-white font-medium font-inter">
                       Media Contact Email *
                     </Label>
                     <Input
@@ -424,7 +424,7 @@ export default function PressReleaseGenerator() {
                       onChange={handleInputChange}
                       placeholder="contact@company.com"
                       required
-                      className="border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
                     />
                   </div>
                 </div>
@@ -433,7 +433,7 @@ export default function PressReleaseGenerator() {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 font-inter"
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold py-4 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 font-inter"
                     style={{ fontWeight: 600 }}
                   >
                     {isLoading ? (
@@ -453,7 +453,7 @@ export default function PressReleaseGenerator() {
                     type="button"
                     variant="outline"
                     onClick={resetForm}
-                    className="border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-300 py-4 px-4 rounded-lg font-inter bg-transparent"
+                    className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 py-4 px-4 rounded-lg font-inter bg-transparent dark:bg-transparent"
                     style={{ fontWeight: 600 }}
                   >
                     Reset
@@ -466,11 +466,11 @@ export default function PressReleaseGenerator() {
           {/* Response Section */}
           <div className="space-y-6">
             {showResponse && response && (
-              <Card className="bg-white shadow-lg border border-gray-200 animate-in slide-in-from-right duration-700">
+              <Card className="bg-white dark:bg-[#111111] shadow-lg border border-gray-200 dark:border-gray-800 animate-in slide-in-from-right duration-700">
                 <CardHeader
-                  className={`${response.success ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"} border-b`}
+                  className={`${response.success ? "bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800" : "bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800"} border-b`}
                 >
-                  <CardTitle className="text-gray-900 text-2xl font-poppins font-semibold flex items-center gap-2">
+                  <CardTitle className="text-gray-900 dark:text-white text-2xl font-poppins font-semibold flex items-center gap-2">
                     {response.success ? (
                       <>
                         <CheckCircle className="h-6 w-6 text-green-500" />
@@ -488,17 +488,17 @@ export default function PressReleaseGenerator() {
                   {response.success ? (
                     <div className="space-y-6">
                       {response.message && (
-                        <Alert className="bg-green-50 border-green-200">
+                        <Alert className="bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800">
                           <CheckCircle className="h-4 w-4 text-green-500" />
-                          <AlertDescription className="text-green-800 font-inter">{response.message}</AlertDescription>
+                          <AlertDescription className="text-green-800 dark:text-green-100 font-inter">{response.message}</AlertDescription>
                         </Alert>
                       )}
 
                       {/* Display formatted press release */}
                       {response.webhookResponse && (
-                        <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
                           <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-gray-900 font-semibold font-poppins text-lg">
+                            <h3 className="text-gray-900 dark:text-white font-semibold font-poppins text-lg">
                               Generated Press Release:
                             </h3>
                             <div className="flex gap-2">
@@ -506,7 +506,7 @@ export default function PressReleaseGenerator() {
                                 onClick={() => copyToClipboard(getParsedContent())}
                                 variant="outline"
                                 size="sm"
-                                className="border-gray-300 text-gray-700 hover:bg-gray-100 font-inter"
+                                className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-inter"
                               >
                                 {copied ? (
                                   <>
@@ -524,7 +524,7 @@ export default function PressReleaseGenerator() {
                                 onClick={() => downloadAsText(getParsedContent(), `press-release-${formData.companyName.toLowerCase().replace(/\s+/g, '-')}.txt`)}
                                 variant="outline"
                                 size="sm"
-                                className="border-gray-300 text-gray-700 hover:bg-gray-100 font-inter"
+                                className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-inter"
                               >
                                 <Download className="h-4 w-4 mr-1" />
                                 Download
@@ -533,7 +533,7 @@ export default function PressReleaseGenerator() {
                           </div>
                           
                           {/* Formatted content display */}
-                          <div className="bg-white rounded-md p-6 border border-gray-200 max-h-96 overflow-y-auto">
+                          <div className="bg-white dark:bg-zinc-900 rounded-md p-6 border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto">
                             <div className="prose prose-gray max-w-none">
                               {renderMarkdownContent(getParsedContent())}
                             </div>
@@ -542,9 +542,9 @@ export default function PressReleaseGenerator() {
                       )}
                     </div>
                   ) : (
-                    <Alert className="bg-red-50 border-red-200">
+                    <Alert className="bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800">
                       <XCircle className="h-4 w-4 text-red-500" />
-                      <AlertDescription className="text-red-800 font-inter">
+                      <AlertDescription className="text-red-800 dark:text-red-100 font-inter">
                         {response.error || "An error occurred while generating the press release."}
                       </AlertDescription>
                     </Alert>
@@ -554,12 +554,12 @@ export default function PressReleaseGenerator() {
             )}
 
             {/* Instructions Card */}
-            <Card className="bg-white shadow-lg border border-gray-200">
-              <CardHeader className="bg-gray-50 border-b border-gray-200">
-                <CardTitle className="text-gray-900 text-xl font-poppins font-semibold">How it works</CardTitle>
+            <Card className="bg-white dark:bg-[#111111] shadow-lg border border-gray-200 dark:border-gray-800">
+              <CardHeader className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-gray-800">
+                <CardTitle className="text-gray-900 dark:text-white text-xl font-poppins font-semibold">How it works</CardTitle>
               </CardHeader>
               <CardContent className="p-6">
-                <div className="text-gray-600 space-y-3 font-inter">
+                <div className="text-gray-600 dark:text-gray-400 space-y-3 font-inter">
                   <div className="flex items-start gap-3">
                     <div className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold mt-0.5">
                       1

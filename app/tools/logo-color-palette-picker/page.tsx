@@ -134,18 +134,18 @@ export default function LogoPaletteGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] font-body">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] font-body">
       {/* Header with gradient */}
-      <div className="bg-gradient-to-r from-[#FFF7ED] to-[#FFF9F6] py-12">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 py-12 border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto max-w-4xl px-4">
           <div className="text-center">
             <div className="flex items-center justify-center mb-4">
-              <Palette className="h-12 w-12 text-[#FF7435] mr-3" />
-              <h1 className="text-4xl md:text-5xl font-bold text-[#111827] font-heading">
+              <Palette className="h-12 w-12 text-orange-500 mr-3" />
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white font-heading">
                 Logo Colour Palette Generator
               </h1>
             </div>
-            <p className="text-[#6B7280] text-lg md:text-xl">Generate the perfect colour palette for your brand</p>
+            <p className="text-gray-600 dark:text-gray-400 text-lg md:text-xl">Generate the perfect colour palette for your brand</p>
           </div>
         </div>
       </div>
@@ -153,10 +153,10 @@ export default function LogoPaletteGenerator() {
       <div className="container mx-auto max-w-4xl px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Form Section */}
-          <Card className="bg-white shadow-lg border-0">
+          <Card className="bg-white dark:bg-[#111111] shadow-lg border-0 border border-gray-200 dark:border-gray-800">
             <CardHeader>
-              <CardTitle className="text-2xl text-[#111827] font-heading">Tell us about your brand</CardTitle>
-              <CardDescription className="text-[#6B7280]">
+              <CardTitle className="text-2xl text-gray-900 dark:text-white font-heading">Tell us about your brand</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-400">
                 We'll create a custom colour palette based on your preferences
               </CardDescription>
             </CardHeader>
@@ -165,7 +165,7 @@ export default function LogoPaletteGenerator() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-[#111827] font-medium">
+                    <Label htmlFor="name" className="text-gray-900 dark:text-white font-medium">
                       Name *
                     </Label>
                     <Input
@@ -173,14 +173,14 @@ export default function LogoPaletteGenerator() {
                       type="text"
                       value={formData.name}
                       onChange={(e) => handleInputChange("name", e.target.value)}
-                      className="border-gray-300 focus:border-[#FF7435] focus:ring-[#FF7435]"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       placeholder="Your full name"
                       required
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-[#111827] font-medium">
+                    <Label htmlFor="email" className="text-gray-900 dark:text-white font-medium">
                       Email *
                     </Label>
                     <Input
@@ -188,7 +188,7 @@ export default function LogoPaletteGenerator() {
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange("email", e.target.value)}
-                      className="border-gray-300 focus:border-[#FF7435] focus:ring-[#FF7435]"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       placeholder="your@email.com"
                       required
                     />
@@ -196,7 +196,7 @@ export default function LogoPaletteGenerator() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="industry" className="text-[#111827] font-medium">
+                  <Label htmlFor="industry" className="text-gray-900 dark:text-white font-medium">
                     Industry *
                   </Label>
                   <Input
@@ -204,28 +204,28 @@ export default function LogoPaletteGenerator() {
                     type="text"
                     value={formData.industry}
                     onChange={(e) => handleInputChange("industry", e.target.value)}
-                    className="border-gray-300 focus:border-[#FF7435] focus:ring-[#FF7435]"
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                     placeholder="e.g., Technology, Healthcare, Fashion"
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="brandDescription" className="text-[#111827] font-medium">
+                  <Label htmlFor="brandDescription" className="text-gray-900 dark:text-white font-medium">
                     Brand Description *
                   </Label>
                   <Textarea
                     id="brandDescription"
                     value={formData.brandDescription}
                     onChange={(e) => handleInputChange("brandDescription", e.target.value)}
-                    className="border-gray-300 focus:border-[#FF7435] focus:ring-[#FF7435] min-h-[100px]"
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 min-h-[100px]"
                     placeholder="Describe your brand, values, and target audience..."
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="stylePreferences" className="text-[#111827] font-medium">
+                  <Label htmlFor="stylePreferences" className="text-gray-900 dark:text-white font-medium">
                     Style Preferences *
                   </Label>
                   <Select
@@ -233,12 +233,12 @@ export default function LogoPaletteGenerator() {
                     onValueChange={(value) => handleInputChange("stylePreferences", value)}
                     required
                   >
-                    <SelectTrigger className="border-gray-300 focus:border-[#FF7435] focus:ring-[#FF7435]">
+                    <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
                       <SelectValue placeholder="Choose your preferred style" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
                       {styleOptions.map((style) => (
-                        <SelectItem key={style} value={style.toLowerCase()}>
+                        <SelectItem key={style} value={style.toLowerCase()} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
                           {style}
                         </SelectItem>
                       ))}
@@ -249,7 +249,7 @@ export default function LogoPaletteGenerator() {
                 <Button
                   type="submit"
                   disabled={!isFormValid || isLoading}
-                  className="w-full bg-[#FF7435] hover:bg-[#E6681F] text-white font-semibold py-4 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50"
+                  className="w-full bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold py-4 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50"
                 >
                   {isLoading ? (
                     <>
@@ -267,16 +267,16 @@ export default function LogoPaletteGenerator() {
 
               {/* Status Messages */}
               {error && (
-                <Alert className="bg-red-50 border-red-200 animate-in slide-in-from-top-2 duration-300">
+                <Alert className="bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800 animate-in slide-in-from-top-2 duration-300">
                   <XCircle className="h-4 w-4 text-red-600" />
-                  <AlertDescription className="text-red-800">{error}</AlertDescription>
+                  <AlertDescription className="text-red-800 dark:text-red-100">{error}</AlertDescription>
                 </Alert>
               )}
 
               {success && (
-                <Alert className="bg-green-50 border-green-200 animate-in slide-in-from-top-2 duration-300">
+                <Alert className="bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800 animate-in slide-in-from-top-2 duration-300">
                   <CheckCircle className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-green-800">Colour palette generated successfully!</AlertDescription>
+                  <AlertDescription className="text-green-800 dark:text-green-100">Colour palette generated successfully!</AlertDescription>
                 </Alert>
               )}
             </CardContent>
@@ -285,51 +285,51 @@ export default function LogoPaletteGenerator() {
           {/* Results Section */}
           <div className="space-y-6">
             {parsedColors.length > 0 && (
-              <Card className="bg-white shadow-lg border-0 animate-in slide-in-from-right-4 duration-500">
+              <Card className="bg-white dark:bg-[#111111] shadow-lg border-0 border border-gray-200 dark:border-gray-800 animate-in slide-in-from-right-4 duration-500">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-[#111827] font-heading flex items-center">
-                    <Palette className="mr-2 h-6 w-6 text-[#FF7435]" />
+                  <CardTitle className="text-2xl text-gray-900 dark:text-white font-heading flex items-center">
+                    <Palette className="mr-2 h-6 w-6 text-orange-500" />
                     Your Brand Colour Palette
                   </CardTitle>
-                  <CardDescription className="text-[#6B7280]">
+                  <CardDescription className="text-gray-600 dark:text-gray-400">
                     Here are the perfect colours for your brand
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {parsedColors.map((color, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-3">
+                    <div key={index} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 space-y-3 bg-gray-50 dark:bg-zinc-800">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-[#111827] font-heading">{color.name}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-heading">{color.name}</h3>
                         <div
-                          className="w-12 h-12 rounded-lg shadow-md border border-gray-200"
+                          className="w-12 h-12 rounded-lg shadow-md border border-gray-200 dark:border-gray-600"
                           style={{ backgroundColor: color.hexCode }}
                         />
                       </div>
 
                       <div className="space-y-2">
                         <div>
-                          <span className="font-bold text-[#111827]">Role:</span>{" "}
-                          <span className="text-[#6B7280]">{color.role}</span>
+                          <span className="font-bold text-gray-900 dark:text-white">Role:</span>{" "}
+                          <span className="text-gray-600 dark:text-gray-400">{color.role}</span>
                         </div>
 
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="font-bold text-[#111827]">Hex Code:</span>{" "}
-                            <span className="text-[#6B7280] font-mono">{color.hexCode}</span>
+                            <span className="font-bold text-gray-900 dark:text-white">Hex Code:</span>{" "}
+                            <span className="text-gray-600 dark:text-gray-400 font-mono">{color.hexCode}</span>
                           </div>
                           <Button
                             onClick={() => copyToClipboard(color.hexCode)}
                             variant="outline"
                             size="sm"
-                            className="ml-2 h-8 w-8 p-0 border-[#FF7435] text-[#FF7435] hover:bg-[#FF7435] hover:text-white"
+                            className="ml-2 h-8 w-8 p-0 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white dark:border-orange-500 dark:text-orange-500 dark:hover:bg-orange-500"
                           >
                             {copiedHex === color.hexCode ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                           </Button>
                         </div>
 
                         <div>
-                          <span className="font-bold text-[#111827]">Description:</span>
-                          <p className="text-[#6B7280] mt-1 leading-relaxed">{color.description}</p>
+                          <span className="font-bold text-gray-900 dark:text-white">Description:</span>
+                          <p className="text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">{color.description}</p>
                         </div>
                       </div>
                     </div>
@@ -341,7 +341,7 @@ export default function LogoPaletteGenerator() {
         </div>
 
         <div className="text-center mt-12">
-          <p className="text-[#6B7280] text-sm">Powered by advanced colour theory and brand psychology</p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">Powered by advanced colour theory and brand psychology</p>
         </div>
       </div>
     </div>

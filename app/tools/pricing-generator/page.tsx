@@ -129,33 +129,33 @@ export default function PricingGenerator() {
       // Handle headings
       if (line.startsWith("# ")) {
         elements.push(
-          <h1 key={elements.length} className="text-3xl md:text-4xl font-bold text-gray-900 font-poppins mb-6">
+          <h1 key={elements.length} className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-poppins mb-6">
             {parseInlineFormatting(line.substring(2))}
           </h1>,
         )
       } else if (line.startsWith("## ")) {
         elements.push(
-          <h2 key={elements.length} className="text-2xl md:text-3xl font-bold text-gray-900 font-poppins mb-4 mt-8">
+          <h2 key={elements.length} className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white font-poppins mb-4 mt-8">
             {parseInlineFormatting(line.substring(3))}
           </h2>,
         )
       } else if (line.startsWith("### ")) {
         elements.push(
-          <h3 key={elements.length} className="text-xl md:text-2xl font-bold text-gray-900 font-poppins mb-3 mt-6">
+          <h3 key={elements.length} className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white font-poppins mb-3 mt-6">
             {parseInlineFormatting(line.substring(4))}
           </h3>,
         )
       }
       // Handle horizontal rules
       else if (line === "---") {
-        elements.push(<hr key={elements.length} className="border-gray-300 my-8" />)
+        elements.push(<hr key={elements.length} className="border-gray-300 dark:border-gray-600 my-8" />)
       }
       // Handle list items
       else if (line.startsWith("- ")) {
         elements.push(
           <div key={elements.length} className="flex items-start mb-2">
             <Check className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-            <span className="text-gray-700 font-inter">{parseInlineFormatting(line.substring(2))}</span>
+            <span className="text-gray-700 dark:text-gray-300 font-inter">{parseInlineFormatting(line.substring(2))}</span>
           </div>,
         )
       }
@@ -164,7 +164,7 @@ export default function PricingGenerator() {
         elements.push(
           <Button
             key={elements.length}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg mt-4 mb-6 font-inter"
+            className="bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold py-3 px-6 rounded-lg mt-4 mb-6 font-inter"
           >
             {parseInlineFormatting(line.substring(3))}
           </Button>,
@@ -173,7 +173,7 @@ export default function PricingGenerator() {
       // Handle regular paragraphs
       else {
         elements.push(
-          <p key={elements.length} className="text-gray-700 font-inter mb-4 leading-relaxed">
+          <p key={elements.length} className="text-gray-700 dark:text-gray-300 font-inter mb-4 leading-relaxed">
             {parseInlineFormatting(line)}
           </p>,
         )
@@ -194,7 +194,7 @@ export default function PricingGenerator() {
     return parts.map((part, index) => {
       if (part.startsWith("**") && part.endsWith("**")) {
         return (
-          <strong key={index} className="font-bold">
+          <strong key={index} className="font-bold text-gray-900 dark:text-white">
             {part.slice(2, -2)}
           </strong>
         )
@@ -215,13 +215,13 @@ export default function PricingGenerator() {
 
     return (
       <div key={key} className="overflow-x-auto mb-8">
-        <table className="w-full border-collapse border border-gray-300 bg-white rounded-lg shadow-sm">
+        <table className="w-full border-collapse border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 rounded-lg shadow-sm">
           <thead>
-            <tr className="bg-gray-50">
+            <tr className="bg-gray-50 dark:bg-zinc-700">
               {headers.map((header, index) => (
                 <th
                   key={index}
-                  className="border border-gray-300 px-4 py-3 text-left font-bold text-gray-900 font-poppins"
+                  className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left font-bold text-gray-900 dark:text-white font-poppins"
                 >
                   {parseInlineFormatting(header)}
                 </th>
@@ -230,9 +230,9 @@ export default function PricingGenerator() {
           </thead>
           <tbody>
             {rows.map((row, rowIndex) => (
-              <tr key={rowIndex} className="hover:bg-gray-50">
+              <tr key={rowIndex} className="hover:bg-gray-50 dark:hover:bg-zinc-700">
                 {row.map((cell, cellIndex) => (
-                  <td key={cellIndex} className="border border-gray-300 px-4 py-3 text-gray-700 font-inter">
+                  <td key={cellIndex} className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-gray-700 dark:text-gray-300 font-inter">
                     {parseInlineFormatting(cell)}
                   </td>
                 ))}
@@ -245,15 +245,15 @@ export default function PricingGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900">
       {/* Header with gradient background */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 py-8">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 py-8 border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto max-w-4xl px-4">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4 font-poppins animate-fade-in">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4 font-poppins animate-fade-in">
               Pricing Page Generator
             </h1>
-            <p className="text-gray-600 text-lg md:text-xl font-inter animate-fade-in-delay">
+            <p className="text-gray-600 dark:text-gray-400 text-lg md:text-xl font-inter animate-fade-in-delay">
               Generate perfect pricing tiers for your product with this easy to use tool
             </p>
           </div>
@@ -262,10 +262,10 @@ export default function PricingGenerator() {
 
       <div className="container mx-auto max-w-4xl px-4 py-8">
         {/* Form Card */}
-        <Card className="bg-gray-50 border-gray-200 shadow-lg animate-slide-up mb-8">
+        <Card className="bg-gray-50 dark:bg-[#111111] border-gray-200 dark:border-gray-800 shadow-lg animate-slide-up mb-8">
           <CardHeader>
-            <CardTitle className="text-gray-900 text-2xl font-poppins">Generate Your Pricing Page</CardTitle>
-            <CardDescription className="text-gray-600 font-inter">
+            <CardTitle className="text-gray-900 dark:text-white text-2xl font-poppins">Generate Your Pricing Page</CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-400 font-inter">
               Fill out the form below and let AI create optimized pricing tiers for your product
             </CardDescription>
           </CardHeader>
@@ -273,7 +273,7 @@ export default function PricingGenerator() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-gray-900 font-inter font-medium">
+                  <Label htmlFor="name" className="text-gray-900 dark:text-white font-inter font-medium">
                     Name
                   </Label>
                   <Input
@@ -281,12 +281,12 @@ export default function PricingGenerator() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500 font-inter"
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500 font-inter"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-900 font-inter font-medium">
+                  <Label htmlFor="email" className="text-gray-900 dark:text-white font-inter font-medium">
                     Email
                   </Label>
                   <Input
@@ -294,14 +294,14 @@ export default function PricingGenerator() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500 font-inter"
+                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500 font-inter"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="productService" className="text-gray-900 font-inter font-medium">
+                <Label htmlFor="productService" className="text-gray-900 dark:text-white font-inter font-medium">
                   What is your product/service?
                 </Label>
                 <Textarea
@@ -309,38 +309,38 @@ export default function PricingGenerator() {
                   value={formData.productService}
                   onChange={(e) => handleInputChange("productService", e.target.value)}
                   placeholder="Please describe its main features and benefits"
-                  className="border-gray-300 focus:border-orange-500 focus:ring-orange-500 font-inter min-h-[100px]"
+                  className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 font-inter min-h-[100px]"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="planDifferentiation" className="text-gray-900 font-inter font-medium">
-                  How will the plans be differentiated? <span className="text-gray-500">(optional)</span>
+                <Label htmlFor="planDifferentiation" className="text-gray-900 dark:text-white font-inter font-medium">
+                  How will the plans be differentiated? <span className="text-gray-500 dark:text-gray-400">(optional)</span>
                 </Label>
                 <Textarea
                   id="planDifferentiation"
                   value={formData.planDifferentiation}
                   onChange={(e) => handleInputChange("planDifferentiation", e.target.value)}
                   placeholder="Explain the features you have that differentiate the plan"
-                  className="border-gray-300 focus:border-orange-500 focus:ring-orange-500 font-inter"
+                  className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 font-inter"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="numberOfPlans" className="text-gray-900 font-inter font-medium">
+                <Label htmlFor="numberOfPlans" className="text-gray-900 dark:text-white font-inter font-medium">
                   How many plans do you want to offer?
                 </Label>
                 <Select
                   value={formData.numberOfPlans}
                   onValueChange={(value) => handleInputChange("numberOfPlans", value)}
                 >
-                  <SelectTrigger className="border-gray-300 focus:border-orange-500 focus:ring-orange-500 font-inter">
+                  <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500 font-inter">
                     <SelectValue placeholder="Select number of plans" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-gray-200">
+                  <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
                     {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                      <SelectItem key={num} value={num.toString()} className="font-inter hover:bg-orange-50">
+                      <SelectItem key={num} value={num.toString()} className="text-gray-900 dark:text-white font-inter hover:bg-orange-50 dark:hover:bg-zinc-700">
                         {num} {num === 1 ? "Plan" : "Plans"}
                       </SelectItem>
                     ))}
@@ -351,7 +351,7 @@ export default function PricingGenerator() {
               <Button
                 type="submit"
                 disabled={!isFormValid || isLoading}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none font-inter"
+                className="w-full bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold py-4 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none font-inter"
                 style={{ padding: "16px" }}
               >
                 {isLoading ? (
@@ -369,16 +369,16 @@ export default function PricingGenerator() {
             </form>
 
             {error && (
-              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center animate-fade-in">
+              <div className="mt-6 p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-lg flex items-center animate-fade-in">
                 <XCircle className="w-5 h-5 text-red-500 mr-2" />
-                <span className="text-red-700 font-inter">{error}</span>
+                <span className="text-red-700 dark:text-red-100 font-inter">{error}</span>
               </div>
             )}
 
             {success && (
-              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center animate-fade-in">
+              <div className="mt-6 p-4 bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800 rounded-lg flex items-center animate-fade-in">
                 <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
-                <span className="text-green-700 font-inter">Pricing page generated successfully!</span>
+                <span className="text-green-700 dark:text-green-100 font-inter">Pricing page generated successfully!</span>
               </div>
             )}
           </CardContent>
@@ -386,7 +386,7 @@ export default function PricingGenerator() {
 
         {/* Generated Content Display */}
         {response && response.output && (
-          <Card className="bg-white border-gray-200 shadow-lg animate-fade-in">
+          <Card className="bg-white dark:bg-[#111111] border-gray-200 dark:border-gray-800 shadow-lg animate-fade-in">
             <CardContent className="p-8">
               <div className="prose prose-lg max-w-none">{renderMarkdownContent(response.output)}</div>
             </CardContent>

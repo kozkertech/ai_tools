@@ -439,62 +439,45 @@ export default function InvoiceGenerator() {
   }
 
   return (
-    <div
-      className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100"
-      style={{ fontFamily: "Inter, sans-serif" }}
-    >
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 font-inter">
       <div className="max-w-4xl mx-auto p-4">
         {/* Header */}
-        <div
-          className="rounded-2xl p-8 mb-8 text-center"
-          style={{
-            background: "linear-gradient(90deg, #FFF7ED 0%, #FFF9F6 100%)",
-            fontFamily: "Poppins, sans-serif",
-          }}
-        >
+        <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 rounded-2xl p-8 mb-8 text-center border border-gray-200 dark:border-gray-800">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <h1 className="text-4xl font-bold mb-2" style={{ color: "#111827" }}>
+            <h1 className="text-4xl font-bold mb-2 text-gray-900 dark:text-white font-poppins">
               Free Invoice Generator
             </h1>
-            <p style={{ color: "#6B7280" }}>Create professional invoices in minutes</p>
+            <p className="text-gray-600 dark:text-gray-400">Create professional invoices in minutes</p>
           </motion.div>
         </div>
 
-        <Card className="shadow-xl border-0" style={{ backgroundColor: "#F9FAFB" }}>
+        <Card className="shadow-xl border-0 bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-gray-800">
           <CardHeader className="text-center pb-6">
             <div className="flex justify-center items-center gap-2 mb-4">
               {[1, 2, 3].map((step) => (
                 <div key={step} className="flex items-center">
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                      step <= currentStep ? "text-white" : "bg-gray-200 text-gray-500"
+                      step <= currentStep 
+                        ? "bg-orange-500 text-white" 
+                        : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
                     }`}
-                    style={{
-                      backgroundColor: step <= currentStep ? "#FF7435" : undefined,
-                    }}
                   >
                     {step}
                   </div>
                   {step < 3 && (
                     <div
                       className={`w-8 h-0.5 mx-2 transition-colors ${
-                        step < currentStep ? "bg-orange-500" : "bg-gray-200"
+                        step < currentStep 
+                          ? "bg-orange-500" 
+                          : "bg-gray-200 dark:bg-gray-700"
                       }`}
-                      style={{
-                        backgroundColor: step < currentStep ? "#FF7435" : undefined,
-                      }}
                     />
                   )}
                 </div>
               ))}
             </div>
-            <CardTitle
-              className="text-xl font-semibold"
-              style={{
-                color: "#111827",
-                fontFamily: "Poppins, sans-serif",
-              }}
-            >
+            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white font-poppins">
               STEP {currentStep} OF 3
             </CardTitle>
           </CardHeader>
@@ -509,19 +492,13 @@ export default function InvoiceGenerator() {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6"
                 >
-                  <h2
-                    className="text-2xl font-semibold mb-6"
-                    style={{
-                      color: "#111827",
-                      fontFamily: "Poppins, sans-serif",
-                    }}
-                  >
+                  <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white font-poppins">
                     Enter your company information
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="companyName" style={{ color: "#111827" }}>
+                      <Label htmlFor="companyName" className="text-gray-900 dark:text-white">
                         Your company name
                       </Label>
                       <Input
@@ -529,11 +506,11 @@ export default function InvoiceGenerator() {
                         placeholder="Your company name"
                         value={invoiceData.companyName}
                         onChange={(e) => updateInvoiceData("companyName", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="companyEmail" style={{ color: "#111827" }}>
+                      <Label htmlFor="companyEmail" className="text-gray-900 dark:text-white">
                         Your email address
                       </Label>
                       <Input
@@ -542,13 +519,13 @@ export default function InvoiceGenerator() {
                         placeholder="Your email address"
                         value={invoiceData.companyEmail}
                         onChange={(e) => updateInvoiceData("companyEmail", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="companyAddress" style={{ color: "#111827" }}>
+                    <Label htmlFor="companyAddress" className="text-gray-900 dark:text-white">
                       Address
                     </Label>
                     <Input
@@ -556,13 +533,13 @@ export default function InvoiceGenerator() {
                       placeholder="Address"
                       value={invoiceData.companyAddress}
                       onChange={(e) => updateInvoiceData("companyAddress", e.target.value)}
-                      className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="companyCity" style={{ color: "#111827" }}>
+                      <Label htmlFor="companyCity" className="text-gray-900 dark:text-white">
                         City
                       </Label>
                       <Input
@@ -570,11 +547,11 @@ export default function InvoiceGenerator() {
                         placeholder="City"
                         value={invoiceData.companyCity}
                         onChange={(e) => updateInvoiceData("companyCity", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="companyZip" style={{ color: "#111827" }}>
+                      <Label htmlFor="companyZip" className="text-gray-900 dark:text-white">
                         Zip/postal code
                       </Label>
                       <Input
@@ -582,26 +559,26 @@ export default function InvoiceGenerator() {
                         placeholder="Zip/postal code"
                         value={invoiceData.companyZip}
                         onChange={(e) => updateInvoiceData("companyZip", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="companyCountry" style={{ color: "#111827" }}>
+                      <Label htmlFor="companyCountry" className="text-gray-900 dark:text-white">
                         Country/Region
                       </Label>
                       <Select
                         value={invoiceData.companyCountry}
                         onValueChange={(value) => updateInvoiceData("companyCountry", value)}
                       >
-                        <SelectTrigger className="border-gray-300 focus:border-orange-500 focus:ring-orange-500">
+                        <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
                           {countries.map((country) => (
-                            <SelectItem key={country} value={country}>
+                            <SelectItem key={country} value={country} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
                               {country}
                             </SelectItem>
                           ))}
@@ -609,7 +586,7 @@ export default function InvoiceGenerator() {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="companyState" style={{ color: "#111827" }}>
+                      <Label htmlFor="companyState" className="text-gray-900 dark:text-white">
                         State/Province
                       </Label>
                       {shouldShowStateDropdown(invoiceData.companyCountry) ? (
@@ -617,12 +594,12 @@ export default function InvoiceGenerator() {
                           value={invoiceData.companyState}
                           onValueChange={(value) => updateInvoiceData("companyState", value)}
                         >
-                          <SelectTrigger className="border-gray-300 focus:border-orange-500 focus:ring-orange-500">
+                          <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
                             <SelectValue placeholder="Select state/province" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
                             {getStatesForCountry(invoiceData.companyCountry).map((state) => (
-                              <SelectItem key={state} value={state}>
+                              <SelectItem key={state} value={state} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
                                 {state}
                               </SelectItem>
                             ))}
@@ -634,7 +611,7 @@ export default function InvoiceGenerator() {
                           placeholder="State/Province"
                           value={invoiceData.companyState}
                           onChange={(e) => updateInvoiceData("companyState", e.target.value)}
-                          className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                          className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                         />
                       )}
                     </div>
@@ -650,19 +627,13 @@ export default function InvoiceGenerator() {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6"
                 >
-                  <h2
-                    className="text-2xl font-semibold mb-6"
-                    style={{
-                      color: "#111827",
-                      fontFamily: "Poppins, sans-serif",
-                    }}
-                  >
+                  <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white font-poppins">
                     Enter customer and invoice information
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="customerName" style={{ color: "#111827" }}>
+                      <Label htmlFor="customerName" className="text-gray-900 dark:text-white">
                         Your customer's name
                       </Label>
                       <Input
@@ -670,11 +641,11 @@ export default function InvoiceGenerator() {
                         placeholder="Your customer's name"
                         value={invoiceData.customerName}
                         onChange={(e) => updateInvoiceData("customerName", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="customerEmail" style={{ color: "#111827" }}>
+                      <Label htmlFor="customerEmail" className="text-gray-900 dark:text-white">
                         Your customer's email
                       </Label>
                       <Input
@@ -683,11 +654,11 @@ export default function InvoiceGenerator() {
                         placeholder="Your customer's email"
                         value={invoiceData.customerEmail}
                         onChange={(e) => updateInvoiceData("customerEmail", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="invoiceNumber" style={{ color: "#111827" }}>
+                      <Label htmlFor="invoiceNumber" className="text-gray-900 dark:text-white">
                         Invoice number
                       </Label>
                       <Input
@@ -695,13 +666,13 @@ export default function InvoiceGenerator() {
                         placeholder="01"
                         value={invoiceData.invoiceNumber}
                         onChange={(e) => updateInvoiceData("invoiceNumber", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="customerAddress" style={{ color: "#111827" }}>
+                    <Label htmlFor="customerAddress" className="text-gray-900 dark:text-white">
                       Customer's address
                     </Label>
                     <Input
@@ -709,13 +680,13 @@ export default function InvoiceGenerator() {
                       placeholder="Customer's address"
                       value={invoiceData.customerAddress}
                       onChange={(e) => updateInvoiceData("customerAddress", e.target.value)}
-                      className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="customerCity" style={{ color: "#111827" }}>
+                      <Label htmlFor="customerCity" className="text-gray-900 dark:text-white">
                         City
                       </Label>
                       <Input
@@ -723,11 +694,11 @@ export default function InvoiceGenerator() {
                         placeholder="City"
                         value={invoiceData.customerCity}
                         onChange={(e) => updateInvoiceData("customerCity", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="customerZip" style={{ color: "#111827" }}>
+                      <Label htmlFor="customerZip" className="text-gray-900 dark:text-white">
                         Zip/postal code
                       </Label>
                       <Input
@@ -735,11 +706,11 @@ export default function InvoiceGenerator() {
                         placeholder="Zip/postal code"
                         value={invoiceData.customerZip}
                         onChange={(e) => updateInvoiceData("customerZip", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="invoiceDate" style={{ color: "#111827" }}>
+                      <Label htmlFor="invoiceDate" className="text-gray-900 dark:text-white">
                         Invoice date
                       </Label>
                       <Input
@@ -747,26 +718,26 @@ export default function InvoiceGenerator() {
                         type="date"
                         value={invoiceData.invoiceDate}
                         onChange={(e) => updateInvoiceData("invoiceDate", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="customerCountry" style={{ color: "#111827" }}>
+                      <Label htmlFor="customerCountry" className="text-gray-900 dark:text-white">
                         Country/Region
                       </Label>
                       <Select
                         value={invoiceData.customerCountry}
                         onValueChange={(value) => updateInvoiceData("customerCountry", value)}
                       >
-                        <SelectTrigger className="border-gray-300 focus:border-orange-500 focus:ring-orange-500">
+                        <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
                           {countries.map((country) => (
-                            <SelectItem key={country} value={country}>
+                            <SelectItem key={country} value={country} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
                               {country}
                             </SelectItem>
                           ))}
@@ -774,7 +745,7 @@ export default function InvoiceGenerator() {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="customerState" style={{ color: "#111827" }}>
+                      <Label htmlFor="customerState" className="text-gray-900 dark:text-white">
                         State/Province
                       </Label>
                       {shouldShowStateDropdown(invoiceData.customerCountry) ? (
@@ -782,12 +753,12 @@ export default function InvoiceGenerator() {
                           value={invoiceData.customerState}
                           onValueChange={(value) => updateInvoiceData("customerState", value)}
                         >
-                          <SelectTrigger className="border-gray-300 focus:border-orange-500 focus:ring-orange-500">
+                          <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
                             <SelectValue placeholder="Select state/province" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
                             {getStatesForCountry(invoiceData.customerCountry).map((state) => (
-                              <SelectItem key={state} value={state}>
+                              <SelectItem key={state} value={state} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
                                 {state}
                               </SelectItem>
                             ))}
@@ -799,7 +770,7 @@ export default function InvoiceGenerator() {
                           placeholder="State/Province"
                           value={invoiceData.customerState}
                           onChange={(e) => updateInvoiceData("customerState", e.target.value)}
-                          className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                          className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                         />
                       )}
                     </div>
@@ -816,29 +787,23 @@ export default function InvoiceGenerator() {
                   className="space-y-6"
                 >
                   <div className="flex justify-between items-center">
-                    <h2
-                      className="text-2xl font-semibold"
-                      style={{
-                        color: "#111827",
-                        fontFamily: "Poppins, sans-serif",
-                      }}
-                    >
+                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-white font-poppins">
                       Enter the items you wish to bill
                     </h2>
                     <div className="space-y-2">
-                      <Label htmlFor="currency" style={{ color: "#111827" }}>
+                      <Label htmlFor="currency" className="text-gray-900 dark:text-white">
                         Currency
                       </Label>
                       <Select
                         value={invoiceData.currency}
                         onValueChange={(value) => updateInvoiceData("currency", value)}
                       >
-                        <SelectTrigger className="border-gray-300 focus:border-orange-500 focus:ring-orange-500 w-32">
+                        <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500 w-32">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
                           {currencies.map((currency) => (
-                            <SelectItem key={currency.code} value={currency.code}>
+                            <SelectItem key={currency.code} value={currency.code} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
                               {currency.symbol} {currency.code}
                             </SelectItem>
                           ))}
@@ -848,7 +813,7 @@ export default function InvoiceGenerator() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="grid grid-cols-12 gap-2 font-medium text-sm" style={{ color: "#111827" }}>
+                    <div className="grid grid-cols-12 gap-2 font-medium text-sm text-gray-900 dark:text-white">
                       <div className="col-span-3">Item</div>
                       <div className="col-span-4">Description</div>
                       <div className="col-span-2">Quantity</div>
@@ -868,7 +833,7 @@ export default function InvoiceGenerator() {
                             placeholder="Item"
                             value={item.item}
                             onChange={(e) => updateLineItem(item.id, "item", e.target.value)}
-                            className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                            className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                           />
                         </div>
                         <div className="col-span-4">
@@ -876,7 +841,7 @@ export default function InvoiceGenerator() {
                             placeholder="Description"
                             value={item.description}
                             onChange={(e) => updateLineItem(item.id, "description", e.target.value)}
-                            className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                            className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                           />
                         </div>
                         <div className="col-span-2">
@@ -885,7 +850,7 @@ export default function InvoiceGenerator() {
                             placeholder="1"
                             value={item.quantity}
                             onChange={(e) => updateLineItem(item.id, "quantity", Number.parseInt(e.target.value) || 0)}
-                            className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                            className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                           />
                         </div>
                         <div className="col-span-2">
@@ -901,7 +866,7 @@ export default function InvoiceGenerator() {
                                 updateLineItem(item.id, "price", value === "" ? 0 : Number.parseFloat(value) || 0)
                               }
                             }}
-                            className="border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+                            className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
                             style={{
                               // Remove spinner arrows
                               MozAppearance: "textfield",
@@ -911,7 +876,7 @@ export default function InvoiceGenerator() {
                           />
                         </div>
                         <div className="col-span-1 flex items-center justify-between">
-                          <span style={{ color: "#6B7280" }} className="text-sm font-medium">
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                             {formatCurrency(item.quantity * item.price)}
                           </span>
                           {invoiceData.lineItems.length > 1 && (
@@ -919,7 +884,7 @@ export default function InvoiceGenerator() {
                               variant="ghost"
                               size="sm"
                               onClick={() => removeLineItem(item.id)}
-                              className="text-red-500 hover:text-red-600 hover:bg-red-50 p-1 h-auto ml-2"
+                              className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 p-1 h-auto ml-2"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -931,8 +896,7 @@ export default function InvoiceGenerator() {
                     <Button
                       variant="ghost"
                       onClick={addLineItem}
-                      className="hover:bg-orange-50"
-                      style={{ color: "#FF7435" }}
+                      className="text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       Add a line item
@@ -941,7 +905,7 @@ export default function InvoiceGenerator() {
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="notes" style={{ color: "#111827" }}>
+                      <Label htmlFor="notes" className="text-gray-900 dark:text-white">
                         Notes / Memo
                       </Label>
                       <Textarea
@@ -949,25 +913,24 @@ export default function InvoiceGenerator() {
                         placeholder="Additional notes..."
                         value={invoiceData.notes}
                         onChange={(e) => updateInvoiceData("notes", e.target.value)}
-                        className="border-gray-300 focus:border-orange-500 focus:ring-orange-500 min-h-[120px]"
+                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500 min-h-[120px]"
                       />
                     </div>
 
                     <div className="space-y-4">
-                      <div className="bg-white rounded-lg p-4 space-y-3 border border-gray-200">
-                        <div className="flex justify-between" style={{ color: "#6B7280" }}>
+                      <div className="bg-white dark:bg-zinc-800 rounded-lg p-4 space-y-3 border border-gray-200 dark:border-gray-700">
+                        <div className="flex justify-between text-gray-600 dark:text-gray-400">
                           <span>Subtotal</span>
                           <span className="font-medium">{formatCurrency(calculateSubtotal())}</span>
                         </div>
-                        <div className="flex justify-between items-center" style={{ color: "#6B7280" }}>
+                        <div className="flex justify-between items-center text-gray-600 dark:text-gray-400">
                           <div className="flex items-center gap-2">
                             <span>Tax ({invoiceData.taxRate}%)</span>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => setIsEditingTax(!isEditingTax)}
-                              className="p-1 h-auto hover:bg-orange-50"
-                              style={{ color: "#FF7435" }}
+                              className="p-1 h-auto text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20"
                             >
                               <Edit className="h-3 w-3" />
                             </Button>
@@ -981,21 +944,21 @@ export default function InvoiceGenerator() {
                               step="0.1"
                               value={invoiceData.taxRate}
                               onChange={(e) => updateInvoiceData("taxRate", Number.parseFloat(e.target.value) || 0)}
-                              className="border-gray-300 focus:border-orange-500 focus:ring-orange-500 w-20"
+                              className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500 w-20"
                             />
-                            <span style={{ color: "#6B7280" }}>%</span>
+                            <span className="text-gray-600 dark:text-gray-400">%</span>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => setIsEditingTax(false)}
-                              className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                              className="text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20"
                             >
                               <CheckCircle className="h-4 w-4" />
                             </Button>
                           </div>
                         )}
-                        <div className="border-t border-gray-200 pt-3">
-                          <div className="rounded-lg p-4 text-white" style={{ backgroundColor: "#FF7435" }}>
+                        <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
+                          <div className="bg-orange-500 rounded-lg p-4 text-white">
                             <div className="flex justify-between items-center">
                               <span className="text-lg font-semibold">Total</span>
                               <span className="text-2xl font-bold">{formatCurrency(calculateTotal())}</span>
@@ -1009,13 +972,12 @@ export default function InvoiceGenerator() {
               )}
             </AnimatePresence>
 
-            <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+            <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
               <Button
                 variant="ghost"
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className="hover:bg-gray-100"
-                style={{ color: "#6B7280" }}
+                className="text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Previous
@@ -1024,12 +986,7 @@ export default function InvoiceGenerator() {
               {currentStep < 3 ? (
                 <Button
                   onClick={nextStep}
-                  className="text-white font-semibold hover:opacity-90 transition-opacity"
-                  style={{
-                    backgroundColor: "#FF7435",
-                    padding: "16px 24px",
-                    borderRadius: "8px",
-                  }}
+                  className="bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold transition-opacity px-6 py-4 rounded-lg"
                 >
                   Next
                   <ArrowRight className="h-4 w-4 ml-2" />
@@ -1038,12 +995,7 @@ export default function InvoiceGenerator() {
                 <Button
                   onClick={handleSubmit}
                   disabled={isLoading}
-                  className="text-white font-semibold hover:opacity-90 transition-opacity px-8"
-                  style={{
-                    backgroundColor: "#FF7435",
-                    padding: "16px 32px",
-                    borderRadius: "8px",
-                  }}
+                  className="bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold transition-opacity px-8 py-4 rounded-lg"
                 >
                   {isLoading ? (
                     <>
@@ -1062,8 +1014,8 @@ export default function InvoiceGenerator() {
                 <Alert
                   className={`${
                     submitStatus === "success"
-                      ? "bg-green-50 border-green-200 text-green-800"
-                      : "bg-red-50 border-red-200 text-red-800"
+                      ? "bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800 text-green-800 dark:text-green-100"
+                      : "bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800 text-red-800 dark:text-red-100"
                   }`}
                 >
                   {submitStatus === "success" ? <CheckCircle className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
@@ -1078,58 +1030,45 @@ export default function InvoiceGenerator() {
 
             {showInvoicePreview && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
-                <Card className="bg-white border border-gray-200">
+                <Card className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-800">
                   <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle
-                      style={{
-                        color: "#111827",
-                        fontFamily: "Poppins, sans-serif",
-                      }}
-                    >
+                    <CardTitle className="text-gray-900 dark:text-white font-poppins">
                       Invoice Preview
                     </CardTitle>
                     <Button
                       onClick={generatePDF}
-                      className="text-white font-semibold hover:opacity-90 transition-opacity"
-                      style={{
-                        backgroundColor: "#FF7435",
-                        padding: "12px 20px",
-                        borderRadius: "8px",
-                      }}
+                      className="bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold transition-opacity px-5 py-3 rounded-lg"
                     >
                       Download PDF
                     </Button>
                   </CardHeader>
                   <CardContent className="p-6">
-                    <div className="max-w-4xl mx-auto bg-white">
+                    <div className="max-w-4xl mx-auto bg-white dark:bg-zinc-900 rounded-lg p-6">
                       {/* Header */}
                       <div className="flex justify-between items-start mb-8">
                         <div>
-                          <h1
-                            className="text-3xl font-bold"
-                            style={{ color: "#111827", fontFamily: "Poppins, sans-serif" }}
-                          >
+                          <h1 className="text-3xl font-bold text-gray-900 dark:text-white font-poppins">
                             INVOICE
                           </h1>
                         </div>
                         <div className="text-right">
                           <div className="mb-2">
-                            <span className="font-semibold" style={{ color: "#111827" }}>
+                            <span className="font-semibold text-gray-900 dark:text-white">
                               INVOICE #
                             </span>
-                            <div style={{ color: "#6B7280" }}>{invoiceData.invoiceNumber}</div>
+                            <div className="text-gray-600 dark:text-gray-400">{invoiceData.invoiceNumber}</div>
                           </div>
                           <div className="mb-2">
-                            <span className="font-semibold" style={{ color: "#111827" }}>
+                            <span className="font-semibold text-gray-900 dark:text-white">
                               INVOICE DATE
                             </span>
-                            <div style={{ color: "#6B7280" }}>{invoiceData.invoiceDate}</div>
+                            <div className="text-gray-600 dark:text-gray-400">{invoiceData.invoiceDate}</div>
                           </div>
                           <div>
-                            <span className="font-semibold" style={{ color: "#111827" }}>
+                            <span className="font-semibold text-gray-900 dark:text-white">
                               AMOUNT DUE
                             </span>
-                            <div className="text-xl font-bold" style={{ color: "#FF7435" }}>
+                            <div className="text-xl font-bold text-orange-500">
                               {formatCurrency(calculateTotal())}
                             </div>
                           </div>
@@ -1139,10 +1078,10 @@ export default function InvoiceGenerator() {
                       {/* Bill From and Bill To */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                         <div>
-                          <h3 className="font-bold mb-3" style={{ color: "#111827" }}>
+                          <h3 className="font-bold mb-3 text-gray-900 dark:text-white">
                             BILL FROM:
                           </h3>
-                          <div style={{ color: "#6B7280" }} className="space-y-1">
+                          <div className="text-gray-600 dark:text-gray-400 space-y-1">
                             <div className="font-semibold">{invoiceData.companyName}</div>
                             <div>{invoiceData.companyAddress}</div>
                             <div>
@@ -1153,10 +1092,10 @@ export default function InvoiceGenerator() {
                           </div>
                         </div>
                         <div>
-                          <h3 className="font-bold mb-3" style={{ color: "#111827" }}>
+                          <h3 className="font-bold mb-3 text-gray-900 dark:text-white">
                             BILL TO:
                           </h3>
-                          <div style={{ color: "#6B7280" }} className="space-y-1">
+                          <div className="text-gray-600 dark:text-gray-400 space-y-1">
                             <div className="font-semibold">{invoiceData.customerName}</div>
                             <div>{invoiceData.customerAddress}</div>
                             <div>
@@ -1173,35 +1112,20 @@ export default function InvoiceGenerator() {
                         <div className="overflow-x-auto">
                           <table className="w-full border-collapse">
                             <thead>
-                              <tr style={{ backgroundColor: "#F9FAFB" }}>
-                                <th
-                                  className="border border-gray-300 px-4 py-3 text-left font-semibold"
-                                  style={{ color: "#111827" }}
-                                >
+                              <tr className="bg-gray-50 dark:bg-zinc-800">
+                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
                                   Item
                                 </th>
-                                <th
-                                  className="border border-gray-300 px-4 py-3 text-left font-semibold"
-                                  style={{ color: "#111827" }}
-                                >
+                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
                                   Description
                                 </th>
-                                <th
-                                  className="border border-gray-300 px-4 py-3 text-center font-semibold"
-                                  style={{ color: "#111827" }}
-                                >
+                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center font-semibold text-gray-900 dark:text-white">
                                   Quantity
                                 </th>
-                                <th
-                                  className="border border-gray-300 px-4 py-3 text-right font-semibold"
-                                  style={{ color: "#111827" }}
-                                >
+                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-right font-semibold text-gray-900 dark:text-white">
                                   Price
                                 </th>
-                                <th
-                                  className="border border-gray-300 px-4 py-3 text-right font-semibold"
-                                  style={{ color: "#111827" }}
-                                >
+                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-right font-semibold text-gray-900 dark:text-white">
                                   Amount
                                 </th>
                               </tr>
@@ -1209,28 +1133,19 @@ export default function InvoiceGenerator() {
                             <tbody>
                               {invoiceData.lineItems.map((item, index) => (
                                 <tr key={item.id}>
-                                  <td className="border border-gray-300 px-4 py-3" style={{ color: "#6B7280" }}>
+                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-gray-600 dark:text-gray-400">
                                     {item.item}
                                   </td>
-                                  <td className="border border-gray-300 px-4 py-3" style={{ color: "#6B7280" }}>
+                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-gray-600 dark:text-gray-400">
                                     {item.description}
                                   </td>
-                                  <td
-                                    className="border border-gray-300 px-4 py-3 text-center"
-                                    style={{ color: "#6B7280" }}
-                                  >
+                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-gray-600 dark:text-gray-400">
                                     {item.quantity}
                                   </td>
-                                  <td
-                                    className="border border-gray-300 px-4 py-3 text-right"
-                                    style={{ color: "#6B7280" }}
-                                  >
+                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-right text-gray-600 dark:text-gray-400">
                                     {formatCurrency(item.price)}
                                   </td>
-                                  <td
-                                    className="border border-gray-300 px-4 py-3 text-right font-semibold"
-                                    style={{ color: "#6B7280" }}
-                                  >
+                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-right font-semibold text-gray-600 dark:text-gray-400">
                                     {formatCurrency(item.quantity * item.price)}
                                   </td>
                                 </tr>
@@ -1243,22 +1158,19 @@ export default function InvoiceGenerator() {
                       {/* Summary */}
                       <div className="flex justify-end mb-8">
                         <div className="w-64">
-                          <div className="flex justify-between py-2 border-b border-gray-200">
-                            <span style={{ color: "#6B7280" }}>SUBTOTAL</span>
-                            <span className="font-semibold" style={{ color: "#6B7280" }}>
+                          <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                            <span className="text-gray-600 dark:text-gray-400">SUBTOTAL</span>
+                            <span className="font-semibold text-gray-600 dark:text-gray-400">
                               {formatCurrency(calculateSubtotal())}
                             </span>
                           </div>
-                          <div className="flex justify-between py-2 border-b border-gray-200">
-                            <span style={{ color: "#6B7280" }}>TAX ({invoiceData.taxRate}%)</span>
-                            <span className="font-semibold" style={{ color: "#6B7280" }}>
+                          <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                            <span className="text-gray-600 dark:text-gray-400">TAX ({invoiceData.taxRate}%)</span>
+                            <span className="font-semibold text-gray-600 dark:text-gray-400">
                               {formatCurrency(calculateTax())}
                             </span>
                           </div>
-                          <div
-                            className="flex justify-between py-3 text-white font-bold text-lg rounded-lg mt-2 px-4"
-                            style={{ backgroundColor: "#FF7435" }}
-                          >
+                          <div className="bg-orange-500 flex justify-between py-3 text-white font-bold text-lg rounded-lg mt-2 px-4">
                             <span>TOTAL</span>
                             <span>{formatCurrency(calculateTotal())}</span>
                           </div>
@@ -1268,33 +1180,27 @@ export default function InvoiceGenerator() {
                       {/* Notes */}
                       {invoiceData.notes && (
                         <div className="mb-8">
-                          <h3 className="font-bold mb-3" style={{ color: "#111827" }}>
+                          <h3 className="font-bold mb-3 text-gray-900 dark:text-white">
                             Notes:
                           </h3>
-                          <p style={{ color: "#6B7280" }} className="whitespace-pre-wrap">
+                          <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
                             {invoiceData.notes}
                           </p>
                         </div>
                       )}
 
                       {/* Actions */}
-                      <div className="flex justify-center gap-4 pt-6 border-t border-gray-200">
+                      <div className="flex justify-center gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
                         <Button
                           onClick={() => setShowInvoicePreview(false)}
                           variant="outline"
-                          className="border-gray-300 hover:bg-gray-50"
-                          style={{ color: "#6B7280" }}
+                          className="border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                         >
                           Back to Form
                         </Button>
                         <Button
                           onClick={generatePDF}
-                          className="text-white font-semibold hover:opacity-90 transition-opacity"
-                          style={{
-                            backgroundColor: "#FF7435",
-                            padding: "12px 24px",
-                            borderRadius: "8px",
-                          }}
+                          className="bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold transition-opacity px-6 py-3 rounded-lg"
                         >
                           Download PDF
                         </Button>

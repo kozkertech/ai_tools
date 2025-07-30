@@ -154,7 +154,7 @@ export default function Footer() {
                 <span className="text-gray-600 dark:text-gray-300 text-sm">
                   11/927,1st Floor Adithya Shopping Complex
                   <br />
-                  IKochupally Road , Thoppumpady
+                  Kochupally Road , Thoppumpady
                   <br/>
                   Kochi, Kerala, India, PO. 682005
                 </span>
