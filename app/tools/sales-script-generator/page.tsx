@@ -25,10 +25,11 @@ import {
   Users,
   Settings,
 } from "lucide-react"
-import jsPDF from "jspdf"
 
 // Types
 export interface FormData {
+  name: string
+  email: string
   productName: string
   targetAudience: string
   keyBenefits: string[]
@@ -81,7 +82,7 @@ function FormattedOutput({ content }: FormattedOutputProps) {
         if (line.match(/^\*\*[^*:]+\*\*$/)) {
           const heading = line.replace(/\*\*/g, "")
           return (
-            <h2 key={index} className="text-xl font-poppins font-semibold brand-heading mt-6 mb-3 first:mt-0">
+            <h2 key={index} className="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3 first:mt-0">
               {heading}
             </h2>
           )
@@ -91,7 +92,7 @@ function FormattedOutput({ content }: FormattedOutputProps) {
         if (line.match(/^\*\*[^*]+:\*\*$/)) {
           const heading = line.replace(/\*\*/g, "").replace(":", "")
           return (
-            <h3 key={index} className="text-lg font-poppins font-semibold brand-heading mt-5 mb-2">
+            <h3 key={index} className="text-lg font-semibold text-gray-900 dark:text-white mt-5 mb-2">
               {heading}:
             </h3>
           )
@@ -101,12 +102,12 @@ function FormattedOutput({ content }: FormattedOutputProps) {
         if (line.match(/^\*".*"\*$/)) {
           const text = line.replace(/^\*"|"\*$/g, "")
           return (
-            <p
+            <div
               key={index}
-              className="italic brand-body mb-3 pl-4 border-l-2 border-orange-200 bg-orange-50 py-2 px-4 rounded"
+              className="italic text-gray-700 dark:text-gray-300 mb-3 pl-4 border-l-2 border-orange-200 bg-orange-50 dark:bg-orange-900/20 py-2 px-4 rounded"
             >
               "{text}"
-            </p>
+            </div>
           )
         }
 
@@ -115,8 +116,8 @@ function FormattedOutput({ content }: FormattedOutputProps) {
           const text = line.replace("✔", "").trim()
           return (
             <div key={index} className="flex items-start gap-2 mb-2">
-              <span className="text-green-500 mt-1">✔</span>
-              <div className="brand-body" dangerouslySetInnerHTML={{ __html: formatInlineText(text) }} />
+              <span className="text-green-500 mt-1 flex-shrink-0">✔</span>
+              <div className="text-gray-700 dark:text-gray-300 flex-1" dangerouslySetInnerHTML={{ __html: formatInlineText(text) }} />
             </div>
           )
         }
@@ -126,8 +127,8 @@ function FormattedOutput({ content }: FormattedOutputProps) {
           const text = line.replace("→", "").trim()
           return (
             <div key={index} className="flex items-start gap-2 mb-2 ml-4">
-              <span className="text-blue-500 mt-1">→</span>
-              <div className="brand-body" dangerouslySetInnerHTML={{ __html: formatInlineText(text) }} />
+              <span className="text-blue-500 mt-1 flex-shrink-0">→</span>
+              <div className="text-gray-700 dark:text-gray-300 flex-1" dangerouslySetInnerHTML={{ __html: formatInlineText(text) }} />
             </div>
           )
         }
@@ -137,7 +138,7 @@ function FormattedOutput({ content }: FormattedOutputProps) {
           return (
             <p
               key={index}
-              className="brand-body mb-3 leading-relaxed"
+              className="text-gray-700 dark:text-gray-300 mb-3 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: formatInlineText(line) }}
             />
           )
@@ -153,7 +154,7 @@ function FormattedOutput({ content }: FormattedOutputProps) {
     return (
       text
         // Convert **text** to bold
-        .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-gray-800">$1</strong>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-gray-800 dark:text-gray-200">$1</strong>')
         // Convert *text* to italic (but not if it's already in quotes)
         .replace(/(?<!")(\*)([^*"]+)(\*)(?!")/g, '<em class="italic">$2</em>')
         // Clean up any remaining escape characters
@@ -161,7 +162,7 @@ function FormattedOutput({ content }: FormattedOutputProps) {
     )
   }
 
-  return <div className="space-y-2">{parseContent(content)}</div>
+  return <div className="space-y-2 text-left">{parseContent(content)}</div>
 }
 
 // Product Details Step Component
@@ -180,6 +181,38 @@ function ProductDetailsStep({ formData, onChange, errors }: ProductDetailsStepPr
       </div>
 
       <div className="space-y-6">
+        {/* Name and Email */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-white">
+              Your Name *
+            </Label>
+            <Input
+              id="name"
+              placeholder="e.g., John Smith"
+              value={formData.name}
+              onChange={(e) => onChange("name", e.target.value)}
+              className={`bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white ${errors.name ? "border-red-500 focus:border-red-500" : "border-gray-300 dark:border-zinc-700 focus:border-orange-500"}`}
+            />
+            {errors.name && <p className="text-red-600 dark:text-red-400 text-sm">{errors.name}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-white">
+              Your Email *
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="e.g., john@company.com"
+              value={formData.email}
+              onChange={(e) => onChange("email", e.target.value)}
+              className={`bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white ${errors.email ? "border-red-500 focus:border-red-500" : "border-gray-300 dark:border-zinc-700 focus:border-orange-500"}`}
+            />
+            {errors.email && <p className="text-red-600 dark:text-red-400 text-sm">{errors.email}</p>}
+          </div>
+        </div>
+
         {/* Product Name */}
         <div className="space-y-2">
           <Label htmlFor="productName" className="text-sm font-medium text-gray-700 dark:text-white">
@@ -465,7 +498,12 @@ interface ScriptResultsProps {
 
 function ScriptResults({ response, formData, onReset }: ScriptResultsProps) {
   const [copied, setCopied] = useState(false)
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const [isGeneratingFile, setIsGeneratingFile] = useState(false)
+
+  // Scroll to top when results component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const copyToClipboard = async () => {
     try {
@@ -496,66 +534,41 @@ function ScriptResults({ response, formData, onReset }: ScriptResultsProps) {
     linkElement.click()
   }
 
-  const downloadPDF = async () => {
-    setIsGeneratingPDF(true)
+  const downloadText = async () => {
+    setIsGeneratingFile(true)
 
     try {
-      const pdf = new jsPDF()
-      const pageWidth = pdf.internal.pageSize.getWidth()
-      const margin = 20
-      let yPosition = margin
-
-      // Helper function to add text with word wrapping
-      const addText = (text: string, fontSize = 12, isBold = false) => {
-        pdf.setFontSize(fontSize)
-        if (isBold) {
-          pdf.setFont("helvetica", "bold")
-        } else {
-          pdf.setFont("helvetica", "normal")
-        }
-
-        const lines = pdf.splitTextToSize(text, pageWidth - 2 * margin)
-        pdf.text(lines, margin, yPosition)
-        yPosition += lines.length * (fontSize * 0.4) + 5
-
-        // Check if we need a new page
-        if (yPosition > pdf.internal.pageSize.getHeight() - margin) {
-          pdf.addPage()
-          yPosition = margin
-        }
-      }
-
-      // Title
-      addText("Sales Script", 20, true)
-      yPosition += 5
-
-      // Product Info
-      addText(`Product: ${formData.productName}`, 14, true)
-      if (formData.industry) addText(`Industry: ${formData.industry}`)
-      if (formData.priceRange) addText(`Price Range: ${formData.priceRange}`)
-      addText(`Target Audience: ${formData.targetAudience}`)
-      addText(`Tone: ${formData.tone}`)
-      addText(`Length: ${formData.scriptLength}`)
-      yPosition += 10
-
-      // Script Content
-      addText("Generated Script:", 14, true)
+      // Create a formatted text version
+      let textContent = `Sales Script Report\n${"=".repeat(25)}\n\n`
       
-      // Clean script content for PDF
+      textContent += `Product: ${formData.productName}\n`
+      if (formData.industry) textContent += `Industry: ${formData.industry}\n`
+      if (formData.priceRange) textContent += `Price Range: ${formData.priceRange}\n`
+      textContent += `Target Audience: ${formData.targetAudience}\n`
+      textContent += `Tone: ${formData.tone}\n`
+      textContent += `Length: ${formData.scriptLength}\n\n`
+      
+      textContent += `Generated Script:\n${"-".repeat(17)}\n`
+      
+      // Clean script content for text file
       const cleanScript = response.script
         .replace(/<[^>]*>/g, "")
         .replace(/\\n/g, "\n")
         .replace(/\*\*(.*?)\*\*/g, "$1")
         .replace(/\*(.*?)\*/g, "$1")
 
-      addText(cleanScript, 10)
+      textContent += cleanScript
 
-      // Save the PDF
-      pdf.save(`${formData.productName.replace(/\s+/g, "_")}_sales_script.pdf`)
+      // Create download
+      const dataUri = "data:text/plain;charset=utf-8," + encodeURIComponent(textContent)
+      const linkElement = document.createElement("a")
+      linkElement.setAttribute("href", dataUri)
+      linkElement.setAttribute("download", `${formData.productName.replace(/\s+/g, "_")}_sales_script.txt`)
+      linkElement.click()
     } catch (error) {
-      console.error("Error generating PDF:", error)
+      console.error("Error generating text file:", error)
     } finally {
-      setIsGeneratingPDF(false)
+      setIsGeneratingFile(false)
     }
   }
 
@@ -590,20 +603,20 @@ function ScriptResults({ response, formData, onReset }: ScriptResultsProps) {
             )}
           </Button>
           <Button
-            onClick={downloadPDF}
-            disabled={isGeneratingPDF}
+            onClick={downloadText}
+            disabled={isGeneratingFile}
             variant="outline"
             className="border-orange-200 dark:border-orange-600 text-orange-700 dark:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 bg-transparent"
           >
-            {isGeneratingPDF ? (
+            {isGeneratingFile ? (
               <>
                 <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                Generating PDF...
+                Generating File...
               </>
             ) : (
               <>
                 <FileText className="w-4 h-4 mr-2" />
-                Download PDF
+                Download Report
               </>
             )}
           </Button>
@@ -776,6 +789,8 @@ const STEPS = [
 export default function SalesScriptGenerator() {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
     productName: "",
     targetAudience: "",
     keyBenefits: [""],
@@ -791,7 +806,7 @@ export default function SalesScriptGenerator() {
   const [submitError, setSubmitError] = useState<string>("")
   const [submitSuccess, setSubmitSuccess] = useState(false)
 
-  // Load saved progress from localStorage
+  // Load saved progress from localStorage and scroll to top
   useEffect(() => {
     const savedData = localStorage.getItem("sales-script-generator-data")
     const savedStep = localStorage.getItem("sales-script-generator-step")
@@ -807,6 +822,9 @@ export default function SalesScriptGenerator() {
     if (savedStep) {
       setCurrentStep(Number.parseInt(savedStep))
     }
+
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0)
   }, [])
 
   // Save progress to localStorage
@@ -828,6 +846,9 @@ export default function SalesScriptGenerator() {
 
     switch (step) {
       case 1:
+        if (!formData.name.trim()) newErrors.name = "Name is required"
+        if (!formData.email.trim()) newErrors.email = "Email is required"
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid"
         if (!formData.productName.trim()) newErrors.productName = "Product name is required"
         break
       case 2:
@@ -849,11 +870,15 @@ export default function SalesScriptGenerator() {
   const nextStep = () => {
     if (validateStep(currentStep)) {
       setCurrentStep((prev) => Math.min(prev + 1, STEPS.length))
+      // Scroll to top when going to next step
+      window.scrollTo(0, 0)
     }
   }
 
   const prevStep = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 1))
+    // Scroll to top when going to previous step
+    window.scrollTo(0, 0)
   }
 
   const submitForm = async () => {
@@ -871,6 +896,9 @@ export default function SalesScriptGenerator() {
       // Clear saved progress after successful submission
       localStorage.removeItem("sales-script-generator-data")
       localStorage.removeItem("sales-script-generator-step")
+      
+      // Scroll to top when results are displayed
+      window.scrollTo(0, 0)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "An error occurred")
     } finally {
@@ -880,6 +908,8 @@ export default function SalesScriptGenerator() {
 
   const resetForm = () => {
     setFormData({
+      name: "",
+      email: "",
       productName: "",
       targetAudience: "",
       keyBenefits: [""],
@@ -896,6 +926,9 @@ export default function SalesScriptGenerator() {
     setErrors({})
     localStorage.removeItem("sales-script-generator-data")
     localStorage.removeItem("sales-script-generator-step")
+    
+    // Scroll to top when form is reset
+    window.scrollTo(0, 0)
   }
 
   const progress = (currentStep / STEPS.length) * 100

@@ -15,13 +15,13 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: {
-    default: "Kozker - Digital Transformation & Business Intelligence Solutions",
+    default: "Kozker Tech - AI Automation & Business Intelligence Solutions",
     template: "%s | Kozker",
   },
   description:
     "Transform your business with AI-powered web design, WhatsApp automation, Power BI analytics, and comprehensive digital solutions. Get started with our LaunchPad, GrowthSuite, and Intelligence packages.",
   keywords: [
-    "digital transformation",
+    "business solutions",
     "business intelligence",
     "power bi",
     "whatsapp automation",
@@ -29,12 +29,12 @@ export const metadata: Metadata = {
     "ai solutions",
     "data analytics",
     "business automation",
-    "crm integration",
+    "web development",
     "cloud solutions",
   ],
   authors: [{ name: "Kozker Team" }],
-  creator: "Kozker",
-  publisher: "Kozker",
+  creator: "Kozker Tech",
+  publisher: "Kozker Tech",
   formatDetection: {
     email: false,
     address: false,
@@ -48,13 +48,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "Kozker - Digital Transformation & Business Intelligence Solutions",
+    title: "Kozker Tech - AI Automation & Business Intelligence Solutions",
     description: "Transform your business with AI-powered solutions, automation, and analytics.",
-    siteName: "Kozker",
+    siteName: "Kozker Tech",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kozker - Digital Transformation Solutions",
+    title: "Kozker Tech - AI Solutions",
     description: "Transform your business with AI-powered solutions, automation, and analytics.",
   },
   robots: {

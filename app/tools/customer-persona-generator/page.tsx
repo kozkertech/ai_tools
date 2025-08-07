@@ -26,7 +26,6 @@ import {
   User,
 } from "lucide-react"
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts"
-import jsPDF from "jspdf"
 
 // Types
 export interface FormData {
@@ -519,111 +518,76 @@ function PersonaResults({ response, onReset }: PersonaResultsProps) {
     linkElement.click()
   }
 
-  const downloadPDF = async () => {
+  const downloadText = () => {
     setIsGeneratingPDF(true)
 
     try {
-      const pdf = new jsPDF()
-      const pageWidth = pdf.internal.pageSize.getWidth()
-      const margin = 20
-      let yPosition = margin
-
-      // Helper function to add text with word wrapping
-      const addText = (text: string, fontSize = 12, isBold = false) => {
-        pdf.setFontSize(fontSize)
-        if (isBold) {
-          pdf.setFont("helvetica", "bold")
-        } else {
-          pdf.setFont("helvetica", "normal")
-        }
-
-        const lines = pdf.splitTextToSize(text, pageWidth - 2 * margin)
-        pdf.text(lines, margin, yPosition)
-        yPosition += lines.length * (fontSize * 0.4) + 5
-
-        // Check if we need a new page
-        if (yPosition > pdf.internal.pageSize.getHeight() - margin) {
-          pdf.addPage()
-          yPosition = margin
-        }
-      }
-
-      // Title
-      addText("Customer Persona Report", 20, true)
-      yPosition += 10
-
-      // Persona Name and Summary
-      addText(response.persona.name, 16, true)
-      addText(response.persona.summary, 12)
-      yPosition += 10
-
-      // Demographics
-      addText("Demographics", 14, true)
-      addText(`Age: ${response.persona.demographics.age}`)
-      addText(`Income: ${response.persona.demographics.income}`)
-      addText(`Location: ${response.persona.demographics.location}`)
-      yPosition += 10
-
-      // Business Context
-      addText("Business Context", 14, true)
-      addText(`Business Type: ${response.persona.businessContext.type}`)
-      addText(`Industry: ${response.persona.businessContext.industry}`)
-      addText(`Company Size: ${response.persona.businessContext.size}`)
-      addText(`Market Segment: ${response.persona.businessContext.segment}`)
-      yPosition += 10
-
-      // Challenges
-      addText("Key Challenges", 14, true)
+      // Create a formatted text version instead of PDF
+      let textContent = `Customer Persona Report\n${"=".repeat(25)}\n\n`
+      
+      textContent += `Persona Name: ${response.persona.name}\n\n`
+      textContent += `Summary:\n${response.persona.summary}\n\n`
+      
+      textContent += `Demographics:\n`
+      textContent += `- Age: ${response.persona.demographics.age}\n`
+      textContent += `- Income: ${response.persona.demographics.income}\n`
+      textContent += `- Location: ${response.persona.demographics.location}\n\n`
+      
+      textContent += `Business Context:\n`
+      textContent += `- Business Type: ${response.persona.businessContext.type}\n`
+      textContent += `- Industry: ${response.persona.businessContext.industry}\n`
+      textContent += `- Company Size: ${response.persona.businessContext.size}\n`
+      textContent += `- Market Segment: ${response.persona.businessContext.segment}\n\n`
+      
+      textContent += `Key Challenges:\n`
       response.persona.psychographics.challenges.forEach((challenge, index) => {
-        addText(`${index + 1}. ${challenge}`)
+        textContent += `${index + 1}. ${challenge}\n`
       })
-      yPosition += 10
-
-      // Goals
-      addText("Goals & Motivations", 14, true)
+      textContent += `\n`
+      
+      textContent += `Goals & Motivations:\n`
       response.persona.psychographics.goals.forEach((goal, index) => {
-        addText(`${index + 1}. ${goal}`)
+        textContent += `${index + 1}. ${goal}\n`
       })
-      yPosition += 10
-
-      // Motivations
-      addText("Core Motivations", 14, true)
+      textContent += `\n`
+      
+      textContent += `Core Motivations:\n`
       response.persona.psychographics.motivations.forEach((motivation, index) => {
-        addText(`${index + 1}. ${motivation}`)
+        textContent += `${index + 1}. ${motivation}\n`
       })
-      yPosition += 10
-
-      // Key Findings
-      addText("Key Findings", 14, true)
+      textContent += `\n`
+      
+      textContent += `Key Findings:\n`
       response.insights.keyFindings.forEach((finding, index) => {
-        addText(`${index + 1}. ${finding}`)
+        textContent += `${index + 1}. ${finding}\n`
       })
-      yPosition += 10
-
-      // Recommendations
-      addText("Recommendations", 14, true)
+      textContent += `\n`
+      
+      textContent += `Recommendations:\n`
       response.insights.recommendations.forEach((recommendation, index) => {
-        addText(`${index + 1}. ${recommendation}`)
+        textContent += `${index + 1}. ${recommendation}\n`
       })
 
-      // Add webhook response section to PDF (only if there's meaningful content)
+      // Add webhook response section (only if there's meaningful content)
       const webhookContent = extractWebhookContent(response.webhookResponse)
       if (webhookContent) {
-        // Strip markdown for PDF (plain text only)
+        // Strip markdown for text file
         const plainTextContent = webhookContent
           .replace(/\*\*(.*?)\*\*/g, "$1") // Remove **bold**
           .replace(/\*(.*?)\*/g, "$1") // Remove *italic*
           .replace(/<[^>]*>/g, "") // Remove any HTML tags
 
-        addText("Additional Insights", 14, true)
-        addText(plainTextContent, 10)
-        yPosition += 10
+        textContent += `\nAdditional Insights:\n${plainTextContent}\n`
       }
 
-      // Save the PDF
-      pdf.save(`${response.persona.name.replace(/\s+/g, "_")}_persona.pdf`)
+      // Create download
+      const dataUri = "data:text/plain;charset=utf-8," + encodeURIComponent(textContent)
+      const linkElement = document.createElement("a")
+      linkElement.setAttribute("href", dataUri)
+      linkElement.setAttribute("download", `${response.persona.name.replace(/\s+/g, "_")}_persona.txt`)
+      linkElement.click()
     } catch (error) {
-      console.error("Error generating PDF:", error)
+      console.error("Error generating text file:", error)
     } finally {
       setIsGeneratingPDF(false)
     }
@@ -643,19 +607,19 @@ function PersonaResults({ response, onReset }: PersonaResultsProps) {
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center gap-4 mb-8">
           <Button
-            onClick={downloadPDF}
+            onClick={downloadText}
             disabled={isGeneratingPDF}
             className="bg-orange-600 hover:bg-orange-700 dark:hover:bg-[#d45616] text-white"
           >
             {isGeneratingPDF ? (
               <>
                 <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                Generating PDF...
+                Generating File...
               </>
             ) : (
               <>
                 <FileText className="w-4 h-4 mr-2" />
-                Download PDF
+                Download Report
               </>
             )}
           </Button>
@@ -1014,15 +978,7 @@ function generateRecommendations(formData: FormData): string[] {
 }
 
 // Main Component
-const STEPS = [
-  { id: 1, title: "Business Type", description: "Select your business category" },
-  { id: 2, title: "Target Market", description: "Define your market focus" },
-  { id: 3, title: "Demographics", description: "Customer characteristics" },
-  { id: 4, title: "Pain Points", description: "Challenges and motivations" },
-]
-
 export default function PersonaGenerator() {
-  const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
     businessType: "",
     industry: "",
@@ -1041,10 +997,9 @@ export default function PersonaGenerator() {
   const [submitError, setSubmitError] = useState<string>("")
   const [submitSuccess, setSubmitSuccess] = useState(false)
 
-  // Load saved progress from localStorage
+  // Load saved progress from localStorage and scroll to top
   useEffect(() => {
     const savedData = localStorage.getItem("persona-generator-data")
-    const savedStep = localStorage.getItem("persona-generator-step")
 
     if (savedData) {
       try {
@@ -1054,16 +1009,14 @@ export default function PersonaGenerator() {
       }
     }
 
-    if (savedStep) {
-      setCurrentStep(Number.parseInt(savedStep))
-    }
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0)
   }, [])
 
   // Save progress to localStorage
   useEffect(() => {
     localStorage.setItem("persona-generator-data", JSON.stringify(formData))
-    localStorage.setItem("persona-generator-step", currentStep.toString())
-  }, [formData, currentStep])
+  }, [formData])
 
   const updateFormData = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -1073,46 +1026,33 @@ export default function PersonaGenerator() {
     }
   }
 
-  const validateStep = (step: number): boolean => {
+  const validateForm = (): boolean => {
     const newErrors: Partial<FormData> = {}
 
-    switch (step) {
-      case 1:
-        if (!formData.businessType) newErrors.businessType = "Business type is required"
-        break
-      case 2:
-        if (!formData.industry) newErrors.industry = "Industry is required"
-        if (!formData.companySize) newErrors.companySize = "Company size is required"
-        if (!formData.segment) newErrors.segment = "Market segment is required"
-        break
-      case 3:
-        if (!formData.ageRange) newErrors.ageRange = "Age range is required"
-        if (!formData.incomeLevel) newErrors.incomeLevel = "Income level is required"
-        if (!formData.location) newErrors.location = "Location is required"
-        if (!formData.personaName.trim()) newErrors.personaName = "Persona name is required"
-        break
-      case 4:
-        if (!formData.challenges.trim()) newErrors.challenges = "Challenges are required"
-        if (!formData.goals.trim()) newErrors.goals = "Goals are required"
-        break
-    }
+    // Business Type validation
+    if (!formData.businessType) newErrors.businessType = "Business type is required"
+
+    // Target Market validation
+    if (!formData.industry) newErrors.industry = "Industry is required"
+    if (!formData.companySize) newErrors.companySize = "Company size is required"
+    if (!formData.segment) newErrors.segment = "Market segment is required"
+
+    // Demographics validation
+    if (!formData.ageRange) newErrors.ageRange = "Age range is required"
+    if (!formData.incomeLevel) newErrors.incomeLevel = "Income level is required"
+    if (!formData.location) newErrors.location = "Location is required"
+    if (!formData.personaName.trim()) newErrors.personaName = "Persona name is required"
+
+    // Pain Points validation
+    if (!formData.challenges.trim()) newErrors.challenges = "Challenges are required"
+    if (!formData.goals.trim()) newErrors.goals = "Goals are required"
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  const nextStep = () => {
-    if (validateStep(currentStep)) {
-      setCurrentStep((prev) => Math.min(prev + 1, STEPS.length))
-    }
-  }
-
-  const prevStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 1))
-  }
-
   const submitForm = async () => {
-    if (!validateStep(4)) return
+    if (!validateForm()) return
 
     setIsSubmitting(true)
     setSubmitError("")
@@ -1125,7 +1065,9 @@ export default function PersonaGenerator() {
 
       // Clear saved progress after successful submission
       localStorage.removeItem("persona-generator-data")
-      localStorage.removeItem("persona-generator-step")
+      
+      // Scroll to top when results are displayed
+      window.scrollTo(0, 0)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "An error occurred")
     } finally {
@@ -1146,16 +1088,15 @@ export default function PersonaGenerator() {
       challenges: "",
       goals: "",
     })
-    setCurrentStep(1)
     setPersonaResponse(null)
     setSubmitSuccess(false)
     setSubmitError("")
     setErrors({})
     localStorage.removeItem("persona-generator-data")
-    localStorage.removeItem("persona-generator-step")
+    
+    // Scroll to top when form is reset
+    window.scrollTo(0, 0)
   }
-
-  const progress = (currentStep / STEPS.length) * 100
 
   if (personaResponse && submitSuccess) {
     return <PersonaResults response={personaResponse} onReset={resetForm} />
@@ -1167,91 +1108,97 @@ export default function PersonaGenerator() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Customer Persona Generator</h1>
-          <p className="text-gray-600 dark:text-gray-400">Create detailed customer personas in 4 simple steps</p>
+          <p className="text-gray-600 dark:text-gray-400">Create detailed customer personas by filling out all sections below</p>
         </div>
 
-        {/* Progress Bar */}
-        <Card className="mb-8 border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between mb-2">
-              <CardTitle className="text-lg text-orange-800 dark:text-orange-300">
-                Step {currentStep} of {STEPS.length}: {STEPS[currentStep - 1].title}
-              </CardTitle>
-              <span className="text-sm text-gray-500 dark:text-gray-400">{Math.round(progress)}% Complete</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-            <CardDescription className="mt-2 text-gray-600 dark:text-gray-400">{STEPS[currentStep - 1].description}</CardDescription>
-          </CardHeader>
-        </Card>
-
-        {/* Form Steps */}
-        <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
-          <CardContent className="p-6">
-            {currentStep === 1 && (
+        {/* Form Sections */}
+        <div className="space-y-8">
+          {/* Business Type Section */}
+          <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
+            <CardHeader>
+              <CardTitle className="text-orange-800 dark:text-orange-300">1. Business Type</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-400">Select your business category</CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
               <BusinessTypeStep
                 value={formData.businessType}
                 onChange={(value) => updateFormData("businessType", value)}
                 error={errors.businessType}
               />
-            )}
+            </CardContent>
+          </Card>
 
-            {currentStep === 2 && <TargetMarketStep formData={formData} onChange={updateFormData} errors={errors} />}
+          {/* Target Market Section */}
+          <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
+            <CardHeader>
+              <CardTitle className="text-orange-800 dark:text-orange-300">2. Target Market</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-400">Define your market focus</CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              <TargetMarketStep formData={formData} onChange={updateFormData} errors={errors} />
+            </CardContent>
+          </Card>
 
-            {currentStep === 3 && <DemographicsStep formData={formData} onChange={updateFormData} errors={errors} />}
+          {/* Demographics Section */}
+          <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
+            <CardHeader>
+              <CardTitle className="text-orange-800 dark:text-orange-300">3. Demographics</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-400">Customer characteristics</CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              <DemographicsStep formData={formData} onChange={updateFormData} errors={errors} />
+            </CardContent>
+          </Card>
 
-            {currentStep === 4 && <PainPointsStep formData={formData} onChange={updateFormData} errors={errors} />}
+          {/* Pain Points Section */}
+          <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
+            <CardHeader>
+              <CardTitle className="text-orange-800 dark:text-orange-300">4. Pain Points & Motivations</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-400">Challenges and motivations</CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              <PainPointsStep formData={formData} onChange={updateFormData} errors={errors} />
+            </CardContent>
+          </Card>
 
-            {/* Error Alert */}
-            {submitError && (
-              <Alert className="mt-6 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
-                <AlertDescription className="text-red-800 dark:text-red-100">{submitError}</AlertDescription>
-              </Alert>
-            )}
+          {/* Error Alert */}
+          {submitError && (
+            <Alert className="border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
+              <AlertDescription className="text-red-800 dark:text-red-100">{submitError}</AlertDescription>
+            </Alert>
+          )}
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8">
-              <Button
-                variant="outline"
-                onClick={prevStep}
-                disabled={currentStep === 1}
-                className="border-orange-200 dark:border-orange-600 text-orange-700 dark:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 bg-transparent"
-              >
-                Previous
-              </Button>
-
-              <div className="flex gap-2">
+          {/* Submit Section */}
+          <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
+            <CardContent className="p-6">
+              <div className="flex justify-center gap-4">
                 <Button
                   variant="outline"
                   onClick={resetForm}
                   className="border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 bg-transparent"
                 >
-                  Reset
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Reset Form
                 </Button>
 
-                {currentStep < STEPS.length ? (
-                  <Button onClick={nextStep} className="bg-orange-600 hover:bg-orange-700 dark:hover:bg-[#d45616] text-white">
-                    Next Step
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={submitForm}
-                    disabled={isSubmitting}
-                    className="bg-orange-600 hover:bg-orange-700 dark:hover:bg-[#d45616] text-white"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Generating Persona...
-                      </>
-                    ) : (
-                      "Generate Persona"
-                    )}
-                  </Button>
-                )}
+                <Button
+                  onClick={submitForm}
+                  disabled={isSubmitting}
+                  className="bg-orange-600 hover:bg-orange-700 dark:hover:bg-[#d45616] text-white px-8"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Generating Persona...
+                    </>
+                  ) : (
+                    "Generate Persona"
+                  )}
+                </Button>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )

@@ -42,7 +42,7 @@ const tools = [
     href: "/tools/domain-name-generator",
     status: "Available",
     category: "Branding",
-    solution:"GrowthSuite",
+    solution:"LaunchPad",
     features: ["AI-powered suggestions", "Real-time availability check", "Multiple TLD options"],
   },
   {
@@ -64,7 +64,7 @@ const tools = [
     href: "/tools/landing-pageherocopygenerator",
     status: "Available",
     category: "Content",
-    solution:"Intelligence",
+    solution:"LaunchPad",
     features: ["Headlines", "Sub-headlines", "CTA variations"],
   },
   {
@@ -145,7 +145,7 @@ const tools = [
     href: "/tools/data-cleanse",
     status: "Available",
     category: "Analytics",
-    solution:"GrowthSuite",
+    solution:"Intelligence",
     features: ["Data cleaning", "Schema mapping", "Anomaly detection"],
   },
   {
@@ -167,7 +167,7 @@ const tools = [
     href: "/tools/proposal-draft-generator",
     status: "Available",
     category: "Business",
-    solution:"LaunchPad",
+    solution:"GrowthSuite",
     features: ["Proposal drafts", "Service packages", "Client customization"],
   },
   {
@@ -189,7 +189,7 @@ const tools = [
     href: "/tools/job-description-generator",
     status: "Available",
     category: "Business",
-    solution:"Intelligence",
+    solution:"GrowthSuite",
     features: ["Role requirements", "Responsibility mapping", "Skills assessment"],
   },
   {
@@ -255,7 +255,7 @@ const tools = [
     href: "/tools/faq-builder",
     status: "Available",
     category: "Content",
-    solution:"Intelligence",
+    solution:"LaunchPad",
     features: ["Question categorization", "Answer optimization", "Search functionality"],
   },
   {
@@ -266,7 +266,7 @@ const tools = [
     href: "/tools/press-release-template",
     status: "Available",
     category: "Marketing",
-    solution:"LaunchPad",
+    solution:"GrowthSuite",
     features: ["Media-ready format", "SEO optimization", "Distribution guidelines"],
   },
   {
