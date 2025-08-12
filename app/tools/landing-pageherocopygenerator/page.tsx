@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Copy, Download, Sparkles, Target, Users, Zap } from "lucide-react"
 import { ContentLoadingScreen } from "@/components/loading-screen"
 
+
 interface HeroCopyResult {
   headline: string
   subheadline: string

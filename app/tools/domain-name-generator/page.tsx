@@ -26,7 +26,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
 
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
+import { DomainLoadingScreen } from "@/components/loading-screen" // Import the loading screen
 
 interface FormDataState {
   name: string
@@ -107,7 +107,7 @@ export default function DomainCheckerPage() {
   const { toast } = useToast()
 
   if (isLoading) {    
-        return < ContentLoadingScreen />  
+        return < DomainLoadingScreen />  
     }
 
   const validateForm = (): boolean => {

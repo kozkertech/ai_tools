@@ -166,6 +166,34 @@ export function SEOLoadingScreen() {
     />
   )
 }
+export function DomainLoadingScreen() {
+  return (
+    <LoadingScreen
+      title="Generating Domain Content"
+      subtitle="Our AI is crafting high-quality content for you"
+      messages={[
+       "Understanding your requirements...",
+"Conjuring domain magic...",
+"Generating creative domain ideas...",
+"Crafting perfect web addresses...",
+"Checking domain availability...",
+"Discovering hidden gems...",
+"Finalizing domain suggestions...",
+"Almost ready!"
+      ]}
+      icon={
+        <div className="relative">
+          <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center">
+            <Brain className="w-10 h-10 text-white" />
+          </div>
+          <div className="absolute -top-2 -right-2 w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center animate-pulse">
+            <Zap className="w-4 h-4 text-white" />
+          </div>
+        </div>
+      }
+    />
+  )
+}
 
 export function ContentLoadingScreen() {
   return (
@@ -173,14 +201,14 @@ export function ContentLoadingScreen() {
       title="Generating Content"
       subtitle="Our AI is crafting high-quality content for you"
       messages={[
-        "Understanding your requirements...",
-        "Researching your topic...",
-        "Generating creative ideas...",
-        "Writing compelling content...",
-        "Optimizing for SEO...",
-        "Adding final touches...",
-        "Quality checking...",
-        "Almost ready!",
+       "Understanding your requirements...",
+       "Awakening AI creativity...",
+       "Generating innovative ideas...",
+       "Crafting intelligent designs...",
+       "Blending human-AI collaboration...",
+       "Refining creative outputs...",
+       "Polishing final results...",
+       "Almost ready!"
       ]}
       icon={
         <div className="relative">

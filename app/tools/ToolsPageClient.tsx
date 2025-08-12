@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import SmartFilterIntegration from '@/components/SmartFilterIntegration'
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -30,6 +31,7 @@ import {
   Megaphone,
   Send,
   Clock,
+  X
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -42,8 +44,14 @@ const tools = [
     href: "/tools/domain-name-generator",
     status: "Available",
     category: "Branding",
-    solution:"LaunchPad",
+    solution: "LaunchPad",
     features: ["AI-powered suggestions", "Real-time availability check", "Multiple TLD options"],
+    keywords: ["domain", "website", "url", "web address", "online presence", "site", "domain name", "hosting"],
+    useCases: ["starting website", "new business", "rebranding", "online launch", "web presence"],
+    userPersonas: ["entrepreneur", "startup founder", "small business owner", "web developer"],
+    businessStages: ["idea", "launch"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "tagline-creator",
@@ -53,8 +61,14 @@ const tools = [
     href: "/tools/tagline-value-prop-creator",
     status: "Available",
     category: "Branding",
-    solution:"LaunchPad",
+    solution: "LaunchPad",
     features: ["Punchy taglines", "Value propositions", "Brand messaging"],
+    keywords: ["tagline", "value proposition", "slogan", "messaging", "brand voice", "marketing copy", "branding"],
+    useCases: ["brand messaging", "marketing materials", "website copy", "brand identity", "startup branding"],
+    userPersonas: ["marketer", "business owner", "brand manager", "entrepreneur"],
+    businessStages: ["launch", "growth"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "hero-copy-generator",
@@ -64,8 +78,14 @@ const tools = [
     href: "/tools/landing-pageherocopygenerator",
     status: "Available",
     category: "Content",
-    solution:"LaunchPad",
+    solution: "LaunchPad",
     features: ["Headlines", "Sub-headlines", "CTA variations"],
+    keywords: ["landing page", "hero copy", "headlines", "conversion", "website copy", "CTA", "call to action"],
+    useCases: ["website launch", "conversion optimization", "landing page creation", "marketing campaigns"],
+    userPersonas: ["marketer", "web designer", "business owner", "copywriter"],
+    businessStages: ["launch", "growth"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "social-media-suggester",
@@ -75,8 +95,14 @@ const tools = [
     href: "/tools/social-media-suggester",
     status: "Available",
     category: "Marketing",
-    solution:"LaunchPad",
+    solution: "LaunchPad",
     features: ["Platform-specific captions", "Trending hashtags", "Engagement optimization"],
+    keywords: ["social media", "captions", "hashtags", "posts", "content", "engagement", "facebook", "instagram", "twitter"],
+    useCases: ["social media marketing", "content creation", "audience engagement", "brand awareness", "social posting"],
+    userPersonas: ["content creator", "social media manager", "marketer", "small business owner"],
+    businessStages: ["launch", "growth", "scale"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "blog-outline-builder",
@@ -86,8 +112,14 @@ const tools = [
     href: "/tools/blog-generator",
     status: "Available",
     category: "Content",
-    solution:"Intelligence",
+    solution: "Intelligence",
     features: ["SEO optimization", "Content structure", "Topic research"],
+    keywords: ["blog", "content", "SEO", "writing", "articles", "blog posts", "content marketing", "outline"],
+    useCases: ["content marketing", "blog writing", "SEO content", "thought leadership", "website content"],
+    userPersonas: ["content writer", "marketer", "blogger", "business owner"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "intermediate",
+    timeToValue: "short"
   },
   {
     id: "email-subject-generator",
@@ -97,8 +129,14 @@ const tools = [
     href: "/tools/email-subject-line",
     status: "Available",
     category: "Marketing",
-    solution:"Intelligence",
+    solution: "Intelligence",
     features: ["Subject line optimization", "Preview text", "Open rate improvement"],
+    keywords: ["email", "subject lines", "newsletter", "email marketing", "open rates", "email campaigns"],
+    useCases: ["email campaigns", "newsletter marketing", "lead nurturing", "customer communication"],
+    userPersonas: ["email marketer", "business owner", "marketing manager"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "ai-business-plan-generator",
@@ -108,12 +146,14 @@ const tools = [
     href: "/tools/ai-business-plan-generator",
     status: "Available",
     category: "Automation",
-    solution:"LaunchPad",
-    features: [
-      "AI-powered business summaries",
-      "Realistic financial projections",
-      "Detailed end-to-end Business strategies",
-    ],
+    solution: "LaunchPad",
+    features: ["AI-powered business summaries", "Realistic financial projections", "Detailed end-to-end Business strategies"],
+    keywords: ["business plan", "startup", "strategy", "financial projections", "business model", "planning"],
+    useCases: ["startup planning", "investor pitch", "business strategy", "funding applications"],
+    userPersonas: ["entrepreneur", "startup founder", "business owner"],
+    businessStages: ["idea", "launch"],
+    complexityLevel: "intermediate",
+    timeToValue: "medium"
   },
   {
     id: "powerbi-generator",
@@ -123,8 +163,14 @@ const tools = [
     href: "/tools/power-bi-measure",
     status: "Available",
     category: "Analytics",
-    solution:"GrowthSuite",
+    solution: "Intelligence",
     features: ["DAX measures", "Visualization snippets", "KPI tracking"],
+    keywords: ["power bi", "analytics", "data visualization", "DAX", "business intelligence", "reporting", "KPI"],
+    useCases: ["business reporting", "data analysis", "dashboard creation", "performance tracking"],
+    userPersonas: ["data analyst", "business analyst", "manager", "executive"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "advanced",
+    timeToValue: "medium"
   },
   {
     id: "meeting-extractor",
@@ -134,8 +180,14 @@ const tools = [
     href: "/tools/meeting-summary-extractor",
     status: "Available",
     category: "Productivity",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Meeting summaries", "Action items", "Task assignment"],
+    keywords: ["meetings", "productivity", "summaries", "action items", "notes", "tasks", "collaboration"],
+    useCases: ["meeting management", "team collaboration", "project tracking", "task management"],
+    userPersonas: ["manager", "team lead", "project manager", "executive"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "data-cleanse-helper",
@@ -145,8 +197,14 @@ const tools = [
     href: "/tools/data-cleanse",
     status: "Available",
     category: "Analytics",
-    solution:"Intelligence",
+    solution: "Intelligence",
     features: ["Data cleaning", "Schema mapping", "Anomaly detection"],
+    keywords: ["data", "csv", "data cleaning", "analytics", "data processing", "schema", "database"],
+    useCases: ["data preparation", "analytics setup", "data migration", "database design"],
+    userPersonas: ["data analyst", "developer", "business analyst"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "advanced",
+    timeToValue: "medium"
   },
   {
     id: "seo-analyzer",
@@ -156,8 +214,14 @@ const tools = [
     href: "/tools/seo-keyword-content-gapanalyzer",
     status: "Available",
     category: "Marketing",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Keyword research", "Content gaps", "Competitor analysis"],
+    keywords: ["SEO", "keywords", "search engine", "google", "content gap", "competitor analysis", "ranking"],
+    useCases: ["SEO optimization", "content strategy", "competitor research", "website ranking"],
+    userPersonas: ["SEO specialist", "marketer", "content manager"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "intermediate",
+    timeToValue: "medium"
   },
   {
     id: "proposal-generator",
@@ -167,8 +231,14 @@ const tools = [
     href: "/tools/proposal-draft-generator",
     status: "Available",
     category: "Business",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Proposal drafts", "Service packages", "Client customization"],
+    keywords: ["proposal", "client", "services", "business development", "sales", "contracts", "quotes"],
+    useCases: ["client proposals", "service quotes", "project bids", "business development"],
+    userPersonas: ["sales person", "business owner", "consultant", "agency owner"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "intermediate",
+    timeToValue: "short"
   },
   {
     id: "follow-up-email-sequencer",
@@ -178,8 +248,14 @@ const tools = [
     href: "/tools/follow-up-email-sequencer",
     status: "Available",
     category: "Marketing",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Email sequences", "Lead nurturing", "Automated follow-ups"],
+    keywords: ["email automation", "follow up", "lead nurturing", "email sequence", "sales funnel", "drip campaign"],
+    useCases: ["lead nurturing", "sales automation", "customer onboarding", "email marketing"],
+    userPersonas: ["sales person", "marketer", "business owner"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "intermediate",
+    timeToValue: "medium"
   },
   {
     id: "job-description-generator",
@@ -189,8 +265,14 @@ const tools = [
     href: "/tools/job-description-generator",
     status: "Available",
     category: "Business",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Role requirements", "Responsibility mapping", "Skills assessment"],
+    keywords: ["hiring", "job description", "recruitment", "HR", "job posting", "talent acquisition"],
+    useCases: ["hiring process", "team building", "recruitment", "job postings"],
+    userPersonas: ["HR manager", "business owner", "team lead"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "customer-persona-generator",
@@ -200,8 +282,14 @@ const tools = [
     href: "/tools/customer-persona-generator",
     status: "Available",
     category: "Marketing",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Detailed personas", "ICP mapping", "Target audience insights"],
+    keywords: ["customer persona", "target audience", "ICP", "ideal customer", "marketing strategy", "customer research"],
+    useCases: ["marketing strategy", "product development", "sales targeting", "customer research"],
+    userPersonas: ["marketer", "product manager", "business owner"],
+    businessStages: ["launch", "growth"],
+    complexityLevel: "intermediate",
+    timeToValue: "short"
   },
   {
     id: "logo-color-picker",
@@ -211,8 +299,14 @@ const tools = [
     href: "/tools/logo-color-palette-picker",
     status: "Available",
     category: "Branding",
-    solution:"LaunchPad",
+    solution: "LaunchPad",
     features: ["Color harmony analysis", "Brand color schemes", "Accessibility compliance"],
+    keywords: ["logo", "colors", "branding", "design", "color palette", "brand identity", "visual design"],
+    useCases: ["brand design", "logo creation", "visual identity", "design system"],
+    userPersonas: ["designer", "business owner", "brand manager"],
+    businessStages: ["idea", "launch"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "pricing-calculator",
@@ -222,8 +316,14 @@ const tools = [
     href: "/tools/pricing-generator",
     status: "Available",
     category: "Business",
-    solution:"LaunchPad",
+    solution: "LaunchPad",
     features: ["Cost analysis", "Profit margin optimization", "Competitive pricing"],
+    keywords: ["pricing", "cost analysis", "profit margins", "pricing strategy", "business model", "revenue"],
+    useCases: ["product pricing", "service pricing", "business planning", "profit optimization"],
+    userPersonas: ["business owner", "product manager", "entrepreneur"],
+    businessStages: ["launch", "growth"],
+    complexityLevel: "intermediate",
+    timeToValue: "short"
   },
   {
     id: "invoice-template-builder",
@@ -233,8 +333,14 @@ const tools = [
     href: "/tools/invoice-template-builder",
     status: "Available",
     category: "Business",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Custom templates", "Automated calculations", "Brand integration"],
+    keywords: ["invoice", "billing", "accounting", "templates", "business documents", "payment"],
+    useCases: ["client billing", "business accounting", "invoice management", "payment processing"],
+    userPersonas: ["business owner", "freelancer", "accountant"],
+    businessStages: ["launch", "growth", "scale"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "sales-script-generator",
@@ -244,8 +350,14 @@ const tools = [
     href: "/tools/sales-script-generator",
     status: "Available",
     category: "Marketing",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Persuasive scripts", "Objection handling", "Closing techniques"],
+    keywords: ["sales", "scripts", "cold calling", "sales pitch", "closing", "objection handling", "sales training"],
+    useCases: ["sales calls", "sales training", "lead conversion", "sales presentations"],
+    userPersonas: ["sales person", "business owner", "sales manager"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "intermediate",
+    timeToValue: "immediate"
   },
   {
     id: "faq-builder",
@@ -255,8 +367,14 @@ const tools = [
     href: "/tools/faq-builder",
     status: "Available",
     category: "Content",
-    solution:"LaunchPad",
+    solution: "LaunchPad",
     features: ["Question categorization", "Answer optimization", "Search functionality"],
+    keywords: ["FAQ", "customer support", "help documentation", "questions", "support content", "customer service"],
+    useCases: ["customer support", "website content", "product documentation", "user guidance"],
+    userPersonas: ["customer support", "business owner", "product manager"],
+    businessStages: ["launch", "growth"],
+    complexityLevel: "beginner",
+    timeToValue: "immediate"
   },
   {
     id: "press-release-template",
@@ -266,8 +384,14 @@ const tools = [
     href: "/tools/press-release-template",
     status: "Available",
     category: "Marketing",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Media-ready format", "SEO optimization", "Distribution guidelines"],
+    keywords: ["press release", "PR", "media", "announcements", "publicity", "news", "media outreach"],
+    useCases: ["product launches", "company announcements", "media relations", "publicity"],
+    userPersonas: ["PR manager", "marketer", "business owner"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "intermediate",
+    timeToValue: "short"
   },
   {
     id: "project-timeline-builder",
@@ -277,10 +401,34 @@ const tools = [
     href: "/tools/project-timeline-builder",
     status: "Available",
     category: "Productivity",
-    solution:"GrowthSuite",
+    solution: "GrowthSuite",
     features: ["Milestone tracking", "Dependency mapping", "Resource planning"],
+    keywords: ["project management", "timeline", "milestones", "project planning", "scheduling", "resource management"],
+    useCases: ["project planning", "team coordination", "deadline management", "resource allocation"],
+    userPersonas: ["project manager", "team lead", "business owner"],
+    businessStages: ["growth", "scale"],
+    complexityLevel: "intermediate",
+    timeToValue: "medium"
   },
 ]
+
+interface Tool {
+  id: string
+  name: string
+  description: string
+  icon: any
+  href: string
+  status: string
+  category: string
+  solution: string
+  features: string[]
+  keywords: string[]
+  useCases: string[]
+  userPersonas: string[]
+  businessStages: string[]
+  complexityLevel: 'beginner' | 'intermediate' | 'advanced'
+  timeToValue: 'immediate' | 'short' | 'medium' | 'long'
+}
 
 const categories = ["All", "Branding", "Content", "Marketing", "Automation", "Analytics", "Productivity", "Business"]
 const solutions = ["All", "GrowthSuite", "LaunchPad", "Intelligence"]
@@ -288,13 +436,148 @@ const solutions = ["All", "GrowthSuite", "LaunchPad", "Intelligence"]
 export default function ToolsPageClient() {
   const [activeCategory, setActiveCategory] = useState("All")
   const [activeSolution, setActiveSolution] = useState("All")
+  
+  // Enhanced intelligent filter state management with debugging
+  const [intelligentFilter, setIntelligentFilter] = useState<{
+    active: boolean
+    toolIds: string[]
+    searchTerm: string
+  }>({
+    active: false,
+    toolIds: [],
+    searchTerm: ''
+  })
 
-  // Filter tools based on active category and solution
+  // Debug logging in development
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Filter state changed:', {
+        activeCategory,
+        activeSolution,
+        intelligentFilter
+      })
+    }
+  }, [activeCategory, activeSolution, intelligentFilter])
+
+  // Enhanced filter logic with intelligent filtering and debugging
   const filteredTools = tools.filter((tool) => {
+    // First, apply intelligent filtering if active
+    if (intelligentFilter.active && intelligentFilter.toolIds.length > 0) {
+      const isIncluded = intelligentFilter.toolIds.includes(tool.id)
+      if (process.env.NODE_ENV === 'development') {
+        if (isIncluded) {
+          console.log(`✅ Tool ${tool.name} (${tool.id}) included by AI filter`)
+        } else {
+          console.log(`❌ Tool ${tool.name} (${tool.id}) excluded by AI filter`)
+        }
+      }
+      return isIncluded
+    }
+    
+    // Otherwise, apply regular category and solution filtering
     const categoryMatch = activeCategory === "All" || tool.category === activeCategory
     const solutionMatch = activeSolution === "All" || tool.solution === activeSolution
-    return categoryMatch && solutionMatch
+    const shouldInclude = categoryMatch && solutionMatch
+    
+    if (process.env.NODE_ENV === 'development' && (activeCategory !== "All" || activeSolution !== "All")) {
+      console.log(`Tool ${tool.name}: category(${tool.category}${categoryMatch ? '✅' : '❌'}) solution(${tool.solution}${solutionMatch ? '✅' : '❌'}) -> ${shouldInclude ? 'INCLUDED' : 'EXCLUDED'}`)
+    }
+    
+    return shouldInclude
   })
+
+  // Debug the filtering results
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`=== Filter Results ===`)
+    console.log(`Total tools: ${tools.length}`)
+    console.log(`Filtered tools: ${filteredTools.length}`)
+    console.log(`Filter mode: ${intelligentFilter.active ? 'AI' : 'Manual'}`)
+    if (intelligentFilter.active) {
+      console.log(`AI tool IDs: [${intelligentFilter.toolIds.join(', ')}]`)
+      console.log(`Matched tools: [${filteredTools.map(t => t.name).join(', ')}]`)
+    } else {
+      console.log(`Category filter: ${activeCategory}`)
+      console.log(`Solution filter: ${activeSolution}`)
+    }
+    console.log(`=====================`)
+  }
+
+  // Enhanced smart filter handler with better debugging and state management
+  const handleSmartFilter = (
+    category: string, 
+    solution: string, 
+    searchTerm: string, 
+    specificToolIds?: string[]
+  ) => {
+    console.log('Smart filter handler called:', {
+      category,
+      solution,
+      searchTerm,
+      specificToolIds: specificToolIds?.length || 0
+    })
+
+    // Apply category and solution filters
+    setActiveCategory(category)
+    setActiveSolution(solution)
+    
+    // Handle intelligent filtering
+    if (specificToolIds && specificToolIds.length > 0) {
+      console.log('Activating intelligent filter with tool IDs:', specificToolIds)
+      
+      // Validate tool IDs exist in our tools array
+      const validToolIds = specificToolIds.filter(id => 
+        tools.some(tool => tool.id === id)
+      )
+      
+      console.log('Valid tool IDs after validation:', validToolIds)
+      
+      if (validToolIds.length > 0) {
+        // Intelligent filtering - show only specific matched tools
+        setIntelligentFilter({
+          active: true,
+          toolIds: validToolIds,
+          searchTerm: searchTerm
+        })
+        
+        console.log('Intelligent filter activated with', validToolIds.length, 'valid tools')
+      } else {
+        console.warn('No valid tool IDs found, falling back to regular filtering')
+        // Fallback to regular filtering if no valid tool IDs
+        setIntelligentFilter({
+          active: false,
+          toolIds: [],
+          searchTerm: ''
+        })
+      }
+    } else {
+      console.log('No specific tool IDs provided, using regular filtering')
+      // Regular filtering - clear intelligent filter
+      setIntelligentFilter({
+        active: false,
+        toolIds: [],
+        searchTerm: ''
+      })
+    }
+    
+    // Smooth scroll to the filter section
+    setTimeout(() => {
+      const filterSection = document.getElementById('filter-section')
+      if (filterSection) {
+        filterSection.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        })
+      }
+    }, 800)
+  }
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    console.log('Clearing all filters')
+    setActiveCategory("All")
+    setActiveSolution("All")
+    setIntelligentFilter({ active: false, toolIds: [], searchTerm: '' })
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
@@ -307,7 +590,7 @@ export default function ToolsPageClient() {
             AI-Powered Business Tools
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-            Accelerate Your Business with AI
+            Accelerate Your Business with Free AI Tools
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Discover our collection of AI-powered tools designed to streamline your workflow, enhance creativity, and
@@ -315,207 +598,369 @@ export default function ToolsPageClient() {
           </p>
         </div>
       </section>
-      {/* Filter Section */} 
-      <section className="py-8 px-4 bg-white/50 dark:bg-slate-800/50">
-       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-         <h2 className="text-2xl font-bold">Browse Tools by Category</h2> 
-         <p className="text-muted-foreground"> {filteredTools.length} tool{filteredTools.length !== 1 ? "s" : ""} available </p> 
-         </div>
+
+      {/* Smart Filter Integration */}
+      <SmartFilterIntegration 
+        tools={tools} 
+        onFilterApply={handleSmartFilter}
+        currentCategory={activeCategory}
+        currentSolution={activeSolution}
+      />
+
+      {/* Filter Section with Enhanced Intelligent Filter Indicator */} 
+      <section id="filter-section" className="py-8 px-4 bg-white/50 dark:bg-slate-800/50">
+        <div className="max-w-7xl mx-auto">
+          
+          {/* Enhanced Intelligent Filter Indicator */}
+          {intelligentFilter.active && intelligentFilter.toolIds.length > 0 && (
+            <div className="mb-6 p-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950 dark:to-red-950 border-l-4 border-primary rounded-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-primary animate-pulse" />
+                    <span className="font-semibold text-primary">AI Intelligent Filter Active</span>
+                  </div>
+                  <Badge variant="secondary" className="bg-primary/10 text-primary">
+                    {filteredTools.length} perfectly matched tools
+                  </Badge>
+                  {process.env.NODE_ENV === 'development' && (
+                    <Badge variant="outline" className="text-xs">
+                      Debug: {intelligentFilter.toolIds.join(', ')}
+                    </Badge>
+                  )}
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={clearAllFilters}
+                  className="hover:bg-primary/10"
+                >
+                  <X className="w-4 h-4 mr-1" />
+                  Clear AI Filter
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground mt-2 ml-7">
+                Showing tools specifically matched to: <span className="font-medium">"{intelligentFilter.searchTerm}"</span>
+              </p>
+              {process.env.NODE_ENV === 'development' && (
+                <div className="mt-2 ml-7">
+                  <details className="text-xs text-muted-foreground">
+                    <summary className="cursor-pointer">Debug Info</summary>
+                    <div className="mt-1 p-2 bg-gray-100 dark:bg-gray-800 rounded">
+                      <p>Tool IDs: {intelligentFilter.toolIds.join(', ')}</p>
+                      <p>Filtered Tools: {filteredTools.map(t => t.name).join(', ')}</p>
+                    </div>
+                  </details>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Filter section header with AI indicator */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+            <h2 className="text-2xl font-bold">Browse Tools by Category</h2> 
+            <div className="flex items-center gap-2">
+              <p className="text-muted-foreground">
+                {filteredTools.length} tool{filteredTools.length !== 1 ? "s" : ""} available
+              </p>
+              {intelligentFilter.active && (
+                <Badge variant="outline" className="text-xs ml-2">
+                  <Sparkles className="w-3 h-3 mr-1 animate-pulse" />
+                  AI Filtered
+                </Badge>
+              )}
+            </div>
+          </div>
+
+          {/* Enhanced Filter Dropdowns with Clear Indicators */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-           <div className="flex items-center gap-4">
-             <label htmlFor="category-filter" className="text-sm font-medium text-muted-foreground"> Filter by Category: </label>
-              <Select value={activeCategory} onValueChange={setActiveCategory}> 
-                <SelectTrigger className="w-[200px]"> 
+            <div className="flex items-center gap-4">
+              <label htmlFor="category-filter" className="text-sm font-medium text-muted-foreground">Filter by Category:</label>
+              <Select value={activeCategory} onValueChange={(value) => {
+                console.log('Category changed to:', value)
+                setActiveCategory(value)
+                if (intelligentFilter.active) {
+                  // Clear intelligent filter when manual category change occurs
+                  setIntelligentFilter({ active: false, toolIds: [], searchTerm: '' })
+                }
+              }}> 
+                <SelectTrigger className={`w-[200px] ${activeCategory !== 'All' ? 'border-primary text-primary' : ''}`}> 
                   <SelectValue placeholder="Select category" /> 
                 </SelectTrigger>
-               <SelectContent> 
-                 {categories.map((category) => ( 
-                   <SelectItem key={category} value={category}> {category} </SelectItem> 
-                 ))} 
-               </SelectContent>
+                <SelectContent> 
+                  {categories.map((category) => ( 
+                    <SelectItem key={category} value={category}>{category}</SelectItem> 
+                  ))} 
+                </SelectContent>
               </Select> 
-           </div>
-           <div className="flex items-center gap-4">
-             <label htmlFor="solution-filter" className="text-sm font-medium text-muted-foreground"> Filter by Solution: </label>
-              <Select value={activeSolution} onValueChange={setActiveSolution}> 
-                <SelectTrigger className="w-[200px]"> 
+            </div>
+            <div className="flex items-center gap-4">
+              <label htmlFor="solution-filter" className="text-sm font-medium text-muted-foreground">Filter by Solution:</label>
+              <Select value={activeSolution} onValueChange={(value) => {
+                console.log('Solution changed to:', value)
+                setActiveSolution(value)
+                if (intelligentFilter.active) {
+                  // Clear intelligent filter when manual solution change occurs
+                  setIntelligentFilter({ active: false, toolIds: [], searchTerm: '' })
+                }
+              }}> 
+                <SelectTrigger className={`w-[200px] ${activeSolution !== 'All' ? 'border-primary text-primary' : ''}`}> 
                   <SelectValue placeholder="Select solution" /> 
                 </SelectTrigger>
-               <SelectContent> 
-                 {solutions.map((solution) => ( 
-                   <SelectItem key={solution} value={solution}> {solution} </SelectItem> 
-                 ))} 
-               </SelectContent>
+                <SelectContent> 
+                  {solutions.map((solution) => ( 
+                    <SelectItem key={solution} value={solution}>{solution}</SelectItem> 
+                  ))} 
+                </SelectContent>
               </Select> 
-           </div>
+            </div>
+            
+            {/* Clear Filters Button */}
+            {(activeCategory !== 'All' || activeSolution !== 'All' || intelligentFilter.active) && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={clearAllFilters}
+                className="ml-auto"
+              >
+                <X className="w-4 h-4 mr-1" />
+                Clear All Filters
+              </Button>
+            )}
+          </div> 
         </div> 
-       </div> 
       </section>
 
-{/* Tools Grid */}
-<section className="py-16 px-4">
-  <div className="max-w-7xl mx-auto">
-    {filteredTools.length === 0 ? (
-      <div className="text-center py-20">
-        <div className="max-w-md mx-auto">
-          <div className="w-24 h-24 mx-auto mb-6 bg-muted rounded-full flex items-center justify-center">
-            <Filter className="w-12 h-12 text-muted-foreground" />
-          </div>
-          <h3 className="text-2xl font-bold mb-4 text-muted-foreground">No Tools Found</h3>
-          <p className="text-muted-foreground mb-6">
-            No tools match your current filter selection. Try adjusting your category or solution filters to see more results.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setActiveCategory("All")
-                setActiveSolution("All")
-              }}
-            >
-              Clear All Filters
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => setActiveCategory("All")}
-            >
-              Reset Category
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => setActiveSolution("All")}
-            >
-              Reset Solution
-            </Button>
-          </div>
-        </div>
-      </div>
-    ) : (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredTools.map((tool) => {
-          const IconComponent = tool.icon
-          const isAvailable = tool.status === "Available"
-
-          return (
-            <Card
-              key={tool.id}
-              className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20 flex flex-col h-full"
-            >
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <IconComponent className="w-6 h-6 text-primary" />
-                    </div>
-                    <div className="flex items-center gap-2 min-w-0">
-                      <Badge variant={isAvailable ? "default" : "secondary"} className="text-xs whitespace-nowrap">
-                        {tool.status}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs whitespace-nowrap">
-                        {tool.category}
-                      </Badge>
-                      {tool.solution === "GrowthSuite" ? (
-                        <Link 
-                          href="/solutions/growthsuite" 
-                          scroll={false}
-                          onClick={() => {
-                            // Force scroll to top after navigation
-                            setTimeout(() => {
-                              window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }, 100);
-                          }}
-                        >
-                          <Badge 
-                            variant="outline" 
-                            className="text-xs whitespace-nowrap border-[#2563EB] text-[#2563EB] bg-[#2563EB]/10 hover:bg-[#2563EB]/20 transition-colors cursor-pointer"
-                          >
-                            {tool.solution}
-                          </Badge>
-                        </Link>
-                      ) : tool.solution === "LaunchPad" ? (
-                        <Link 
-                          href="/solutions/launchpad" 
-                          scroll={false}
-                          onClick={() => {
-                            // Force scroll to top after navigation
-                            setTimeout(() => {
-                              window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }, 100);
-                          }}
-                        >
-                          <Badge 
-                            variant="outline" 
-                            className="text-xs whitespace-nowrap border-[#059669] text-[#059669] bg-[#059669]/10 hover:bg-[#059669]/20 transition-colors cursor-pointer"
-                          >
-                            {tool.solution}
-                          </Badge>
-                        </Link>
-                      ) : tool.solution === "Intelligence" ? (
-                        <Link 
-                          href="/solutions/intelligence" 
-                          scroll={false}
-                          onClick={() => {
-                            // Force scroll to top after navigation
-                            setTimeout(() => {
-                              window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }, 100);
-                          }}
-                        >
-                          <Badge 
-                            variant="outline" 
-                            className="text-xs whitespace-nowrap border-[#7C3AED] text-[#7C3AED] bg-[#7C3AED]/10 hover:bg-[#7C3AED]/20 transition-colors cursor-pointer"
-                          >
-                            {tool.solution}
-                          </Badge>
-                        </Link>
+      {/* Tools Grid with Enhanced Empty State */}
+      <section id="tools-grid" className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          {filteredTools.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="max-w-md mx-auto">
+                <div className="w-24 h-24 mx-auto mb-6 bg-muted rounded-full flex items-center justify-center">
+                  <Filter className="w-12 h-12 text-muted-foreground" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-muted-foreground">No Tools Found</h3>
+                <p className="text-muted-foreground mb-6">
+                  {intelligentFilter.active 
+                    ? `No tools match your AI search for "${intelligentFilter.searchTerm}". The AI couldn't find relevant tools with the current parameters.`
+                    : "No tools match your current filter selection. Try adjusting your category or solution filters to see more results."
+                  }
+                </p>
+                
+                {/* Enhanced Debug Information */}
+                {process.env.NODE_ENV === 'development' && (
+                  <div className="mb-6 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm text-left">
+                    <h4 className="font-bold mb-2">Debug Information:</h4>
+                    <p><strong>Active Category:</strong> {activeCategory}</p>
+                    <p><strong>Active Solution:</strong> {activeSolution}</p>
+                    <p><strong>Intelligent Filter Active:</strong> {intelligentFilter.active ? 'Yes' : 'No'}</p>
+                    {intelligentFilter.active && (
+                      <>
+                        <p><strong>AI Search Term:</strong> {intelligentFilter.searchTerm}</p>
+                        <p><strong>AI Tool IDs:</strong> {intelligentFilter.toolIds.join(', ') || 'None'}</p>
+                        <p><strong>Valid Tool Names:</strong> {tools.filter(t => intelligentFilter.toolIds.includes(t.id)).map(t => t.name).join(', ') || 'None found'}</p>
+                      </>
+                    )}
+                    <p><strong>Total Tools Available:</strong> {tools.length}</p>
+                    <p><strong>Filtered Tools Count:</strong> {filteredTools.length}</p>
+                    
+                    <div className="mt-2 p-2 bg-orange-100 dark:bg-orange-900 rounded">
+                      <p className="font-medium text-orange-800 dark:text-orange-200">Current Filter Logic:</p>
+                      {intelligentFilter.active ? (
+                        <p className="text-xs text-orange-700 dark:text-orange-300">
+                          Using AI filter with {intelligentFilter.toolIds.length} specific tool IDs
+                        </p>
                       ) : (
-                        <Badge variant="outline" className="text-xs whitespace-nowrap">
-                          {tool.solution}
-                        </Badge>
+                        <p className="text-xs text-orange-700 dark:text-orange-300">
+                          Using category ({activeCategory}) and solution ({activeSolution}) filters
+                        </p>
                       )}
                     </div>
                   </div>
+                )}
+                
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button 
+                    variant="outline" 
+                    onClick={clearAllFilters}
+                  >
+                    Clear All Filters
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setActiveCategory("All")}
+                  >
+                    Reset Category
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setActiveSolution("All")}
+                  >
+                    Reset Solution
+                  </Button>
                 </div>
-                <CardTitle className="text-xl group-hover:text-primary transition-colors">{tool.name}</CardTitle>
-                <CardDescription className="text-base">{tool.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex-grow flex flex-col">
-                <div className="space-y-4 flex-grow">
-                  <div>
-                    <h4 className="font-medium text-sm text-muted-foreground mb-2">Key Features:</h4>
-                    <ul className="space-y-1">
-                      {tool.features.map((feature, index) => (
-                        <li key={index} className="text-sm flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Results Summary */}
+              {(intelligentFilter.active || activeCategory !== 'All' || activeSolution !== 'All') && (
+                <div className="mb-8 p-4 bg-orange-50 dark:bg-orange-950/50 rounded-lg border border-orange-200 dark:border-orange-800">
+                  <div className="flex items-center gap-2">
+                    {intelligentFilter.active ? (
+                      <>
+                        <Sparkles className="w-5 h-5 text-orange-600" />
+                        <span className="font-medium text-orange-800 dark:text-orange-200">
+                          AI found {filteredTools.length} tools matching "{intelligentFilter.searchTerm}"
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Filter className="w-5 h-5 text-orange-600" />
+                        <span className="font-medium text-orange-800 dark:text-orange-200">
+                          Showing {filteredTools.length} tools filtered by {activeCategory !== 'All' && `Category: ${activeCategory}`}{activeCategory !== 'All' && activeSolution !== 'All' && ' + '}{activeSolution !== 'All' && `Solution: ${activeSolution}`}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
-                <div className="mt-auto pt-4">
-                  {isAvailable ? (
-                    <Button asChild className="w-full group">
-                      <Link href={tool.href}>
-                        Try Now
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Link>
-                    </Button>
-                  ) : (
-                    <Button disabled className="w-full">
-                      Coming Soon
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          )
-        })}
-      </div>
-    )}
-  </div>
-</section>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredTools.map((tool) => {
+                  const IconComponent = tool.icon
+                  const isAvailable = tool.status === "Available"
+                  const isAIMatched = intelligentFilter.active && intelligentFilter.toolIds.includes(tool.id)
+
+                  return (
+                    <Card
+                      key={tool.id}
+                      className={`group hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20 flex flex-col h-full ${
+                        isAIMatched ? 'ring-2 ring-orange-500 bg-orange-50/50 dark:bg-orange-950/50' : ''
+                      }`}
+                    >
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-start gap-3">
+                            <div className={`p-2 rounded-lg ${isAIMatched ? 'bg-orange-100 dark:bg-orange-900' : 'bg-primary/10'}`}>
+                              <IconComponent className={`w-6 h-6 ${isAIMatched ? 'text-orange-600' : 'text-primary'}`} />
+                            </div>
+                            <div className="flex flex-wrap items-center gap-2 min-w-0">
+                              <Badge variant={isAvailable ? "default" : "secondary"} className="text-xs whitespace-nowrap">
+                                {tool.status}
+                              </Badge>
+                              {isAIMatched && (
+                                <Badge variant="secondary" className="bg-orange-100 text-orange-800 text-xs">
+                                  <Sparkles className="w-3 h-3 mr-1" />
+                                  AI Match
+                                </Badge>
+                              )}
+                              <Badge variant="outline" className="text-xs whitespace-nowrap">
+                                {tool.category}
+                              </Badge>
+                              {tool.solution === "GrowthSuite" ? (
+                                <Link 
+                                  href="/solutions/growthsuite" 
+                                  scroll={false}
+                                  onClick={() => {
+                                    setTimeout(() => {
+                                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }, 100);
+                                  }}
+                                >
+                                  <Badge 
+                                    variant="outline" 
+                                    className="text-xs whitespace-nowrap border-[#2563EB] text-[#2563EB] bg-[#2563EB]/10 hover:bg-[#2563EB]/20 transition-colors cursor-pointer"
+                                  >
+                                    {tool.solution}
+                                  </Badge>
+                                </Link>
+                              ) : tool.solution === "LaunchPad" ? (
+                                <Link 
+                                  href="/solutions/launchpad" 
+                                  scroll={false}
+                                  onClick={() => {
+                                    setTimeout(() => {
+                                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }, 100);
+                                  }}
+                                >
+                                  <Badge 
+                                    variant="outline" 
+                                    className="text-xs whitespace-nowrap border-[#059669] text-[#059669] bg-[#059669]/10 hover:bg-[#059669]/20 transition-colors cursor-pointer"
+                                  >
+                                    {tool.solution}
+                                  </Badge>
+                                </Link>
+                              ) : tool.solution === "Intelligence" ? (
+                                <Link 
+                                  href="/solutions/intelligence" 
+                                  scroll={false}
+                                  onClick={() => {
+                                    setTimeout(() => {
+                                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }, 100);
+                                  }}
+                                >
+                                  <Badge 
+                                    variant="outline" 
+                                    className="text-xs whitespace-nowrap border-[#7C3AED] text-[#7C3AED] bg-[#7C3AED]/10 hover:bg-[#7C3AED]/20 transition-colors cursor-pointer"
+                                  >
+                                    {tool.solution}
+                                  </Badge>
+                                </Link>
+                              ) : (
+                                <Badge variant="outline" className="text-xs whitespace-nowrap">
+                                  {tool.solution}
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <CardTitle className={`text-xl group-hover:text-primary transition-colors ${isAIMatched ? 'text-orange-700 dark:text-orange-300' : ''}`}>
+                          {tool.name}
+                        </CardTitle>
+                        <CardDescription className="text-base">{tool.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex-grow flex flex-col">
+                        <div className="space-y-4 flex-grow">
+                          <div>
+                            <h4 className="font-medium text-sm text-muted-foreground mb-2">Key Features:</h4>
+                            <ul className="space-y-1">
+                              {tool.features.map((feature, index) => (
+                                <li key={index} className="text-sm flex items-center gap-2">
+                                  <div className={`w-1.5 h-1.5 rounded-full ${isAIMatched ? 'bg-orange-500' : 'bg-primary'}`}></div>
+                                  {feature}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                        <div className="mt-auto pt-4">
+                          {isAvailable ? (
+                            <Button asChild className={`w-full group ${isAIMatched ? 'bg-orange-600 hover:bg-orange-700' : ''}`}>
+                              <Link href={tool.href}>
+                                Try Now
+                                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                              </Link>
+                            </Button>
+                          ) : (
+                            <Button disabled className="w-full">
+                              Coming Soon
+                            </Button>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-4 bg-primary text-primary-foreground">
         <div className="max-w-4xl mx-auto text-center">
