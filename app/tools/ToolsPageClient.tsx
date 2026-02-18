@@ -860,8 +860,8 @@ export default function ToolsPageClient() {
                                 {tool.category}
                               </Badge>
                               {tool.solution === "GrowthSuite" ? (
-                                <Link 
-                                  href="/solutions/growthsuite" 
+                                <Link
+                                  href="/growthsuite"
                                   scroll={false}
                                   onClick={() => {
                                     setTimeout(() => {
@@ -877,8 +877,8 @@ export default function ToolsPageClient() {
                                   </Badge>
                                 </Link>
                               ) : tool.solution === "LaunchPad" ? (
-                                <Link 
-                                  href="/solutions/launchpad" 
+                                <Link
+                                  href="/launchpad"
                                   scroll={false}
                                   onClick={() => {
                                     setTimeout(() => {
@@ -894,8 +894,8 @@ export default function ToolsPageClient() {
                                   </Badge>
                                 </Link>
                               ) : tool.solution === "Intelligence" ? (
-                                <Link 
-                                  href="/solutions/intelligence" 
+                                <Link
+                                  href="/intelligence"
                                   scroll={false}
                                   onClick={() => {
                                     setTimeout(() => {

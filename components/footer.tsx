@@ -53,7 +53,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/solutions/launchpad"
+                  href="/launchpad"
                   className="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
                 >
                   LaunchPad
@@ -61,7 +61,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/solutions/growthsuite"
+                  href="/growthsuite"
                   className="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
                 >
                   GrowthSuite
@@ -69,7 +69,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/solutions/intelligence"
+                  href="/intelligence"
                   className="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
                 >
                   Intelligence

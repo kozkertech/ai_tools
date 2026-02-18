@@ -54,7 +54,7 @@ export default async function Home() {
 
               {/* Solution Tier Quick Links */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                <Link href="/solutions/launchpad" className="group">
+                <Link href="/launchpad" className="group">
                   <Card className="border-2 hover:border-primary transition-all cursor-pointer">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
@@ -70,7 +70,7 @@ export default async function Home() {
                   </Card>
                 </Link>
 
-                <Link href="/solutions/growthsuite" className="group">
+                <Link href="/growthsuite" className="group">
                   <Card className="border-2 hover:border-primary transition-all cursor-pointer">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
@@ -86,7 +86,7 @@ export default async function Home() {
                   </Card>
                 </Link>
 
-                <Link href="/solutions/intelligence" className="group">
+                <Link href="/intelligence" className="group">
                   <Card className="border-2 hover:border-primary transition-all cursor-pointer">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
@@ -200,7 +200,7 @@ export default async function Home() {
                   variant="outline"
                   className="w-full group-hover:bg-green-50 bg-transparent hover:bg-green-500 hover:text-white border-green-500 text-green-600"
                 >
-                  <Link href="/solutions/launchpad">
+                  <Link href="/launchpad">
                     Explore LaunchPad <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -238,7 +238,7 @@ export default async function Home() {
                   variant="outline"
                   className="w-full group-hover:bg-blue-50 bg-transparent hover:bg-blue-500 hover:text-white border-blue-500 text-blue-600"
                 >
-                  <Link href="/solutions/growthsuite">
+                  <Link href="/growthsuite">
                     Explore GrowthSuite <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -276,7 +276,7 @@ export default async function Home() {
                   variant="outline"
                   className="w-full group-hover:bg-purple-50 bg-transparent hover:bg-purple-500 hover:text-white border-purple-500 text-purple-600"
                 >
-                  <Link href="/solutions/intelligence">
+                  <Link href="/intelligence">
                     Explore Intelligence <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
