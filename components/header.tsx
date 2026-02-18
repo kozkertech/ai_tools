@@ -5,9 +5,8 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
-import { Menu, X, ChevronDown } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes"
 
 export default function Header() {
@@ -29,13 +28,7 @@ export default function Header() {
     setIsMenuOpen(!isMenuOpen)
   }
 
-  const isSolutionsPage = pathname.startsWith("/solutions")
-  const isResourcesPage =
-    pathname.startsWith("/resources") ||
-    pathname.startsWith("/blog") ||
-    pathname.startsWith("/webinars") ||
-    pathname.startsWith("/case-studies") ||
-    pathname.startsWith("/tools")
+  const isFreeToolsPage = pathname === "/tools"
 
   return (
     <header
@@ -72,135 +65,18 @@ export default function Header() {
             ></span>
           </Link>
 
-          {/* Solutions Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="link"
-                className={cn(
-                  "p-0 h-auto text-sm font-medium flex items-center gap-1.5 hover:text-primary relative group",
-                  isSolutionsPage && "text-primary font-semibold",
-                )}
-              >
-                Solutions
-                <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                <span
-                  className={cn(
-                    "absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 w-0 group-hover:w-full",
-                    isSolutionsPage && "w-full",
-                  )}
-                ></span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="center"
-              sideOffset={8}
-              className="w-64 p-2 rounded-xl border border-border/50 shadow-lg animate-in fade-in-80 zoom-in-95 dark:bg-gray-900 dark:border-gray-800"
-            >
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/solutions/launchpad"
-                  className="w-full cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary flex flex-col items-start"
-                >
-                  <span className="font-semibold">LaunchPad</span>
-                  <span className="text-xs text-muted-foreground">For Startups & Local SMBs</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/solutions/growthsuite"
-                  className="w-full cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary flex flex-col items-start"
-                >
-                  <span className="font-semibold">GrowthSuite</span>
-                  <span className="text-xs text-muted-foreground">For Growing SMBs</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/solutions/intelligence"
-                  className="w-full cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary flex flex-col items-start"
-                >
-                  <span className="font-semibold">Intelligence</span>
-                  <span className="text-xs text-muted-foreground">For Data-Driven Enterprises</span>
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Resources Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="link"
-                className={cn(
-                  "p-0 h-auto text-sm font-medium flex items-center gap-1.5 hover:text-primary relative group",
-                  isResourcesPage && "text-primary font-semibold",
-                )}
-              >
-                Resources
-                <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                <span
-                  className={cn(
-                    "absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 w-0 group-hover:w-full",
-                    isResourcesPage && "w-full",
-                  )}
-                ></span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="center"
-              sideOffset={8}
-              className="w-56 p-2 rounded-xl border border-border/50 shadow-lg animate-in fade-in-80 zoom-in-95 dark:bg-gray-900 dark:border-gray-800"
-            >
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/blog"
-                  className="w-full cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary"
-                >
-                  Blog
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <a
-                  href="https://events.kozker.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary"
-                >
-                  Webinars & Events
-                </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/case-studies"
-                  className="w-full cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary"
-                >
-                  Case Studies
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/tools"
-                  className="w-full cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary"
-                >
-                  Free Tools
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
           <Link
-            href="/pricing"
+            href="/tools"
             className={cn(
               "text-sm font-medium transition-colors hover:text-primary relative group",
-              pathname === "/pricing" && "text-primary font-semibold",
+              isFreeToolsPage && "text-primary font-semibold",
             )}
           >
-            Pricing
+            Free Tools
             <span
               className={cn(
                 "absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 w-0 group-hover:w-full",
-                pathname === "/pricing" && "w-full",
+                isFreeToolsPage && "w-full",
               )}
             ></span>
           </Link>
@@ -262,82 +138,12 @@ export default function Header() {
               <span className="text-base font-medium">Home</span>
             </Link>
 
-            <div className="space-y-3">
-              <div className="px-3 py-2">
-                <span className="text-base font-medium">Solutions</span>
-              </div>
-              <div className="pl-4 border-l-2 border-primary/20 space-y-2 ml-3">
-                <Link
-                  href="/solutions/launchpad"
-                  className="flex flex-col space-y-1 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="text-sm font-medium">LaunchPad</span>
-                  <span className="text-xs text-muted-foreground">For Startups & Local SMBs</span>
-                </Link>
-                <Link
-                  href="/solutions/growthsuite"
-                  className="flex flex-col space-y-1 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="text-sm font-medium">GrowthSuite</span>
-                  <span className="text-xs text-muted-foreground">For Growing SMBs</span>
-                </Link>
-                <Link
-                  href="/solutions/intelligence"
-                  className="flex flex-col space-y-1 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="text-sm font-medium">Intelligence</span>
-                  <span className="text-xs text-muted-foreground">For Data-Driven Enterprises</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <div className="px-3 py-2">
-                <span className="text-base font-medium">Resources</span>
-              </div>
-              <div className="pl-4 border-l-2 border-primary/20 space-y-2 ml-3">
-                <Link
-                  href="/blog"
-                  className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="text-sm font-medium">Blog</span>
-                </Link>
-                <a
-                  href="https://events.kozker.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="text-sm font-medium">Webinars & Events</span>
-                </a>
-                <Link
-                  href="/case-studies"
-                  className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="text-sm font-medium">Case Studies</span>
-                </Link>
-                <Link
-                  href="/tools"
-                  className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="text-sm font-medium">Free Tools</span>
-                </Link>
-              </div>
-            </div>
-
             <Link
-              href="/pricing"
-              className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
+              href="/tools"
+              className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10 hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
             >
-              <span className="text-base font-medium">Pricing</span>
+              <span className="text-base font-medium">Free Tools</span>
             </Link>
 
             <Link
