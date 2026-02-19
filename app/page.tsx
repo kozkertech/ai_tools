@@ -667,111 +667,94 @@ export default async function Home() {
       </section>
 
       {/* Why AI Over Agencies */}
-      <section className="py-20 bg-gradient-to-b from-background to-muted/50">
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Use Free AI Tools Instead of Agencies?</h2>
-            <p className="text-xl text-muted-foreground">
-              The future of business is self-service, instant, and powered by intelligent automation and AI tools
-            </p>
-          </div>
+ <section className="py-20 bg-gradient-to-b from-background to-muted/50">
+  <div className="container">
+    <div className="text-center max-w-3xl mx-auto mb-16">
+      <h2 className="text-3xl md:text-4xl font-bold mb-6">
+        Why Businesses Are Adopting AI Tools
+      </h2>
+      <p className="text-xl text-muted-foreground">
+        AI tools are becoming an essential productivity layer — helping teams move faster, experiment freely, and execute ideas with greater efficiency.
+      </p>
+    </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-            {/* AI Side */}
-            <div className="space-y-4">
-              <div className="text-center mb-6">
-                <Badge className="bg-primary/10 text-primary text-sm py-2 px-4">
-                  <Sparkles className="h-4 w-4 mr-1 inline" /> AI Tools
-                </Badge>
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <div className="font-semibold text-sm">Instant Output</div>
-                    <div className="text-xs text-muted-foreground">Seconds, not weeks</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <div className="font-semibold text-sm">Total Control</div>
-                    <div className="text-xs text-muted-foreground">Generate, edit, iterate freely</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <div className="font-semibold text-sm">Zero Dependency</div>
-                    <div className="text-xs text-muted-foreground">No vendor lock-in</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <div className="font-semibold text-sm">Unlimited Iterations</div>
-                    <div className="text-xs text-muted-foreground">Test as many versions as you need</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <div className="font-semibold text-sm">Low Cost</div>
-                    <div className="text-xs text-muted-foreground">Free forever, scale as you grow</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
 
-            {/* Traditional Services Side */}
-            <div className="space-y-4">
-              <div className="text-center mb-6">
-                <Badge variant="outline" className="text-sm py-2 px-4">
-                  Traditional Agencies
-                </Badge>
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
-                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
-                  <div>
-                    <div className="font-semibold text-sm">Extended Delays</div>
-                    <div className="text-xs text-muted-foreground">Weeks or months for deliverables</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
-                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
-                  <div>
-                    <div className="font-semibold text-sm">Limited Control</div>
-                    <div className="text-xs text-muted-foreground">Dependency on agency for changes</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
-                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
-                  <div>
-                    <div className="font-semibold text-sm">Vendor Lock-In</div>
-                    <div className="text-xs text-muted-foreground">Ongoing dependency for revisions</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
-                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
-                  <div>
-                    <div className="font-semibold text-sm">High Revision Costs</div>
-                    <div className="text-xs text-muted-foreground">Extra fees for changes and iterations</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
-                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
-                  <div>
-                    <div className="font-semibold text-sm">Premium Pricing</div>
-                    <div className="text-xs text-muted-foreground">High upfront investment required</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Speed */}
+      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
+        <div className="mb-4 text-primary">
+          <Sparkles className="h-6 w-6" />
         </div>
-      </section>
+        <h3 className="font-semibold text-lg mb-2">Faster Execution</h3>
+        <p className="text-sm text-muted-foreground">
+          Generate content, visuals, proposals, and workflows in minutes instead of waiting days.
+        </p>
+      </div>
 
+      {/* Flexibility */}
+      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
+        <div className="mb-4 text-primary">
+          <CheckCircle className="h-6 w-6" />
+        </div>
+        <h3 className="font-semibold text-lg mb-2">Unlimited Iteration</h3>
+        <p className="text-sm text-muted-foreground">
+          Experiment, refine, and test different versions without additional cost or dependency.
+        </p>
+      </div>
+
+      {/* Control */}
+      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
+        <div className="mb-4 text-primary">
+          <Zap className="h-6 w-6" />
+        </div>
+        <h3 className="font-semibold text-lg mb-2">Greater Control</h3>
+        <p className="text-sm text-muted-foreground">
+          Maintain ownership of your ideas while using AI as an intelligent assistant for execution.
+        </p>
+      </div>
+
+      {/* Cost Efficiency */}
+      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
+        <div className="mb-4 text-primary">
+          <Target className="h-6 w-6" />
+        </div>
+        <h3 className="font-semibold text-lg mb-2">Cost Efficiency</h3>
+        <p className="text-sm text-muted-foreground">
+          Reduce repetitive work and allocate budgets more strategically.
+        </p>
+      </div>
+
+      {/* Scalability */}
+      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
+        <div className="mb-4 text-primary">
+          <TrendingUp className="h-6 w-6" />
+        </div>
+        <h3 className="font-semibold text-lg mb-2">Scalable Workflows</h3>
+        <p className="text-sm text-muted-foreground">
+          Use AI tools to handle increasing workloads without expanding your team immediately.
+        </p>
+      </div>
+
+      {/* Collaboration */}
+      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
+        <div className="mb-4 text-primary">
+          <Users className="h-6 w-6" />
+        </div>
+        <h3 className="font-semibold text-lg mb-2">Works Alongside Teams</h3>
+        <p className="text-sm text-muted-foreground">
+          AI tools complement agencies, consultants, and internal teams — enhancing productivity, not replacing expertise.
+        </p>
+      </div>
+
+    </div>
+
+    <div className="text-center mt-12 max-w-2xl mx-auto">
+      <p className="text-muted-foreground text-lg">
+        Whether you collaborate with agencies or operate independently, AI tools help you move from idea to execution faster.
+      </p>
+    </div>
+  </div>
+</section>
       {/* AI Tools Directory Section */}
       <section className="py-12 bg-white dark:bg-gray-900">
         <div className="container">
