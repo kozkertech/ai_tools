@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -7,7 +8,6 @@ import {
   CheckCircle,
   ArrowRight,
   Zap,
-  Users,
   TrendingUp,
   Brain,
   Rocket,
@@ -19,12 +19,20 @@ import {
   Bot,
   Type,
   LayoutTemplate,
+  Lightbulb,
+  FileText,
+  Mail,
 } from "lucide-react"
 import { getFeaturedPosts } from "@/lib/ghost"
 import { PostCard } from "@/components/post-card"
 
+export const metadata: Metadata = {
+  title: "KozkerTech - AI-Powered Business Tools | Automate Your Growth",
+  description:
+    "Launch, grow, and scale your business with AI. Generate domains, proposals, dashboards, and more instantly. Free AI tools for every business stage.",
+}
+
 export default async function Home() {
-  // Fetch featured posts with error handling
   let featuredPosts = []
   try {
     if (process.env.GHOST_URL && process.env.GHOST_CONTENT_API_KEY) {
@@ -36,453 +44,539 @@ export default async function Home() {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="py-20 md:py-28 hero-pattern">
-        <div className="container">
+      {/* Hero Section - AI-Focused */}
+      <section className="relative py-20 md:py-32 overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-primary/30 via-blue-300/20 to-transparent rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-tl from-purple-300/20 via-primary/20 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
+        </div>
+
+        <div className="container relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
-              <Badge className="px-4 py-2 text-sm bg-primary/10 text-primary border-primary/20">
-                Digital Solutions from Launch to Scale
+              <Badge className="px-4 py-2 text-sm bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200">
+                <Sparkles className="h-4 w-4 mr-2" />
+                AI-Powered Business Tools
               </Badge>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                Transform Your Business with <span className="text-primary">Smart Technology</span>
+
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
+                Launch, Grow <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">&amp; Scale</span> with AI
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                From rapid website launches to advanced business intelligence, we provide comprehensive digital
-                solutions tailored to your business stage and growth ambitions.
+
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
+                Generate domains, branding, content, pricing, proposals, analytics and more — instantly. 
+                No waiting. No agencies. No dependencies. Just pure AI acceleration.
               </p>
 
-              {/* Solution Tier Quick Links */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                <Link href="/launchpad" className="group">
-                  <Card className="border-2 hover:border-primary transition-all cursor-pointer">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-green-100 rounded-lg">
-                          <Rocket className="h-5 w-5 text-green-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold">LaunchPad</h3>
-                          <p className="text-sm text-muted-foreground">Startups & Local SMBs</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-
-                <Link href="/growthsuite" className="group">
-                  <Card className="border-2 hover:border-primary transition-all cursor-pointer">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                          <TrendingUp className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold">GrowthSuite</h3>
-                          <p className="text-sm text-muted-foreground">Growing SMBs</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-
-                <Link href="/intelligence" className="group">
-                  <Card className="border-2 hover:border-primary transition-all cursor-pointer">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-purple-100 rounded-lg">
-                          <Brain className="h-5 w-5 text-purple-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold">Intelligence</h3>
-                          <p className="text-sm text-muted-foreground">Data-Driven Enterprises</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg px-8 h-14">
+                  <Link href="/tools">
+                    Explore Our Free AI Tools <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="text-lg px-8 h-14 border-2">
+                  <Link href="#tools-showcase">See How It Works</Link>
+                </Button>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="text-lg px-8">
-                  <Link href="/contact">Get Started Today</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="text-lg px-8 bg-transparent hover:bg-primary hover:text-white border-primary text-primary"
-                >
-                  <Link href="/solutions">Explore Solutions</Link>
-                </Button>
+              <div className="pt-4">
+                <p className="text-sm text-muted-foreground">
+                  ✨ 12+ free tools • 0 setup required • Forever free
+                </p>
               </div>
             </div>
 
-            <div className="relative">
-              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
-              <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Version%20control-cuate-yIM8dgQYh75USr7RBxwMELEfYb0KvG.png"
-                alt="Software developer working on code with workflow diagrams and development processes"
-                width={600}
-                height={600}
-                className="rounded-lg"
-                priority
-              />
+            {/* Animated Tool Cards Preview */}
+            <div className="relative h-96 hidden lg:block">
+              <div className="absolute inset-0 flex items-center justify-center">
+                {/* Floating Card 1 - Domain */}
+                <div className="absolute w-64 h-40 bg-gradient-to-br from-green-500/20 to-green-600/10 backdrop-blur-md border border-green-200/40 rounded-xl p-4 shadow-xl transform -rotate-12 -translate-y-12 -translate-x-12 animate-bounce" style={{ animationDelay: "0s", animationDuration: "4s" }}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Globe className="h-5 w-5 text-green-600" />
+                    <span className="font-semibold text-sm">Domain Suggestions</span>
+                  </div>
+                  <div className="space-y-2 text-xs text-muted-foreground">
+                    <div>✓ techstartup.com</div>
+                    <div>✓ innovatetech.in</div>
+                    <div>✓ growthventure.co</div>
+                  </div>
+                </div>
+
+                {/* Floating Card 2 - Proposal */}
+                <div className="absolute w-64 h-40 bg-gradient-to-br from-blue-500/20 to-blue-600/10 backdrop-blur-md border border-blue-200/40 rounded-xl p-4 shadow-xl transform rotate-6 translate-y-8 animate-bounce" style={{ animationDelay: "0.5s", animationDuration: "4s" }}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <FileText className="h-5 w-5 text-blue-600" />
+                    <span className="font-semibold text-sm">Proposal Draft</span>
+                  </div>
+                  <div className="space-y-2 text-xs text-muted-foreground">
+                    <div>Scope • Timeline • Pricing</div>
+                    <div>Terms • Deliverables</div>
+                    <div className="text-blue-600 pt-1">→ Ready to send</div>
+                  </div>
+                </div>
+
+                {/* Floating Card 3 - Dashboard */}
+                <div className="absolute w-64 h-40 bg-gradient-to-br from-purple-500/20 to-purple-600/10 backdrop-blur-md border border-purple-200/40 rounded-xl p-4 shadow-xl transform rotate-12 translate-y-16 translate-x-12 animate-bounce" style={{ animationDelay: "1s", animationDuration: "4s" }}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <BarChart3 className="h-5 w-5 text-purple-600" />
+                    <span className="font-semibold text-sm">Dashboard Blueprint</span>
+                  </div>
+                  <div className="space-y-2 text-xs text-muted-foreground">
+                    <div>KPI selection</div>
+                    <div>Visualization design</div>
+                    <div className="text-purple-600 pt-1">→ Ready to build</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-muted/50">
-        <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="space-y-2">
-              <div className="text-4xl font-bold text-primary">200+</div>
-              <p className="text-muted-foreground">Projects Delivered</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-4xl font-bold text-primary">98%</div>
-              <p className="text-muted-foreground">Client Satisfaction</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-4xl font-bold text-primary">24/7</div>
-              <p className="text-muted-foreground">Support Available</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-4xl font-bold text-primary">6+</div>
-              <p className="text-muted-foreground">Years Experience</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Who We Help Section */}
-      <section className="py-20">
+      {/* What You Can Build Section */}
+      <section className="py-20 bg-gradient-to-b from-muted/30 to-background">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Who We Help</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You Can Build with AI</h2>
             <p className="text-xl text-muted-foreground">
-              Tailored solutions for businesses at every stage of their digital journey
+              Instant tools for every business function. No waiting. No dependencies.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Startups & Local SMBs */}
-            <Card className="border-2 hover:border-green-500 transition-all group">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+            {/* Launch Your Brand */}
+            <Card className="border-2 border-green-200/50 hover:border-green-500 transition-all group overflow-hidden">
+              <CardHeader className="pb-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-50 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Rocket className="h-6 w-6 text-green-600" />
                 </div>
-                <CardTitle className="text-xl">Startups & Local SMBs</CardTitle>
+                <CardTitle className="text-xl">Launch Your Brand</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Get online fast with our LaunchPad solutions. Perfect for businesses just starting their digital
-                  journey.
+                  Generate everything needed to establish your brand identity instantly.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">Free 1-page website</span>
+                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    <span className="text-sm">Domain names (generated in seconds)</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">Local SEO optimization</span>
+                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    <span className="text-sm">Taglines & brand messages</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">Basic automation setup</span>
+                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    <span className="text-sm">Color palettes & design</span>
                   </li>
                 </ul>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="w-full group-hover:bg-green-50 bg-transparent hover:bg-green-500 hover:text-white border-green-500 text-green-600"
-                >
-                  <Link href="/launchpad">
-                    Explore LaunchPad <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
               </CardContent>
             </Card>
 
-            {/* Growing SMBs */}
-            <Card className="border-2 hover:border-blue-500 transition-all group">
-              <CardHeader>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+            {/* Automate Growth */}
+            <Card className="border-2 border-blue-200/50 hover:border-blue-500 transition-all group overflow-hidden">
+              <CardHeader className="pb-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <TrendingUp className="h-6 w-6 text-blue-600" />
                 </div>
-                <CardTitle className="text-xl">Growing SMBs</CardTitle>
+                <CardTitle className="text-xl">Automate Your Growth</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Scale your operations with our GrowthSuite. Optimize engagement and automate workflows.
+                  Generate sales and marketing content that converts at scale.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">WhatsApp CRM & automation</span>
+                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <span className="text-sm">Proposals (drafted in minutes)</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">AI chatbots & support suite</span>
+                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <span className="text-sm">Email sequences & sales scripts</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Conversion optimization</span>
+                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <span className="text-sm">Content & campaign copy</span>
                   </li>
                 </ul>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="w-full group-hover:bg-blue-50 bg-transparent hover:bg-blue-500 hover:text-white border-blue-500 text-blue-600"
-                >
-                  <Link href="/growthsuite">
-                    Explore GrowthSuite <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
               </CardContent>
             </Card>
 
-            {/* Data-Driven Enterprises */}
-            <Card className="border-2 hover:border-purple-500 transition-all group">
-              <CardHeader>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+            {/* Make Smarter Decisions */}
+            <Card className="border-2 border-purple-200/50 hover:border-purple-500 transition-all group overflow-hidden">
+              <CardHeader className="pb-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Brain className="h-6 w-6 text-purple-600" />
                 </div>
-                <CardTitle className="text-xl">Data-Driven Enterprises</CardTitle>
+                <CardTitle className="text-xl">Make Smarter Decisions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Unlock strategic insights with our Intelligence solutions. Advanced BI and data analytics.
+                  Transform data into actionable intelligence instantly.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">Power BI consulting</span>
+                    <CheckCircle className="h-4 w-4 text-purple-500 flex-shrink-0" />
+                    <span className="text-sm">Dashboards (designed in minutes)</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">Custom dashboard development</span>
+                    <CheckCircle className="h-4 w-4 text-purple-500 flex-shrink-0" />
+                    <span className="text-sm">Data models & queries</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">Data integration services</span>
+                    <CheckCircle className="h-4 w-4 text-purple-500 flex-shrink-0" />
+                    <span className="text-sm">Insights & recommendations</span>
                   </li>
                 </ul>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="w-full group-hover:bg-purple-50 bg-transparent hover:bg-purple-500 hover:text-white border-purple-500 text-purple-600"
-                >
-                  <Link href="/intelligence">
-                    Explore Intelligence <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* Core Benefits Section */}
-      <section className="py-20 bg-muted/50">
+      {/* Featured Tool - Domain Name Genie */}
+      <section id="tools-showcase" className="py-20">
         <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Choose KozkerTech</h2>
-            <p className="text-xl text-muted-foreground">We deliver results that matter for your business growth</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center p-6 rounded-lg bg-background hover:shadow-md transition-all">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="h-8 w-8 text-primary" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Feature Details */}
+            <div className="space-y-8">
+              <div>
+                <Badge className="mb-4 bg-green-100 text-green-700 hover:bg-green-200">
+                  Most Popular Tool
+                </Badge>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Domain Name Genie</h2>
+                <p className="text-lg text-muted-foreground">
+                  Get 100+ AI-generated domain suggestions instantly. No more brainstorming for hours.
+                  Just describe your business, and let AI generate perfect names in seconds.
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-2">Speed</h3>
-              <p className="text-muted-foreground">Launch your digital presence in days, not months.</p>
+
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold">Instant Generation</div>
+                    <div className="text-sm text-muted-foreground">100+ suggestions in seconds</div>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold">Real-Time Availability</div>
+                    <div className="text-sm text-muted-foreground">Check if domains are available</div>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold">Multiple TLDs</div>
+                    <div className="text-sm text-muted-foreground">.com, .io, .co, .in and more</div>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold">One-Click Booking</div>
+                    <div className="text-sm text-muted-foreground">Direct links to register immediately</div>
+                  </div>
+                </li>
+              </ul>
+
+              <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 h-12">
+                <Link href="/tools/domain-name-generator">
+                  Try Domain Name Genie Free <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
             </div>
 
-            <div className="text-center p-6 rounded-lg bg-background hover:shadow-md transition-all">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Target className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Automation</h3>
-              <p className="text-muted-foreground">Streamline operations with intelligent automation.</p>
-            </div>
+            {/* Right: Interactive Preview */}
+            <div className="relative">
+              <Card className="border-2 border-green-200/50 overflow-hidden">
+                <CardContent className="p-0 bg-gradient-to-br from-green-50 to-white dark:from-green-950/20 dark:to-background">
+                  <div className="p-6 space-y-4">
+                    <div className="text-center pb-4 border-b">
+                      <div className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold mb-2">
+                        ✨ Live Preview
+                      </div>
+                      <div className="font-semibold text-sm text-muted-foreground">Domain Suggestions</div>
+                    </div>
 
-            <div className="text-center p-6 rounded-lg bg-background hover:shadow-md transition-all">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BarChart3 className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Insights</h3>
-              <p className="text-muted-foreground">Make data-driven decisions with powerful analytics.</p>
-            </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg border border-green-200/50 hover:border-green-400 transition-colors">
+                        <div>
+                          <div className="font-semibold text-sm">techstartup.com</div>
+                          <div className="text-xs text-muted-foreground">Top choice</div>
+                        </div>
+                        <Badge className="bg-green-100 text-green-700">Available</Badge>
+                      </div>
 
-            <div className="text-center p-6 rounded-lg bg-background hover:shadow-md transition-all">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Support</h3>
-              <p className="text-muted-foreground">24/7 support to ensure your success.</p>
+                      <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg border border-blue-200/50 hover:border-blue-400 transition-colors">
+                        <div>
+                          <div className="font-semibold text-sm">innovatebiz.io</div>
+                          <div className="text-xs text-muted-foreground">Fresh & modern</div>
+                        </div>
+                        <Badge className="bg-blue-100 text-blue-700">Available</Badge>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg border border-purple-200/50 hover:border-purple-400 transition-colors">
+                        <div>
+                          <div className="font-semibold text-sm">growthventure.co</div>
+                          <div className="text-xs text-muted-foreground">Premium name</div>
+                        </div>
+                        <Badge className="bg-purple-100 text-purple-700">Available</Badge>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg border border-orange-200/50 hover:border-orange-400 transition-colors">
+                        <div>
+                          <div className="font-semibold text-sm">smarttech.cloud</div>
+                          <div className="text-xs text-muted-foreground">Future-focused</div>
+                        </div>
+                        <Badge className="bg-orange-100 text-orange-700">Available</Badge>
+                      </div>
+                    </div>
+
+                    <div className="text-center pt-4 border-t">
+                      <Button asChild variant="ghost" size="sm" className="text-green-600 hover:text-green-700">
+                        <Link href="/tools/domain-name-generator">
+                          See more suggestions →
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Free Tools Section */}
+      {/* AI Tool Ecosystem Overview */}
+      <section className="py-20 bg-gradient-to-b from-background to-muted/50">
+        <div className="container">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools for Every Stage</h2>
+            <p className="text-xl text-muted-foreground">
+              Curated AI tool collections designed for your business journey
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* LaunchPad */}
+            <Link href="/launchpad" className="group">
+              <Card className="h-full border-2 border-green-200/50 hover:border-green-500 transition-all hover:shadow-lg">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-200 transition-colors">
+                    <Rocket className="h-6 w-6 text-green-600" />
+                  </div>
+                  <CardTitle>LaunchPad</CardTitle>
+                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Launch Toolkit</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    For founders building their brand and launching instantly.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>Domain generation</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>Brand messaging</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>Business planning</span>
+                    </div>
+                  </div>
+                  <div className="pt-2">
+                    <span className="text-sm font-semibold text-green-600 group-hover:text-green-700">
+                      Explore → 
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* GrowthSuite */}
+            <Link href="/growthsuite" className="group">
+              <Card className="h-full border-2 border-blue-200/50 hover:border-blue-500 transition-all hover:shadow-lg">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
+                    <TrendingUp className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <CardTitle>GrowthSuite</CardTitle>
+                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Growth Automation Stack</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    For growing businesses accelerating sales and marketing.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span>Proposal generation</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span>Email sequences</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span>Content automation</span>
+                    </div>
+                  </div>
+                  <div className="pt-2">
+                    <span className="text-sm font-semibold text-blue-600 group-hover:text-blue-700">
+                      Explore → 
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* Intelligence */}
+            <Link href="/intelligence" className="group">
+              <Card className="h-full border-2 border-purple-200/50 hover:border-purple-500 transition-all hover:shadow-lg">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
+                    <Brain className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <CardTitle>Intelligence</CardTitle>
+                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Decision Intelligence</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    For enterprises transforming data into strategic decisions.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                      <span>Dashboard generation</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                      <span>Data modeling</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                      <span>Insight extraction</span>
+                    </div>
+                  </div>
+                  <div className="pt-2">
+                    <span className="text-sm font-semibold text-purple-600 group-hover:text-purple-700">
+                      Explore → 
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why AI Over Agencies */}
       <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <Badge className="px-4 py-2 text-sm bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 border-orange-200 mb-4">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Free AI-Powered Tools
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Start Your Journey with Our Free Tools</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Use AI Instead of Agencies?</h2>
             <p className="text-xl text-muted-foreground">
-              Get a taste of our AI-powered solutions with our collection of free business tools. Perfect for testing
-              the waters before diving deeper.
+              The future of business is self-service, instant, and AI-powered
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-  {/* Featured Tool - Domain Name Genie */}
-  <div className="space-y-6">
-    <Card className="border-2 border-primary/20 dark:border-orange-500/20 bg-gradient-to-br from-primary/5 to-orange-50 dark:from-orange-900/10 dark:to-zinc-900 hover:border-primary/40 dark:hover:border-orange-500/40 transition-all bg-white dark:bg-[#111111]">
-      <CardHeader>
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 bg-gradient-to-br from-primary to-orange-500 rounded-xl flex items-center justify-center">
-            <Globe className="h-8 w-8 text-white" />
-          </div>
-          <div>
-            <Badge className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-100 border-green-200 dark:border-green-800 mb-2">
-              Most Popular
-            </Badge>
-            <CardTitle className="text-2xl text-gray-900 dark:text-white">Domain Name Genie</CardTitle>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-lg text-gray-600 dark:text-gray-400">
-          Find your perfect domain with AI-powered suggestions based on your business description. Get
-          real-time availability checks and multiple TLD options.
-        </p>
-        <ul className="space-y-2">
-          <li className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-500" />
-            <span className="text-sm text-gray-700 dark:text-gray-300">AI-powered domain suggestions</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-500" />
-            <span className="text-sm text-gray-700 dark:text-gray-300">Real-time availability checking</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-500" />
-            <span className="text-sm text-gray-700 dark:text-gray-300">Multiple TLD options (.com, .net, .org, etc.)</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-500" />
-            <span className="text-sm text-gray-700 dark:text-gray-300">Direct purchase links</span>
-          </li>
-        </ul>
-        <Button asChild size="lg" className="w-full text-lg bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white">
-          <Link href="/tools/domain-name-generator">
-            Try Domain Name Genie Free <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
-        </Button>
-      </CardContent>
-    </Card>
-  </div>
-
-
-            {/* Other Tools Preview */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold mb-6">More Free Tools Available</h3>
-
-              <div className="grid gap-4">
-                <Card className="border hover:border-primary/40 transition-all cursor-pointer group">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-blue-100 rounded-lg">
-                        <Type className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold group-hover:text-primary transition-colors">
-                          Tagline & Value-Prop Creator
-                        </h4>
-                        <p className="text-sm text-muted-foreground">Create punchy taglines and value propositions</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border hover:border-primary/40 transition-all cursor-pointer group">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-green-100 rounded-lg">
-                        <LayoutTemplate className="h-5 w-5 text-green-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold group-hover:text-primary transition-colors">
-                          Landing Page Hero Copy Generator
-                        </h4>
-                        <p className="text-sm text-muted-foreground">Generate compelling headlines and CTAs</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border hover:border-primary/40 transition-all cursor-pointer group">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-purple-100 rounded-lg">
-                        <Bot className="h-5 w-5 text-purple-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold group-hover:text-primary transition-colors">
-                          AI Business Plan Generator
-                        </h4>
-                        <p className="text-sm text-muted-foreground">Create comprehensive business plans with AI</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+            {/* AI Side */}
+            <div className="space-y-4">
+              <div className="text-center mb-6">
+                <Badge className="bg-gradient-to-r from-blue-100 to-green-100 text-blue-700 text-sm py-2 px-4">
+                  <Sparkles className="h-4 w-4 mr-1 inline" /> AI Tools
+                </Badge>
               </div>
-
-              <div className="text-center pt-4">
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="bg-transparent hover:bg-primary hover:text-white border-primary text-primary"
-                >
-                  <Link href="/tools">
-                    View All 12 Free Tools <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
+                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold text-sm">Instant Output</div>
+                    <div className="text-xs text-muted-foreground">Seconds, not weeks</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
+                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold text-sm">Total Control</div>
+                    <div className="text-xs text-muted-foreground">Generate, edit, iterate freely</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
+                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold text-sm">Zero Dependency</div>
+                    <div className="text-xs text-muted-foreground">No vendor lock-in</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
+                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold text-sm">Unlimited Iterations</div>
+                    <div className="text-xs text-muted-foreground">Test as many versions as you need</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50">
+                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold text-sm">Low Cost</div>
+                    <div className="text-xs text-muted-foreground">Free forever, scale as you grow</div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Tools CTA */}
-          <div className="text-center bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-8 border border-blue-100 dark:border-slate-700">
-            <h3 className="text-2xl font-bold mb-4">Ready to Accelerate Your Business?</h3>
-            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Start with our free tools to get a taste of AI-powered business solutions, then explore our comprehensive
-              service packages when you're ready to scale.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg">
-                <Link href="/tools/domain-name-generator">Start with Domain Name Genie</Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="bg-transparent hover:bg-primary hover:text-white border-primary text-primary"
-              >
-                <Link href="https://cal.com/kozker">Schedule a Consultation</Link>
-              </Button>
+            {/* Traditional Services Side */}
+            <div className="space-y-4">
+              <div className="text-center mb-6">
+                <Badge variant="outline" className="text-sm py-2 px-4">
+                  Traditional Agencies
+                </Badge>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
+                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
+                  <div>
+                    <div className="font-semibold text-sm">Extended Delays</div>
+                    <div className="text-xs text-muted-foreground">Weeks or months for deliverables</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
+                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
+                  <div>
+                    <div className="font-semibold text-sm">Limited Control</div>
+                    <div className="text-xs text-muted-foreground">Dependency on agency for changes</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
+                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
+                  <div>
+                    <div className="font-semibold text-sm">Vendor Lock-In</div>
+                    <div className="text-xs text-muted-foreground">Ongoing dependency for revisions</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
+                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
+                  <div>
+                    <div className="font-semibold text-sm">High Revision Costs</div>
+                    <div className="text-xs text-muted-foreground">Extra fees for changes and iterations</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50">
+                  <div className="text-red-600 font-bold mt-0.5 flex-shrink-0">✕</div>
+                  <div>
+                    <div className="font-semibold text-sm">Premium Pricing</div>
+                    <div className="text-xs text-muted-foreground">High upfront investment required</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -495,7 +589,7 @@ export default async function Home() {
             <div className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Latest Insights</h2>
               <p className="text-xl text-muted-foreground">
-                Stay updated with our latest articles and industry insights
+                Learn how to leverage AI tools for your business
               </p>
             </div>
 
@@ -520,107 +614,44 @@ export default async function Home() {
         </section>
       )}
 
-      {/* Social Proof Section */}
-      <section className="py-20">
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Trusted by Growing Businesses</h2>
-            <p className="text-xl text-muted-foreground">
-              Join hundreds of satisfied clients who have transformed their digital presence
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="p-6">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <blockquote className="text-lg mb-4">
-                "KozkerTech transformed our online presence completely. The LaunchPad solution was perfect for our
-                startup."
-              </blockquote>
-              <cite className="text-sm text-muted-foreground">- Local Restaurant Owner</cite>
-            </Card>
-
-            <Card className="p-6">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <blockquote className="text-lg mb-4">
-                "The WhatsApp automation has revolutionized our customer communication. Highly recommended!"
-              </blockquote>
-              <cite className="text-sm text-muted-foreground">- E-commerce Business</cite>
-            </Card>
-
-            <Card className="p-6">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <blockquote className="text-lg mb-4">
-                "Their Power BI expertise helped us make data-driven decisions that increased our ROI by 40%."
-              </blockquote>
-              <cite className="text-sm text-muted-foreground">- Manufacturing Company</cite>
-            </Card>
-          </div>
+      {/* Final CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
+        {/* Background gradient animation */}
+        <div className="absolute inset-0 opacity-50">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-transparent to-purple-600/0"></div>
         </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-primary text-white">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold">Ready to Transform Your Business?</h2>
-              <p className="text-xl opacity-90">
-                Choose the solution tier that matches your business stage and start your digital transformation journey
-                today.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" variant="secondary" className="text-primary">
-                  <Link href="/contact">Get Started Today</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-white hover:bg-white hover:text-primary text-white bg-transparent"
-                >
-                  <Link href="/solutions">Explore All Solutions</Link>
-                </Button>
-              </div>
+        <div className="container relative z-10">
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Start Building with AI Today
+            </h2>
+            <p className="text-xl opacity-90 mb-8">
+              All tools are free to start. No credit card required. No commitment. 
+              Build your business at your pace.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" variant="secondary" className="text-blue-600 text-lg px-8 h-14 font-semibold">
+                <Link href="/tools">
+                  Explore All AI Tools <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="border-2 border-white hover:bg-white hover:text-blue-600 text-white bg-transparent text-lg px-8 h-14 font-semibold"
+              >
+                <Link href="/tools/domain-name-generator">
+                  Try Domain Name Genie
+                </Link>
+              </Button>
             </div>
 
-            <div className="space-y-6">
-              <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
-                <h3 className="text-xl font-bold mb-4">Your Journey Starts Here</h3>
-                <ol className="space-y-4">
-                  <li className="flex items-center gap-4">
-                    <div className="bg-white text-primary rounded-full w-8 h-8 flex items-center justify-center font-bold">
-                      1
-                    </div>
-                    <span>Choose your solution tier</span>
-                  </li>
-                  <li className="flex items-center gap-4">
-                    <div className="bg-white text-primary rounded-full w-8 h-8 flex items-center justify-center font-bold">
-                      2
-                    </div>
-                    <span>Schedule a consultation</span>
-                  </li>
-                  <li className="flex items-center gap-4">
-                    <div className="bg-white text-primary rounded-full w-8 h-8 flex items-center justify-center font-bold">
-                      3
-                    </div>
-                    <span>Launch and grow your business</span>
-                  </li>
-                </ol>
-              </div>
-            </div>
+            <p className="text-sm opacity-75 mt-8">
+              ✨ 12+ free tools • ⚡ Generate in seconds • 💎 Premium quality • 🚀 Enterprise ready
+            </p>
           </div>
         </div>
       </section>
