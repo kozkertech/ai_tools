@@ -52,7 +52,7 @@ export default function AboutPage() {
               Transforming Businesses Through Technology
             </h1>
             <p className="max-w-[700px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-              We're on a mission to help businesses leverage cutting-edge technology to grow, innovate, and succeed in
+              We're on a mission to help businesses leverage cutting-edge AI-powered tools and intelligent automation to grow, innovate, and succeed in
               the digital age.
             </p>
           </div>
@@ -74,8 +74,8 @@ export default function AboutPage() {
               <p className="text-gray-500 dark:text-gray-400 mb-4">
                 Though we're a young company, we bring together experienced professionals with decades of combined
                 expertise in technology and business transformation. Our team is passionate about helping businesses
-                across various industries transform their operations, enhance customer experiences, and achieve
-                remarkable growth through our innovative solutions.
+                across various industries transform their operations through intelligent automation, enhance customer experiences with data-driven insights, and achieve
+                remarkable growth through our AI-powered solutions.
               </p>
               <p className="text-gray-500 dark:text-gray-400">
                 Today, we're proud to be at the forefront of technological innovation, specializing in AI-powered
@@ -124,7 +124,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-bold mb-2">Trust & Reliability</h3>
               <p className="text-gray-500 dark:text-gray-400">
-                We build lasting relationships based on trust, delivering reliable solutions that our clients can depend
+                We build lasting relationships based on trust, delivering reliable AI-powered solutions and intelligent systems that our clients can depend
                 on.
               </p>
             </div>
@@ -147,8 +147,8 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-bold mb-2">Innovation</h3>
               <p className="text-gray-500 dark:text-gray-400">
-                We constantly push the boundaries of what's possible, embracing new technologies and creative approaches
-                to solve complex problems.
+                We constantly push the boundaries of what's possible, embracing AI innovation and creative approaches
+                to build smart workflows and solve complex business challenges.
               </p>
             </div>
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
@@ -173,7 +173,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-bold mb-2">Client Success</h3>
               <p className="text-gray-500 dark:text-gray-400">
-                Your success is our success. We're committed to delivering solutions that drive measurable results and
+                Your success is our success. We're committed to delivering AI-driven solutions that enable data-informed growth and
                 help you achieve your business goals.
               </p>
             </div>
