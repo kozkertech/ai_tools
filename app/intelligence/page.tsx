@@ -9,18 +9,20 @@ import {
   Brain,
   BarChart3,
   Database,
-  Users,
   TrendingUp,
   Zap,
   ArrowRight,
   Sparkles,
   Filter,
+  Lightbulb,
+  Target,
+  Rocket,
 } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Intelligence - Power BI & Data Analytics Solutions | KozkerTech",
+  title: "Intelligence - AI Decision Intelligence Platform | KozkerTech",
   description:
-    "Expert Power BI consulting and advanced data analytics for enterprises. Custom dashboards, data integration, and strategic insights.",
+    "Turn data into decisions instantly. AI-powered dashboards, data modeling, and insights. Automate analysis, empower decisions.",
 }
 
 export default function IntelligencePage() {
@@ -33,29 +35,29 @@ export default function IntelligencePage() {
             <div className="space-y-8">
               <Badge className="px-4 py-2 text-sm bg-purple-100 text-purple-700 border-purple-200">
                 <Brain className="h-4 w-4 mr-2" />
-                Intelligence Solutions
+                Decision Intelligence
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                Unlock Strategic Insights with <span className="text-purple-600">Advanced Analytics</span>
+                Turn Data into Decisions with <span className="text-purple-600">AI Intelligence</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Expert Power BI consulting and data analytics for enterprises and data-driven organizations. Transform
-                your data into actionable insights that drive measurable business results.
+                Generate dashboards, DAX measures, data schemas, and insight summaries instantly. 
+                Automate repetitive analysis. Empower faster, smarter decisions at every level of your organization.
               </p>
 
               <div className="bg-purple-100 dark:bg-purple-900/20 p-4 rounded-lg">
                 <p className="text-purple-700 dark:text-purple-300 font-semibold flex items-center">
-                  <TrendingUp className="h-5 w-5 mr-2" />
-                  Average 40% ROI Increase Through Data-Driven Decision Making
+                  <Sparkles className="h-5 w-5 mr-2" />
+                  Instant insights • Structured outputs • Enterprise scale
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700">
-                  <Link href="/contact?solution=intelligence">Request Consultation</Link>
+                  <Link href="/tools">Explore Intelligence AI Tools</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
-                  <Link href="#free-tool">Try Our Free Tool</Link>
+                  <Link href="/tools/data-cleanse">Start with Data Cleanse Tool</Link>
                 </Button>
               </div>
             </div>
@@ -63,7 +65,7 @@ export default function IntelligencePage() {
             <div className="relative">
               <Image
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Portfolio%20Update-amico-OhL64K0etmJPJS3dEZtqcPssksdkvh.png"
-                alt="Data analytics professional interacting with purple dashboard displaying charts, graphs, and performance metrics"
+                alt="AI-powered intelligence platform generating dashboards and data insights instantly"
                 width={600}
                 height={600}
                 className="rounded-lg"
@@ -78,9 +80,9 @@ export default function IntelligencePage() {
       <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Built for Data-Driven Organizations</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">For Data-Driven Organizations</h2>
             <p className="text-xl text-muted-foreground">
-              Intelligence solutions for enterprises and organizations that rely on data for strategic decisions
+              Intelligence accelerates decision-making for enterprises, data teams, and analytics leaders
             </p>
           </div>
 
@@ -89,9 +91,9 @@ export default function IntelligencePage() {
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Brain className="h-8 w-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Enterprises</h3>
+              <h3 className="text-xl font-bold mb-2">Enterprise Teams</h3>
               <p className="text-muted-foreground">
-                Large organizations needing comprehensive BI solutions and data strategy consulting
+                Automate dashboard development, measure generation, and data modeling. Scale BI operations.
               </p>
             </Card>
 
@@ -99,9 +101,9 @@ export default function IntelligencePage() {
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <BarChart3 className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">E-commerce & D2C</h3>
+              <h3 className="text-xl font-bold mb-2">Analytics Leaders</h3>
               <p className="text-muted-foreground">
-                Online businesses requiring advanced analytics for customer insights and performance tracking
+                Reduce time spent on data prep. Focus on insights instead of infrastructure.
               </p>
             </Card>
 
@@ -109,211 +111,249 @@ export default function IntelligencePage() {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Database className="h-8 w-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Data-Rich SMBs</h3>
+              <h3 className="text-xl font-bold mb-2">Data Professionals</h3>
               <p className="text-muted-foreground">
-                Growing businesses with complex data needs requiring custom analytics solutions
+                AI-assisted data modeling, schema design, and transformation logic generation.
               </p>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* Our Delivery Process */}
+      {/* AI Tools Section */}
       <section className="py-20 bg-muted/50">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Our 5-Step Delivery Process</h2>
-            <p className="text-xl text-muted-foreground">Proven methodology for successful BI implementations</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-purple-600">1</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Analyze</h3>
-              <p className="text-sm text-muted-foreground">
-                Assess your current data landscape and business requirements
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">2</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Integrate</h3>
-              <p className="text-sm text-muted-foreground">Connect and consolidate data from multiple sources</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-green-600">3</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Develop</h3>
-              <p className="text-sm text-muted-foreground">Build custom dashboards and analytics solutions</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-orange-600">4</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Implement</h3>
-              <p className="text-sm text-muted-foreground">Deploy solutions and train your team</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-red-600">5</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Support</h3>
-              <p className="text-sm text-muted-foreground">Ongoing maintenance and optimization</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Core Services Section */}
-      <section className="py-20">
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Expert BI & Analytics Services</h2>
-            <p className="text-xl text-muted-foreground">Comprehensive solutions for your data and analytics needs</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools for Data Intelligence</h2>
+            <p className="text-xl text-muted-foreground">
+              Automate the entire BI pipeline from data prep to insights to executive dashboards
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Power BI Consulting */}
-            <Card className="p-6">
+            {/* Power BI Measure Generator */}
+            <Card className="p-6 border-2 border-purple-200/50 hover:border-purple-500 transition-colors">
               <CardHeader className="p-0 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                     <BarChart3 className="h-6 w-6 text-purple-600" />
                   </div>
-                  <CardTitle>Power BI Consulting</CardTitle>
+                  <div>
+                    <CardTitle>Power BI Measure & Viz Generator</CardTitle>
+                    <Badge className="mt-1 bg-purple-100 text-purple-700 hover:bg-purple-200">Instant</Badge>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
                 <p className="text-muted-foreground mb-4">
-                  Strategic consulting and implementation of Microsoft Power BI solutions
+                  Generate DAX measures and visualizations instantly from business requirements
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">BI strategy development</span>
+                    <span className="text-sm">AI-generated DAX formulas</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">Architecture design</span>
+                    <span className="text-sm">Visualization recommendations</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">Performance optimization</span>
+                    <span className="text-sm">Performance optimization tips</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">Best practices implementation</span>
+                    <span className="text-sm">Copy-paste ready code</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            {/* Custom Dashboard Development */}
-            <Card className="p-6">
+            {/* Data Cleanse & Schema Helper */}
+            <Card className="p-6 border-2 border-purple-200/50 hover:border-purple-500 transition-colors">
               <CardHeader className="p-0 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="h-6 w-6 text-blue-600" />
+                    <Filter className="h-6 w-6 text-blue-600" />
                   </div>
-                  <CardTitle>Custom Dashboard Development</CardTitle>
+                  <div>
+                    <CardTitle>Data Cleanse & Schema Helper</CardTitle>
+                    <Badge className="mt-1 bg-blue-100 text-blue-700 hover:bg-blue-200">Foundation</Badge>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
                 <p className="text-muted-foreground mb-4">
-                  Tailored dashboards that provide actionable insights for your business
+                  Prepare and structure raw data for analysis in minutes
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Interactive visualizations</span>
+                    <span className="text-sm">Automatic data quality analysis</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Real-time data updates</span>
+                    <span className="text-sm">Schema design recommendations</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Mobile-responsive design</span>
+                    <span className="text-sm">Star schema templates</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Role-based access control</span>
+                    <span className="text-sm">Data cleaning guidance</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            {/* Data Integration Services */}
-            <Card className="p-6">
+            {/* Dashboard Blueprint Generator */}
+            <Card className="p-6 border-2 border-purple-200/50 hover:border-purple-500 transition-colors">
               <CardHeader className="p-0 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Database className="h-6 w-6 text-green-600" />
+                    <BarChart3 className="h-6 w-6 text-green-600" />
                   </div>
-                  <CardTitle>Data Integration Services</CardTitle>
+                  <div>
+                    <CardTitle>Dashboard Blueprint Generator</CardTitle>
+                    <Badge className="mt-1 bg-green-100 text-green-700 hover:bg-green-200">Design</Badge>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
                 <p className="text-muted-foreground mb-4">
-                  Seamlessly connect and consolidate data from multiple sources
+                  Design complete dashboards by describing your analytics needs
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">ETL pipeline development</span>
+                    <span className="text-sm">Instant dashboard wireframes</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">API integrations</span>
+                    <span className="text-sm">KPI selection guidance</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">Data warehouse setup</span>
+                    <span className="text-sm">Visual layout recommendations</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">Data quality assurance</span>
+                    <span className="text-sm">Best practices included</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            {/* Corporate Training */}
-            <Card className="p-6">
+            {/* Insight Summary Generator */}
+            <Card className="p-6 border-2 border-purple-200/50 hover:border-purple-500 transition-colors">
               <CardHeader className="p-0 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <Users className="h-6 w-6 text-orange-600" />
+                    <Lightbulb className="h-6 w-6 text-orange-600" />
                   </div>
-                  <CardTitle>Corporate Power BI Training</CardTitle>
+                  <div>
+                    <CardTitle>Executive Insight Summarizer</CardTitle>
+                    <Badge className="mt-1 bg-orange-100 text-orange-700 hover:bg-orange-200">Summary</Badge>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
-                <p className="text-muted-foreground mb-4">Comprehensive training programs for your team</p>
+                <p className="text-muted-foreground mb-4">
+                  Transform raw data into executive-ready insights and recommendations
+                </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Beginner to advanced courses</span>
+                    <span className="text-sm">One-page insight summaries</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Hands-on workshops</span>
+                    <span className="text-sm">Actionable recommendations</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Certification preparation</span>
+                    <span className="text-sm">Risk and opportunity flagging</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Ongoing support</span>
+                    <span className="text-sm">Strategic decision support</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* SQL Query Generator */}
+            <Card className="p-6 border-2 border-purple-200/50 hover:border-purple-500 transition-colors">
+              <CardHeader className="p-0 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
+                    <Database className="h-6 w-6 text-pink-600" />
+                  </div>
+                  <div>
+                    <CardTitle>SQL & Data Transformation Helper</CardTitle>
+                    <Badge className="mt-1 bg-pink-100 text-pink-700 hover:bg-pink-200">Automation</Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                <p className="text-muted-foreground mb-4">
+                  Generate SQL queries and ETL logic from plain English requirements
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500" />
+                    <span className="text-sm">AI-generated SQL queries</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500" />
+                    <span className="text-sm">ETL transformation templates</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500" />
+                    <span className="text-sm">Optimization recommendations</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500" />
+                    <span className="text-sm">Database-agnostic support</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Predictive Analytics Generator */}
+            <Card className="p-6 border-2 border-purple-200/50 hover:border-purple-500 transition-colors">
+              <CardHeader className="p-0 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                    <TrendingUp className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <div>
+                    <CardTitle>Predictive Analytics Generator</CardTitle>
+                    <Badge className="mt-1 bg-indigo-100 text-indigo-700 hover:bg-indigo-200">Advanced</Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                <p className="text-muted-foreground mb-4">
+                  Build predictive models and forecasts without advanced ML knowledge
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm">Model selection guidance</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm">Forecast generation</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm">Accuracy metrics included</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm">Scenario simulation ready</span>
                   </li>
                 </ul>
               </CardContent>
@@ -322,169 +362,76 @@ export default function IntelligencePage() {
         </div>
       </section>
 
-      {/* Technology Focus */}
-      <section className="py-20 bg-muted/50">
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Microsoft Technology Focus</h2>
-            <p className="text-xl text-muted-foreground">Certified experts in the Microsoft ecosystem</p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center p-6 bg-background rounded-lg">
-              <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <BarChart3 className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="font-bold">Power BI</h3>
-            </div>
-
-            <div className="text-center p-6 bg-background rounded-lg">
-              <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Database className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="font-bold">Azure</h3>
-            </div>
-
-            <div className="text-center p-6 bg-background rounded-lg">
-              <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="font-bold">SQL Server</h3>
-            </div>
-
-            <div className="text-center p-6 bg-background rounded-lg">
-              <div className="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Zap className="h-8 w-8 text-orange-600" />
-              </div>
-              <h3 className="font-bold">Power Platform</h3>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Industries Served */}
+      {/* Benefits Section */}
       <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Industries We Serve</h2>
-            <p className="text-xl text-muted-foreground">Specialized expertise across key industry verticals</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="p-6 text-center">
-              <h3 className="text-xl font-bold mb-2">E-commerce & Retail</h3>
-              <p className="text-muted-foreground">
-                Customer analytics, inventory optimization, sales performance tracking
-              </p>
-            </Card>
-
-            <Card className="p-6 text-center">
-              <h3 className="text-xl font-bold mb-2">Manufacturing</h3>
-              <p className="text-muted-foreground">Production analytics, quality control, supply chain optimization</p>
-            </Card>
-
-            <Card className="p-6 text-center">
-              <h3 className="text-xl font-bold mb-2">Financial Services</h3>
-              <p className="text-muted-foreground">Risk analytics, compliance reporting, performance dashboards</p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Free Tool Section - Data Cleanse & Schema Map Helper */}
-      <section
-        id="free-tool"
-        className="py-20 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20"
-      >
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
-              Free Tool for Data Professionals
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Clean and Structure Your Data</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">AI-Powered Decision Advantage</h2>
             <p className="text-xl text-muted-foreground">
-              Prepare your data for analytics with our AI-powered data cleansing and schema mapping tool
+              Move from data overload to decision clarity at enterprise scale
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <Card className="p-8 border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950/50 dark:to-indigo-950/50">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center">
-                      <Filter className="h-8 w-8 text-purple-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold">Data Cleanse & Schema Map Helper</h3>
-                      <Badge className="mt-1 bg-purple-600 hover:bg-purple-700">Essential for BI Projects</Badge>
-                    </div>
-                  </div>
-
-                  <p className="text-lg text-muted-foreground">
-                    Upload your CSV files and get intelligent data cleaning suggestions, column type inference, and
-                    star-schema recommendations for your Power BI projects.
-                  </p>
-
-                  <ul className="space-y-3">
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-purple-500 flex-shrink-0" />
-                      <span>Automatic column type detection</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-purple-500 flex-shrink-0" />
-                      <span>Data quality anomaly flagging</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-purple-500 flex-shrink-0" />
-                      <span>Star-schema design recommendations</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-purple-500 flex-shrink-0" />
-                      <span>Power BI optimization tips</span>
-                    </li>
-                  </ul>
-
-                  <Button asChild size="lg" className="w-full bg-purple-600 hover:bg-purple-700">
-                    <Link href="/tools/data-cleanse">
-                      Try Data Cleanse Tool Free
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Link>
-                  </Button>
-                </div>
-
-                <div className="relative">
-                  <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-lg border">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                        Analysis Results
-                      </div>
-                      <div className="space-y-3">
-                        <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded border-l-4 border-green-500">
-                          <div className="font-medium text-green-700 dark:text-green-300">customer_id</div>
-                          <div className="text-sm text-green-600 dark:text-green-400">Integer • Primary Key ✓</div>
-                        </div>
-                        <div className="bg-yellow-50 dark:bg-yellow-950/20 p-3 rounded border-l-4 border-yellow-500">
-                          <div className="font-medium text-yellow-700 dark:text-yellow-300">email</div>
-                          <div className="text-sm text-yellow-600 dark:text-yellow-400">
-                            Text • 3 duplicates found ⚠️
-                          </div>
-                        </div>
-                        <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded border-l-4 border-blue-500">
-                          <div className="font-medium text-blue-700 dark:text-blue-300">order_date</div>
-                          <div className="text-sm text-blue-600 dark:text-blue-400">DateTime • Format consistent ✓</div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-purple-600 dark:text-purple-400 mt-4">
-                        💡 Recommended: Create dimension table for customer data
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="h-8 w-8 text-purple-600" />
               </div>
-            </Card>
+              <h3 className="text-xl font-bold mb-2">10x Faster Insights</h3>
+              <p className="text-muted-foreground">
+                Dashboard development and analysis that normally takes weeks happens in hours
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Target className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">70% Less Manual Work</h3>
+              <p className="text-muted-foreground">
+                Reduce repetitive data prep and transformation tasks. Focus on strategy, not mechanics
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Brain className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Structured Decisions</h3>
+              <p className="text-muted-foreground">
+                AI ensures consistent, logic-based decision frameworks across the organization
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="h-8 w-8 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Executive Clarity</h3>
+              <p className="text-muted-foreground">
+                One-page summaries cut through complexity. Leaders get actionable insights, not data dumps
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Rocket className="h-8 w-8 text-pink-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Enterprise Scalability</h3>
+              <p className="text-muted-foreground">
+                Handle unlimited dashboards, models, and users without proportional cost increases
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="h-8 w-8 text-indigo-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Future-Proof Analytics</h3>
+              <p className="text-muted-foreground">
+                AI-powered recommendations keep your data architecture modern and competitive
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -493,13 +440,13 @@ export default function IntelligencePage() {
       <section className="py-20 bg-purple-600 text-white">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Unlock Your Data's Potential?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Turn Data Into Strategic Advantage</h2>
             <p className="text-xl opacity-90 mb-8">
-              Start with our free Data Cleanse tool, then let our experts build your complete BI solution
+              Start using Intelligence AI tools to automate analysis, generate insights, and empower smarter decisions at every level.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" variant="secondary" className="text-purple-600">
-                <Link href="/contact?solution=intelligence">Speak to a BI Expert</Link>
+                <Link href="/tools">Start Using AI Tools Now</Link>
               </Button>
               <Button
                 asChild
@@ -507,10 +454,10 @@ export default function IntelligencePage() {
                 size="lg"
                 className="border-white hover:bg-white hover:text-purple-600 text-white bg-transparent"
               >
-                <Link href="/tools">Explore All Free Tools</Link>
+                <Link href="/tools/data-cleanse">Begin Data Prep</Link>
               </Button>
             </div>
-            <p className="text-sm opacity-75 mt-4">Free consultation • Custom solutions • Enterprise-grade security</p>
+            <p className="text-sm opacity-75 mt-4">Enterprise-grade • Instant deployment • Unlimited scalability</p>
           </div>
         </div>
       </section>

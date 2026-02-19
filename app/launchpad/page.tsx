@@ -4,12 +4,12 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, Rocket, Globe, Calendar, MessageSquare, MapPin, Star, ArrowRight, Sparkles } from "lucide-react"
+import { CheckCircle, Rocket, Globe, Zap, Sparkles, ArrowRight, Lightbulb, Palette, Calculator, FileText, Brain, Target } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "LaunchPad - Digital Solutions for Startups & Local SMBs | KozkerTech",
+  title: "LaunchPad - AI Launch Toolkit for Startups | KozkerTech",
   description:
-    "Get online fast with our LaunchPad solutions. Perfect for startups and local SMBs. Includes free 1-page website, local SEO, and basic automation.",
+    "Launch your business instantly with AI-powered tools. Generate domains, brand messaging, pricing strategies, and business plans in seconds.",
 }
 
 export default function LaunchPadPage() {
@@ -22,29 +22,29 @@ export default function LaunchPadPage() {
             <div className="space-y-8">
               <Badge className="px-4 py-2 text-sm bg-green-100 text-green-700 border-green-200">
                 <Rocket className="h-4 w-4 mr-2" />
-                LaunchPad Solutions
+                AI Launch Toolkit
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                Launch Your Digital Presence <span className="text-green-600">Fast & Affordable</span>
+                Launch Your Business with <span className="text-green-600">AI-Powered Tools</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Perfect for startups and local SMBs ready to establish their online presence. Get a professional
-                website, local visibility, and basic automation to start growing your business.
+                Everything you need to build your brand foundation in minutes. Generate domain names, craft your brand message, 
+                create pricing strategies, and build your business plan—all powered by instant AI tools.
               </p>
 
               <div className="bg-green-100 dark:bg-green-900/20 p-4 rounded-lg">
                 <p className="text-green-700 dark:text-green-300 font-semibold flex items-center">
-                  <Star className="h-5 w-5 mr-2" />
-                  FREE 1-Page Website Included with Every Package!
+                  <Sparkles className="h-5 w-5 mr-2" />
+                  Instant AI tools • No agency fees • Your complete control
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="bg-green-600 hover:bg-green-700">
-                  <Link href="/contact?solution=launchpad">Get Started Free</Link>
+                  <Link href="/tools">Explore LaunchPad AI Tools</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
-                  <Link href="#free-tool">Try Our Free Tool</Link>
+                  <Link href="/tools/domain-name-generator">Start with Domain Name Genie</Link>
                 </Button>
               </div>
             </div>
@@ -52,7 +52,7 @@ export default function LaunchPadPage() {
             <div className="relative">
               <Image
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Version%20control-bro-Qh89MYaKZ0pQ3bE5Ki22coNF2ls8tw.png"
-                alt="Developer working on automated workflows and digital solutions with gears and process diagrams in the background"
+                alt="AI-powered tools generating business foundations with instant outputs"
                 width={600}
                 height={600}
                 className="rounded-lg"
@@ -67,189 +67,280 @@ export default function LaunchPadPage() {
       <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Perfect For</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Perfect For Idea-Stage Founders</h2>
             <p className="text-xl text-muted-foreground">
-              LaunchPad is designed for businesses just starting their digital journey
+              LaunchPad is designed for founders and entrepreneurs ready to launch independently, fast, and affordably
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="text-center p-6">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Rocket className="h-8 w-8 text-green-600" />
+                <Lightbulb className="h-8 w-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Startups</h3>
+              <h3 className="text-xl font-bold mb-2">First-Time Founders</h3>
               <p className="text-muted-foreground">
-                New businesses looking to establish their online presence quickly and affordably
+                Get your business identity, brand message, and initial business plan generated in minutes using AI
               </p>
             </Card>
 
             <Card className="text-center p-6">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-8 w-8 text-blue-600" />
+                <Rocket className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Local Businesses</h3>
+              <h3 className="text-xl font-bold mb-2">Local Service Businesses</h3>
               <p className="text-muted-foreground">
-                Restaurants, salons, clinics, and shops wanting to attract local customers
+                Generate pricing models, service descriptions, and marketing messaging instantly without agency dependency
               </p>
             </Card>
 
             <Card className="text-center p-6">
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Globe className="h-8 w-8 text-purple-600" />
+                <Zap className="h-8 w-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Service Providers</h3>
+              <h3 className="text-xl font-bold mb-2">Lean Startups</h3>
               <p className="text-muted-foreground">
-                Consultants, tutors, and professionals needing appointment booking and basic automation
+                Launch with zero budget for external services. AI tools replace expensive consultants and agencies
               </p>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* Core Services Section */}
+      {/* AI Tools Section */}
       <section className="py-20 bg-muted/50">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">What's Included</h2>
-            <p className="text-xl text-muted-foreground">Everything you need to launch your digital presence</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools Included in LaunchPad</h2>
+            <p className="text-xl text-muted-foreground">
+              Instantly generate everything your startup needs to launch and scale
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* AI Web Design */}
-            <Card className="p-6">
+            {/* Domain Name Genie */}
+            <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">
               <CardHeader className="p-0 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                     <Globe className="h-6 w-6 text-green-600" />
                   </div>
                   <div>
-                    <CardTitle>AI Web Design</CardTitle>
-                    <Badge variant="secondary" className="mt-1">
-                      FREE 1-Page Website
-                    </Badge>
+                    <CardTitle>Domain Name Genie</CardTitle>
+                    <Badge className="mt-1 bg-green-100 text-green-700 hover:bg-green-200">AI-Powered</Badge>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
                 <p className="text-muted-foreground mb-4">
-                  Professional, mobile-first website designed to convert visitors into customers
+                  Generate perfect domain names in seconds based on your business idea
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">Responsive design for all devices</span>
+                    <span className="text-sm">Instant AI suggestions (100+ names)</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">WhatsApp integration</span>
+                    <span className="text-sm">Real-time availability checking</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">Contact forms and CTAs</span>
+                    <span className="text-sm">Multiple TLD options included</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">Fast loading and SEO optimized</span>
+                    <span className="text-sm">Direct registration links</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            {/* Local SEO & GMB */}
-            <Card className="p-6">
+            {/* Tagline & UVP Creator */}
+            <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">
               <CardHeader className="p-0 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <MapPin className="h-6 w-6 text-blue-600" />
+                    <Target className="h-6 w-6 text-blue-600" />
                   </div>
-                  <CardTitle>Local SEO & GMB Optimization</CardTitle>
+                  <div>
+                    <CardTitle>Tagline & UVP Creator</CardTitle>
+                    <Badge className="mt-1 bg-blue-100 text-blue-700 hover:bg-blue-200">Instant Output</Badge>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
-                <p className="text-muted-foreground mb-4">Dominate local search results and "near me" queries</p>
+                <p className="text-muted-foreground mb-4">
+                  Craft compelling brand messaging and value propositions instantly
+                </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Google My Business setup & optimization</span>
+                    <span className="text-sm">Generate in seconds</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Local keyword optimization</span>
+                    <span className="text-sm">Multiple tagline variations</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">NAP consistency across directories</span>
+                    <span className="text-sm">Customer-focused messaging</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Review management setup</span>
+                    <span className="text-sm">Unlimited iterations</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            {/* Appointment Booking */}
-            <Card className="p-6">
+            {/* Pricing Calculator */}
+            <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">
               <CardHeader className="p-0 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <Calendar className="h-6 w-6 text-purple-600" />
+                    <Calculator className="h-6 w-6 text-purple-600" />
                   </div>
-                  <CardTitle>Automated Appointment Booking</CardTitle>
+                  <div>
+                    <CardTitle>Pricing Strategy Generator</CardTitle>
+                    <Badge className="mt-1 bg-purple-100 text-purple-700 hover:bg-purple-200">Strategic</Badge>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
-                <p className="text-muted-foreground mb-4">Streamline scheduling with automated booking and reminders</p>
+                <p className="text-muted-foreground mb-4">
+                  Generate competitive pricing models and strategy recommendations
+                </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">Online booking calendar</span>
+                    <span className="text-sm">Market-based pricing tiers</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">Automated confirmation emails</span>
+                    <span className="text-sm">Value-based pricing model</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">SMS/WhatsApp reminders</span>
+                    <span className="text-sm">Instant revenue projections</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm">No-show reduction features</span>
+                    <span className="text-sm">Competitive analysis included</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            {/* Basic Automation */}
-            <Card className="p-6">
+            {/* AI Business Plan Generator */}
+            <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">
               <CardHeader className="p-0 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <MessageSquare className="h-6 w-6 text-orange-600" />
+                    <FileText className="h-6 w-6 text-orange-600" />
                   </div>
-                  <CardTitle>Basic WhatsApp Automation</CardTitle>
+                  <div>
+                    <CardTitle>AI Business Plan Generator</CardTitle>
+                    <Badge className="mt-1 bg-orange-100 text-orange-700 hover:bg-orange-200">Comprehensive</Badge>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
-                <p className="text-muted-foreground mb-4">Simple automation to handle common customer inquiries</p>
+                <p className="text-muted-foreground mb-4">
+                  Create a complete, structured business plan in minutes
+                </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Auto-responder setup</span>
+                    <span className="text-sm">Executive summary generation</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">FAQ responses</span>
+                    <span className="text-sm">Market analysis and positioning</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Business hours messaging</span>
+                    <span className="text-sm">Financial projections</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Lead capture forms</span>
+                    <span className="text-sm">Downloadable document</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Logo Color Palette Picker */}
+            <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">
+              <CardHeader className="p-0 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
+                    <Palette className="h-6 w-6 text-pink-600" />
+                  </div>
+                  <div>
+                    <CardTitle>Brand Color Palette Generator</CardTitle>
+                    <Badge className="mt-1 bg-pink-100 text-pink-700 hover:bg-pink-200">Design</Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                <p className="text-muted-foreground mb-4">
+                  Generate professional color palettes for your brand identity
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500" />
+                    <span className="text-sm">Instant color palette generation</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500" />
+                    <span className="text-sm">Psychology-based recommendations</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500" />
+                    <span className="text-sm">Accessibility compliance checked</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500" />
+                    <span className="text-sm">Export as CSS/Hex codes</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* FAQ Builder */}
+            <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">
+              <CardHeader className="p-0 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                    <Brain className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <div>
+                    <CardTitle>FAQ & Messaging Builder</CardTitle>
+                    <Badge className="mt-1 bg-indigo-100 text-indigo-700 hover:bg-indigo-200">Content Ready</Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                <p className="text-muted-foreground mb-4">
+                  Generate customer FAQs and response templates instantly
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm">AI-generated FAQ sections</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm">Customer service templates</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm">Objection handling responses</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm">Fully customizable</span>
                   </li>
                 </ul>
               </CardContent>
@@ -262,127 +353,72 @@ export default function LaunchPadPage() {
       <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Choose LaunchPad?</h2>
-            <p className="text-xl text-muted-foreground">Get online fast without breaking the bank</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Founders Use LaunchPad AI</h2>
+            <p className="text-xl text-muted-foreground">
+              Empower yourself with AI—move fast, control your narrative, and launch affordably
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Rocket className="h-8 w-8 text-green-600" />
+                <Zap className="h-8 w-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Launch in Days</h3>
-              <p className="text-muted-foreground">Get your website live in 3-5 business days, not weeks</p>
+              <h3 className="text-xl font-bold mb-2">Launch in Minutes</h3>
+              <p className="text-muted-foreground">
+                From idea to business foundation in minutes, not weeks. Get everything you need instantly.
+              </p>
             </div>
 
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="h-8 w-8 text-blue-600" />
+                <Target className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Free Website</h3>
-              <p className="text-muted-foreground">Professional 1-page website included at no extra cost</p>
+              <h3 className="text-xl font-bold mb-2">100% Founder Control</h3>
+              <p className="text-muted-foreground">
+                No agency dependency. You generate, iterate, and refine at your pace. Your brand, your rules.
+              </p>
             </div>
 
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-8 w-8 text-purple-600" />
+                <Sparkles className="h-8 w-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Local Focus</h3>
-              <p className="text-muted-foreground">Optimized for local search and "near me" queries</p>
+              <h3 className="text-xl font-bold mb-2">Zero Cost to Start</h3>
+              <p className="text-muted-foreground">
+                All LaunchPad tools are free. No hidden fees, no consulting costs, no setup charges.
+              </p>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Free Tool Section - Domain Name Genie */}
-      <section
-        id="free-tool"
-        className="py-20 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20"
-      >
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
-              Free Tool for LaunchPad Users
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Start with the Perfect Domain Name</h2>
-            <p className="text-xl text-muted-foreground">
-              Before launching your business, find the perfect domain name with our AI-powered Domain Name Genie
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <Card className="p-8 border-2 border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/50 dark:to-emerald-950/50">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center">
-                      <Globe className="h-8 w-8 text-green-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold">Domain Name Genie</h3>
-                      <Badge className="mt-1 bg-green-600 hover:bg-green-700">Most Popular for Startups</Badge>
-                    </div>
-                  </div>
-
-                  <p className="text-lg text-muted-foreground">
-                    Get AI-powered domain name suggestions based on your business description. Perfect for startups and
-                    local businesses looking to establish their online presence.
-                  </p>
-
-                  <ul className="space-y-3">
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>AI-powered domain suggestions</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>Real-time availability checking</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>Multiple TLD options (.com, .in, .org)</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>Brand-friendly suggestions</span>
-                    </li>
-                  </ul>
-
-                  <Button asChild size="lg" className="w-full bg-green-600 hover:bg-green-700">
-                    <Link href="/tools/domain-name-generator">
-                      Try Domain Name Genie Free
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Link>
-                  </Button>
-                </div>
-
-                <div className="relative">
-                  <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-lg border">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        Live Preview
-                      </div>
-                      <div className="space-y-3">
-                        <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded border-l-4 border-green-500">
-                          <div className="font-medium text-green-700 dark:text-green-300">techstartup.com</div>
-                          <div className="text-sm text-green-600 dark:text-green-400">Available ✓</div>
-                        </div>
-                        <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded border-l-4 border-blue-500">
-                          <div className="font-medium text-blue-700 dark:text-blue-300">innovatetech.in</div>
-                          <div className="text-sm text-blue-600 dark:text-blue-400">Available ✓</div>
-                        </div>
-                        <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded border-l-4 border-purple-500">
-                          <div className="font-medium text-purple-700 dark:text-purple-300">digitallaunch.org</div>
-                          <div className="text-sm text-purple-600 dark:text-purple-400">Available ✓</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Rocket className="h-8 w-8 text-orange-600" />
               </div>
-            </Card>
+              <h3 className="text-xl font-bold mb-2">Unlimited Iterations</h3>
+              <p className="text-muted-foreground">
+                Generate as many variations as you need. Test messaging, pricing, and brand concepts instantly.
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Brain className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Expert-Level Output</h3>
+              <p className="text-muted-foreground">
+                AI-powered tools deliver professional-quality results that rival expensive consultants.
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Globe className="h-8 w-8 text-pink-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Fully Integrated</h3>
+              <p className="text-muted-foreground">
+                All tools work together seamlessly. Build your complete brand foundation in one place.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -391,13 +427,13 @@ export default function LaunchPadPage() {
       <section className="py-20 bg-green-600 text-white">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Launch Your Digital Presence?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Launch Your Business?</h2>
             <p className="text-xl opacity-90 mb-8">
-              Start with our free Domain Name Genie, then let us build your complete digital presence with LaunchPad
+              Start with LaunchPad AI tools today. Build your brand foundation, strategy, and launch plan in minutes.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" variant="secondary" className="text-green-600">
-                <Link href="/contact?solution=launchpad">Get Your Free Consultation</Link>
+                <Link href="/tools">Start Using AI Tools Now</Link>
               </Button>
               <Button
                 asChild
@@ -405,10 +441,10 @@ export default function LaunchPadPage() {
                 size="lg"
                 className="border-white hover:bg-white hover:text-green-600 text-white bg-transparent"
               >
-                <Link href="/tools">Explore All Free Tools</Link>
+                <Link href="/tools/domain-name-generator">Generate My Domain Names</Link>
               </Button>
             </div>
-            <p className="text-sm opacity-75 mt-4">No commitment required • Free consultation • Launch in 3-5 days</p>
+            <p className="text-sm opacity-75 mt-4">Free forever • No credit card required • Unlimited generations</p>
           </div>
         </div>
       </section>
