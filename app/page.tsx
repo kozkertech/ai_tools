@@ -62,7 +62,10 @@ export default async function Home() {
               </h1>
 
               <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
-                Discover powerful AI tools designed to help you build your brand, automate workflows, generate content, and make smarter decisions — all in minutes.
+                Discover powerful AI tools designed to help you create content, generate images, write code, automate workflows, and make smarter business decisions — all in minutes.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-xl">
+                From AI writing tools to AI automation tools, our platform gives you everything you need to build and scale faster.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -100,99 +103,210 @@ export default async function Home() {
       </section>
 
 
-      {/* What You Can Build Section */}
+      {/* What You Can Do with AI Section */}
       <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You Can Do with Our AI Tools</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You Can Do with AI</h2>
             <p className="text-xl text-muted-foreground">
-              Our AI tools are built for founders, marketers, developers, and teams who want faster execution and smarter workflows.
+              Our AI tools are built for founders, marketers, developers, and business teams who want faster execution and smarter workflows.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Launch Your Brand */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* 1️⃣ Launch Your Brand */}
             <Card className="border-2 border-green-200/50 hover:border-green-500 transition-all group overflow-hidden">
               <CardHeader className="pb-3">
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Rocket className="h-6 w-6 text-green-600" />
                 </div>
-                <CardTitle className="text-xl">1️⃣ Launch Your Brand</CardTitle>
+                <CardTitle className="text-lg">1️⃣ Launch Your Brand</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Generate domain names, create compelling taglines, define pricing strategies, and build your business foundation using intelligent AI tools.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">Domain names (generated in seconds)</span>
+                    <span className="text-sm">AI writing tools</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">Taglines & brand messages</span>
+                    <span className="text-sm">AI content generator</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">Color palettes & design</span>
+                    <span className="text-sm">Brand messaging tools</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    <span className="text-sm">AI pricing calculators</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            {/* Automate Growth */}
-            <Card className="border-2 border-primary/30 hover:border-primary transition-all group overflow-hidden">
+            {/* 2️⃣ Create & Scale Content */}
+            <Card className="border-2 border-blue-200/50 hover:border-blue-500 transition-all group overflow-hidden">
               <CardHeader className="pb-3">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <TrendingUp className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FileText className="h-6 w-6 text-blue-600" />
                 </div>
-                <CardTitle className="text-xl">2️⃣ Automate Your Growth</CardTitle>
+                <CardTitle className="text-lg">2️⃣ Create & Scale Content</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground">
-                  Create proposals, email sequences, SEO content, and sales scripts instantly — reducing manual effort and saving valuable time.
+                <p className="text-muted-foreground text-sm">
+                  Produce high-quality content instantly with powerful AI writing tools and AI SEO tools. Our AI keyword research tools help you discover high-volume opportunities.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span className="text-sm">Proposals (drafted in minutes)</span>
+                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <span className="text-sm">Blog posts</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span className="text-sm">Email sequences & sales scripts</span>
+                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <span className="text-sm">AI SEO content</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span className="text-sm">Content & campaign copy</span>
+                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <span className="text-sm">Keyword research insights</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <span className="text-sm">AI content outlines</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            {/* Make Smarter Decisions */}
+            {/* 3️⃣ Build Visuals & Media */}
             <Card className="border-2 border-purple-200/50 hover:border-purple-500 transition-all group overflow-hidden">
               <CardHeader className="pb-3">
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Brain className="h-6 w-6 text-purple-600" />
+                  <PenTool className="h-6 w-6 text-purple-600" />
                 </div>
-                <CardTitle className="text-xl">3️⃣ Make Smarter Decisions</CardTitle>
+                <CardTitle className="text-lg">3️⃣ Build Visuals & Media</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground">
-                  Transform raw data into structured insights with AI-powered analytics, dashboards, and business intelligence tools.
+                <p className="text-muted-foreground text-sm">
+                  Turn ideas into visuals using advanced AI image generator and AI video generator tools. Our AI image generator makes design accessible and efficient.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500 flex-shrink-0" />
-                    <span className="text-sm">Dashboards (designed in minutes)</span>
+                    <span className="text-sm">Text to image AI designs</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500 flex-shrink-0" />
-                    <span className="text-sm">Data models & queries</span>
+                    <span className="text-sm">Social media visuals</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-purple-500 flex-shrink-0" />
-                    <span className="text-sm">Insights & recommendations</span>
+                    <span className="text-sm">AI-generated thumbnails</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-purple-500 flex-shrink-0" />
+                    <span className="text-sm">Text to video presentations</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* 4️⃣ Automate Workflows */}
+            <Card className="border-2 border-orange-200/50 hover:border-orange-500 transition-all group overflow-hidden">
+              <CardHeader className="pb-3">
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Zap className="h-6 w-6 text-orange-600" />
+                </div>
+                <CardTitle className="text-lg">4️⃣ Automate Workflows</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground text-sm">
+                  Reduce repetitive work with AI automation tools and workflow automation AI systems. Focus on strategy while AI handles execution.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-orange-500 flex-shrink-0" />
+                    <span className="text-sm">Email sequences</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-orange-500 flex-shrink-0" />
+                    <span className="text-sm">Proposal drafting</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-orange-500 flex-shrink-0" />
+                    <span className="text-sm">Lead follow-ups</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-orange-500 flex-shrink-0" />
+                    <span className="text-sm">Customer onboarding</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* 5️⃣ Develop & Code Faster */}
+            <Card className="border-2 border-pink-200/50 hover:border-pink-500 transition-all group overflow-hidden">
+              <CardHeader className="pb-3">
+                <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Bot className="h-6 w-6 text-pink-600" />
+                </div>
+                <CardTitle className="text-lg">5️⃣ Develop & Code Faster</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground text-sm">
+                  Speed up development with intelligent AI coding tools. Our AI coding tools help developers move faster with confidence.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500 flex-shrink-0" />
+                    <span className="text-sm">Coding assistant AI</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500 flex-shrink-0" />
+                    <span className="text-sm">AI code snippet generator</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500 flex-shrink-0" />
+                    <span className="text-sm">AI debugging helpers</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-pink-500 flex-shrink-0" />
+                    <span className="text-sm">AI documentation generators</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* 6️⃣ Communicate with AI Chat & Voice Tools */}
+            <Card className="border-2 border-cyan-200/50 hover:border-cyan-500 transition-all group overflow-hidden">
+              <CardHeader className="pb-3">
+                <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Type className="h-6 w-6 text-cyan-600" />
+                </div>
+                <CardTitle className="text-lg">6️⃣ AI Chat & Voice Tools</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground text-sm">
+                  Enhance engagement using AI chat tools and AI voice generator solutions. Scale communication without increasing workload.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-cyan-500 flex-shrink-0" />
+                    <span className="text-sm">AI chat assistant tools</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-cyan-500 flex-shrink-0" />
+                    <span className="text-sm">Text to speech AI</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-cyan-500 flex-shrink-0" />
+                    <span className="text-sm">AI voice generator</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-cyan-500 flex-shrink-0" />
+                    <span className="text-sm">AI-powered customer replies</span>
                   </li>
                 </ul>
               </CardContent>
@@ -302,11 +416,11 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* How Businesses Use Our AI Tools */}
+      {/* Use Cases Section */}
       <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">How Businesses Use Free AI Tools & Automation</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">How Businesses Use Our AI Tools</h2>
             <p className="text-xl text-muted-foreground">
               Real-world examples of how teams accelerate their work every day
             </p>
@@ -323,12 +437,8 @@ export default async function Home() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Generates domain, tagline, and pricing in one afternoon. Launches MVP faster without months of planning.
+                  Generates domain names, taglines, and pricing models in one afternoon to validate an idea quickly.
                 </p>
-                <div className="pt-2 flex items-center gap-2 text-sm font-semibold text-green-600">
-                  <Zap className="h-4 w-4" />
-                  Saves 2-3 weeks per launch
-                </div>
               </CardContent>
             </Card>
 
@@ -342,12 +452,8 @@ export default async function Home() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Creates email sequences and blog outlines instantly. Improves campaign turnaround time dramatically.
+                  Uses AI writing tools and AI SEO tools to create campaigns and content faster.
                 </p>
-                <div className="pt-2 flex items-center gap-2 text-sm font-semibold text-primary">
-                  <Zap className="h-4 w-4" />
-                  5x faster content creation
-                </div>
               </CardContent>
             </Card>
 
@@ -361,12 +467,8 @@ export default async function Home() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Generates proposals and sales scripts in minutes. Closes deals faster with prepared materials.
+                  Creates professional proposals and follow-up sequences using AI automation tools.
                 </p>
-                <div className="pt-2 flex items-center gap-2 text-sm font-semibold text-blue-600">
-                  <Zap className="h-4 w-4" />
-                  Proposal time: hours to minutes
-                </div>
               </CardContent>
             </Card>
 
@@ -380,12 +482,8 @@ export default async function Home() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Cleans data and generates dashboards with AI. Makes faster strategic decisions with instant insights.
+                  Uses AI-powered analytics tools to clean data and generate dashboards efficiently.
                 </p>
-                <div className="pt-2 flex items-center gap-2 text-sm font-semibold text-purple-600">
-                  <Zap className="h-4 w-4" />
-                  Dashboard days to hours
-                </div>
               </CardContent>
             </Card>
           </div>
@@ -411,11 +509,11 @@ export default async function Home() {
                     <Rocket className="h-6 w-6 text-green-600" />
                   </div>
                   <CardTitle>LaunchPad</CardTitle>
-                  <p className="text-sm text-muted-foreground font-normal mt-2">Best Free AI Tools for Startups</p>
+                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Tools for Startups</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    AI tools designed for startups and early-stage businesses. Build your brand, messaging, pricing, and launch assets with intelligent automation.
+                    AI tools designed for startups and early-stage businesses. Build your brand, messaging, pricing, and launch assets using generative AI and intelligent automation.
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
@@ -448,11 +546,11 @@ export default async function Home() {
                     <TrendingUp className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle>GrowthSuite</CardTitle>
-                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Marketing & Sales Automation Tools</p>
+                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Growth Tools for Scaling</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    AI growth and marketing tools for scaling businesses. Generate proposals, SEO content, automation workflows, and conversion-driven assets.
+                    AI growth and marketing tools for scaling businesses. Generate proposals, AI SEO tools, automation workflows, and conversion-driven content.
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
@@ -485,11 +583,11 @@ export default async function Home() {
                     <Brain className="h-6 w-6 text-purple-600" />
                   </div>
                   <CardTitle>Intelligence</CardTitle>
-                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Analytics & BI Tools</p>
+                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Analytics & BI</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    AI-powered analytics and business intelligence tools. Turn data into structured insights and make data-driven decisions with confidence.
+                    AI-powered analytics and business intelligence tools. Turn raw data into structured insights using AI analytics tools and machine learning-driven dashboards.
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
@@ -513,6 +611,57 @@ export default async function Home() {
                 </CardContent>
               </Card>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Businesses Use AI Tools */}
+      <section className="py-20">
+        <div className="container">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Businesses Use AI Tools</h2>
+            <p className="text-lg text-muted-foreground">
+              AI tools provide speed, flexibility, and intelligent assistance — helping teams move faster and experiment more efficiently.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-12">
+            <div className="flex items-start gap-3 p-4">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+              <div>
+                <div className="font-semibold">Generate results instantly</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-4">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+              <div>
+                <div className="font-semibold">Reduce repetitive manual work</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-4">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+              <div>
+                <div className="font-semibold">Improve workflow efficiency</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-4">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+              <div>
+                <div className="font-semibold">Access powerful AI tools at no cost</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-4 md:col-span-2">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+              <div>
+                <div className="font-semibold">Iterate and refine ideas quickly</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground">
+              Our AI tools are designed to support businesses of all sizes — from startups to enterprises.
+            </p>
           </div>
         </div>
       </section>
@@ -675,34 +824,22 @@ export default async function Home() {
         <div className="container relative z-10">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Start Building with Free AI Tools Today
+              Start Building with AI Today
             </h2>
-            <p className="text-xl opacity-90 mb-8">
-              Access our complete collection of free generative AI tools and AI-powered business solutions. No credit card required. No commitment.
-              Build your business at your pace with intelligent automation and AI tools designed for growth.
+            <p className="text-lg opacity-90 mb-8">
+              Explore our growing collection of AI writing tools, AI image generator tools, AI coding assistants, AI SEO tools, AI automation tools, and AI chat & voice generators.
+            </p>
+            <p className="text-lg opacity-90 mb-8">
+              Discover how intelligent automation can simplify your business workflows.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" variant="secondary" className="text-primary text-lg px-8 h-14 font-semibold">
                 <Link href="/tools">
-                  Explore All AI Tools <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="border-2 border-white hover:bg-white hover:text-primary text-white bg-transparent text-lg px-8 h-14 font-semibold"
-              >
-                <Link href="/tools/domain-name-generator">
-                  Try Domain Name Genie
+                  🚀 Explore Our Free AI Tools Now
                 </Link>
               </Button>
             </div>
-
-            <p className="text-sm opacity-75 mt-8">
-              ✨ 12+ free tools • ⚡ Generate in seconds • 💎 Premium quality • 🚀 Enterprise ready
-            </p>
           </div>
         </div>
       </section>
