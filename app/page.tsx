@@ -800,7 +800,7 @@ export default async function Home() {
       )}
 
       {/* Final CTA Section */}
-      <section className="py-20 bg-primary text-white relative overflow-hidden">
+           <section className="py-20 bg-primary text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/0 to-primary/0"></div>
         </div>
@@ -808,22 +808,34 @@ export default async function Home() {
         <div className="container relative z-10">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Start Building with AI Today
+              Start Building with Free AI Tools Today
             </h2>
-            <p className="text-lg opacity-90 mb-8">
-              Explore our growing collection of AI writing tools, AI image generator tools, AI coding assistants, AI SEO tools, AI automation tools, and AI chat & voice generators.
-            </p>
-            <p className="text-lg opacity-90 mb-8">
-              Discover how intelligent automation can simplify your business workflows.
+            <p className="text-xl opacity-90 mb-8">
+              Access our complete collection of free generative AI tools and AI-powered business solutions. No credit card required. No commitment.
+              Build your business at your pace with intelligent automation and AI tools designed for growth.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" variant="secondary" className="text-primary text-lg px-8 h-14 font-semibold">
                 <Link href="/tools">
-                  🚀 Explore Our Free AI Tools Now
+                  Explore All AI Tools <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="border-2 border-white hover:bg-white hover:text-primary text-white bg-transparent text-lg px-8 h-14 font-semibold"
+              >
+                <Link href="/tools/domain-name-generator">
+                  Try Domain Name Genie
                 </Link>
               </Button>
             </div>
+
+            <p className="text-sm opacity-75 mt-8">
+              ✨ 12+ free tools • ⚡ Generate in seconds • 💎 Premium quality • 🚀 Enterprise ready
+            </p>
           </div>
         </div>
       </section>
