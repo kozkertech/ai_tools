@@ -22,6 +22,9 @@ import {
   Lightbulb,
   FileText,
   Mail,
+  Briefcase,
+  PenTool,
+  LineChart,
 } from "lucide-react"
 import { getFeaturedPosts } from "@/lib/ghost"
 import { PostCard } from "@/components/post-card"
@@ -44,24 +47,18 @@ export default async function Home() {
 
   return (
     <>
-      {/* Hero Section - AI-Focused */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-primary/30 via-blue-300/20 to-transparent rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-tl from-purple-300/20 via-primary/20 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
-        </div>
-
-        <div className="container relative z-10">
+      {/* Hero Section */}
+      <section className="py-20 md:py-28 hero-pattern">
+        <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <Badge className="px-4 py-2 text-sm bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200">
+            <div className="space-y-8 animate-fade-in">
+              <Badge className="px-4 py-2 text-sm bg-primary/10 text-primary border-primary/20">
                 <Sparkles className="h-4 w-4 mr-2" />
                 AI-Powered Business Tools
               </Badge>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-                Launch, Grow <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">&amp; Scale</span> with AI
+              <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold tracking-tight leading-tight">
+                Launch, Grow <span className="text-primary">&amp; Scale</span> with AI
               </h1>
 
               <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
@@ -70,7 +67,7 @@ export default async function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg px-8 h-14">
+                <Button asChild size="lg" className="text-lg px-8 h-14">
                   <Link href="/tools">
                     Explore Our Free AI Tools <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -87,55 +84,56 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Animated Tool Cards Preview */}
-            <div className="relative h-96 hidden lg:block">
-              <div className="absolute inset-0 flex items-center justify-center">
-                {/* Floating Card 1 - Domain */}
-                <div className="absolute w-64 h-40 bg-gradient-to-br from-green-500/20 to-green-600/10 backdrop-blur-md border border-green-200/40 rounded-xl p-4 shadow-xl transform -rotate-12 -translate-y-12 -translate-x-12 animate-bounce" style={{ animationDelay: "0s", animationDuration: "4s" }}>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Globe className="h-5 w-5 text-green-600" />
-                    <span className="font-semibold text-sm">Domain Suggestions</span>
-                  </div>
-                  <div className="space-y-2 text-xs text-muted-foreground">
-                    <div>✓ techstartup.com</div>
-                    <div>✓ innovatetech.in</div>
-                    <div>✓ growthventure.co</div>
-                  </div>
-                </div>
-
-                {/* Floating Card 2 - Proposal */}
-                <div className="absolute w-64 h-40 bg-gradient-to-br from-blue-500/20 to-blue-600/10 backdrop-blur-md border border-blue-200/40 rounded-xl p-4 shadow-xl transform rotate-6 translate-y-8 animate-bounce" style={{ animationDelay: "0.5s", animationDuration: "4s" }}>
-                  <div className="flex items-center gap-2 mb-3">
-                    <FileText className="h-5 w-5 text-blue-600" />
-                    <span className="font-semibold text-sm">Proposal Draft</span>
-                  </div>
-                  <div className="space-y-2 text-xs text-muted-foreground">
-                    <div>Scope • Timeline • Pricing</div>
-                    <div>Terms • Deliverables</div>
-                    <div className="text-blue-600 pt-1">→ Ready to send</div>
-                  </div>
-                </div>
-
-                {/* Floating Card 3 - Dashboard */}
-                <div className="absolute w-64 h-40 bg-gradient-to-br from-purple-500/20 to-purple-600/10 backdrop-blur-md border border-purple-200/40 rounded-xl p-4 shadow-xl transform rotate-12 translate-y-16 translate-x-12 animate-bounce" style={{ animationDelay: "1s", animationDuration: "4s" }}>
-                  <div className="flex items-center gap-2 mb-3">
-                    <BarChart3 className="h-5 w-5 text-purple-600" />
-                    <span className="font-semibold text-sm">Dashboard Blueprint</span>
-                  </div>
-                  <div className="space-y-2 text-xs text-muted-foreground">
-                    <div>KPI selection</div>
-                    <div>Visualization design</div>
-                    <div className="text-purple-600 pt-1">→ Ready to build</div>
-                  </div>
-                </div>
-              </div>
+            {/* Original SVG Illustration */}
+            <div className="relative animate-fade-in" style={{ animationDelay: "0.2s" }}>
+              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Version%20control-cuate-yIM8dgQYh75USr7RBxwMELEfYb0KvG.png"
+                alt="Software developer working on code with workflow diagrams and development processes"
+                width={600}
+                height={600}
+                className="rounded-lg"
+                priority
+              />
             </div>
           </div>
         </div>
       </section>
 
+      {/* AI Execution Era Section */}
+      <section className="py-20 bg-gradient-to-b from-primary/5 to-background relative overflow-hidden">
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10"></div>
+        </div>
+        
+        <div className="container relative z-10">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+            <h2 className="text-3xl md:text-4xl font-bold">We Are in the AI Execution Era</h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Businesses no longer need weeks of agency work to validate ideas, build assets, and launch. 
+              AI enables instant execution. Entrepreneurs can now do in an afternoon what took months before. 
+              This isn't about replacing humans—it's about giving you leverage to move faster, iterate freely, 
+              and stay ahead of the competition. The future belongs to those who can execute instantly.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Motivational Quote Section */}
+      <section className="py-16 bg-muted/40">
+        <div className="container">
+          <div className="max-w-2xl mx-auto text-center space-y-4">
+            <div className="text-primary text-4xl opacity-30">"</div>
+            <p className="text-2xl md:text-3xl italic font-light text-foreground leading-relaxed">
+              In the AI era, speed is no longer about resources — it's about leverage.
+            </p>
+            <div className="text-primary text-4xl opacity-30 text-right">"</div>
+          </div>
+        </div>
+      </section>
+
       {/* What You Can Build Section */}
-      <section className="py-20 bg-gradient-to-b from-muted/30 to-background">
+      <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">What You Can Build with AI</h2>
@@ -148,7 +146,7 @@ export default async function Home() {
             {/* Launch Your Brand */}
             <Card className="border-2 border-green-200/50 hover:border-green-500 transition-all group overflow-hidden">
               <CardHeader className="pb-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-50 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Rocket className="h-6 w-6 text-green-600" />
                 </div>
                 <CardTitle className="text-xl">Launch Your Brand</CardTitle>
@@ -175,10 +173,10 @@ export default async function Home() {
             </Card>
 
             {/* Automate Growth */}
-            <Card className="border-2 border-blue-200/50 hover:border-blue-500 transition-all group overflow-hidden">
+            <Card className="border-2 border-primary/30 hover:border-primary transition-all group overflow-hidden">
               <CardHeader className="pb-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <TrendingUp className="h-6 w-6 text-blue-600" />
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <TrendingUp className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-xl">Automate Your Growth</CardTitle>
               </CardHeader>
@@ -188,15 +186,15 @@ export default async function Home() {
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
                     <span className="text-sm">Proposals (drafted in minutes)</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
                     <span className="text-sm">Email sequences & sales scripts</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
                     <span className="text-sm">Content & campaign copy</span>
                   </li>
                 </ul>
@@ -206,7 +204,7 @@ export default async function Home() {
             {/* Make Smarter Decisions */}
             <Card className="border-2 border-purple-200/50 hover:border-purple-500 transition-all group overflow-hidden">
               <CardHeader className="pb-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Brain className="h-6 w-6 text-purple-600" />
                 </div>
                 <CardTitle className="text-xl">Make Smarter Decisions</CardTitle>
@@ -311,12 +309,12 @@ export default async function Home() {
                         <Badge className="bg-green-100 text-green-700">Available</Badge>
                       </div>
 
-                      <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg border border-blue-200/50 hover:border-blue-400 transition-colors">
+                      <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg border border-primary/20 hover:border-primary/40 transition-colors">
                         <div>
                           <div className="font-semibold text-sm">innovatebiz.io</div>
                           <div className="text-xs text-muted-foreground">Fresh & modern</div>
                         </div>
-                        <Badge className="bg-blue-100 text-blue-700">Available</Badge>
+                        <Badge className="bg-primary/10 text-primary">Available</Badge>
                       </div>
 
                       <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg border border-purple-200/50 hover:border-purple-400 transition-colors">
@@ -351,8 +349,98 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* How Businesses Use Our AI Tools */}
+      <section className="py-20 bg-gradient-to-b from-background to-muted/30">
+        <div className="container">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">How Businesses Use Our AI Tools</h2>
+            <p className="text-xl text-muted-foreground">
+              Real-world examples of how teams accelerate their work every day
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Startup Founder */}
+            <Card className="border-2 border-green-200/50 hover:border-green-500 hover:shadow-lg transition-all group cursor-pointer">
+              <CardHeader>
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Rocket className="h-6 w-6 text-green-600" />
+                </div>
+                <CardTitle className="text-xl">Startup Founder</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Generates domain, tagline, and pricing in one afternoon. Launches MVP faster without months of planning.
+                </p>
+                <div className="pt-2 flex items-center gap-2 text-sm font-semibold text-green-600">
+                  <Zap className="h-4 w-4" />
+                  Saves 2-3 weeks per launch
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Marketing Manager */}
+            <Card className="border-2 border-primary/30 hover:border-primary hover:shadow-lg transition-all group cursor-pointer">
+              <CardHeader>
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Mail className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="text-xl">Marketing Manager</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Creates email sequences and blog outlines instantly. Improves campaign turnaround time dramatically.
+                </p>
+                <div className="pt-2 flex items-center gap-2 text-sm font-semibold text-primary">
+                  <Zap className="h-4 w-4" />
+                  5x faster content creation
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Sales Team */}
+            <Card className="border-2 border-blue-200/50 hover:border-blue-500 hover:shadow-lg transition-all group cursor-pointer">
+              <CardHeader>
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FileText className="h-6 w-6 text-blue-600" />
+                </div>
+                <CardTitle className="text-xl">Sales Team</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Generates proposals and sales scripts in minutes. Closes deals faster with prepared materials.
+                </p>
+                <div className="pt-2 flex items-center gap-2 text-sm font-semibold text-blue-600">
+                  <Zap className="h-4 w-4" />
+                  Proposal time: hours to minutes
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Business Analyst */}
+            <Card className="border-2 border-purple-200/50 hover:border-purple-500 hover:shadow-lg transition-all group cursor-pointer">
+              <CardHeader>
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <LineChart className="h-6 w-6 text-purple-600" />
+                </div>
+                <CardTitle className="text-xl">Business Analyst</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Cleans data and generates dashboards with AI. Makes faster strategic decisions with instant insights.
+                </p>
+                <div className="pt-2 flex items-center gap-2 text-sm font-semibold text-purple-600">
+                  <Zap className="h-4 w-4" />
+                  Dashboard days to hours
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* AI Tool Ecosystem Overview */}
-      <section className="py-20 bg-gradient-to-b from-background to-muted/50">
+      <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools for Every Stage</h2>
@@ -401,10 +489,10 @@ export default async function Home() {
 
             {/* GrowthSuite */}
             <Link href="/growthsuite" className="group">
-              <Card className="h-full border-2 border-blue-200/50 hover:border-blue-500 transition-all hover:shadow-lg">
+              <Card className="h-full border-2 border-primary/30 hover:border-primary transition-all hover:shadow-lg">
                 <CardHeader>
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
-                    <TrendingUp className="h-6 w-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                    <TrendingUp className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle>GrowthSuite</CardTitle>
                   <p className="text-sm text-muted-foreground font-normal mt-2">AI Growth Automation Stack</p>
@@ -415,20 +503,20 @@ export default async function Home() {
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full"></div>
                       <span>Proposal generation</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full"></div>
                       <span>Email sequences</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full"></div>
                       <span>Content automation</span>
                     </div>
                   </div>
                   <div className="pt-2">
-                    <span className="text-sm font-semibold text-blue-600 group-hover:text-blue-700">
+                    <span className="text-sm font-semibold text-primary group-hover:text-primary/80">
                       Explore → 
                     </span>
                   </div>
@@ -477,7 +565,7 @@ export default async function Home() {
       </section>
 
       {/* Why AI Over Agencies */}
-      <section className="py-20">
+      <section className="py-20 bg-gradient-to-b from-background to-muted/50">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Use AI Instead of Agencies?</h2>
@@ -490,7 +578,7 @@ export default async function Home() {
             {/* AI Side */}
             <div className="space-y-4">
               <div className="text-center mb-6">
-                <Badge className="bg-gradient-to-r from-blue-100 to-green-100 text-blue-700 text-sm py-2 px-4">
+                <Badge className="bg-primary/10 text-primary text-sm py-2 px-4">
                   <Sparkles className="h-4 w-4 mr-1 inline" /> AI Tools
                 </Badge>
               </div>
@@ -615,10 +703,9 @@ export default async function Home() {
       )}
 
       {/* Final CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
-        {/* Background gradient animation */}
-        <div className="absolute inset-0 opacity-50">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-transparent to-purple-600/0"></div>
+      <section className="py-20 bg-primary text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/0 to-primary/0"></div>
         </div>
 
         <div className="container relative z-10">
@@ -632,7 +719,7 @@ export default async function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" variant="secondary" className="text-blue-600 text-lg px-8 h-14 font-semibold">
+              <Button asChild size="lg" variant="secondary" className="text-primary text-lg px-8 h-14 font-semibold">
                 <Link href="/tools">
                   Explore All AI Tools <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -641,7 +728,7 @@ export default async function Home() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-2 border-white hover:bg-white hover:text-blue-600 text-white bg-transparent text-lg px-8 h-14 font-semibold"
+                className="border-2 border-white hover:bg-white hover:text-primary text-white bg-transparent text-lg px-8 h-14 font-semibold"
               >
                 <Link href="/tools/domain-name-generator">
                   Try Domain Name Genie
