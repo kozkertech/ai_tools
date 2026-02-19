@@ -25,6 +25,7 @@ import {
   Briefcase,
   PenTool,
   LineChart,
+  Users,
 } from "lucide-react"
 import { getFeaturedPosts } from "@/lib/ghost"
 import { PostCard } from "@/components/post-card"
