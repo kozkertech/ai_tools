@@ -58,12 +58,11 @@ export default async function Home() {
               </Badge>
 
               <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold tracking-tight leading-tight">
-                Launch, Grow <span className="text-primary">&amp; Scale</span> with AI Tools
+                Launch, Grow <span className="text-primary">&amp; Scale</span> Your Business with AI
               </h1>
 
               <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
-                Explore our platform of free AI-powered tools and generative AI solutions for business growth. Generate domains, branding, content, proposals, AI-driven analytics and more — instantly.
-                No waiting. No agencies. No dependencies. Just pure AI acceleration.
+                Discover powerful AI tools designed to help you build your brand, automate workflows, generate content, and make smarter decisions — all in minutes.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -73,7 +72,7 @@ export default async function Home() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="text-lg px-8 h-14 border-2">
-                  <Link href="#tools-showcase">See How It Works</Link>
+                  <Link href="#ai-ecosystem">See AI Tool Suites</Link>
                 </Button>
               </div>
 
@@ -100,45 +99,14 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* AI Execution Era Section */}
-      <section className="py-20 bg-gradient-to-b from-primary/5 to-background relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10"></div>
-        </div>
-        
-        <div className="container relative z-10">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h2 className="text-3xl md:text-4xl font-bold">We Are in the AI-Powered Execution Era</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Businesses no longer need weeks of agency work to validate ideas, build assets, and launch.
-              AI-powered tools and intelligent automation enable instant execution. Entrepreneurs using generative AI tools can now do in an afternoon what took months before.
-              This isn't about replacing humans—it's about giving you leverage to move faster, iterate freely,
-              and stay ahead of the competition. The future belongs to those who can execute instantly with AI.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Motivational Quote Section */}
-      <section className="py-16 bg-muted/40">
-        <div className="container">
-          <div className="max-w-2xl mx-auto text-center space-y-4">
-            <div className="text-primary text-4xl opacity-30">"</div>
-            <p className="text-2xl md:text-3xl italic font-light text-foreground leading-relaxed">
-              In the AI era, speed is no longer about resources — it's about leverage.
-            </p>
-            <div className="text-primary text-4xl opacity-30 text-right">"</div>
-          </div>
-        </div>
-      </section>
 
       {/* What You Can Build Section */}
       <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You Can Build with AI Tools</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You Can Do with Our AI Tools</h2>
             <p className="text-xl text-muted-foreground">
-              Instant AI-powered solutions and generative AI tools for every business function. No waiting. No dependencies.
+              Our AI tools are built for founders, marketers, developers, and teams who want faster execution and smarter workflows.
             </p>
           </div>
 
@@ -149,11 +117,11 @@ export default async function Home() {
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Rocket className="h-6 w-6 text-green-600" />
                 </div>
-                <CardTitle className="text-xl">Launch Your Brand</CardTitle>
+                <CardTitle className="text-xl">1️⃣ Launch Your Brand</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Use AI tools to generate everything needed to establish your brand identity instantly with our free AI business tools.
+                  Generate domain names, create compelling taglines, define pricing strategies, and build your business foundation using intelligent AI tools.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
@@ -178,11 +146,11 @@ export default async function Home() {
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <TrendingUp className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle className="text-xl">Automate Your Growth</CardTitle>
+                <CardTitle className="text-xl">2️⃣ Automate Your Growth</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Use AI automation tools and AI-powered content generators for sales and marketing that converts at scale.
+                  Create proposals, email sequences, SEO content, and sales scripts instantly — reducing manual effort and saving valuable time.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
@@ -207,11 +175,11 @@ export default async function Home() {
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Brain className="h-6 w-6 text-purple-600" />
                 </div>
-                <CardTitle className="text-xl">Make Smarter Decisions</CardTitle>
+                <CardTitle className="text-xl">3️⃣ Make Smarter Decisions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Transform data into actionable intelligence using AI analytics tools and machine learning solutions instantly.
+                  Transform raw data into structured insights with AI-powered analytics, dashboards, and business intelligence tools.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
@@ -234,56 +202,41 @@ export default async function Home() {
       </section>
 
       {/* Featured Tool - Domain Name Genie */}
-      <section id="tools-showcase" className="py-20">
+      <section id="featured-tool" className="py-20">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left: Feature Details */}
             <div className="space-y-8">
               <div>
-                <Badge className="mb-4 bg-green-100 text-green-700 hover:bg-green-200">
-                  Most Popular Tool
-                </Badge>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">Domain Name Genie</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Start with Our Most Popular AI Tool</h2>
+                <h3 className="text-2xl font-semibold mb-3 text-gray-900 dark:text-white">Domain Name Genie</h3>
                 <p className="text-lg text-muted-foreground">
-                  Get 100+ AI-generated domain suggestions instantly. No more brainstorming for hours.
-                  Just describe your business, and let AI generate perfect names in seconds.
+                  Find the perfect domain name using our AI-powered domain generator. Get brand-friendly suggestions with real-time availability checks.
                 </p>
               </div>
 
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <div className="font-semibold">Instant Generation</div>
-                    <div className="text-sm text-muted-foreground">100+ suggestions in seconds</div>
-                  </div>
+                  <span className="text-sm">AI-powered domain suggestions</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <div className="font-semibold">Real-Time Availability</div>
-                    <div className="text-sm text-muted-foreground">Check if domains are available</div>
-                  </div>
+                  <span className="text-sm">Multiple TLD options</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <div className="font-semibold">Multiple TLDs</div>
-                    <div className="text-sm text-muted-foreground">.com, .io, .co, .in and more</div>
-                  </div>
+                  <span className="text-sm">Instant results</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <div className="font-semibold">One-Click Booking</div>
-                    <div className="text-sm text-muted-foreground">Direct links to register immediately</div>
-                  </div>
+                  <span className="text-sm">Built for startups and small businesses</span>
                 </li>
               </ul>
 
               <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 h-12">
                 <Link href="/tools/domain-name-generator">
-                  Try Domain Name Genie Free <ArrowRight className="ml-2 h-5 w-5" />
+                  Try Domain Name Genie Free →
                 </Link>
               </Button>
             </div>
@@ -440,12 +393,12 @@ export default async function Home() {
       </section>
 
       {/* AI Tool Ecosystem Overview */}
-      <section className="py-20">
+      <section id="ai-ecosystem" className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Best AI Tools for Every Business Stage</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools for Every Stage of Business</h2>
             <p className="text-xl text-muted-foreground">
-              Curated AI-powered tool collections and generative AI solutions designed for your business journey from startup to enterprise
+              Choose the right AI tool suite for your business needs
             </p>
           </div>
 
@@ -462,7 +415,7 @@ export default async function Home() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    Explore our AI tools for startups and free AI tools for entrepreneurs building their brand and launching instantly.
+                    AI tools designed for startups and early-stage businesses. Build your brand, messaging, pricing, and launch assets with intelligent automation.
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
@@ -499,7 +452,7 @@ export default async function Home() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    Explore AI automation tools and AI marketing tools for growing businesses accelerating sales and marketing.
+                    AI growth and marketing tools for scaling businesses. Generate proposals, SEO content, automation workflows, and conversion-driven assets.
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
@@ -536,7 +489,7 @@ export default async function Home() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    Explore our AI analytics tools and machine learning dashboard generators for enterprises transforming data into strategic decisions.
+                    AI-powered analytics and business intelligence tools. Turn data into structured insights and make data-driven decisions with confidence.
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
