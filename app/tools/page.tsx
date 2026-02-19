@@ -2,11 +2,11 @@ import type { Metadata } from "next"
 import ToolsPageClient from "./ToolsPageClient"
 
 export const metadata: Metadata = {
-  title: "Free AI Business Tools – Automate, Create & Grow | KozkerTech",
+  title: "Best Free AI Tools for Business 2026 | AI Tools Directory | KozkerTech",
   description:
-    "Access 20+ free AI-powered tools to boost business growth. Instantly generate domain names, marketing copy, blog posts, sales scripts, and automate workflows to save time and scale faster.",
+    "Discover 20+ best free AI tools for business: AI content generators, AI automation tools, generative AI solutions, and AI marketing tools. No credit card required. Instant AI business tools for startups and enterprises.",
   keywords:
-    "free AI tools, AI business tools, business automation software, domain name generator, AI marketing tools, content creation AI, SEO tools, sales automation, productivity AI tools, marketing automation, KozkerTech"
+    "free AI tools, best AI tools, generative AI tools, AI business tools, AI tools for startups, AI automation tools, AI marketing tools, AI content generator, AI SEO tools, free generative AI, AI tools for small business, AI analytics tools, KozkerTech"
 }
 
 export default function ToolsPage() {

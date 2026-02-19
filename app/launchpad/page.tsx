@@ -7,9 +7,9 @@ import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Rocket, Globe, Zap, Sparkles, ArrowRight, Lightbulb, Palette, Calculator, FileText, Brain, Target } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "LaunchPad - AI Launch Toolkit for Startups | KozkerTech",
+  title: "LaunchPad - AI Tools for Startups | Free AI Launch Toolkit | KozkerTech",
   description:
-    "Launch your business instantly with AI-powered tools. Generate domains, brand messaging, pricing strategies, and business plans in seconds.",
+    "Launch your business instantly with free AI tools for startups. AI-powered domain generator, branding tools, and business planning software. Perfect for entrepreneurs and first-time founders.",
 }
 
 export default function LaunchPadPage() {
@@ -28,8 +28,8 @@ export default function LaunchPadPage() {
                 Launch Your Business with <span className="text-green-600">AI-Powered Tools</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Everything you need to build your brand foundation in minutes. Generate domain names, craft your brand message, 
-                create pricing strategies, and build your business plan—all powered by instant AI tools.
+                Everything you need to build your brand foundation in minutes. Use free AI tools to generate domain names, craft your brand message,
+                create pricing strategies, and build your business plan—all powered by instant generative AI solutions for startups.
               </p>
 
               <div className="bg-green-100 dark:bg-green-900/20 p-4 rounded-lg">
@@ -67,9 +67,9 @@ export default function LaunchPadPage() {
       <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Perfect For Idea-Stage Founders</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Best AI Tools for Startup Founders</h2>
             <p className="text-xl text-muted-foreground">
-              LaunchPad is designed for founders and entrepreneurs ready to launch independently, fast, and affordably
+              LaunchPad is the ultimate AI tools for startups, designed for founders and entrepreneurs ready to launch independently, fast, and affordably using free AI tools
             </p>
           </div>
 
@@ -80,7 +80,7 @@ export default function LaunchPadPage() {
               </div>
               <h3 className="text-xl font-bold mb-2">First-Time Founders</h3>
               <p className="text-muted-foreground">
-                Get your business identity, brand message, and initial business plan generated in minutes using AI
+                Get your business identity, brand message, and initial business plan generated in minutes using AI tools for entrepreneurs
               </p>
             </Card>
 
@@ -113,7 +113,7 @@ export default function LaunchPadPage() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools Included in LaunchPad</h2>
             <p className="text-xl text-muted-foreground">
-              Instantly generate everything your startup needs to launch and scale
+              Explore our complete collection of free AI tools for startup success. Instantly generate everything your startup needs to launch and scale with intelligent automation
             </p>
           </div>
 
@@ -419,6 +419,48 @@ export default function LaunchPadPage() {
                 All tools work together seamlessly. Build your complete brand foundation in one place.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Cross-Product Link Section */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Next Steps: Scale Your Business with AI Tools</h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              After launching with LaunchPad, explore our AI automation tools and AI analytics tools for scaling.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <Card className="border-2 border-blue-200/50 p-6">
+              <CardHeader className="p-0 mb-4">
+                <CardTitle className="text-xl">GrowthSuite</CardTitle>
+                <p className="text-sm text-muted-foreground font-normal mt-2">Scale with AI Automation & Marketing Tools</p>
+              </CardHeader>
+              <CardContent className="p-0">
+                <p className="text-muted-foreground mb-4">
+                  Ready to accelerate growth? Explore our AI marketing tools, sales automation, and AI automation tools for scaling your business.
+                </p>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/growthsuite">Explore GrowthSuite →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+            <Card className="border-2 border-purple-200/50 p-6">
+              <CardHeader className="p-0 mb-4">
+                <CardTitle className="text-xl">Intelligence</CardTitle>
+                <p className="text-sm text-muted-foreground font-normal mt-2">Data-Driven Decisions with AI Analytics</p>
+              </CardHeader>
+              <CardContent className="p-0">
+                <p className="text-muted-foreground mb-4">
+                  Transform your data into insights. Discover our AI analytics tools, machine learning tools, and dashboard generators.
+                </p>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/intelligence">Explore Intelligence →</Link>
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

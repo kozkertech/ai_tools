@@ -20,9 +20,9 @@ import {
 } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Intelligence - AI Decision Intelligence Platform | KozkerTech",
+  title: "Intelligence - AI Analytics Tools & BI Platform | Machine Learning Dashboard Generator | KozkerTech",
   description:
-    "Turn data into decisions instantly. AI-powered dashboards, data modeling, and insights. Automate analysis, empower decisions.",
+    "Turn data into decisions instantly with AI analytics tools and machine learning dashboard generators. AI-powered business intelligence, data modeling, and insights. Automate analysis and empower data-driven decisions.",
 }
 
 export default function IntelligencePage() {
@@ -41,8 +41,8 @@ export default function IntelligencePage() {
                 Turn Data into Decisions with <span className="text-purple-600">AI Intelligence</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Generate dashboards, DAX measures, data schemas, and insight summaries instantly. 
-                Automate repetitive analysis. Empower faster, smarter decisions at every level of your organization.
+                Use AI analytics tools to generate dashboards, DAX measures, data schemas, and insight summaries instantly.
+                Automate repetitive analysis with machine learning tools. Empower faster, smarter decisions at every level of your organization with our AI business intelligence platform.
               </p>
 
               <div className="bg-purple-100 dark:bg-purple-900/20 p-4 rounded-lg">
@@ -80,9 +80,9 @@ export default function IntelligencePage() {
       <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">For Data-Driven Organizations</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Best AI Tools for Data-Driven Organizations</h2>
             <p className="text-xl text-muted-foreground">
-              Intelligence accelerates decision-making for enterprises, data teams, and analytics leaders
+              Intelligence accelerates decision-making for enterprises, data teams, and analytics leaders using AI business intelligence and machine learning analytics tools
             </p>
           </div>
 
@@ -124,9 +124,9 @@ export default function IntelligencePage() {
       <section className="py-20 bg-muted/50">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools for Data Intelligence</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools for Data Intelligence & Analytics</h2>
             <p className="text-xl text-muted-foreground">
-              Automate the entire BI pipeline from data prep to insights to executive dashboards
+              Automate the entire BI pipeline from data prep to insights to executive dashboards using our AI analytics tools, machine learning dashboard generators, and business intelligence solutions
             </p>
           </div>
 

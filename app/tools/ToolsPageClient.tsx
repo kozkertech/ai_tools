@@ -590,11 +590,11 @@ export default function ToolsPageClient() {
             AI-Powered Business Tools
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-            Accelerate Your Business with Free AI Tools
+            Best Free AI Tools for Business Growth
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Discover our collection of AI-powered tools designed to streamline your workflow, enhance creativity, and
-            drive business growth.
+            Discover our collection of free AI tools, generative AI solutions, and AI automation tools designed to streamline your workflow, enhance creativity, and
+            drive business growth for startups and enterprises.
           </p>
         </div>
       </section>
@@ -658,7 +658,7 @@ export default function ToolsPageClient() {
 
           {/* Filter section header with AI indicator */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-            <h2 className="text-2xl font-bold">Browse Tools by Category</h2> 
+            <h2 className="text-2xl font-bold">AI Tools by Category</h2> 
             <div className="flex items-center gap-2">
               <p className="text-muted-foreground">
                 {filteredTools.length} tool{filteredTools.length !== 1 ? "s" : ""} available
@@ -964,9 +964,9 @@ export default function ToolsPageClient() {
       {/* CTA Section */}
       <section className="py-20 px-4 bg-primary text-primary-foreground">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Business?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Business with Free AI Tools?</h2>
           <p className="text-xl mb-8 opacity-90">
-            Start with our Domain Name Genie and discover the perfect domain for your business.
+            Start with our AI-powered Domain Name Genie to discover the perfect domain for your business. Explore our complete directory of generative AI tools and find the best AI solutions for your enterprise needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" variant="secondary" className="text-lg px-8">

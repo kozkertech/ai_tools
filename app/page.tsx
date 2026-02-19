@@ -30,9 +30,9 @@ import { getFeaturedPosts } from "@/lib/ghost"
 import { PostCard } from "@/components/post-card"
 
 export const metadata: Metadata = {
-  title: "KozkerTech - AI-Powered Business Tools | Automate Your Growth",
+  title: "AI Tools Platform for Business Growth | Free Generative AI Tools | KozkerTech",
   description:
-    "Launch, grow, and scale your business with AI. Generate domains, proposals, dashboards, and more instantly. Free AI tools for every business stage.",
+    "Discover free AI tools for business: generative AI tools for content, automation, analytics & more. AI-powered solutions for startups and enterprises. No credit card required.",
 }
 
 export default async function Home() {
@@ -58,11 +58,11 @@ export default async function Home() {
               </Badge>
 
               <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold tracking-tight leading-tight">
-                Launch, Grow <span className="text-primary">&amp; Scale</span> with AI
+                Launch, Grow <span className="text-primary">&amp; Scale</span> with AI Tools
               </h1>
 
               <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
-                Generate domains, branding, content, pricing, proposals, analytics and more — instantly. 
+                Explore our platform of free AI-powered tools and generative AI solutions for business growth. Generate domains, branding, content, proposals, AI-driven analytics and more — instantly.
                 No waiting. No agencies. No dependencies. Just pure AI acceleration.
               </p>
 
@@ -108,12 +108,12 @@ export default async function Home() {
         
         <div className="container relative z-10">
           <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h2 className="text-3xl md:text-4xl font-bold">We Are in the AI Execution Era</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">We Are in the AI-Powered Execution Era</h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Businesses no longer need weeks of agency work to validate ideas, build assets, and launch. 
-              AI enables instant execution. Entrepreneurs can now do in an afternoon what took months before. 
-              This isn't about replacing humans—it's about giving you leverage to move faster, iterate freely, 
-              and stay ahead of the competition. The future belongs to those who can execute instantly.
+              Businesses no longer need weeks of agency work to validate ideas, build assets, and launch.
+              AI-powered tools and intelligent automation enable instant execution. Entrepreneurs using generative AI tools can now do in an afternoon what took months before.
+              This isn't about replacing humans—it's about giving you leverage to move faster, iterate freely,
+              and stay ahead of the competition. The future belongs to those who can execute instantly with AI.
             </p>
           </div>
         </div>
@@ -136,9 +136,9 @@ export default async function Home() {
       <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You Can Build with AI</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You Can Build with AI Tools</h2>
             <p className="text-xl text-muted-foreground">
-              Instant tools for every business function. No waiting. No dependencies.
+              Instant AI-powered solutions and generative AI tools for every business function. No waiting. No dependencies.
             </p>
           </div>
 
@@ -153,7 +153,7 @@ export default async function Home() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Generate everything needed to establish your brand identity instantly.
+                  Use AI tools to generate everything needed to establish your brand identity instantly with our free AI business tools.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
@@ -182,7 +182,7 @@ export default async function Home() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Generate sales and marketing content that converts at scale.
+                  Use AI automation tools and AI-powered content generators for sales and marketing that converts at scale.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
@@ -211,7 +211,7 @@ export default async function Home() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Transform data into actionable intelligence instantly.
+                  Transform data into actionable intelligence using AI analytics tools and machine learning solutions instantly.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
@@ -353,7 +353,7 @@ export default async function Home() {
       <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">How Businesses Use Our AI Tools</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">How Businesses Use Free AI Tools & Automation</h2>
             <p className="text-xl text-muted-foreground">
               Real-world examples of how teams accelerate their work every day
             </p>
@@ -443,9 +443,9 @@ export default async function Home() {
       <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools for Every Stage</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Best AI Tools for Every Business Stage</h2>
             <p className="text-xl text-muted-foreground">
-              Curated AI tool collections designed for your business journey
+              Curated AI-powered tool collections and generative AI solutions designed for your business journey from startup to enterprise
             </p>
           </div>
 
@@ -458,11 +458,11 @@ export default async function Home() {
                     <Rocket className="h-6 w-6 text-green-600" />
                   </div>
                   <CardTitle>LaunchPad</CardTitle>
-                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Launch Toolkit</p>
+                  <p className="text-sm text-muted-foreground font-normal mt-2">Best Free AI Tools for Startups</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    For founders building their brand and launching instantly.
+                    Explore our AI tools for startups and free AI tools for entrepreneurs building their brand and launching instantly.
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
@@ -495,11 +495,11 @@ export default async function Home() {
                     <TrendingUp className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle>GrowthSuite</CardTitle>
-                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Growth Automation Stack</p>
+                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Marketing & Sales Automation Tools</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    For growing businesses accelerating sales and marketing.
+                    Explore AI automation tools and AI marketing tools for growing businesses accelerating sales and marketing.
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
@@ -532,11 +532,11 @@ export default async function Home() {
                     <Brain className="h-6 w-6 text-purple-600" />
                   </div>
                   <CardTitle>Intelligence</CardTitle>
-                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Decision Intelligence</p>
+                  <p className="text-sm text-muted-foreground font-normal mt-2">AI Analytics & BI Tools</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    For enterprises transforming data into strategic decisions.
+                    Explore our AI analytics tools and machine learning dashboard generators for enterprises transforming data into strategic decisions.
                   </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
@@ -568,9 +568,9 @@ export default async function Home() {
       <section className="py-20 bg-gradient-to-b from-background to-muted/50">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Use AI Instead of Agencies?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Why Use Free AI Tools Instead of Agencies?</h2>
             <p className="text-xl text-muted-foreground">
-              The future of business is self-service, instant, and AI-powered
+              The future of business is self-service, instant, and powered by intelligent automation and AI tools
             </p>
           </div>
 
@@ -670,14 +670,25 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* AI Tools Directory Section */}
+      <section className="py-12 bg-white dark:bg-gray-900">
+        <div className="container">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              KozkerTech provides a growing AI tools directory including AI content generators, AI automation tools, AI marketing tools, AI analytics tools, and generative AI applications built for startups and enterprises. Explore free AI tools for small business, AI tools for entrepreneurs, and best generative AI tools designed to accelerate your business growth.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Blog Posts */}
       {featuredPosts && featuredPosts.length > 0 && (
         <section className="py-20 bg-muted/50">
           <div className="container">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Latest Insights</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Latest Insights on AI Business Tools</h2>
               <p className="text-xl text-muted-foreground">
-                Learn how to leverage AI tools for your business
+                Learn how to leverage AI tools and generative AI for your business growth
               </p>
             </div>
 
@@ -711,11 +722,11 @@ export default async function Home() {
         <div className="container relative z-10">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Start Building with AI Today
+              Start Building with Free AI Tools Today
             </h2>
             <p className="text-xl opacity-90 mb-8">
-              All tools are free to start. No credit card required. No commitment. 
-              Build your business at your pace.
+              Access our complete collection of free generative AI tools and AI-powered business solutions. No credit card required. No commitment.
+              Build your business at your pace with intelligent automation and AI tools designed for growth.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

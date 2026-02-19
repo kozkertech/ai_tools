@@ -4,13 +4,13 @@ import Link from "next/link"
 import { SchemaMarkup } from "@/components/schema-markup"
 
 export const metadata: Metadata = {
-  title: "About KozkerTech | Our Story, Mission & Team",
+  title: "About KozkerTech | AI Tools Platform for Business Growth",
   description:
-    "Learn about KozkerTech's journey, our mission to transform businesses with innovative tech solutions, and meet the team behind our success.",
+    "Learn about KozkerTech, the leading AI tools platform empowering businesses with free generative AI solutions. Our mission is to make AI-powered business execution accessible to all.",
   openGraph: {
-    title: "About KozkerTech | Our Story, Mission & Team",
+    title: "About KozkerTech | AI Tools Platform for Business Growth",
     description:
-      "Learn about KozkerTech's journey, our mission to transform businesses with innovative tech solutions, and meet the team behind our success.",
+      "Learn about KozkerTech, the leading AI tools platform empowering businesses with free generative AI solutions. Our mission is to make AI-powered business execution accessible to all.",
     url: "https://kozker.com/about",
     type: "website",
   },

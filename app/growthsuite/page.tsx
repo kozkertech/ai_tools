@@ -21,9 +21,9 @@ import {
 } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "GrowthSuite - AI Growth Automation Stack | KozkerTech",
+  title: "GrowthSuite - AI Marketing & Sales Tools | AI Automation Software | KozkerTech",
   description:
-    "Scale faster with AI-powered growth tools. Generate proposals, emails, sales scripts, and content instantly. Automate your pipeline.",
+    "Scale faster with AI-powered growth and automation tools. AI marketing tools, sales automation, proposal generator, and email sequencer. Automate your sales pipeline and grow revenue.",
 }
 
 export default function GrowthSuitePage() {
@@ -42,8 +42,8 @@ export default function GrowthSuitePage() {
                 Scale Smarter with <span className="text-blue-600">AI-Driven Growth Tools</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Generate campaigns, proposals, and email sequences instantly. Automate your sales pipeline, accelerate conversions, 
-                and scale without the marketing costs. AI does the work, you close the deals.
+                Use AI automation tools to generate campaigns, proposals, and email sequences instantly. Automate your sales pipeline with intelligent automation, accelerate conversions,
+                and scale without the marketing costs. AI sales automation does the work, you close the deals.
               </p>
 
               <div className="bg-blue-100 dark:bg-blue-900/20 p-4 rounded-lg">
@@ -81,9 +81,9 @@ export default function GrowthSuitePage() {
       <section className="py-20">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Perfect For Scaling Businesses</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Best AI Tools for Growing Businesses</h2>
             <p className="text-xl text-muted-foreground">
-              GrowthSuite accelerates revenue growth for businesses ready to automate their entire sales and marketing pipeline
+              GrowthSuite accelerates revenue growth with AI automation tools for businesses ready to automate their entire sales and marketing pipeline using intelligent automation and AI marketing tools
             </p>
           </div>
 
@@ -127,7 +127,7 @@ export default function GrowthSuitePage() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">AI Tools in GrowthSuite</h2>
             <p className="text-xl text-muted-foreground">
-              Complete automation stack for pipeline acceleration, content generation, and revenue growth
+              Complete AI automation tools and sales software stack for pipeline acceleration, content generation, marketing automation, and revenue growth
             </p>
           </div>
 
