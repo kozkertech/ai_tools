@@ -4,6 +4,9 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { ScrollHero } from "@/components/scroll-hero"
+import { ScrollReveal } from "@/components/scroll-reveal"
+import { WorkflowChart } from "@/components/workflow-chart"
 import {
   CheckCircle,
   ArrowRight,
@@ -48,9 +51,12 @@ export default async function Home() {
 
   return (
     <>
+      <ScrollHero />
+
       {/* Hero Section */}
       <section className="py-20 md:py-28 hero-pattern">
         <div className="container">
+          <ScrollReveal>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate-fade-in">
               <Badge className="px-4 py-2 text-sm bg-primary/10 text-primary border-primary/20">
@@ -100,13 +106,27 @@ export default async function Home() {
               />
             </div>
           </div>
+          </ScrollReveal>
         </div>
       </section>
 
+      {/* Workflow Section */}
+      <section className="py-24 border-t bg-muted/10 overflow-hidden relative">
+        <div className="container">
+          <ScrollReveal>
+            <div className="text-center max-w-3xl mx-auto mb-2">
+              <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">How Our AI Ecosystem Works</h2>
+              <p className="text-xl text-muted-foreground">A seamless pipeline from raw data to scalable growth.</p>
+            </div>
+          </ScrollReveal>
+          <WorkflowChart />
+        </div>
+      </section>
 
       {/* What You Can Do with AI Section */}
       <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container">
+          <ScrollReveal delay={0.1}>
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">What You Can Do with AI</h2>
             <p className="text-xl text-muted-foreground">
@@ -313,12 +333,14 @@ export default async function Home() {
               </CardContent>
             </Card>
           </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* Featured Tool - Domain Name Genie */}
       <section id="featured-tool" className="py-20">
         <div className="container">
+          <ScrollReveal delay={0.2}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left: Feature Details */}
             <div className="space-y-8">
@@ -414,12 +436,14 @@ export default async function Home() {
               </Card>
             </div>
           </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* Use Cases Section */}
       <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container">
+          <ScrollReveal>
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">How Businesses Use Our AI Tools</h2>
             <p className="text-xl text-muted-foreground">
@@ -488,6 +512,7 @@ export default async function Home() {
               </CardContent>
             </Card>
           </div>
+          </ScrollReveal>
         </div>
       </section>
 
