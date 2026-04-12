@@ -30,6 +30,9 @@ import {
   LineChart,
   Users,
 } from "lucide-react"
+import { getFeaturedPosts } from "@/lib/ghost"
+import { PostCard } from "@/components/post-card"
+
 export const metadata: Metadata = {
   title: "AI Tools Platform for Business Growth | Free Generative AI Tools | KozkerTech",
   description:
@@ -37,6 +40,15 @@ export const metadata: Metadata = {
 }
 
 export default async function Home() {
+  let featuredPosts = []
+  try {
+    if (process.env.GHOST_URL && process.env.GHOST_CONTENT_API_KEY) {
+      featuredPosts = await getFeaturedPosts()
+    }
+  } catch (error) {
+    console.error("Error fetching featured posts:", error)
+  }
+
   return (
     <>
       <ScrollHero />
@@ -66,7 +78,7 @@ export default async function Home() {
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button asChild size="lg" className="text-lg px-8 h-14">
                   <Link href="/tools">
-                    Start Building for Free <ArrowRight className="ml-2 h-5 w-5" />
+                    Explore Our Free AI Tools <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="text-lg px-8 h-14 border-2">
@@ -779,6 +791,38 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Featured Blog Posts */}
+      {featuredPosts && featuredPosts.length > 0 && (
+        <section className="py-20 bg-muted/50">
+          <div className="container">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Latest Insights on AI Business Tools</h2>
+              <p className="text-xl text-muted-foreground">
+                Learn how to leverage AI tools and generative AI for your business growth
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredPosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <Button
+                asChild
+                variant="outline"
+                className="bg-transparent hover:bg-primary hover:text-white border-primary text-primary"
+              >
+                <Link href="/blog">
+                  View All Articles <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Final CTA Section */}
            <section className="py-20 bg-primary text-white relative overflow-hidden">
