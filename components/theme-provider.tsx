@@ -3,7 +3,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes"
 import type { ThemeProviderProps } from "next-themes"
 import { useEffect, useState } from "react"
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps & { children: React.ReactNode }) {
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   const [mounted, setMounted] = useState(false)
 
   // Ensure we only render theme-dependent UI after mounting to avoid hydration mismatch
