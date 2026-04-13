@@ -1,6 +1,7 @@
 {
-  "name": "ghost-netlify-starter",
-  "version": "0.1.0",
+  "name": "kozker-ai-tools",
+  "version": "1.0.0",
+  "description": "AI Tools Platform by Kozker Tech",
   "private": true,
   "scripts": {
     "build": "next build",

@@ -185,7 +185,7 @@ function ProductDetailsStep({ formData, onChange, errors }: ProductDetailsStepPr
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-white">
-              Your Name *
+              Full Name *
             </Label>
             <Input
               id="name"
@@ -199,7 +199,7 @@ function ProductDetailsStep({ formData, onChange, errors }: ProductDetailsStepPr
 
           <div className="space-y-2">
             <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-white">
-              Your Email *
+              Email Address *
             </Label>
             <Input
               id="email"
@@ -846,9 +846,9 @@ export default function SalesScriptGenerator() {
 
     switch (step) {
       case 1:
-        if (!formData.name.trim()) newErrors.name = "Name is required"
-        if (!formData.email.trim()) newErrors.email = "Email is required"
-        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid"
+        if (!formData.name.trim()) newErrors.name = "Full Name is required"
+        if (!formData.email.trim()) newErrors.email = "Email Address is required"
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email Address is invalid"
         if (!formData.productName.trim()) newErrors.productName = "Product name is required"
         break
       case 2:
