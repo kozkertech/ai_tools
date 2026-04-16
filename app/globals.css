@@ -6,56 +6,62 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --background: 51 27% 95%; /* Parchment #f5f4ed */
+    --foreground: 60 3% 8%; /* Near Black #141413 */
+    --card: 51 33% 97%; /* Ivory #faf9f5 */
+    --card-foreground: 60 3% 8%;
+    --popover: 51 33% 97%;
+    --popover-foreground: 60 3% 8%;
+    --secondary: 47 18% 88%; /* Warm Sand #e8e6dc */
+    --secondary-foreground: 51 3% 30%; /* Charcoal Warm #4d4c48 */
+    --muted: 47 18% 88%;
+    --muted-foreground: 52 5% 51%; /* Stone Gray #87867f */
+    --accent: 47 18% 88%;
+    --accent-foreground: 60 3% 8%;
+    --destructive: 0 56% 45%; /* Error #b53333 */
+    --destructive-foreground: 51 33% 97%;
+    --border: 51 24% 92%; /* Border Cream #f0eee6 */
+    --input: 51 24% 92%;
+    --ring: 47 18% 88%; /* Ring Warm #d1cfc5 */
+    --radius: 0.75rem; /* Generously rounded 12px base */
 
+    --primary: 15 57% 52%; /* Terracotta #c96442 */
+    --primary-foreground: 51 33% 97%;
+    
     /* Chart colors */
-    --chart-1: #ff6e30;
-    --chart-2: #3b82f6;
-    --chart-3: #10b981;
-    --chart-4: #f59e0b;
+    --chart-1: 15 57% 52%;
+    --chart-2: 211 40% 57%;
+    --chart-3: 160 40% 50%;
+    --chart-4: 45 40% 50%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%; /* Much darker background */
-    --foreground: 210 40% 98%;
-    --card: 217.2 32.6% 7%; /* Darker card background */
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 10%; /* Darker secondary */
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 10%; /* Darker muted */
-    --muted-foreground: 215 20.2% 75%;
-    --accent: 217.2 32.6% 10%; /* Darker accent */
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 15%; /* Darker border */
-    --input: 217.2 32.6% 15%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 60 3% 8%; /* Near Black */
+    --foreground: 51 27% 95%; /* Parchment */
+    --card: 60 2% 18%; /* Dark Surface #30302e */
+    --card-foreground: 51 33% 97%;
+    --popover: 60 2% 18%;
+    --popover-foreground: 51 33% 97%;
+    --secondary: 60 2% 18%; 
+    --secondary-foreground: 51 33% 97%; 
+    --muted: 60 2% 18%;
+    --muted-foreground: 51 6% 67%; /* Warm Silver #b0aea5 */
+    --accent: 60 2% 18%;
+    --accent-foreground: 51 33% 97%;
+    --destructive: 0 56% 45%;
+    --destructive-foreground: 51 33% 97%;
+    --border: 60 2% 18%; /* Border Dark */
+    --input: 60 2% 18%;
+    --ring: 51 12% 74%; /* Ring Deep #c2c0b6 */
 
-    /* Chart colors - adjusted for dark mode */
-    --chart-1: #ff8e50;
-    --chart-2: #60a5fa;
-    --chart-3: #34d399;
-    --chart-4: #fbbf24;
+    --primary: 15 57% 52%;
+    --primary-foreground: 51 33% 97%;
+
+    /* Chart colors */
+    --chart-1: 15 57% 52%;
+    --chart-2: 211 40% 57%;
+    --chart-3: 160 40% 50%;
+    --chart-4: 45 40% 50%;
   }
 }
 
@@ -65,6 +71,12 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Anthropic Serif", Georgia, serif;
+    font-weight: 500;
   }
 }
 

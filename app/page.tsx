@@ -52,11 +52,11 @@ export default async function Home() {
                 AI-Powered Business Tools
               </Badge>
 
-              <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold tracking-tight leading-tight">
-                Launch, Grow <span className="text-primary">&amp; Scale</span> Your Business with AI
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium tracking-normal leading-[1.10]">
+                Launch, Grow <span className="text-anthropic-terracotta italic">&amp; Scale</span> Your Business with AI
               </h1>
 
-              <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
+              <p className="text-xl text-anthropic-charcoalWarm leading-relaxed max-w-xl">
                 Discover powerful AI tools designed to help you create content, generate images, write code, automate workflows, and make smarter business decisions — all in minutes.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed max-w-xl">
@@ -103,7 +103,7 @@ export default async function Home() {
         <div className="container">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-2">
-              <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">How Our AI Ecosystem Works</h2>
+              <h2 className="text-3xl md:text-5xl font-serif font-medium mb-6 text-foreground tracking-normal leading-[1.20]">How Our AI Ecosystem Works</h2>
               <p className="text-xl text-muted-foreground">A seamless pipeline from raw data to scalable growth.</p>
             </div>
           </ScrollReveal>
@@ -695,70 +695,82 @@ export default async function Home() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
 
       {/* Speed */}
-      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
-        <div className="mb-4 text-primary">
-          <Sparkles className="h-6 w-6" />
-        </div>
-        <h3 className="font-semibold text-lg mb-2">Faster Execution</h3>
-        <p className="text-sm text-muted-foreground">
-          Generate content, visuals, proposals, and workflows in minutes instead of waiting days.
-        </p>
-      </div>
+      <Card className="hover:shadow-md transition-all cursor-default">
+        <CardContent className="p-6">
+          <div className="mb-4 text-primary">
+            <Sparkles className="h-6 w-6" />
+          </div>
+          <h3 className="font-semibold text-lg mb-2 text-foreground">Faster Execution</h3>
+          <p className="text-sm text-muted-foreground">
+            Generate content, visuals, proposals, and workflows in minutes instead of waiting days.
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Flexibility */}
-      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
-        <div className="mb-4 text-primary">
-          <CheckCircle className="h-6 w-6" />
-        </div>
-        <h3 className="font-semibold text-lg mb-2">Unlimited Iteration</h3>
-        <p className="text-sm text-muted-foreground">
-          Experiment, refine, and test different versions without additional cost or dependency.
-        </p>
-      </div>
+      <Card className="hover:shadow-md transition-all cursor-default">
+        <CardContent className="p-6">
+          <div className="mb-4 text-primary">
+            <CheckCircle className="h-6 w-6" />
+          </div>
+          <h3 className="font-semibold text-lg mb-2 text-foreground">Unlimited Iteration</h3>
+          <p className="text-sm text-muted-foreground">
+            Experiment, refine, and test different versions without additional cost or dependency.
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Control */}
-      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
-        <div className="mb-4 text-primary">
-          <Zap className="h-6 w-6" />
-        </div>
-        <h3 className="font-semibold text-lg mb-2">Greater Control</h3>
-        <p className="text-sm text-muted-foreground">
-          Maintain ownership of your ideas while using AI as an intelligent assistant for execution.
-        </p>
-      </div>
+      <Card className="hover:shadow-md transition-all cursor-default">
+        <CardContent className="p-6">
+          <div className="mb-4 text-primary">
+            <Zap className="h-6 w-6" />
+          </div>
+          <h3 className="font-semibold text-lg mb-2 text-foreground">Greater Control</h3>
+          <p className="text-sm text-muted-foreground">
+            Maintain ownership of your ideas while using AI as an intelligent assistant for execution.
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Cost Efficiency */}
-      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
-        <div className="mb-4 text-primary">
-          <Target className="h-6 w-6" />
-        </div>
-        <h3 className="font-semibold text-lg mb-2">Cost Efficiency</h3>
-        <p className="text-sm text-muted-foreground">
-          Reduce repetitive work and allocate budgets more strategically.
-        </p>
-      </div>
+      <Card className="hover:shadow-md transition-all cursor-default">
+        <CardContent className="p-6">
+          <div className="mb-4 text-primary">
+            <Target className="h-6 w-6" />
+          </div>
+          <h3 className="font-semibold text-lg mb-2 text-foreground">Cost Efficiency</h3>
+          <p className="text-sm text-muted-foreground">
+            Reduce repetitive work and allocate budgets more strategically.
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Scalability */}
-      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
-        <div className="mb-4 text-primary">
-          <TrendingUp className="h-6 w-6" />
-        </div>
-        <h3 className="font-semibold text-lg mb-2">Scalable Workflows</h3>
-        <p className="text-sm text-muted-foreground">
-          Use AI tools to handle increasing workloads without expanding your team immediately.
-        </p>
-      </div>
+      <Card className="hover:shadow-md transition-all cursor-default">
+        <CardContent className="p-6">
+          <div className="mb-4 text-primary">
+            <TrendingUp className="h-6 w-6" />
+          </div>
+          <h3 className="font-semibold text-lg mb-2 text-foreground">Scalable Workflows</h3>
+          <p className="text-sm text-muted-foreground">
+            Use AI tools to handle increasing workloads without expanding your team immediately.
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Collaboration */}
-      <div className="p-6 rounded-xl bg-background border hover:shadow-md transition-all">
-        <div className="mb-4 text-primary">
-          <Users className="h-6 w-6" />
-        </div>
-        <h3 className="font-semibold text-lg mb-2">Works Alongside Teams</h3>
-        <p className="text-sm text-muted-foreground">
-          AI tools complement agencies, consultants, and internal teams — enhancing productivity, not replacing expertise.
-        </p>
-      </div>
+      <Card className="hover:shadow-md transition-all cursor-default">
+        <CardContent className="p-6">
+          <div className="mb-4 text-primary">
+            <Users className="h-6 w-6" />
+          </div>
+          <h3 className="font-semibold text-lg mb-2 text-foreground">Works Alongside Teams</h3>
+          <p className="text-sm text-muted-foreground">
+            AI tools complement agencies, consultants, and internal teams — enhancing productivity, not replacing expertise.
+          </p>
+        </CardContent>
+      </Card>
 
     </div>
 

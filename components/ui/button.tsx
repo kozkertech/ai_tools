@@ -5,25 +5,28 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[12px] text-base font-sans font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-anthropic-focus disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-[0_0_0_1px_transparent,0_0_0_0_transparent]",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-anthropic-terracotta text-anthropic-ivory hover:brightness-110 shadow-[0_0_0_1px_#c96442,0_2px_8px_rgba(201,100,66,0.2)]", // Primary CTA
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-anthropic-error text-anthropic-ivory hover:brightness-110 shadow-[0_0_0_1px_#b53333]",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-anthropic-borderWarm bg-transparent hover:bg-anthropic-ivory text-anthropic-charcoalWarm",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-anthropic-warmSand text-anthropic-charcoalWarm hover:translate-y-[-1px] shadow-[0_0_0_1px_#e8e6dc] hover:shadow-[0_0_0_1px_#d1cfc5]", // The workhorse warm button
+        ghost: "hover:bg-anthropic-warmSand text-anthropic-charcoalWarm",
+        link: "text-anthropic-charcoalWarm underline-offset-4 hover:underline",
+        white: "bg-anthropic-white text-anthropic-nearBlack rounded-[12px] hover:bg-anthropic-warmSand shadow-[0_1px_2px_rgba(0,0,0,0.05)]", // White surface
+        dark: "bg-anthropic-nearBlack text-anthropic-warmSilver border border-anthropic-borderDark hover:bg-anthropic-darkSurface", // Dark primary
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "px-[16px] py-[8px]",
+        sm: "h-9 rounded-[8px] px-[12px] text-sm",
+        lg: "px-[20px] py-[10px] text-lg rounded-[16px]",
+        icon: "h-10 w-10 rounded-[8px]",
+        asymmetric: "pl-[8px] pr-[12px] py-[6px] rounded-[8px]", // Icon-first layout from DESIGN.md
       },
     },
     defaultVariants: {

@@ -26,9 +26,8 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#FF6E30",
-          foreground: "#FFFFFF",
-          dark: "#E05A20", // Darker shade for hover states
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -53,6 +52,30 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // Anthropic Claude Palette
+        anthropic: {
+          nearBlack: "#141413",
+          terracotta: "#c96442",
+          coral: "#d97757",
+          error: "#b53333",
+          focus: "#3898ec",
+          parchment: "#f5f4ed",
+          ivory: "#faf9f5",
+          white: "#ffffff",
+          warmSand: "#e8e6dc",
+          darkSurface: "#30302e",
+          charcoalWarm: "#4d4c48",
+          oliveGray: "#5e5d59",
+          stoneGray: "#87867f",
+          darkWarm: "#3d3d3a",
+          warmSilver: "#b0aea5",
+          borderCream: "#f0eee6",
+          borderWarm: "#e8e6dc",
+          borderDark: "#30302e",
+          ringWarm: "#d1cfc5",
+          ringSubtle: "#dedc01",
+          ringDeep: "#c2c0b6",
         },
         // Chart colors
         chart: {

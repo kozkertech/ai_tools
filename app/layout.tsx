@@ -71,6 +71,9 @@ export const metadata: Metadata = {
     generator: 'v0.dev'
 }
 
+import { Container } from "@/components/ui/Container"
+import { Section } from "@/components/ui/Section"
+
 export default function RootLayout({
   children,
 }: {
@@ -81,9 +84,15 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <Suspense fallback={null}>
-              <div className="flex min-h-screen flex-col">
+              <div className="flex min-h-screen flex-col bg-background">
                 <Header />
-                <main className="flex-1">{children}</main>
+                <main className="flex-1">
+                  <Section className="py-8 md:py-16">
+                    <Container>
+                      {children}
+                    </Container>
+                  </Section>
+                </main>
                 <Footer />
               </div>
               <Analytics />
