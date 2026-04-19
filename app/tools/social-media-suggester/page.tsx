@@ -212,7 +212,7 @@ export default function CaptionGenerator() {
     }
 
     try {
-      const res = await fetch("https://n8n.srv832341.hstgr.cloud/webhook-test/caption-generator", {
+      const res = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/caption-generator", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
