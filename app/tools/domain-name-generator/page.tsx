@@ -26,8 +26,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
 
-import { DomainLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
 interface FormDataState {
   name: string
   email: string
@@ -105,10 +103,6 @@ export default function DomainCheckerPage() {
   const [favorites, setFavorites] = useState<string[]>([])
   const [searchHistory, setSearchHistory] = useState<string[]>([])
   const { toast } = useToast()
-
-  if (isLoading) {    
-        return < DomainLoadingScreen />  
-    }
 
   const validateForm = (): boolean => {
     const newErrors: Partial<FormDataState> = {}
@@ -351,94 +345,110 @@ export default function DomainCheckerPage() {
     })
   }
 
+  const renderSkeleton = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+        <Card key={i} className="animate-pulse shadow-sm rounded-xl overflow-hidden" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
+          <CardContent className="p-5 h-40 flex flex-col justify-between">
+            <div>
+              <div className="w-1/3 h-5 bg-gray-200 dark:bg-gray-700 rounded-full mb-4"></div>
+              <div className="w-3/4 h-8 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+            </div>
+            <div className="flex justify-end gap-2 mt-auto">
+                <div className="w-20 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                <div className="w-24 h-8 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+
+  const renderEmptyState = () => (
+    <div className="text-center py-20 px-4 w-full animate-in fade-in duration-700">
+      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 mx-auto shadow-sm" style={{ backgroundColor: colors.cardBackground, border: `1px solid ${colors.border}` }}>
+        <Globe className="w-8 h-8 opacity-40 text-gray-400" />
+      </div>
+      <h3 className="text-2xl md:text-3xl font-bold mb-3 font-['Poppins'] tracking-tight" style={{ color: colors.textPrimary }}>Start your search</h3>
+      <p className="text-lg max-w-lg mx-auto leading-relaxed" style={{ color: colors.textSecondary }}>
+        Enter a keyword, business name, or idea in the search box above to instantly generate matching domain suggestions.
+      </p>
+    </div>
+  )
+
   const renderDomainCard = (result: DomainAPIResult, index: number) => (
     <Card
       key={index}
-      className="transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg cursor-pointer border"
+      className="transition-all duration-300 ease-out transform hover:-translate-y-1 hover:shadow-xl rounded-xl overflow-hidden border cursor-pointer"
       style={{ 
         backgroundColor: colors.cardBackground,
         borderColor: colors.border
       }}
       onClick={() => handleDomainCardClick(result)}
     >
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-2">
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between mb-4">
           <Badge
             variant={result.Availability === "Available" ? "default" : "secondary"}
             className={`${
               result.Availability === "Available"
-                ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100 dark:border-green-800"
-                : "bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-100 dark:border-red-800"
-            } flex items-center gap-1 text-xs font-medium`}
+                ? "bg-green-100/90 text-green-700 border-green-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-800"
+                : "bg-red-100/90 text-red-700 border-red-200 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800"
+            } flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full`}
           >
-            {result.Availability === "Available" ? <CheckCircle size={12} /> : <XCircle size={12} />}
+            {result.Availability === "Available" ? <CheckCircle size={14} className="opacity-80" /> : <XCircle size={14} className="opacity-80" />}
             {result.Availability}
           </Badge>
           <Button
-            variant="ghost"
-            size="icon"
-            className="w-6 h-6 transition-colors"
-            style={{ 
-              color: favorites.includes(result.Domain) ? colors.accent : colors.textTertiary 
-            }}
-            onClick={(e) => {
-              e.stopPropagation()
-              toggleFavorite(result.Domain)
-            }}
+             variant="ghost"
+             size="icon"
+             className={`w-8 h-8 rounded-full transition-colors ${favorites.includes(result.Domain) ? 'bg-orange-50 dark:bg-orange-900/20' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+             style={{ color: favorites.includes(result.Domain) ? colors.accent : colors.textTertiary }}
+             onClick={(e) => {
+               e.stopPropagation()
+               toggleFavorite(result.Domain)
+             }}
           >
-            <Heart
-              size={14}
-              className={`transition-all ${
-                favorites.includes(result.Domain) ? "fill-current" : ""
-              }`}
-            />
+            <Heart size={16} className={`transition-all ${favorites.includes(result.Domain) ? "fill-current" : ""}`} />
           </Button>
         </div>
-        <h3 className="font-semibold text-lg mb-2 break-all leading-tight font-['Poppins']" style={{ color: colors.textPrimary }}>
+        
+        <h3 className="font-bold text-xl mb-6 break-all leading-tight font-['Poppins'] tracking-tight" style={{ color: colors.textPrimary }}>
           {result.Domain}
         </h3>
-        <div className="flex gap-2 mt-3">
+        
+        <div className="flex gap-2 mt-auto justify-end">
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 text-xs py-2 px-4 font-medium transition-colors"
+            className="text-xs px-4 rounded-full font-medium transition-all shadow-sm"
             style={{ 
               borderColor: colors.border,
               color: colors.textSecondary,
               backgroundColor: 'transparent'
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.hoverBackground
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent'
-            }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.hoverBackground }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}
             onClick={(e) => {
               e.stopPropagation()
               copyToClipboard(result.Domain)
             }}
           >
-            <Copy size={12} className="mr-1" /> Copy
+            <Copy size={13} className="mr-2" /> Copy
           </Button>
           {result.Availability === "Available" && (
             <Button
               size="sm"
-              className="flex-1 text-white text-xs py-2 px-4 font-semibold rounded transition-colors"
-              style={{ 
-                backgroundColor: colors.accent,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.accentHover
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = colors.accent
-              }}
+              className="text-white text-xs px-5 rounded-full font-bold transition-all shadow-md hover:shadow-lg"
+              style={{ backgroundColor: colors.accent }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.accentHover }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = colors.accent }}
               onClick={(e) => {
                 e.stopPropagation()
                 handleDomainCardClick(result)
               }}
             >
-              <ExternalLink size={12} className="mr-1" /> Buy
+              <ExternalLink size={13} className="mr-2" /> Buy
             </Button>
           )}
         </div>
@@ -449,96 +459,71 @@ export default function DomainCheckerPage() {
   const renderDomainRow = (result: DomainAPIResult, index: number) => (
     <div
       key={index}
-      className="flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-all duration-300"
+      className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-xl border cursor-pointer transition-all duration-200 hover:shadow-md"
       style={{ 
         backgroundColor: colors.cardBackground,
         borderColor: colors.border
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = colors.hoverBackground
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = colors.cardBackground
-      }}
+      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.hoverBackground }}
+      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = colors.cardBackground }}
       onClick={() => handleDomainCardClick(result)}
     >
-      <div className="flex items-center gap-4 flex-1 min-w-0">
+      <div className="flex items-center gap-5 flex-1 min-w-0 mb-4 sm:mb-0">
         <Badge
           variant={result.Availability === "Available" ? "default" : "secondary"}
           className={`${
             result.Availability === "Available"
-              ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100 dark:border-green-800"
-              : "bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-100 dark:border-red-800"
-          } flex items-center gap-1 text-xs font-medium shrink-0`}
+              ? "bg-green-100/90 text-green-700 border-green-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-800"
+              : "bg-red-100/90 text-red-700 border-red-200 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800"
+          } flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full shrink-0`}
         >
-          {result.Availability === "Available" ? <CheckCircle size={12} /> : <XCircle size={12} />}
+          {result.Availability === "Available" ? <CheckCircle size={14} /> : <XCircle size={14} />}
           {result.Availability}
         </Badge>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-lg break-all font-['Poppins']" style={{ color: colors.textPrimary }}>{result.Domain}</h3>
+          <h3 className="font-bold text-lg xl:text-xl break-all font-['Poppins'] tracking-tight" style={{ color: colors.textPrimary }}>{result.Domain}</h3>
         </div>
       </div>
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex flex-wrap items-center gap-2 shrink-0">
         <Button
           variant="ghost"
           size="icon"
-          className="w-8 h-8 transition-colors"
-          style={{ 
-            color: favorites.includes(result.Domain) ? colors.accent : colors.textTertiary 
-          }}
+          className="w-9 h-9 rounded-full transition-colors"
+          style={{ color: favorites.includes(result.Domain) ? colors.accent : colors.textTertiary }}
           onClick={(e) => {
             e.stopPropagation()
             toggleFavorite(result.Domain)
           }}
         >
-          <Heart
-            size={16}
-            className={`transition-all ${
-              favorites.includes(result.Domain) ? "fill-current" : ""
-            }`}
-          />
+          <Heart size={18} className={`transition-all ${favorites.includes(result.Domain) ? "fill-current" : ""}`} />
         </Button>
         <Button
           variant="outline"
           size="sm"
-          className="font-medium transition-colors"
-          style={{ 
-            borderColor: colors.border,
-            color: colors.textSecondary,
-            backgroundColor: 'transparent'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = colors.hoverBackground
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent'
-          }}
+          className="font-medium rounded-full px-4 transition-colors shadow-sm"
+          style={{ borderColor: colors.border, color: colors.textSecondary, backgroundColor: 'transparent' }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.hoverBackground }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}
           onClick={(e) => {
             e.stopPropagation()
             copyToClipboard(result.Domain)
           }}
         >
-          <Copy size={14} className="mr-1" /> Copy
+          <Copy size={14} className="mr-2" /> Copy
         </Button>
         {result.Availability === "Available" && (
           <Button
             size="sm"
-            className="text-white font-semibold rounded px-4 transition-colors"
-            style={{ 
-              backgroundColor: colors.accent,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.accentHover
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.accent
-            }}
+            className="text-white font-bold rounded-full px-6 transition-all shadow-md hover:shadow-lg"
+            style={{ backgroundColor: colors.accent }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.accentHover }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = colors.accent }}
             onClick={(e) => {
               e.stopPropagation()
               handleDomainCardClick(result)
             }}
           >
-            <ExternalLink size={14} className="mr-1" /> Buy
+            <ExternalLink size={14} className="mr-2" /> Buy
           </Button>
         )}
       </div>
@@ -546,361 +531,217 @@ export default function DomainCheckerPage() {
   )
 
   return (
-    <div className="min-h-screen w-full font-['Inter'] transition-colors duration-200" style={{ backgroundColor: colors.background }}>
-      {/* Header Section with Gradient */}
-      <div
-        className="w-full p-4 md:p-8 flex flex-col items-center"
-        style={{ background: colors.headerBackground }}
+    <div className="min-h-screen w-full font-sans transition-colors duration-200" style={{ backgroundColor: colors.background }}>
+      {/* Hero Section */}
+      <div 
+        className="w-full pt-16 pb-12 px-4 md:px-8 border-b"
+        style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}
       >
-        <header className="text-center mb-8 md:mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4" style={{ backgroundColor: colors.accent }}>
-            <Globe className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 font-['Poppins']" style={{ color: colors.textPrimary }}>Domain Name Genie</h1>
-          <p className="text-lg md:text-xl" style={{ color: colors.textSecondary }}>Find your perfect domain with a touch of magic!</p>
-        </header>
+        <div className="max-w-4xl mx-auto text-center space-y-6">
+            <div className="inline-flex items-center justify-center p-3.5 rounded-2xl mb-2 shadow-sm" style={{ backgroundColor: `${colors.accent}15`, color: colors.accent }}>
+              <Globe className="w-8 h-8" />
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight font-['Poppins']" style={{ color: colors.textPrimary }}>
+              Domain Name <span style={{ color: colors.accent }}>Genie</span>
+            </h1>
+            <p className="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium" style={{ color: colors.textSecondary }}>
+              Generate premium, brandable domain names powered by AI instantly. 
+            </p>
 
-        <Card className="w-full max-w-2xl mb-8 md:mb-12 border shadow-lg transition-colors" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
-          <CardHeader>
-            <CardTitle className="text-2xl font-semibold flex items-center gap-2 font-['Poppins']" style={{ color: colors.textPrimary }}>
-              <Search style={{ color: colors.accent }} />
-              Uncover Your Domain
-            </CardTitle>
-            <CardDescription style={{ color: colors.textSecondary }}>Enter your details to generate domain ideas.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="flex items-center gap-1.5 font-medium" style={{ color: colors.textPrimary }}>
-                    <User size={16} style={{ color: colors.accent }} /> Name
-                  </Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Your Name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className={`transition-colors ${
-                      errors.name ? "border-red-400 ring-red-400" : ""
-                    }`}
-                    style={{ 
-                      backgroundColor: colors.inputBackground,
-                      borderColor: errors.name ? '#F87171' : colors.border,
-                      color: colors.textPrimary
-                    }}
-                  />
-                  {errors.name && (
-                    <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                      <AlertTriangle size={14} />
-                      {errors.name}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="flex items-center gap-1.5 font-medium" style={{ color: colors.textPrimary }}>
-                    <Mail size={16} style={{ color: colors.accent }} /> Email
-                  </Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="your.email@example.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className={`transition-colors ${
-                      errors.email ? "border-red-400 ring-red-400" : ""
-                    }`}
-                    style={{ 
-                      backgroundColor: colors.inputBackground,
-                      borderColor: errors.email ? '#F87171' : colors.border,
-                      color: colors.textPrimary
-                    }}
-                  />
-                  {errors.email && (
-                    <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                      <AlertTriangle size={14} />
-                      {errors.email}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="keywords" className="font-medium" style={{ color: colors.textPrimary }}>
-                  Keywords / Business Description
-                </Label>
-                <Textarea
-                  id="keywords"
-                  name="keywords"
-                  placeholder="e.g., artisanal bakery, AI-powered travel, sustainable pet food..."
-                  value={formData.keywords}
-                  onChange={handleInputChange}
-                  className={`min-h-[100px] transition-colors ${
-                    errors.keywords ? "border-red-400 ring-red-400" : ""
-                  }`}
-                  style={{ 
-                    backgroundColor: colors.inputBackground,
-                    borderColor: errors.keywords ? '#F87171' : colors.border,
-                    color: colors.textPrimary
-                  }}
-                />
-                {errors.keywords && (
-                  <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                    <AlertTriangle size={14} />
-                    {errors.keywords}
-                  </p>
-                )}
-              </div>
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full text-lg py-4 px-4 text-white font-semibold rounded transition-all duration-300 ease-in-out transform hover:scale-105"
-                style={{ 
-                  backgroundColor: colors.accent,
-                }}
-                onMouseEnter={(e) => {
-                  if (!isLoading) {
-                    e.currentTarget.style.backgroundColor = colors.accentHover
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isLoading) {
-                    e.currentTarget.style.backgroundColor = colors.accent
-                  }
-                }}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Conjuring Domains...
-                  </>
-                ) : (
-                  <>
-                    <Search className="w-5 h-5 mr-2" />
-                    Find My Domain
-                  </>
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+            <Card className="mt-8 md:mt-12 w-full shadow-xl rounded-2xl overflow-hidden border" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
+                <CardContent className="p-6 md:p-8">
+                    <form onSubmit={handleSubmit} className="space-y-6 text-left">
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="name" className="text-xs font-bold tracking-wider uppercase" style={{ color: colors.textSecondary }}>NAME</Label>
+                                <Input
+                                    id="name" name="name" type="text"
+                                    placeholder="Enter your name"
+                                    value={formData.name} onChange={handleInputChange}
+                                    className={`rounded-xl h-12 transition-all shadow-sm ${errors.name ? "border-red-400 ring-2 ring-red-100" : ""}`}
+                                    style={{ 
+                                        backgroundColor: colors.inputBackground,
+                                        borderColor: errors.name ? '#F87171' : colors.border,
+                                        color: colors.textPrimary
+                                    }}
+                                />
+                                {errors.name && <p className="text-xs text-red-500 font-bold flex items-center gap-1 mt-1"><AlertTriangle size={12} />{errors.name}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="email" className="text-xs font-bold tracking-wider uppercase" style={{ color: colors.textSecondary }}>EMAIL</Label>
+                                <Input
+                                    id="email" name="email" type="email"
+                                    placeholder="your@email.com"
+                                    value={formData.email} onChange={handleInputChange}
+                                    className={`rounded-xl h-12 transition-all shadow-sm ${errors.email ? "border-red-400 ring-2 ring-red-100" : ""}`}
+                                    style={{ 
+                                        backgroundColor: colors.inputBackground,
+                                        borderColor: errors.email ? '#F87171' : colors.border,
+                                        color: colors.textPrimary
+                                    }}
+                                />
+                                {errors.email && <p className="text-xs text-red-500 font-bold flex items-center gap-1 mt-1"><AlertTriangle size={12} />{errors.email}</p>}
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="keywords" className="text-xs font-bold tracking-wider uppercase" style={{ color: colors.textSecondary }}>KEYWORDS OR DESCRIPTION</Label>
+                            <Textarea
+                                id="keywords" name="keywords"
+                                placeholder="Enter keywords (e.g. tech, food, AI...) or describe your business"
+                                value={formData.keywords} onChange={handleInputChange}
+                                className={`min-h-[120px] rounded-xl p-4 transition-all text-base leading-relaxed shadow-inner ${errors.keywords ? "border-red-400 ring-2 ring-red-100" : ""}`}
+                                style={{ 
+                                    backgroundColor: colors.inputBackground,
+                                    borderColor: errors.keywords ? '#F87171' : colors.border,
+                                    color: colors.textPrimary
+                                }}
+                            />
+                            {errors.keywords && <p className="text-xs text-red-500 font-bold flex items-center gap-1 mt-1"><AlertTriangle size={12} />{errors.keywords}</p>}
+                        </div>
+
+                        <Button
+                            type="submit" disabled={isLoading}
+                            className={`w-full h-14 text-lg text-white font-bold rounded-xl transition-all duration-300 ${isLoading ? 'opacity-80 cursor-not-allowed' : 'shadow-lg hover:-translate-y-0.5'}`}
+                            style={{ backgroundColor: colors.accent, ...(!isLoading ? { boxShadow: `0 8px 24px -4px ${colors.accent}` } : {}) }}
+                            onMouseEnter={(e) => { if (!isLoading) e.currentTarget.style.backgroundColor = colors.accentHover }}
+                            onMouseLeave={(e) => { if (!isLoading) e.currentTarget.style.backgroundColor = colors.accent }}
+                        >
+                            {isLoading ? (
+                                <><Loader2 className="w-6 h-6 mr-3 animate-spin" /> Generating Domains...</>
+                            ) : (
+                                <><Search className="w-6 h-6 mr-3" /> Generate Domains</>
+                            )}
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="w-full p-4 md:p-8 flex flex-col items-center">
+      <div className="w-full max-w-6xl mx-auto px-4 py-12 md:py-16">
+        
+        {/* Errors & Raw Responses */}
         {apiError && (
-          <Card className="w-full max-w-2xl mb-8 md:mb-12 border transition-colors" style={{ backgroundColor: colors.errorBackground, borderColor: colors.errorBorder }}>
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold flex items-center gap-2 font-['Poppins']" style={{ color: colors.error }}>
-                <AlertTriangle /> API Error
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p style={{ color: colors.error }}>{apiError}</p>
-            </CardContent>
-          </Card>
+          <div className="mb-10 p-6 rounded-xl border border-red-200 bg-red-50 dark:bg-red-900/10 dark:border-red-800/30">
+            <h3 className="text-lg font-bold text-red-600 flex items-center gap-2 mb-2"><AlertTriangle size={18} /> API Error</h3>
+            <p className="text-red-700 dark:text-red-400 font-medium">{apiError}</p>
+          </div>
         )}
 
-        {rawApiResponse && domainResults.length === 0 && (
-          <Card className="w-full max-w-2xl mb-8 md:mb-12 border transition-colors" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold font-['Poppins']" style={{ color: colors.textPrimary }}>Raw API Response</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <pre className="text-sm whitespace-pre-wrap break-all max-h-60 overflow-y-auto p-4 rounded-md transition-colors" style={{ 
-                color: colors.textSecondary,
-                backgroundColor: colors.hoverBackground
-              }}>
-                {rawApiResponse}
-              </pre>
-            </CardContent>
-          </Card>
+        {rawApiResponse && domainResults.length === 0 && !isLoading && !apiError && (
+            <Card className="mb-10 rounded-xl shadow-sm border overflow-hidden" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
+                <CardHeader className="border-b" style={{ borderColor: `${colors.border}40` }}>
+                    <CardTitle className="text-lg font-bold" style={{ color: colors.textPrimary }}>Raw Output Diagnostics</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                    <pre className="text-sm p-6 overflow-x-auto" style={{ color: colors.textSecondary, backgroundColor: colors.hoverBackground }}>
+                        {rawApiResponse}
+                    </pre>
+                </CardContent>
+            </Card>
         )}
 
-        {domainResults.length > 0 && (
-          <section className="w-full max-w-7xl mb-8 md:mb-12">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        {/* Loading State inline */}
+        {isLoading && (
+            <div className="w-full pt-4">
+                <div className="flex gap-4 mb-8 max-w-lg">
+                   <div className="w-24 h-10 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse transition-colors" style={{ backgroundColor: colors.border }}></div>
+                   <div className="w-24 h-10 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse transition-colors" style={{ backgroundColor: colors.border }}></div>
+                   <div className="w-24 h-10 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse transition-colors" style={{ backgroundColor: colors.border }}></div>
+                </div>
+                {renderSkeleton()}
+            </div>
+        )}
+
+        {/* Results Area */}
+        {!isLoading && domainResults.length > 0 && (
+          <section className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10">
               <div>
-                <h2 className="text-3xl font-bold mb-2 font-['Poppins']" style={{ color: colors.textPrimary }}>Domain Suggestions</h2>
-                <p style={{ color: colors.textSecondary }}>
-                  Showing {filteredDomains.length} of {domainResults.length} domains
+                <h2 className="text-2xl md:text-3xl font-extrabold mb-1 font-['Poppins'] tracking-tight" style={{ color: colors.textPrimary }}>
+                    Generated Domains
+                </h2>
+                <p className="font-medium" style={{ color: colors.textSecondary }}>
+                  Showing {filteredDomains.length} outstanding choices
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                <div className="relative">
-                  <Input
-                    placeholder="Search domains..."
-                    value={searchFilter}
-                    onChange={(e) => setSearchFilter(e.target.value)}
-                    className="pr-10 transition-colors"
-                    style={{ 
-                      backgroundColor: colors.inputBackground,
-                      borderColor: colors.border,
-                      color: colors.textPrimary
-                    }}
-                  />
-                  <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: colors.textSecondary }} />
+
+              {/* Filters & Toggles */}
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                
+                {/* Visual Mock Ext Chips */}
+                <div className="hidden md:flex gap-1.5 mr-2">
+                    {['.com', '.ai', '.io'].map(ext => (
+                        <div key={ext} className="px-3.5 py-1.5 text-xs font-bold rounded-full border opacity-50 cursor-not-allowed select-none transition-opacity" 
+                             style={{ color: colors.textSecondary, backgroundColor: colors.background, borderColor: colors.border }}>
+                            {ext}
+                        </div>
+                    ))}
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant={filterMode === "all" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setFilterMode("all")}
-                    className={`font-semibold px-4 rounded transition-colors ${
-                      filterMode === "all"
-                        ? "text-white"
-                        : ""
-                    }`}
-                    style={{ 
-                      backgroundColor: filterMode === "all" ? colors.accent : 'transparent',
-                      borderColor: colors.border,
-                      color: filterMode === "all" ? 'white' : colors.textSecondary
-                    }}
-                    onMouseEnter={(e) => {
-                      if (filterMode === "all") {
-                        e.currentTarget.style.backgroundColor = colors.accentHover
-                      } else {
-                        e.currentTarget.style.backgroundColor = colors.hoverBackground
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filterMode === "all") {
-                        e.currentTarget.style.backgroundColor = colors.accent
-                      } else {
-                        e.currentTarget.style.backgroundColor = 'transparent'
-                      }
-                    }}
-                  >
-                    All
-                  </Button>
-                  <Button
-                    variant={filterMode === "available" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setFilterMode("available")}
-                    className={`font-semibold px-4 rounded transition-colors ${
-                      filterMode === "available"
-                        ? "bg-green-600 hover:bg-green-700 text-white"
-                        : ""
-                    }`}
-                    style={{ 
-                      backgroundColor: filterMode === "available" ? '#059669' : 'transparent',
-                      borderColor: colors.border,
-                      color: filterMode === "available" ? 'white' : colors.textSecondary
-                    }}
-                    onMouseEnter={(e) => {
-                      if (filterMode === "available") {
-                        e.currentTarget.style.backgroundColor = '#047857'
-                      } else {
-                        e.currentTarget.style.backgroundColor = colors.hoverBackground
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filterMode === "available") {
-                        e.currentTarget.style.backgroundColor = '#059669'
-                      } else {
-                        e.currentTarget.style.backgroundColor = 'transparent'
-                      }
-                    }}
-                  >
-                    Available
-                  </Button>
-                  <Button
-                    variant={filterMode === "unavailable" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setFilterMode("unavailable")}
-                    className={`font-semibold px-4 rounded transition-colors ${
-                      filterMode === "unavailable"
-                        ? "bg-red-600 hover:bg-red-700 text-white"
-                        : ""
-                    }`}
-                    style={{ 
-                      backgroundColor: filterMode === "unavailable" ? '#DC2626' : 'transparent',
-                      borderColor: colors.border,
-                      color: filterMode === "unavailable" ? 'white' : colors.textSecondary
-                    }}
-                    onMouseEnter={(e) => {
-                      if (filterMode === "unavailable") {
-                        e.currentTarget.style.backgroundColor = '#B91C1C'
-                      } else {
-                        e.currentTarget.style.backgroundColor = colors.hoverBackground
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filterMode === "unavailable") {
-                        e.currentTarget.style.backgroundColor = '#DC2626'
-                      } else {
-                        e.currentTarget.style.backgroundColor = 'transparent'
-                      }
-                    }}
-                  >
-                    Unavailable
-                  </Button>
+
+                <div className="flex gap-1.5 items-center p-1.5 rounded-full shadow-inner w-full sm:w-auto" style={{ backgroundColor: colors.hoverBackground }}>
+                    {["all", "available", "unavailable"].map((mode) => (
+                        <Button
+                            key={mode}
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setFilterMode(mode as FilterMode)}
+                            className={`rounded-full px-5 font-bold transition-all duration-300 capitalize text-xs md:text-sm h-8 ${
+                                filterMode === mode ? "shadow-sm bg-white text-gray-900 dark:bg-gray-700 dark:text-white" : ""
+                            }`}
+                            style={filterMode !== mode ? { color: colors.textSecondary } : {}}
+                        >
+                            {mode}
+                        </Button>
+                    ))}
                 </div>
-                <div className="flex gap-1 rounded-lg p-1 transition-colors" style={{ backgroundColor: colors.hoverBackground }}>
+                
+                <div className="flex gap-1 rounded-full p-1 border shadow-sm w-full sm:w-auto justify-center" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setViewMode("grid")}
-                    className={`transition-colors ${
-                      viewMode === "grid" ? "shadow-sm" : ""
-                    }`}
+                    variant="ghost" size="icon" onClick={() => setViewMode("grid")}
+                    className={`rounded-full w-8 h-8 transition-colors`}
                     style={{ 
-                      backgroundColor: viewMode === "grid" ? colors.cardBackground : 'transparent',
-                      color: viewMode === "grid" ? colors.accent : colors.textSecondary
+                        color: viewMode === "grid" ? colors.accent : colors.textTertiary,
+                        backgroundColor: viewMode === "grid" ? colors.hoverBackground : 'transparent'
                     }}
                   >
-                    <Grid size={16} />
+                    <Grid size={15} />
                   </Button>
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setViewMode("list")}
-                    className={`transition-colors ${
-                      viewMode === "list" ? "shadow-sm" : ""
-                    }`}
+                    variant="ghost" size="icon" onClick={() => setViewMode("list")}
+                    className={`rounded-full w-8 h-8 transition-colors`}
                     style={{ 
-                      backgroundColor: viewMode === "list" ? colors.cardBackground : 'transparent',
-                      color: viewMode === "list" ? colors.accent : colors.textSecondary
+                        color: viewMode === "list" ? colors.accent : colors.textTertiary,
+                        backgroundColor: viewMode === "list" ? colors.hoverBackground : 'transparent'
                     }}
                   >
-                    <List size={16} />
+                    <List size={15} />
                   </Button>
                 </div>
               </div>
             </div>
-            <div className="max-h-[70vh] overflow-y-auto">
+
+            <div className="w-full">
               {viewMode === "grid" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredDomains.map((result, index) => renderDomainCard(result, index))}
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4 max-w-4xl mx-auto">
                   {filteredDomains.map((result, index) => renderDomainRow(result, index))}
                 </div>
               )}
             </div>
-            {filteredDomains.length === 0 && domainResults.length > 0 && (
-              <div className="text-center py-8">
-                <p className="text-lg" style={{ color: colors.textSecondary }}>No domains match your current filters.</p>
+
+            {filteredDomains.length === 0 && (
+              <div className="text-center py-16 px-4 border rounded-2xl border-dashed mt-8" style={{ borderColor: colors.border }}>
+                <p className="text-lg font-medium mb-5" style={{ color: colors.textSecondary }}>No domains match your current filters.</p>
                 <Button
-                  variant="outline"
-                  onClick={() => {
-                    setFilterMode("all")
-                    setSearchFilter("")
-                  }}
-                  className="mt-4 font-semibold px-4 rounded transition-colors"
-                  style={{ 
-                    borderColor: colors.border,
-                    color: colors.textSecondary,
-                    backgroundColor: 'transparent'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.hoverBackground
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent'
-                  }}
+                  variant="outline" onClick={() => { setFilterMode("all"); setSearchFilter(""); }}
+                  className="font-bold px-6 rounded-full transition-colors shadow-sm"
+                  style={{ borderColor: colors.border, color: colors.textPrimary, backgroundColor: colors.cardBackground }}
                 >
                   Clear Filters
                 </Button>
@@ -909,46 +750,46 @@ export default function DomainCheckerPage() {
           </section>
         )}
 
-        {searchHistory.length > 0 && (
-          <Card className="w-full max-w-2xl border transition-colors" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold flex items-center gap-2 font-['Poppins']" style={{ color: colors.textPrimary }}>
-                <History style={{ color: colors.accent }} /> Recent Searches
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {searchHistory.map((searchTerm, index) => (
-                  <Badge
-                    key={index}
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1 text-sm font-medium transition-colors"
-                    style={{ 
-                      backgroundColor: colors.hoverBackground,
-                      color: colors.textSecondary
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.border
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.hoverBackground
-                    }}
-                    onClick={() => {
-                      setFormData((prev) => ({ ...prev, keywords: searchTerm }))
-                      toast({ description: `Loaded search: "${searchTerm}"` })
-                    }}
-                  >
-                    {searchTerm}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        {/* Empty State */}
+        {!isLoading && domainResults.length === 0 && !apiError && !rawApiResponse && (
+            renderEmptyState()
         )}
 
-        <footer className="text-center mt-8 md:mt-12 text-sm" style={{ color: colors.textSecondary }}>
+        {/* History Area */}
+        {searchHistory.length > 0 && !isLoading && (
+            <div className="mt-20 pt-10 border-t flex flex-col items-center animate-in fade-in" style={{ borderColor: colors.border }}>
+                <div className="flex flex-col items-center w-full max-w-3xl">
+                    <h4 className="text-xs font-bold uppercase tracking-widest mb-6 flex items-center gap-2" style={{ color: colors.textSecondary }}>
+                        <History size={16} /> Recent Searches
+                    </h4>
+                    <div className="flex flex-wrap justify-center gap-3">
+                        {searchHistory.map((searchTerm, index) => (
+                        <div
+                            key={index}
+                            className="cursor-pointer px-4 py-2 rounded-full text-sm font-semibold transition-all border shadow-sm hover:-translate-y-0.5"
+                            style={{ 
+                                backgroundColor: colors.cardBackground,
+                                color: colors.textPrimary,
+                                borderColor: colors.border
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.hoverBackground; e.currentTarget.style.borderColor = colors.accent }}
+                            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = colors.cardBackground; e.currentTarget.style.borderColor = colors.border }}
+                            onClick={() => {
+                                setFormData((prev) => ({ ...prev, keywords: searchTerm }))
+                                window.scrollTo({ top: 0, behavior: 'smooth' })
+                                toast({ description: `Loaded search: "${searchTerm}"` })
+                            }}
+                        >
+                            {searchTerm}
+                        </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )}
+
+        <footer className="text-center mt-24 pt-8 border-t text-sm font-medium opacity-70" style={{ color: colors.textSecondary, borderColor: colors.border }}>
           <p>&copy; {new Date().getFullYear()} Domain Name Genie. All rights reserved.</p>
-          <p>Powered by Your Imagination & n8n!</p>
         </footer>
       </div>
     </div>
