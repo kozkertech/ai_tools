@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next"
-import { getAllPosts, getAllTags } from "@/lib/ghost"
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kozker.com"
 
   // Static pages
@@ -61,28 +60,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  try {
-    // Dynamic blog posts
-    const posts = await getAllPosts()
-    const postSitemap = posts.map((post) => ({
-      url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: new Date(post.updated_at || post.published_at),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    }))
-
-    // Dynamic tags
-    const tags = await getAllTags()
-    const tagSitemap = tags.map((tag) => ({
-      url: `${baseUrl}/tag/${tag.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.4,
-    }))
-
-    return [...staticSitemap, ...caseStudySitemap, ...postSitemap, ...tagSitemap]
-  } catch (error) {
-    console.error("Error generating sitemap:", error)
-    return [...staticSitemap, ...caseStudySitemap]
-  }
+  return [...staticSitemap, ...caseStudySitemap]
 }
