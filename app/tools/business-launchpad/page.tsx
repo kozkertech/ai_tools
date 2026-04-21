@@ -49,7 +49,7 @@ const NEXT_STEPS = [
 import { Globe, LayoutTemplate } from "lucide-react"
 
 // Configuration
-const WEBHOOK_URL = "https://n8n.srv832341.hstgr.cloud/webhook-test/business-launchpad-ai"
+const WEBHOOK_URL = "https://n8n.srv832341.hstgr.cloud/webhook/business-launchpad-ai"
 
 export default function BusinessLaunchpad() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
