@@ -156,39 +156,39 @@ export default function LaunchPadPage() {
               </CardContent>
             </Card>
 
-            {/* Tagline & UVP Creator */}
+            {/* Business Launchpad */}
             <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">
               <CardHeader className="p-0 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Target className="h-6 w-6 text-blue-600" />
+                    <Rocket className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <CardTitle>Tagline & UVP Creator</CardTitle>
-                    <Badge className="mt-1 bg-blue-100 text-blue-700 hover:bg-blue-200">Instant Output</Badge>
+                    <CardTitle>Business Launchpad</CardTitle>
+                    <Badge className="mt-1 bg-blue-100 text-blue-700 hover:bg-blue-200">Guided Assistant</Badge>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
                 <p className="text-muted-foreground mb-4">
-                  Craft compelling brand messaging and value propositions instantly
+                  A guided assistant to generate your business plan, name, tagline, and brand colors.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Generate in seconds</span>
+                    <span className="text-sm">Structured business plan</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Multiple tagline variations</span>
+                    <span className="text-sm">Brand naming ideas</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Customer-focused messaging</span>
+                    <span className="text-sm">Tagline and messaging generation</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm">Unlimited iterations</span>
+                    <span className="text-sm">Color palette picking</span>
                   </li>
                 </ul>
               </CardContent>
@@ -232,81 +232,7 @@ export default function LaunchPadPage() {
               </CardContent>
             </Card>
 
-            {/* AI Business Plan Generator */}
-            <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">
-              <CardHeader className="p-0 mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-6 w-6 text-orange-600" />
-                  </div>
-                  <div>
-                    <CardTitle>AI Business Plan Generator</CardTitle>
-                    <Badge className="mt-1 bg-orange-100 text-orange-700 hover:bg-orange-200">Comprehensive</Badge>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-0">
-                <p className="text-muted-foreground mb-4">
-                  Create a complete, structured business plan in minutes
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Executive summary generation</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Market analysis and positioning</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Financial projections</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Downloadable document</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
 
-            {/* Logo Color Palette Picker */}
-            <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">
-              <CardHeader className="p-0 mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
-                    <Palette className="h-6 w-6 text-pink-600" />
-                  </div>
-                  <div>
-                    <CardTitle>Brand Color Palette Generator</CardTitle>
-                    <Badge className="mt-1 bg-pink-100 text-pink-700 hover:bg-pink-200">Design</Badge>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-0">
-                <p className="text-muted-foreground mb-4">
-                  Generate professional color palettes for your brand identity
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-pink-500" />
-                    <span className="text-sm">Instant color palette generation</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-pink-500" />
-                    <span className="text-sm">Psychology-based recommendations</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-pink-500" />
-                    <span className="text-sm">Accessibility compliance checked</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-pink-500" />
-                    <span className="text-sm">Export as CSS/Hex codes</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
 
             {/* FAQ Builder */}
             <Card className="p-6 border-2 border-green-200/50 hover:border-green-500 transition-colors">

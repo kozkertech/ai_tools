@@ -31,7 +31,8 @@ import {
   Megaphone,
   Send,
   Clock,
-  X
+  X,
+  Rocket
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -54,19 +55,19 @@ const tools = [
     timeToValue: "immediate"
   },
   {
-    id: "tagline-creator",
-    name: "Tagline & Value-Prop Creator",
-    description: "Crafts a punchy tagline and 1-sentence UVP based on user inputs.",
-    icon: Type,
-    href: "/tools/tagline-value-prop-creator",
+    id: "business-launchpad",
+    name: "Business Launchpad",
+    description: "A guided assistant to generate your business plan, name, tagline, and brand colors.",
+    icon: Rocket,
+    href: "/tools/business-launchpad",
     status: "Available",
     category: "Branding",
     solution: "LaunchPad",
-    features: ["Punchy taglines", "Value propositions", "Brand messaging"],
-    keywords: ["tagline", "value proposition", "slogan", "messaging", "brand voice", "marketing copy", "branding"],
-    useCases: ["brand messaging", "marketing materials", "website copy", "brand identity", "startup branding"],
-    userPersonas: ["marketer", "business owner", "brand manager", "entrepreneur"],
-    businessStages: ["launch", "growth"],
+    features: ["AI business plan", "Brand name ideas", "Tagline generation", "Color palettes"],
+    keywords: ["business plan", "startup", "branding", "name generator", "colors", "launch"],
+    useCases: ["starting business", "rebranding", "startup launch"],
+    userPersonas: ["entrepreneur", "founder", "small business owner"],
+    businessStages: ["idea", "launch"],
     complexityLevel: "beginner",
     timeToValue: "immediate"
   },
@@ -137,23 +138,6 @@ const tools = [
     businessStages: ["growth", "scale"],
     complexityLevel: "beginner",
     timeToValue: "immediate"
-  },
-  {
-    id: "ai-business-plan-generator",
-    name: "AI Business Plan Generator",
-    description: "Effortless Business Planning with AI",
-    icon: Bot,
-    href: "/tools/ai-business-plan-generator",
-    status: "Available",
-    category: "Automation",
-    solution: "LaunchPad",
-    features: ["AI-powered business summaries", "Realistic financial projections", "Detailed end-to-end Business strategies"],
-    keywords: ["business plan", "startup", "strategy", "financial projections", "business model", "planning"],
-    useCases: ["startup planning", "investor pitch", "business strategy", "funding applications"],
-    userPersonas: ["entrepreneur", "startup founder", "business owner"],
-    businessStages: ["idea", "launch"],
-    complexityLevel: "intermediate",
-    timeToValue: "medium"
   },
   {
     id: "powerbi-generator",
@@ -290,23 +274,6 @@ const tools = [
     businessStages: ["launch", "growth"],
     complexityLevel: "intermediate",
     timeToValue: "short"
-  },
-  {
-    id: "logo-color-picker",
-    name: "Logo Color Palette Picker",
-    description: "Generate harmonious color palettes for your brand and logo design.",
-    icon: Palette,
-    href: "/tools/logo-color-palette-picker",
-    status: "Available",
-    category: "Branding",
-    solution: "LaunchPad",
-    features: ["Color harmony analysis", "Brand color schemes", "Accessibility compliance"],
-    keywords: ["logo", "colors", "branding", "design", "color palette", "brand identity", "visual design"],
-    useCases: ["brand design", "logo creation", "visual identity", "design system"],
-    userPersonas: ["designer", "business owner", "brand manager"],
-    businessStages: ["idea", "launch"],
-    complexityLevel: "beginner",
-    timeToValue: "immediate"
   },
   {
     id: "pricing-calculator",
