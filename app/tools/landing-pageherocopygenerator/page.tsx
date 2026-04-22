@@ -75,7 +75,7 @@ export default function LandingPageHeroCopyGenerator() {
     }
 
     try {
-      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook-test/landing-page-hero-generator", {
+      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/landing-page-hero-generator", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
