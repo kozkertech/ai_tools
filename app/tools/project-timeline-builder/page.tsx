@@ -1,568 +1,465 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Loader2, CheckCircle, XCircle, Calendar, Users, Briefcase, Copy, Clock, Target, Zap } from "lucide-react"
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Sparkles } from "lucide-react"
 
-interface FormData {
-  name: string
-  email: string
-  projectName: string
-  description: string
-  startDate: string
-  endDate: string
-  teamSize: string
-  projectType: string
+// Types
+export type AppMode = 'FORM' | 'LOADING' | 'DASHBOARD';
+export type Priority = 'critical' | 'high' | 'medium' | 'low';
+export type Severity = 'high' | 'medium' | 'low';
+
+export interface UserInfo {
+   name: string;
+   email: string;
 }
 
-interface Task {
-  id: number
-  name: string
-  duration: number
-  start: string
-  end: string
-  resource: string
-  dependencies: number[]
+export interface ProjectMetadata {
+   name: string;
+   type: string;
+   description: string;
+   startDate: string;
+   endDate: string;
+   teamSize: string;
+   complexity: string;
+   priority: string;
+   deliverables: string;
+   constraints: string;
+   successCriteria: string;
 }
 
-interface Phase {
-  phase: string
-  start: string
-  end: string
-  duration: number
-  tasks: number[]
+export interface Subtask {
+   name: string;
+   description: string;
+   owner: string;
+   durationDays: number;
 }
 
-interface Milestone {
-  name: string
-  date: string
-  type: string
+export interface Task {
+   name: string;
+   description: string;
+   priority: Priority;
+   critical: boolean;
+   owner: string;
+   startDate: string;
+   endDate: string;
+   durationDays: number;
+   dependencies: string[];
+   subtasks: Subtask[];
 }
 
-interface TimelineData {
-  tasks: Task[]
-  timeline: Phase[]
-  milestones: Milestone[]
-  gantt_data?: any
-  critical_path?: number[]
+export interface Phase {
+   name: string;
+   summary: string;
+   startDate: string;
+   endDate: string;
+   tasks: Task[];
 }
 
-interface WebhookResponse {
-  success?: boolean
-  message?: string
-  timeline?: any
-  output?: string
-  [key: string]: any
+export interface AIResponse {
+   success: boolean;
+   projectSummary: {
+      projectName: string;
+      projectType: string;
+      estimatedDuration: string;
+      recommendedTeamStructure: string;
+      mainGoal: string;
+      deliveryStrategy: string;
+      totalPhases: number;
+      totalTasks: number;
+      totalSubtasks: number;
+      totalMilestones: number;
+      criticalTasksCount: number;
+      highRiskCount: number;
+   };
+   goals: {
+      primaryGoal: string;
+      secondaryGoals: string[];
+      successCriteria: string[];
+   };
+   okrs: {
+      objective: string;
+      keyResults: string[];
+   }[];
+   kpis: {
+      name: string;
+      target: string;
+      frequency: string;
+      status: string;
+      notes: string;
+   }[];
+   phases: Phase[];
+   timeline: {
+      phase: string;
+      start: string;
+      end: string;
+      tasks: string[];
+   }[];
+   milestones: {
+      name: string;
+      targetDate: string;
+      relatedPhase: string;
+      importance: string;
+      successCondition: string;
+   }[];
+   dependencies: {
+      fromTask: string;
+      toTask: string;
+      type: string;
+      impact: string;
+   }[];
+   criticalPath: {
+      name: string;
+      phase: string;
+      reason: string;
+   }[];
+   risks: {
+      title: string;
+      severity: Severity;
+      impact: string;
+      mitigation: string;
+   }[];
+   prioritySummary: {
+      critical: number;
+      high: number;
+      medium: number;
+      low: number;
+   };
+   chartData: {
+      priorityDistribution: { name: string; value: number; color: string }[];
+      tasksPerPhase: { name: string; tasks: number }[];
+      timelineLoad: { name: string; load: number }[];
+      riskBreakdown: { name: string; value: number }[];
+   };
 }
 
-export default function ProjectTimelineBuilder() {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    projectName: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    teamSize: "",
-    projectType: "",
-  })
+// Components
+import { 
+   InputSection, 
+   LoadingView, 
+   DashboardToolbar, 
+   ProjectHero, 
+   ProjectMetricsGrid, 
+   VisualTimeline, 
+   WorkBreakdownSection, 
+   TaskPriorityBoard, 
+   VisualInsights, 
+   MilestonesSection, 
+   DependenciesSection, 
+   CriticalPathSection, 
+   StrategySection, 
+   RiskSection 
+} from "@/components/project-timeline-builder"
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [response, setResponse] = useState<WebhookResponse | null>(null)
-  const [parsedTimeline, setParsedTimeline] = useState<TimelineData | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+// Hooks
+import { useProjectPlanViewModel } from "@/hooks/useProjectPlanViewModel"
 
-  const parseTimelineOutput = (output: string): TimelineData | null => {
-    try {
-      // Extract JSON from markdown code block
-      const jsonMatch = output.match(/```json\n([\s\S]*?)\n```/)
-      let parsedData
+// --- Dashboard View Component ---
 
-      if (jsonMatch && jsonMatch[1]) {
-        parsedData = JSON.parse(jsonMatch[1])
-      } else {
-        // Try parsing directly if no code block
-        parsedData = JSON.parse(output)
-      }
+const DashboardView = ({
+   response,
+   setMode,
+   handleGenerate,
+   handleExportCSV
+}: {
+   response: AIResponse;
+   setMode: React.Dispatch<React.SetStateAction<AppMode>>;
+   handleGenerate: () => void;
+   handleExportCSV: () => void;
+}) => {
+   const viewModel = useProjectPlanViewModel(response);
 
-      // Validate and normalize the data structure
-      if (parsedData && typeof parsedData === "object") {
-        return {
-          tasks: Array.isArray(parsedData.tasks) ? parsedData.tasks : [],
-          timeline: Array.isArray(parsedData.timeline) ? parsedData.timeline : [],
-          milestones: Array.isArray(parsedData.milestones) ? parsedData.milestones : [],
-          gantt_data: parsedData.gantt_data || null,
-          critical_path: Array.isArray(parsedData.critical_path) ? parsedData.critical_path : [],
-        }
-      }
+   if (!viewModel) return null;
 
-      return null
-    } catch (error) {
-      console.error("Failed to parse timeline output:", error)
-      return null
-    }
-  }
+   const {
+      groupedTimelineRows,
+      tasksByPriority,
+      phasesWithMeta,
+      chartColors,
+      visibility
+   } = viewModel;
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }))
-  }
+   return (
+      <motion.div
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         className="space-y-12 sm:space-y-16 pb-32"
+      >
+         <DashboardToolbar 
+            setMode={setMode} 
+            handleGenerate={handleGenerate} 
+            handleExportCSV={handleExportCSV} 
+         />
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError(null)
-    setResponse(null)
-    setParsedTimeline(null)
+         <ProjectHero summary={response.projectSummary} />
+         
+         <ProjectMetricsGrid summary={response.projectSummary} />
 
-    try {
-      const webhookUrl = "https://n8n.srv832341.hstgr.cloud/webhook/project timeline builder"
+         {/* Timeline: Always full width, horizontal overflow allowed internally */}
+         <VisualTimeline 
+            groupedRows={groupedTimelineRows} 
+            chartColors={chartColors.priority} 
+         />
 
-      const res = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
+         {/* Work Breakdown & Priority: Dynamic Layout */}
+         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className={visibility.showPriorityBoard ? "lg:col-span-8" : "lg:col-span-12"}>
+               <WorkBreakdownSection 
+                  phases={phasesWithMeta} 
+                  priorityColors={chartColors.priority} 
+               />
+            </div>
 
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`)
-      }
+            {visibility.showPriorityBoard && (
+               <div className="lg:col-span-4 space-y-10 sticky top-24">
+                  <TaskPriorityBoard 
+                     tasksByPriority={tasksByPriority} 
+                     priorityColors={chartColors.priority} 
+                  />
+                  {visibility.showCriticalPath && <CriticalPathSection path={response.criticalPath} />}
+               </div>
+            )}
+         </section>
 
-      const data = await res.json()
-      setResponse(data)
+         {/* Fallback for Critical Path if Priority Board is hidden */}
+         {!visibility.showPriorityBoard && visibility.showCriticalPath && (
+            <CriticalPathSection path={response.criticalPath} />
+         )}
 
-      // Parse the timeline data
-      if (data) {
-        let timelineOutput = null
+         {visibility.showInsights && (
+            <VisualInsights 
+               chartData={response.chartData} 
+               priorityColors={chartColors.priority} 
+            />
+         )}
 
-        // Handle different response structures
-        if (Array.isArray(data) && data[0]?.output) {
-          timelineOutput = data[0].output
-        } else if (data.output) {
-          timelineOutput = data.output
-        } else if (typeof data === "string") {
-          timelineOutput = data
-        }
+         {visibility.showStrategy && (
+            <StrategySection 
+               okrs={response.okrs} 
+               kpis={response.kpis} 
+            />
+         )}
 
-        if (timelineOutput) {
-          const parsed = parseTimelineOutput(timelineOutput)
-          if (parsed) {
-            setParsedTimeline(parsed)
-          }
-        }
-      }
+         {visibility.showRisks && (
+            <RiskSection 
+               risks={response.risks} 
+               severityColors={chartColors.risk} 
+            />
+         )}
 
-      setIsSubmitted(true)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred while submitting the form")
-    } finally {
-      setIsLoading(false)
-    }
-  }
+         {(visibility.showMilestones || visibility.showDependencies) && (
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+               {visibility.showMilestones && <MilestonesSection milestones={response.milestones} />}
+               {visibility.showDependencies && <DependenciesSection dependencies={response.dependencies} />}
+            </section>
+         )}
+      </motion.div>
+   );
+};
 
-  const resetForm = () => {
-    setFormData({
+// --- Main Layout Component ---
+
+export default function AIProjectPlanner() {
+   const [mode, setMode] = useState<AppMode>('FORM');
+   const [loadingStage, setLoadingStage] = useState(0);
+   const [error, setError] = useState<string | null>(null);
+   const [response, setResponse] = useState<AIResponse | null>(null);
+
+   // Form State
+   const [user, setUser] = useState<UserInfo>({ name: "", email: "" });
+   const [project, setProject] = useState<ProjectMetadata>({
       name: "",
-      email: "",
-      projectName: "",
+      type: "",
       description: "",
       startDate: "",
       endDate: "",
-      teamSize: "",
-      projectType: "",
-    })
-    setResponse(null)
-    setParsedTimeline(null)
-    setError(null)
-    setIsSubmitted(false)
-  }
+      teamSize: "3-5",
+      complexity: "Medium",
+      priority: "Medium",
+      deliverables: "",
+      constraints: "",
+      successCriteria: ""
+   });
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
-  }
+   // Loading Animation
+   useEffect(() => {
+      let timer: NodeJS.Timeout;
+      if (mode === 'LOADING') {
+         timer = setInterval(() => {
+            setLoadingStage(prev => (prev < 5 ? prev + 1 : prev));
+         }, 2500);
+      } else {
+         setLoadingStage(0);
+      }
+      return () => clearInterval(timer);
+   }, [mode]);
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    })
-  }
+   // Submission Handler
+   const handleGenerate = async () => {
+      const missing = [];
+      if (!user.name) missing.push("Full Name");
+      if (!user.email) missing.push("Email Address");
+      if (!project.name) missing.push("Project Name");
+      if (!project.type) missing.push("Project Type");
+      if (!project.description) missing.push("Project Goal/Description");
+      if (!project.startDate) missing.push("Start Date");
+      if (!project.endDate) missing.push("End Date");
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 p-4">
-      <div className="w-full max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 p-8 rounded-2xl mb-6 border border-gray-200 dark:border-gray-800">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 font-poppins">Project Timeline Builder</h1>
-            <p className="text-gray-600 dark:text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-inter">
-              Create intelligent project timelines based on your requirements
-            </p>
-          </div>
-        </div>
+      if (missing.length > 0) {
+         setError(`Missing required fields: ${missing.join(', ')}`);
+         return;
+      }
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Form Section */}
-          <Card className="bg-gray-50 dark:bg-[#111111] border-gray-200 dark:border-gray-800 shadow-lg animate-slide-up">
-            <CardHeader className="text-center bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 rounded-t-lg border-b border-gray-100 dark:border-gray-800">
-              <CardTitle className="text-2xl text-gray-900 dark:text-white flex items-center justify-center gap-2 font-poppins">
-                <Calendar className="h-6 w-6 text-orange-500" />
-                Project Details
-              </CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400 font-inter">
-                Fill in your project information to generate a timeline
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name" className="text-gray-900 dark:text-white font-semibold font-inter">
-                      Name
-                    </Label>
-                    <Input
-                      id="name"
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 focus:border-orange-500 focus:ring-orange-500 text-gray-900 dark:text-white font-inter"
-                      placeholder="Your full name"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gray-900 dark:text-white font-semibold font-inter">
-                      Email
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 focus:border-orange-500 focus:ring-orange-500 text-gray-900 dark:text-white font-inter"
-                      placeholder="your.email@example.com"
-                      required
-                    />
-                  </div>
-                </div>
+      setError(null);
+      setMode('LOADING');
 
-                <div className="space-y-2">
-                  <Label htmlFor="projectName" className="text-gray-900 dark:text-white font-semibold font-inter">
-                    Project Name
-                  </Label>
-                  <Input
-                    id="projectName"
-                    type="text"
-                    value={formData.projectName}
-                    onChange={(e) => handleInputChange("projectName", e.target.value)}
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 focus:border-orange-500 focus:ring-orange-500 text-gray-900 dark:text-white font-inter"
-                    placeholder="Enter your project name"
-                    required
+      try {
+         const WEBHOOK_URL = "https://n8n.srv832341.hstgr.cloud/webhook/project-timeline-builder";
+         const payload = { user, project };
+
+         const fetchResponse = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+         });
+
+         if (!fetchResponse.ok) throw new Error('Failed to connect to the planning engine.');
+
+         const data: AIResponse = await fetchResponse.json();
+         if (!data.success && !data.projectSummary) {
+            throw new Error('The AI advisor returned an incomplete plan.');
+         }
+
+         setResponse(data);
+         setMode('DASHBOARD');
+      } catch (err) {
+         setError("We couldn’t generate the project plan right now. Please try again.");
+         setMode('FORM');
+      }
+   };
+
+   const handleExportCSV = () => {
+      if (!response) return;
+
+      const s = response.projectSummary;
+      let csvContent = "data:text/csv;charset=utf-8,";
+
+      csvContent += "SECTION,FIELD,VALUE\n";
+      csvContent += `SUMMARY,Project Name,${s.projectName || 'Unnamed Project'}\n`;
+      csvContent += `SUMMARY,Project Type,${s.projectType || 'Standard'}\n`;
+      csvContent += `SUMMARY,Estimated Duration,${s.estimatedDuration || 'TBD'}\n`;
+      csvContent += `SUMMARY,Team Structure,${(s.recommendedTeamStructure || '').replace(/,/g, ';')}\n`;
+      csvContent += `SUMMARY,Main Goal,${(s.mainGoal || '').replace(/,/g, ' ')}\n`;
+      csvContent += `SUMMARY,Delivery Strategy,${(s.deliveryStrategy || '').replace(/,/g, ' ')}\n`;
+
+      csvContent += "\nMETRICS,METRIC,COUNT\n";
+      csvContent += `METRICS,Total Phases,${s.totalPhases}\n`;
+      csvContent += `METRICS,Total Tasks,${s.totalTasks}\n`;
+      csvContent += `METRICS,Total Subtasks,${s.totalSubtasks}\n`;
+      csvContent += `METRICS,Total Milestones,${s.totalMilestones}\n`;
+      csvContent += `METRICS,Critical Tasks,${s.criticalTasksCount}\n`;
+      csvContent += `METRICS,High Risks,${s.highRiskCount}\n`;
+
+      csvContent += "\nWORK BREAKDOWN,PHASE,TASK,OWNER,DURATION,PRIORITY,CRITICAL\n";
+      (response.phases || []).forEach(phase => {
+         (phase.tasks || []).forEach(task => {
+            csvContent += `WBS,${phase.name},${task.name},${task.owner},${task.durationDays}d,${task.priority},${task.critical ? 'YES' : 'NO'}\n`;
+         });
+      });
+
+      csvContent += "\nMILESTONES,NAME,TARGET DATE,PHASE,IMPORTANCE\n";
+      (response.milestones || []).forEach(m => {
+         csvContent += `MILESTONE,${m.name},${m.targetDate},${m.relatedPhase},${m.importance}\n`;
+      });
+
+      csvContent += "\nRISKS,TITLE,SEVERITY,IMPACT,MITIGATION\n";
+      (response.risks || []).forEach(r => {
+         csvContent += `RISK,${r.title},${r.severity},${(r.impact || '').replace(/,/g, ';')},${(r.mitigation || '').replace(/,/g, ';')}\n`;
+      });
+
+      csvContent += "\nSTRATEGY,TYPE,OBJECTIVE/KPI,TARGET/RESULT\n";
+      (response.okrs || []).forEach(okr => {
+         csvContent += `OKR,Objective,${okr.objective},${(okr.keyResults || []).join('; ')}\n`;
+      });
+      (response.kpis || []).forEach(kpi => {
+         csvContent += `KPI,Metric,${kpi.name},${kpi.target}\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `${(s.projectName || 'project_plan').replace(/\s+/g, '_')}_full_plan.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+   };
+
+   return (
+      <div className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100 font-sans selection:bg-orange-500/30 transition-colors duration-300">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
+            {mode !== 'DASHBOARD' && (
+               <header className="mb-8 sm:mb-12 text-center space-y-4">
+                  <motion.div
+                     initial={{ scale: 0.9, opacity: 0 }}
+                     animate={{ scale: 1, opacity: 1 }}
+                     className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 rounded-full border border-orange-500/20 mb-2 sm:mb-4"
+                  >
+                     <Sparkles className="w-4 h-4 text-orange-500" />
+                     <span className="text-[10px] sm:text-xs font-bold text-orange-500 uppercase tracking-widest">Next-Gen Planning Engine</span>
+                  </motion.div>
+                  <h1 className="text-4xl sm:text-6xl font-black text-zinc-900 dark:text-white tracking-tighter leading-none">
+                     Project Planner <span className="text-orange-500">AI</span>
+                  </h1>
+                  <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto font-medium px-4">
+                     Describe your project in a few simple inputs. The AI will generate a full project plan with timeline, tasks, milestones, priorities, and visual insights.
+                  </p>
+               </header>
+            )}
+
+            <AnimatePresence mode="wait">
+               {mode === 'FORM' && (
+                  <InputSection
+                     key="input"
+                     user={user}
+                     setUser={setUser}
+                     project={project}
+                     setProject={setProject}
+                     handleGenerate={handleGenerate}
+                     error={error}
                   />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description" className="text-gray-900 dark:text-white font-semibold font-inter">
-                    Description
-                  </Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => handleInputChange("description", e.target.value)}
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 focus:border-orange-500 focus:ring-orange-500 min-h-[100px] text-gray-900 dark:text-white font-inter"
-                    placeholder="Describe your project goals and requirements..."
-                    required
+               )}
+               {mode === 'LOADING' && (
+                  <LoadingView
+                     key="loading"
+                     loadingStage={loadingStage}
                   />
-                </div>
+               )}
+               {mode === 'DASHBOARD' && response && (
+                  <DashboardView
+                     key="dashboard"
+                     response={response}
+                     setMode={setMode}
+                     handleGenerate={handleGenerate}
+                     handleExportCSV={handleExportCSV}
+                  />
+               )}
+            </AnimatePresence>
+         </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="startDate" className="text-gray-900 dark:text-white font-semibold font-inter">
-                      Start Date
-                    </Label>
-                    <Input
-                      id="startDate"
-                      type="date"
-                      value={formData.startDate}
-                      onChange={(e) => handleInputChange("startDate", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 focus:border-orange-500 focus:ring-orange-500 text-gray-900 dark:text-white font-inter"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="endDate" className="text-gray-900 dark:text-white font-semibold font-inter">
-                      End Date
-                    </Label>
-                    <Input
-                      id="endDate"
-                      type="date"
-                      value={formData.endDate}
-                      onChange={(e) => handleInputChange("endDate", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 focus:border-orange-500 focus:ring-orange-500 text-gray-900 dark:text-white font-inter"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="teamSize"
-                      className="text-gray-900 dark:text-white font-semibold font-inter flex items-center gap-2"
-                    >
-                      <Users className="h-4 w-4 text-orange-500" />
-                      Team Size
-                    </Label>
-                    <Input
-                      id="teamSize"
-                      type="text"
-                      value={formData.teamSize}
-                      onChange={(e) => handleInputChange("teamSize", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 focus:border-orange-500 focus:ring-orange-500 text-gray-900 dark:text-white font-inter"
-                      placeholder="e.g., 5 members"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="projectType"
-                      className="text-gray-900 dark:text-white font-semibold font-inter flex items-center gap-2"
-                    >
-                      <Briefcase className="h-4 w-4 text-orange-500" />
-                      Project Type
-                    </Label>
-                    <Select
-                      value={formData.projectType}
-                      onValueChange={(value) => handleInputChange("projectType", value)}
-                    >
-                      <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 focus:border-orange-500 focus:ring-orange-500 text-gray-900 dark:text-white font-inter">
-                        <SelectValue placeholder="Select project type" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
-                        <SelectItem value="Development" className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">Development</SelectItem>
-                        <SelectItem value="Marketing" className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">Marketing</SelectItem>
-                        <SelectItem value="Design" className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">Design</SelectItem>
-                        <SelectItem value="Research" className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">Research</SelectItem>
-                        <SelectItem value="Consulting" className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">Consulting</SelectItem>
-                        <SelectItem value="Other" className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold py-4 px-6 rounded-2xl shadow-lg transform transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none font-inter"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating Timeline...
-                    </>
-                  ) : (
-                    "Generate Project Timeline"
-                  )}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Response Section */}
-          <Card className="bg-gray-50 dark:bg-[#111111] border-gray-200 dark:border-gray-800 shadow-lg animate-slide-up-delay">
-            <CardHeader className="text-center bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 rounded-t-lg border-b border-gray-100 dark:border-gray-800">
-              <CardTitle className="text-2xl text-gray-900 dark:text-white font-poppins">Timeline Response</CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400 font-inter">
-                Your generated project timeline will appear here
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="min-h-[400px] p-6">
-              {isLoading && (
-                <div className="text-center flex items-center justify-center h-full">
-                  <div>
-                    <Loader2 className="h-12 w-12 animate-spin text-orange-500 mx-auto mb-4" />
-                    <p className="text-gray-600 dark:text-gray-400 font-inter">Processing your request...</p>
-                  </div>
-                </div>
-              )}
-
-              {error && (
-                <div className="text-center flex items-center justify-center h-full">
-                  <div>
-                    <XCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-                    <p className="text-red-600 dark:text-red-400 mb-4 font-inter">Error: {error}</p>
-                    <Button
-                      onClick={resetForm}
-                      variant="outline"
-                      className="border-orange-500 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 font-inter font-semibold bg-transparent dark:bg-transparent"
-                    >
-                      Try Again
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {parsedTimeline && !error && (
-                <div className="w-full space-y-6">
-                  <div className="text-center mb-6">
-                    <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                    <p className="text-green-600 dark:text-green-400 font-semibold font-inter">Timeline Generated Successfully!</p>
-                  </div>
-
-                  {/* Project Phases */}
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white font-poppins flex items-center gap-2">
-                        <Zap className="h-5 w-5 text-orange-500" />
-                        Project Phases
-                      </h3>
-                      <Button
-                        onClick={() => copyToClipboard(JSON.stringify(parsedTimeline, null, 2))}
-                        variant="outline"
-                        size="sm"
-                        className="border-orange-500 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 font-inter bg-transparent dark:bg-transparent"
-                      >
-                        <Copy className="h-4 w-4 mr-2" />
-                        Copy All
-                      </Button>
-                    </div>
-
-                    <div className="grid gap-4">
-                      {parsedTimeline.timeline && parsedTimeline.timeline.length > 0 ? (
-                        parsedTimeline.timeline.map((phase, index) => (
-                          <div key={index} className="bg-white dark:bg-zinc-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="font-bold text-gray-900 dark:text-white font-poppins">{phase.phase}</h4>
-                              <span className="text-sm text-gray-600 dark:text-gray-400 font-inter">{phase.duration} days</span>
-                            </div>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm font-inter">
-                              {formatDate(phase.start)} - {formatDate(phase.end)}
-                            </p>
-                            <p className="text-gray-500 dark:text-gray-500 text-xs font-inter mt-1">
-                              Tasks: {Array.isArray(phase.tasks) ? phase.tasks.join(", ") : "N/A"}
-                            </p>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="bg-white dark:bg-zinc-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm text-center">
-                          <p className="text-gray-500 dark:text-gray-400 font-inter">No timeline phases available</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Milestones */}
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white font-poppins flex items-center gap-2">
-                      <Target className="h-5 w-5 text-orange-500" />
-                      Key Milestones
-                    </h3>
-                    <div className="grid gap-3">
-                      {parsedTimeline.milestones && parsedTimeline.milestones.length > 0 ? (
-                        parsedTimeline.milestones.map((milestone, index) => (
-                          <div key={index} className="bg-white dark:bg-zinc-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 shadow-sm">
-                            <div className="flex items-center justify-between">
-                              <h4 className="font-semibold text-gray-900 dark:text-white font-inter">{milestone.name}</h4>
-                              <span className="text-sm text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 px-2 py-1 rounded font-inter">
-                                {milestone.type}
-                              </span>
-                            </div>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm font-inter mt-1">{formatDate(milestone.date)}</p>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="bg-white dark:bg-zinc-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 shadow-sm text-center">
-                          <p className="text-gray-500 dark:text-gray-400 font-inter">No milestones available</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Tasks Summary */}
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white font-poppins flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-orange-500" />
-                      Tasks Overview ({parsedTimeline.tasks ? parsedTimeline.tasks.length : 0} total)
-                    </h3>
-                    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm max-h-96 overflow-y-auto">
-                      {parsedTimeline.tasks && parsedTimeline.tasks.length > 0 ? (
-                        parsedTimeline.tasks.map((task, index) => (
-                          <div
-                            key={task.id}
-                            className={`p-3 ${index !== parsedTimeline.tasks.length - 1 ? "border-b border-gray-100 dark:border-gray-700" : ""}`}
-                          >
-                            <div className="flex items-center justify-between mb-1">
-                              <h4 className="font-semibold text-gray-900 dark:text-white font-inter text-sm">
-                                {task.id}. {task.name}
-                              </h4>
-                              <span className="text-xs text-gray-500 dark:text-gray-400 font-inter">
-                                {task.duration} day{task.duration !== 1 ? "s" : ""}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 font-inter">
-                              <span>
-                                {formatDate(task.start)} - {formatDate(task.end)}
-                              </span>
-                              <span className="bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded">{task.resource}</span>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="p-3 text-center">
-                          <p className="text-gray-500 dark:text-gray-400 font-inter">No tasks available</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Raw Response Fallback */}
-                  {!parsedTimeline && response && (
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white font-poppins">Raw Response</h3>
-                      <div className="bg-white dark:bg-zinc-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
-                        <pre className="text-gray-600 dark:text-gray-300 text-sm overflow-auto max-h-64 whitespace-pre-wrap">
-                          {JSON.stringify(response, null, 2)}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex gap-3 pt-4">
-                    <Button
-                      onClick={resetForm}
-                      variant="outline"
-                      className="flex-1 border-orange-500 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 font-inter font-semibold bg-transparent dark:bg-transparent"
-                    >
-                      Create New Timeline
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {!isLoading && !error && !parsedTimeline && (
-                <div className="text-center flex items-center justify-center h-full">
-                  <div>
-                    <Calendar className="h-16 w-16 text-orange-300 dark:text-orange-600 mx-auto mb-4 opacity-50" />
-                    <p className="text-gray-600 dark:text-gray-400 font-inter">Fill out the form to generate your project timeline</p>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+         <footer className="py-12 border-t border-zinc-200 dark:border-zinc-900 mt-20 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-8 flex flex-col sm:flex-row items-center justify-between gap-8">
+               <div className="space-y-1 text-center sm:text-left">
+                  <h4 className="text-sm font-bold text-zinc-700 dark:text-zinc-300">Kozker AI Tools</h4>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-600 text-balance">Built for high-velocity teams and agile managers.</p>
+               </div>
+               <div className="flex gap-8">
+                  <a href="#" className="text-xs font-bold text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors uppercase tracking-widest">Privacy</a>
+                  <a href="#" className="text-xs font-bold text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors uppercase tracking-widest">Terms</a>
+                  <a href="#" className="text-xs font-bold text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors uppercase tracking-widest underline decoration-orange-500/50">Stitch API Support</a>
+               </div>
+            </div>
+         </footer>
       </div>
-    </div>
-  )
+   );
 }
