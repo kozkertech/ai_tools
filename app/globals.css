@@ -464,3 +464,94 @@
   40% { content: ".." !important; }
   60%, 100% { content: "..." !important; }
 }
+/* ICP Report Print Optimization */
+@media print {
+  @page {
+    margin: 20mm;
+    size: A4 portrait;
+  }
+
+  /* Hide all UI elements that shouldn't be in the PDF */
+  header, 
+  footer, 
+  nav, 
+  .sticky, 
+  .fixed,
+  button,
+  .no-print,
+  [role="button"],
+  .chat-widget,
+  #chat-widget-container,
+  .n8n-chat-widget {
+    display: none !important;
+  }
+
+  /* Reset layout for print */
+  body, 
+  main, 
+  .container {
+    background: white !important;
+    color: black !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  /* Report Specific Styling Overrides */
+  .print-area {
+    background: white !important;
+    color: black !important;
+    padding: 0 !important;
+  }
+
+  .print-area * {
+    color: black !important;
+    border-color: #eee !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+  }
+
+  /* Keep the primary color for important accents but tone it down if needed */
+  .text-primary, .bg-primary {
+    color: #ff6e30 !important;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Section heading separation */
+  .print-section {
+    page-break-inside: avoid;
+    margin-bottom: 24pt;
+    padding-bottom: 12pt;
+    border-bottom: 1px solid #eee;
+  }
+
+  h1 { font-size: 28pt !important; margin-bottom: 12pt !important; }
+  h2 { font-size: 22pt !important; margin-top: 24pt !important; margin-bottom: 12pt !important; }
+  h3 { font-size: 18pt !important; margin-bottom: 8pt !important; }
+  p, li { font-size: 11pt !important; line-height: 1.5 !important; }
+
+  /* Grid adjustment for print (prevent horizontal overflow) */
+  .grid {
+    display: block !important;
+  }
+  
+  .print-grid-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20pt !important;
+  }
+
+  /* Card styling for print */
+  .bg-zinc-900, .bg-zinc-800, .bg-primary\/5 {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    border-radius: 8pt !important;
+  }
+
+  /* Image/Icon adjustments */
+  svg {
+    filter: none !important;
+  }
+}
