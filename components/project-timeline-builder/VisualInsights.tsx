@@ -35,18 +35,18 @@ export const VisualInsights: React.FC<VisualInsightsProps> = ({ chartData, prior
 
    return (
       <div className="space-y-6 sm:space-y-8 transition-colors">
-         <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white flex items-center gap-3 tracking-tighter">
-            <BarChart3 className="w-7 h-7 text-purple-600 dark:text-purple-500" />
+         <h2 className="text-2xl sm:text-3xl font-bold text-[var(--night)] flex items-center gap-3 tracking-tighter">
+            <BarChart3 className="w-7 h-7 text-[#a855f7]" />
             Insights
          </h2>
 
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-            <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 p-6 sm:p-8 flex flex-col min-h-[350px] sm:h-[400px] rounded-[2rem] sm:rounded-[2.5rem] shadow-sm dark:shadow-xl transition-colors">
+            <Card className="card bg-[var(--cloud)] border-[var(--iron)] p-6 sm:p-8 flex flex-col min-h-[350px] sm:h-[400px] rounded-[2rem] sm:rounded-[2.5rem] shadow-sm transition-colors">
                <div className="flex items-center gap-3 mb-6 sm:mb-8">
-                  <div className="p-2 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-                     <PieChartIcon className="w-4 h-4 text-orange-500" />
+                  <div className="p-2 bg-[var(--mist)] rounded-lg">
+                     <PieChartIcon className="w-4 h-4 text-[#ff7a59]" />
                   </div>
-                  <h3 className="text-[10px] sm:text-xs font-black text-zinc-400 dark:text-zinc-400 uppercase tracking-widest">Priority Distribution</h3>
+                  <h3 className="text-[10px] sm:text-xs font-bold text-[var(--steel)] uppercase tracking-widest">Priority Distribution</h3>
                </div>
                <div className="flex-1 w-full h-[250px] sm:h-auto">
                   <ResponsiveContainer width="100%" height="100%">
@@ -84,20 +84,20 @@ export const VisualInsights: React.FC<VisualInsightsProps> = ({ chartData, prior
                </div>
             </Card>
 
-            <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 p-6 sm:p-8 flex flex-col min-h-[350px] sm:h-[400px] rounded-[2rem] sm:rounded-[2.5rem] shadow-sm dark:shadow-xl transition-colors">
+            <Card className="card bg-[var(--cloud)] border-[var(--iron)] p-6 sm:p-8 flex flex-col min-h-[350px] sm:h-[400px] rounded-[2rem] sm:rounded-[2.5rem] shadow-sm transition-colors">
                <div className="flex items-center gap-3 mb-6 sm:mb-8">
-                  <div className="p-2 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-                     <BarChart3 className="w-4 h-4 text-blue-600 dark:text-blue-500" />
+                  <div className="p-2 bg-[var(--mist)] rounded-lg">
+                     <BarChart3 className="w-4 h-4 text-[#3b82f6]" />
                   </div>
-                  <h3 className="text-[10px] sm:text-xs font-black text-zinc-400 dark:text-zinc-400 uppercase tracking-widest">Project Load Over Time</h3>
+                  <h3 className="text-[10px] sm:text-xs font-bold text-[var(--steel)] uppercase tracking-widest">Project Load Over Time</h3>
                </div>
                <div className="flex-1 w-full h-[250px] sm:h-auto">
                   <ResponsiveContainer width="100%" height="100%">
                      <BarChart data={chartData.timelineLoad} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-zinc-100 dark:text-zinc-800" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-[var(--iron)] opacity-50" vertical={false} />
                         <XAxis
                            dataKey="name"
-                           stroke="#71717a"
+                           stroke="var(--steel)"
                            fontSize={9}
                            fontWeight="black"
                            axisLine={false}

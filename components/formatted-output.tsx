@@ -42,29 +42,29 @@ export function FormattedOutput({
   const renderContent = () => {
     switch (type) {
       case "html":
-        return <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
+        return <div className="prose prose-sm max-w-none text-[var(--night)]" dangerouslySetInnerHTML={{ __html: content }} />
       case "markdown":
         return (
-          <pre className="whitespace-pre-wrap text-sm font-mono bg-gray-50 p-4 rounded-lg overflow-auto">{content}</pre>
+          <pre className="whitespace-pre-wrap text-sm font-mono bg-[var(--mist)] p-4 rounded-xl border border-[var(--iron)] overflow-auto text-[var(--night)]">{content}</pre>
         )
       default:
-        return <div className="whitespace-pre-wrap text-sm leading-relaxed">{content}</div>
+        return <div className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--night)]">{content}</div>
     }
   }
 
   return (
-    <Card className={`w-full ${className}`}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+    <Card className={`card border-[var(--iron)] bg-[var(--cloud)] ${className}`}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b border-[var(--iron)] bg-[var(--mist)] rounded-t-2xl">
+        <CardTitle className="text-lg font-bold tracking-tight text-[var(--night)]">{title}</CardTitle>
         <div className="flex gap-2">
           {showCopyButton && (
             <Button
               variant="outline"
               size="sm"
               onClick={copyToClipboard}
-              className="flex items-center gap-2 bg-transparent"
+              className="btn btn-secondary border-[var(--iron)] text-[var(--night)] hover:bg-[var(--cloud)]"
             >
-              <Copy className="w-4 h-4" />
+              <Copy className="w-4 h-4 mr-2" />
               Copy
             </Button>
           )}
@@ -73,16 +73,16 @@ export function FormattedOutput({
               variant="outline"
               size="sm"
               onClick={downloadContent}
-              className="flex items-center gap-2 bg-transparent"
+              className="btn btn-secondary border-[var(--iron)] text-[var(--night)] hover:bg-[var(--cloud)]"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-4 h-4 mr-2" />
               Download
             </Button>
           )}
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="max-h-96 overflow-auto border rounded-lg p-4 bg-white">{renderContent()}</div>
+      <CardContent className="p-4">
+        <div className="max-h-96 overflow-auto border border-[var(--iron)] rounded-xl p-4 bg-[var(--mist)]">{renderContent()}</div>
       </CardContent>
     </Card>
   )

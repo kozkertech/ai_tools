@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-[var(--cloud)] text-[var(--night)]">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <Skeleton className="h-12 w-96 mx-auto mb-4" />
@@ -11,7 +11,7 @@ export default function Loading() {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <Card>
+          <Card className="card border-[var(--iron)] bg-[var(--cloud)]">
             <CardHeader>
               <Skeleton className="h-8 w-64" />
               <Skeleton className="h-4 w-96" />

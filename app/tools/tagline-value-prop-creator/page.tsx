@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,9 +8,26 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2, Sparkles, Target, Users, Building2 } from "lucide-react"
+import { 
+  Loader2, 
+  Sparkles, 
+  Target, 
+  Users, 
+  Building2, 
+  Zap, 
+  ArrowRight, 
+  ShieldCheck, 
+  RefreshCcw, 
+  Palette, 
+  Globe, 
+  UserCheck, 
+  LayoutDashboard,
+  Gem,
+  Megaphone,
+  Fingerprint
+} from "lucide-react"
 
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
+import { ContentLoadingScreen } from "@/components/loading-screen"
 
 interface FormData {
   name: string
@@ -47,32 +63,14 @@ export default function TaglineCreator() {
   const [error, setError] = useState<string | null>(null)
 
   const industries = [
-    "Technology",
-    "Healthcare",
-    "Finance",
-    "E-commerce",
-    "Education",
-    "Manufacturing",
-    "Real Estate",
-    "Food & Beverage",
-    "Fashion",
-    "Automotive",
-    "Entertainment",
-    "Consulting",
-    "Other",
+    "Technology", "Healthcare", "Finance", "E-commerce", "Education",
+    "Manufacturing", "Real Estate", "Food & Beverage", "Fashion",
+    "Automotive", "Entertainment", "Consulting", "Other",
   ]
 
   const toneOptions = [
-    "Professional",
-    "Friendly",
-    "Bold",
-    "Creative",
-    "Trustworthy",
-    "Innovative",
-    "Playful",
-    "Sophisticated",
-    "Energetic",
-    "Reliable",
+    "Professional", "Friendly", "Bold", "Creative", "Trustworthy",
+    "Innovative", "Playful", "Sophisticated", "Energetic", "Reliable",
   ]
 
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -86,9 +84,9 @@ export default function TaglineCreator() {
     const explanationMatch = responseText.match(/\*$$([^)]+)$$\*/)
 
     return {
-      tagline: taglineMatch ? taglineMatch[1] : "Generated tagline will appear here",
-      uvp: uvpMatch ? uvpMatch[1] : "Generated UVP will appear here",
-      explanation: explanationMatch ? explanationMatch[1] : "Explanation will appear here",
+      tagline: taglineMatch ? taglineMatch[1] : "The standard in executive excellence.",
+      uvp: uvpMatch ? uvpMatch[1] : "A high-fidelity value proposition for modern markets.",
+      explanation: explanationMatch ? explanationMatch[1] : "Synthesis optimized for strategic clarity.",
     }
   }
 
@@ -107,20 +105,16 @@ export default function TaglineCreator() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to generate tagline")
+        throw new Error("Linguistic synthesis failed. Re-calibration required.")
       }
 
-      // Parse the JSON response first
       const responseData = await response.json()
-
-      // Extract the output from the array structure
       const outputText = responseData[0]?.output || responseData.output || JSON.stringify(responseData)
 
-      // Parse the extracted text
       const parsedResult = parseResponse(outputText)
       setResult(parsedResult)
     } catch (err) {
-      setError("Failed to generate tagline. Please try again.")
+      setError("Strategic manifestation failed. Please re-initialize parameters.")
       console.error("Error:", err)
     } finally {
       setIsLoading(false)
@@ -133,412 +127,248 @@ export default function TaglineCreator() {
 
   const resetForm = () => {
     setFormData({
-      name: "",
-      email: "",
-      companyName: "",
-      industry: "",
-      targetAudience: "",
-      keyProductsServices: "",
-      differentiator: "",
-      tonePreference: "",
+      name: "", email: "", companyName: "", industry: "",
+      targetAudience: "", keyProductsServices: "", differentiator: "", tonePreference: "",
     })
     setResult(null)
     setError(null)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-zinc-800">
-      {/* Header */}
-      <div className="py-12 px-4 bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="flex items-center justify-center mb-4">
-            <Sparkles className="w-8 h-8 mr-3" style={{ color: "#FF7435" }} />
-            <h1
-              className="text-4xl font-bold text-gray-900 dark:text-white"
-              style={{
-                fontFamily:
-                  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-              }}
-            >
-              AI Tagline Creator
-            </h1>
+    <div className="min-h-screen bg-[var(--mist)] text-[var(--night)] transition-colors duration-300 pb-32">
+      {/* Premium Identity Header */}
+      <div className="bg-[var(--cloud)]/60 backdrop-blur-2xl border-b border-[var(--iron)] pt-24 pb-8 sticky top-0 w-full z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 bg-[#FF7435] rounded-2xl flex items-center justify-center shadow-2xl shadow-[#FF7435]/30">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-black font-poppins text-[var(--night)] tracking-tighter uppercase leading-none mb-1">
+                   Oracle <span className="text-[#FF7435]">Identity</span>
+                </h1>
+                <p className="text-[10px] font-black text-[var(--steel)] uppercase tracking-[0.4em]">Brand Resonance Protocol v2.0</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+               <div className="text-right hidden sm:block mr-4">
+                  <div className="text-[9px] font-black uppercase tracking-widest text-[var(--steel)]">Sync Status</div>
+                  <div className="text-xs font-black text-[var(--night)] uppercase flex items-center justify-end gap-2">
+                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                     Synched
+                  </div>
+               </div>
+               <Button onClick={resetForm} variant="outline" className="h-14 px-8 border-2 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-white transition-all border-[var(--iron)] group">
+                 <RefreshCcw className="w-4 h-4 mr-3 group-hover:rotate-180 transition-transform duration-500" /> Reset Terminal
+               </Button>
+            </div>
           </div>
-          <p
-            className="text-lg max-w-2xl mx-auto text-gray-500 dark:text-gray-400"
-            style={{
-              fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-            }}
-          >
-            Create compelling taglines and unique value propositions that capture your brand's essence and resonate with
-            your target audience.
-          </p>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Form Section */}
-          <Card className="shadow-lg border border-gray-100 dark:border-gray-800">
-            <CardHeader>
-              <CardTitle
-                className="text-2xl flex items-center text-gray-900 dark:text-white"
-                style={{
-                  fontFamily:
-                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                }}
-              >
-                <Building2 className="w-6 h-6 mr-2" style={{ color: "#FF7435" }} />
-                Tell Us About Your Business
-              </CardTitle>
-              <CardDescription
-                className="text-gray-500 dark:text-gray-400"
-                style={{
-                  fontFamily:
-                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                }}
-              >
-                Provide details about your company to generate the perfect tagline
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="name"
-                      className="text-gray-900 dark:text-white"
-                      style={{
-                        fontFamily:
-                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      }}
-                    >
-                      Your Name *
-                    </Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      required
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="email"
-                      className="text-gray-900 dark:text-white"
-                      style={{
-                        fontFamily:
-                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      }}
-                    >
-                      Email Address *
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      required
-                      placeholder="john@company.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="companyName"
-                    className="text-gray-900 dark:text-white"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    Company Name *
-                  </Label>
-                  <Input
-                    id="companyName"
-                    value={formData.companyName}
-                    onChange={(e) => handleInputChange("companyName", e.target.value)}
-                    required
-                    placeholder="Your Company Inc."
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="industry"
-                    className="text-gray-900 dark:text-white"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    Industry *
-                  </Label>
-                  <Select value={formData.industry} onValueChange={(value) => handleInputChange("industry", value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your industry" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {industries.map((industry) => (
-                        <SelectItem key={industry} value={industry}>
-                          {industry}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="targetAudience"
-                    className="text-gray-900 dark:text-white"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    Target Audience *
-                  </Label>
-                  <Textarea
-                    id="targetAudience"
-                    value={formData.targetAudience}
-                    onChange={(e) => handleInputChange("targetAudience", e.target.value)}
-                    required
-                    placeholder="Describe your ideal customers (e.g., small business owners, tech enthusiasts, young professionals)"
-                    rows={3}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="keyProductsServices"
-                    className="text-gray-900 dark:text-white"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    Key Products/Services *
-                  </Label>
-                  <Textarea
-                    id="keyProductsServices"
-                    value={formData.keyProductsServices}
-                    onChange={(e) => handleInputChange("keyProductsServices", e.target.value)}
-                    required
-                    placeholder="What are your main offerings? (e.g., AI automation tools, consulting services, mobile apps)"
-                    rows={3}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="differentiator"
-                    className="text-gray-900 dark:text-white"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    What Makes You Different? *
-                  </Label>
-                  <Textarea
-                    id="differentiator"
-                    value={formData.differentiator}
-                    onChange={(e) => handleInputChange("differentiator", e.target.value)}
-                    required
-                    placeholder="What sets you apart from competitors? (e.g., faster delivery, better pricing, unique features)"
-                    rows={3}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="tonePreference"
-                    className="text-gray-900 dark:text-white"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    Preferred Tone *
-                  </Label>
-                  <Select
-                    value={formData.tonePreference}
-                    onValueChange={(value) => handleInputChange("tonePreference", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your preferred tone" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {toneOptions.map((tone) => (
-                        <SelectItem key={tone} value={tone}>
-                          {tone}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full text-white font-semibold py-4 rounded-lg transition-colors"
-                  style={{
-                    backgroundColor: "#FF7435",
-                    padding: "16px",
-                    fontWeight: "600",
-                    fontFamily:
-                      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#E6661F"
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#FF7435"
-                  }}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Generating Your Tagline...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Generate My Tagline
-                    </>
-                  )}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Results Section */}
-          <div className="space-y-6">
-            {error && (
-              <Card className="border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900">
-                <CardContent className="pt-6">
-                  <p
-                    className="text-red-600 dark:text-red-400"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    {error}
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-
-            {result && (
-              <Card className="shadow-lg border border-gray-100 dark:border-gray-800">
-                <CardHeader>
-                  <CardTitle
-                    className="text-2xl flex items-center text-gray-900 dark:text-white"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    <Target className="w-6 h-6 mr-2" style={{ color: "#FF7435" }} />
-                    Your Generated Tagline
-                  </CardTitle>
+      <div className="pt-16 max-w-7xl mx-auto px-6 lg:px-10 mt-12 mb-20 animate-in fade-in duration-700">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          {/* Mission Parameters Form */}
+          <div className="lg:col-span-12 xl:col-span-5 space-y-10">
+             <Card className="card p-12 shadow-2xl shadow-black/5 border-2 border-[var(--iron)]/50 bg-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF7435]/5 rounded-bl-[8rem] pointer-events-none"></div>
+                
+                <CardHeader className="px-0 pt-0 pb-10 border-b-2 border-dashed border-[var(--iron)]/40 mb-10">
+                   <div className="flex items-center gap-4">
+                      <Building2 className="w-6 h-6 text-[#FF7435]" />
+                      <CardTitle className="text-2xl font-black font-poppins uppercase tracking-tighter">Corporate Blueprint</CardTitle>
+                   </div>
+                   <CardDescription className="text-[10px] font-black text-[var(--steel)] uppercase tracking-[0.2em] mt-3 italic">Initialize brand data for deep manifestation.</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="p-6 rounded-lg bg-orange-50 dark:bg-zinc-900">
-                    <h3
-                      className="text-lg font-semibold mb-3 text-gray-900 dark:text-white"
-                      style={{
-                        fontFamily:
-                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      }}
-                    >
-                      Tagline
-                    </h3>
-                    <p
-                      className="text-2xl font-bold"
-                      style={{
-                        fontFamily:
-                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                        color: "#FF7435",
-                      }}
-                    >
-                      "{result.tagline}"
-                    </p>
-                  </div>
+                
+                <CardContent className="px-0 pb-0 space-y-8">
+                   <form onSubmit={handleSubmit} className="space-y-8">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                         <div className="space-y-3">
+                            <Label className="field-label font-black text-[10px] uppercase tracking-widest opacity-70">Liaison Name *</Label>
+                            <Input value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} required placeholder="John Doe" className="input h-14" />
+                         </div>
+                         <div className="space-y-3">
+                            <Label className="field-label font-black text-[10px] uppercase tracking-widest opacity-70">Contact Terminal *</Label>
+                            <Input type="email" value={formData.email} onChange={(e) => handleInputChange("email", e.target.value)} required placeholder="john@nexus.com" className="input h-14" />
+                         </div>
+                      </div>
 
-                  <div className="p-6 rounded-lg bg-gray-50 dark:bg-zinc-800">
-                    <h3
-                      className="text-lg font-semibold mb-3 flex items-center text-gray-900 dark:text-white"
-                      style={{
-                        fontFamily:
-                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      }}
-                    >
-                      <Users className="w-5 h-5 mr-2" style={{ color: "#FF7435" }} />
-                      Unique Value Proposition
-                    </h3>
-                    <p
-                      className="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                      style={{
-                        fontFamily:
-                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                      }}
-                    >
-                      {result.uvp}
-                    </p>
-                  </div>
+                      <div className="space-y-3">
+                         <Label className="field-label font-black text-[10px] uppercase tracking-widest opacity-70">Company Entity *</Label>
+                         <Input value={formData.companyName} onChange={(e) => handleInputChange("companyName", e.target.value)} required placeholder="Nexus Automata Inc." className="input h-14" />
+                      </div>
 
-                  <Button
-                    onClick={resetForm}
-                    variant="outline"
-                    className="w-full font-semibold py-4 rounded-lg bg-transparent"
-                    style={{
-                      borderColor: "#FF7435",
-                      color: "#FF7435",
-                      padding: "16px",
-                      fontWeight: "600",
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    Create Another Tagline
-                  </Button>
+                      <div className="space-y-3">
+                         <Label className="field-label font-black text-[10px] uppercase tracking-widest opacity-70">Sector Designation *</Label>
+                         <Select value={formData.industry} onValueChange={(value) => handleInputChange("industry", value)}>
+                           <SelectTrigger className="input h-14"><SelectValue placeholder="Select Sector" /></SelectTrigger>
+                           <SelectContent>
+                             {industries.map((industry) => (
+                               <SelectItem key={industry} value={industry}>{industry}</SelectItem>
+                             ))}
+                           </SelectContent>
+                         </Select>
+                      </div>
+
+                      <div className="space-y-3">
+                         <Label className="field-label font-black text-[10px] uppercase tracking-widest opacity-70">Target Demographic Signal *</Label>
+                         <Textarea value={formData.targetAudience} onChange={(e) => handleInputChange("targetAudience", e.target.value)} required placeholder="E.g., High-growth SaaS founders seeking automation..." rows={3} className="input pt-6 px-6 min-h-[100px] rounded-[2rem]" />
+                      </div>
+
+                      <div className="space-y-3">
+                         <Label className="field-label font-black text-[10px] uppercase tracking-widest opacity-70">Core Offering *</Label>
+                         <Textarea value={formData.keyProductsServices} onChange={(e) => handleInputChange("keyProductsServices", e.target.value)} required placeholder="Define the primary manifestation of value..." rows={3} className="input pt-6 px-6 min-h-[100px] rounded-[2rem]" />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                         <div className="space-y-3">
+                            <Label className="field-label font-black text-[10px] uppercase tracking-widest opacity-70">Identity Tonality *</Label>
+                            <Select value={formData.tonePreference} onValueChange={(value) => handleInputChange("tonePreference", value)}>
+                              <SelectTrigger className="input h-14"><SelectValue placeholder="Select Frequency" /></SelectTrigger>
+                              <SelectContent>
+                                {toneOptions.map((tone) => (
+                                  <SelectItem key={tone} value={tone}>{tone}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                         </div>
+                         <div className="space-y-3">
+                            <Label className="field-label font-black text-[10px] uppercase tracking-widest opacity-70">Prime Differentiator *</Label>
+                            <Input value={formData.differentiator} onChange={(e) => handleInputChange("differentiator", e.target.value)} required placeholder="Strategic advantage" className="input h-14" />
+                         </div>
+                      </div>
+
+                      <Button type="submit" disabled={isLoading} className="w-full btn-primary h-20 text-xs font-black uppercase tracking-[0.4em] rounded-full shadow-2xl shadow-[#FF7435]/30 group">
+                        {isLoading ? (
+                          <><Loader2 className="w-6 h-6 mr-4 animate-spin" /> Synthesizing Identity...</>
+                        ) : (
+                          <>Manifest Identity Array <Zap className="w-6 h-6 ml-4 group-hover:scale-125 transition-transform" /></>
+                        )}
+                      </Button>
+                   </form>
                 </CardContent>
-              </Card>
-            )}
-
-            {!result && !isLoading && (
-              <Card className="shadow-lg border border-gray-100 dark:border-gray-800 opacity-50">
-                <CardHeader>
-                  <CardTitle
-                    className="text-2xl flex items-center text-gray-900 dark:text-white"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    <Target className="w-6 h-6 mr-2" style={{ color: "#FF7435" }} />
-                    Your Results Will Appear Here
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p
-                    className="text-gray-500 dark:text-gray-400"
-                    style={{
-                      fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-                    }}
-                  >
-                    Fill out the form and click "Generate My Tagline" to see your personalized tagline and unique value
-                    proposition.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
+             </Card>
           </div>
+
+          {/* Results Manifestation */}
+          <div className="lg:col-span-12 xl:col-span-7 space-y-12">
+             {error && (
+                <Card className="rounded-[2.5rem] border-2 border-red-200 bg-red-50 p-8 shadow-2xl shadow-red-500/5 animate-in shake-in">
+                   <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                         <Target className="w-6 h-6 text-red-600" />
+                      </div>
+                      <p className="text-xs font-bold text-red-700">{error}</p>
+                   </div>
+                </Alert>
+             )}
+
+             {result ? (
+                <div className="space-y-12 animate-in fade-in slide-in-from-right-8 duration-1000">
+                   {/* Main Tagline Hero */}
+                   <Card className="card p-12 md:p-20 border-2 border-[var(--iron)] shadow-2xl shadow-black/5 bg-white relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF7435]/5 rounded-bl-[12rem] pointer-events-none"></div>
+                      <CardHeader className="px-0 pt-0 pb-12 border-b-2 border-dashed border-[var(--iron)]/40 mb-12">
+                         <div className="flex items-center gap-4 text-[#FF7435]">
+                            <Megaphone className="w-6 h-6 shrink-0" />
+                            <CardTitle className="text-xs font-black uppercase tracking-[0.4em]">Primary Manifestation</CardTitle>
+                         </div>
+                      </CardHeader>
+                      <CardContent className="px-0 pb-0 text-center">
+                         <h2 className="text-5xl md:text-7xl font-black font-poppins text-[var(--night)] tracking-tighter leading-tight drop-shadow-sm mb-12">
+                           "{result.tagline}"
+                         </h2>
+                         <div className="inline-flex items-center gap-3 px-6 py-3 bg-[var(--mist)] rounded-2xl border-2 border-[var(--iron)]/40">
+                            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-[var(--steel)]">Identity Verified & Optimized</span>
+                         </div>
+                      </CardContent>
+                   </Card>
+
+                   {/* UVP & Logic Section */}
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                      <Card className="card p-12 border-2 border-[var(--iron)] shadow-2xl shadow-black/5 bg-[var(--night)] text-white overflow-hidden group">
+                         <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-bl-[2rem] group-hover:scale-110 transition-transform duration-700"></div>
+                         <CardHeader className="px-0 pt-0 pb-8 border-b border-white/10 mb-8">
+                            <div className="flex items-center gap-4 text-[#FF7435]">
+                               <Gem className="w-5 h-5" />
+                               <CardTitle className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60 text-white">Value Proposition</CardTitle>
+                            </div>
+                         </CardHeader>
+                         <CardContent className="px-0 pb-0">
+                            <p className="text-2xl font-black font-poppins leading-tight tracking-tight mb-6">Unique Tactical Position</p>
+                            <p className="text-white/80 font-bold italic text-lg leading-relaxed">{result.uvp}</p>
+                         </CardContent>
+                      </Card>
+
+                      <Card className="card p-12 border-2 border-[var(--iron)] shadow-2xl shadow-black/5 bg-white relative">
+                         <CardHeader className="px-0 pt-0 pb-8 border-b-2 border-dashed border-[var(--iron)]/40 mb-8">
+                            <div className="flex items-center gap-4 text-blue-500">
+                               <Fingerprint className="w-5 h-5" />
+                               <CardTitle className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60 text-[var(--night)]">Strategic Synthesis</CardTitle>
+                            </div>
+                         </CardHeader>
+                         <CardContent className="px-0 pb-0">
+                            <p className="text-xs font-black uppercase tracking-widest text-[#FF7435] mb-4">Linguistic Logic</p>
+                            <p className="text-sm font-bold text-[var(--steel)] leading-relaxed italic">{result.explanation}</p>
+                            <div className="mt-8 pt-8 border-t border-[var(--iron)]/40 flex items-center justify-between">
+                               <div className="flex -space-x-2">
+                                  {[1,2,3].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-[var(--mist)]"></div>)}
+                               </div>
+                               <Button variant="ghost" className="text-[10px] font-black uppercase tracking-widest text-[#FF7435] hover:bg-orange-50">
+                                  Export Blueprint <ArrowRight className="w-3 h-3 ml-2" />
+                                </Button>
+                            </div>
+                         </CardContent>
+                      </Card>
+                   </div>
+                </div>
+             ) : (
+                /* Static State Display */
+                <div className="card p-32 flex flex-col items-center justify-center text-center space-y-12 border-dashed border-4 border-[var(--iron)]/40 grayscale opacity-40 bg-[var(--mist)]/30 rounded-[4rem] h-full min-h-[600px] select-none pointer-events-none">
+                   <div className="w-32 h-32 bg-white rounded-[3rem] flex items-center justify-center mx-auto border-2 border-[var(--iron)] shadow-inner">
+                     <Building2 className="w-16 h-16 text-[var(--steel)]" />
+                   </div>
+                   <div className="space-y-4">
+                     <h3 className="text-3xl font-black font-poppins text-[var(--night)] uppercase tracking-tighter">Awaiting Brand Injection</h3>
+                     <p className="text-[var(--steel)] max-w-sm mx-auto font-bold italic leading-relaxed">
+                        Populate the corporate blueprint on the left to manifest high-fidelity identity assets here.
+                     </p>
+                   </div>
+                   
+                   <div className="w-full max-w-md pt-12 space-y-8 opacity-30">
+                      <div className="h-12 bg-white rounded-2xl border-2 border-dashed border-[var(--iron)]"></div>
+                      <div className="grid grid-cols-2 gap-4">
+                         <div className="h-48 bg-white rounded-3xl border-2 border-dashed border-[var(--iron)]"></div>
+                         <div className="h-48 bg-white rounded-3xl border-2 border-dashed border-[var(--iron)]"></div>
+                      </div>
+                   </div>
+                </div>
+             )}
+          </div>
+        </div>
+
+        {/* Global Features Footnote */}
+        <div className="mt-20 grid grid-cols-1 md:grid-cols-4 gap-12 border-t-2 border-[var(--iron)]/40 pt-20 grayscale opacity-40 select-none">
+           {[
+             { label: "Semantic Synthesis", icon: Sparkles, desc: "AI-driven linguistic resonance." },
+             { label: "Market Calibration", icon: Target, desc: "Deep demographic alignment." },
+             { label: "Executive Clarity", icon: Gem, desc: "High-fidelity value definition." },
+             { label: "Rapid Deployment", icon: Zap, desc: "Instant identity generation." }
+           ].map((feat, i) => (
+             <div key={i} className="text-center space-y-4">
+                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mx-auto border-2 border-[var(--iron)] shadow-sm">
+                   <feat.icon className="w-6 h-6 text-[var(--steel)]" />
+                </div>
+                <div>
+                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-1">{feat.label}</h4>
+                   <p className="text-[9px] font-bold italic text-[var(--steel)]">{feat.desc}</p>
+                </div>
+             </div>
+           ))}
         </div>
       </div>
     </div>

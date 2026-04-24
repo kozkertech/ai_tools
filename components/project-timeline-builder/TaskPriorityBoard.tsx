@@ -16,20 +16,20 @@ const PriorityColumn: React.FC<PriorityColumnProps> = ({ priority, tasks, color 
    if (tasks.length === 0) return null;
 
    return (
-      <div className="p-6 sm:p-8 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-[2.5rem] space-y-6 sm:space-y-8 flex flex-col h-fit transition-all hover:bg-zinc-50 dark:hover:bg-zinc-900/60 hover:border-zinc-300 dark:hover:border-zinc-700/50 shadow-sm dark:shadow-xl group/col">
-         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-6">
+      <div className="card p-6 sm:p-8 bg-[var(--cloud)] border border-[var(--iron)] rounded-[2.5rem] space-y-6 sm:space-y-8 flex flex-col h-fit transition-all hover:bg-[var(--mist)] hover:border-[#ff7a59]/30 shadow-sm group/col">
+         <div className="flex items-center justify-between border-b border-[var(--iron)] pb-6">
             <div className="flex items-center gap-3">
                <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: color }} />
                <h4 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em]" style={{ color }}>{priority}</h4>
             </div>
-            <div className="px-3 py-1 bg-zinc-50 dark:bg-zinc-950 rounded-full border border-zinc-200 dark:border-zinc-800 transition-colors">
-               <span className="text-[11px] font-black text-zinc-500 dark:text-zinc-400">{tasks.length}</span>
+            <div className="px-3 py-1 bg-[var(--mist)] rounded-full border border-[var(--iron)] transition-colors">
+               <span className="text-[11px] font-bold text-[var(--steel)]">{tasks.length}</span>
             </div>
          </div>
 
          <div className="space-y-6">
             {tasks.map((task, i) => (
-               <div key={i} className="group/item space-y-4 pb-6 border-b border-zinc-100 dark:border-zinc-800/40 last:border-0 last:pb-0">
+               <div key={i} className="group/item space-y-4 pb-6 border-b border-[var(--iron)] last:border-0 last:pb-0">
                   <div className="space-y-2">
                      <div className="flex items-start gap-2">
                         {task.critical && (
@@ -39,28 +39,28 @@ const PriorityColumn: React.FC<PriorityColumnProps> = ({ priority, tasks, color 
                         )}
                         <p className={cn(
                            "text-sm sm:text-base font-bold leading-tight transition-colors line-clamp-2",
-                           task.critical ? "text-red-600 dark:text-red-100 group-hover/item:text-red-500 dark:group-hover/item:text-white" : "text-zinc-800 dark:text-zinc-200 group-hover/item:text-zinc-900 dark:group-hover/item:text-white"
+                           task.critical ? "text-red-500 group-hover/item:text-[#ff7a59]" : "text-[var(--night)]"
                         )}>
                            {task.name}
                         </p>
                      </div>
-                     <p className="text-[11px] text-zinc-500 dark:text-zinc-500 leading-relaxed font-medium line-clamp-2 italic">
+                     <p className="text-[11px] text-[var(--steel)] leading-relaxed font-medium line-clamp-2 italic">
                         "{task.description}"
                      </p>
                   </div>
                   
                   <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-900 group-hover/item:border-zinc-300 dark:group-hover/item:border-zinc-800 transition-colors">
-                           <Users className="w-3 h-3 text-zinc-400 dark:text-zinc-600" />
-                           <span className="text-[10px] font-bold text-zinc-600 dark:text-zinc-400 group-hover/item:text-zinc-800 dark:group-hover/item:text-zinc-300">{task.owner}</span>
+                        <div className="flex items-center gap-1.5 px-2 py-1 bg-[var(--mist)] rounded-lg border border-[var(--iron)] group-hover/item:border-[#ff7a59]/30 transition-colors">
+                           <Users className="w-3 h-3 text-[var(--steel)]" />
+                           <span className="text-[10px] font-bold text-[var(--night)]">{task.owner}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-900 group-hover/item:border-zinc-300 dark:group-hover/item:border-zinc-800 transition-colors">
-                           <Clock className="w-3 h-3 text-zinc-400 dark:text-zinc-600" />
-                           <span className="text-[10px] font-bold text-zinc-600 dark:text-zinc-400 group-hover/item:text-zinc-800 dark:group-hover/item:text-zinc-300">{task.durationDays}d</span>
+                        <div className="flex items-center gap-1.5 px-2 py-1 bg-[var(--mist)] rounded-lg border border-[var(--iron)] group-hover/item:border-[#ff7a59]/30 transition-colors">
+                           <Clock className="w-3 h-3 text-[var(--steel)]" />
+                           <span className="text-[10px] font-bold text-[var(--night)]">{task.durationDays}d</span>
                         </div>
                      </div>
-                     <ChevronRight className="w-3.5 h-3.5 text-zinc-200 dark:text-zinc-800 group-hover/item:text-zinc-400 dark:group-hover/item:text-zinc-600 transition-colors" />
+                     <ChevronRight className="w-3.5 h-3.5 text-[var(--iron)] group-hover/item:text-[#ff7a59] transition-colors" />
                   </div>
                </div>
             ))}
@@ -80,11 +80,11 @@ export const TaskPriorityBoard: React.FC<TaskPriorityBoardProps> = ({ tasksByPri
    return (
       <div className="space-y-6 sm:space-y-8 transition-colors">
          <div className="space-y-1">
-            <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white flex items-center gap-4 tracking-tighter">
-               <Flag className="w-8 h-8 text-orange-500" />
+            <h2 className="text-2xl sm:text-3xl font-bold text-[var(--night)] flex items-center gap-4 tracking-tighter">
+               <Flag className="w-8 h-8 text-[#ff7a59]" />
                Task Priority
             </h2>
-            <p className="text-sm text-zinc-500 font-medium max-w-2xl">
+            <p className="text-sm text-[var(--steel)] font-medium max-w-2xl">
                Automated resource allocation based on delivery risk and critical path logic.
             </p>
          </div>

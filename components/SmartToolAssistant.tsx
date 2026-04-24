@@ -249,14 +249,14 @@ export default function SmartToolAssistant({ tools }: SmartToolAssistantProps) {
 
   const TypingIndicator = () => (
     <div className="flex gap-2">
-      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-        <Bot className="w-4 h-4 text-primary" />
+      <div className="w-8 h-8 bg-[#ff7a59]/10 rounded-full flex items-center justify-center flex-shrink-0">
+        <Bot className="w-4 h-4 text-[#ff7a59]" />
       </div>
-      <div className="bg-muted p-3 rounded-lg">
+      <div className="bg-[var(--mist)] p-3 rounded-2xl border border-[var(--iron)]">
         <div className="flex space-x-1">
-          <div className="w-2 h-2 bg-primary/60 rounded-full animate-bounce"></div>
-          <div className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-          <div className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+          <div className="w-2 h-2 bg-[#ff7a59]/60 rounded-full animate-bounce"></div>
+          <div className="w-2 h-2 bg-[#ff7a59]/60 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+          <div className="w-2 h-2 bg-[#ff7a59]/60 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
         </div>
       </div>
     </div>
@@ -267,71 +267,74 @@ export default function SmartToolAssistant({ tools }: SmartToolAssistantProps) {
       <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsOpen(true)}
-          className="h-14 w-14 rounded-full shadow-lg bg-primary hover:bg-primary/90 transition-all duration-300 hover:scale-110"
+          className="h-14 w-14 rounded-full shadow-lg bg-[#ff7a59] hover:bg-[#ff7a59]/90 transition-all duration-300 hover:scale-110"
           size="icon"
         >
-          <MessageCircle className="h-6 w-6" />
+          <MessageCircle className="h-6 w-6 text-white" />
         </Button>
-        <div className="absolute -top-2 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
+        <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#10b981] rounded-full border-2 border-white animate-pulse"></div>
       </div>
     )
   }
 
   return (
-    <Card className="fixed bottom-6 right-6 w-96 h-[600px] shadow-xl z-50 flex flex-col bg-background border">
-      <CardHeader className="flex-row items-center justify-between space-y-0 pb-3 border-b">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-primary/10 rounded-full">
-            <Bot className="h-4 w-4 text-primary" />
+    <Card className="fixed bottom-6 right-6 w-[400px] h-[650px] shadow-2xl z-50 flex flex-col bg-[var(--cloud)] border-[var(--iron)] rounded-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-5">
+      <CardHeader className="flex-row items-center justify-between space-y-0 p-4 border-b border-[var(--iron)] bg-[var(--mist)]">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-[#ff7a59]/10 rounded-full border border-[#ff7a59]/20">
+            <Bot className="h-5 w-5 text-[#ff7a59]" />
           </div>
-          <CardTitle className="text-lg">AI Tool Assistant</CardTitle>
-          <Badge variant="secondary" className="text-xs">
-            <Sparkles className="w-3 h-3 mr-1" />
-            Smart
-          </Badge>
+          <div>
+            <CardTitle className="text-base font-bold text-[var(--night)]">Assistant</CardTitle>
+            <div className="flex items-center gap-1.5 prose prose-stone">
+               <div className="w-1.5 h-1.5 bg-[#10b981] rounded-full"></div>
+               <span className="text-[10px] text-[var(--steel)] uppercase tracking-widest font-bold">Online</span>
+            </div>
+          </div>
         </div>
-        <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
-          <X className="h-4 w-4" />
+        <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="hover:bg-[var(--iron)]/20 text-[var(--steel)]">
+          <X className="h-5 w-5" />
         </Button>
       </CardHeader>
       
-      <CardContent className="flex-1 flex flex-col p-0">
+      <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
         <ScrollArea className="flex-1 px-4">
-          <div className="space-y-4 py-4">
+          <div className="space-y-6 py-6">
             {messages.map((message) => (
-              <div key={message.id} className={`flex gap-2 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={message.id} className={`flex gap-3 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {message.sender === 'assistant' && (
-                  <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <Bot className="w-4 h-4 text-primary" />
+                  <div className="w-8 h-8 bg-[#ff7a59]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1 border border-[#ff7a59]/10">
+                    <Bot className="w-4 h-4 text-[#ff7a59]" />
                   </div>
                 )}
                 
-                <div className="max-w-[80%]">
+                <div className="max-w-[85%]">
                   {message.type === 'text' && (
-                    <div className={`p-3 rounded-lg ${
+                    <div className={`p-4 rounded-2xl shadow-sm border ${
                       message.sender === 'user' 
-                        ? 'bg-primary text-primary-foreground ml-auto' 
-                        : 'bg-muted'
+                        ? 'bg-[var(--night)] text-white border-[var(--night)] rounded-tr-none' 
+                        : 'bg-white text-[var(--night)] border-[var(--iron)] rounded-tl-none'
                     }`}>
-                      {message.content}
+                      <p className="text-sm leading-relaxed">{message.content}</p>
                     </div>
                   )}
                   
                   {message.type === 'question' && (
-                    <div className="space-y-3">
-                      <div className="p-3 rounded-lg bg-muted">
-                        {message.content}
+                    <div className="space-y-4">
+                      <div className="p-4 rounded-2xl bg-white text-[var(--night)] border border-[var(--iron)] shadow-sm rounded-tl-none">
+                        <p className="text-sm leading-relaxed">{message.content}</p>
                       </div>
                       {message.data?.type === 'multiple-choice' && (
-                        <div className="space-y-2">
+                        <div className="grid gap-2 pl-2">
                           {message.data.options.map((option: any, idx: number) => (
                             <Button
                               key={idx}
                               variant="outline"
-                              className="w-full justify-start text-left h-auto p-3 hover:bg-primary/10"
+                              className="justify-start text-left h-auto p-3.5 bg-white border-[var(--iron)] text-[var(--night)] hover:bg-[var(--mist)] hover:border-[#ff7a59]/30 rounded-xl transition-all duration-200"
                               onClick={() => handleOptionSelect(option)}
                             >
-                              {option.text}
+                              <span className="text-sm font-medium">{option.text}</span>
+                              <ArrowRight className="w-3.5 h-3.5 ml-auto text-[var(--steel)]" />
                             </Button>
                           ))}
                         </div>
@@ -344,32 +347,22 @@ export default function SmartToolAssistant({ tools }: SmartToolAssistantProps) {
                       {message.data.tools.map((result: any) => {
                         const tool = result.tool
                         return (
-                          <Card key={tool.id} className="border hover:shadow-md transition-shadow">
-                            <CardContent className="p-3">
+                          <Card key={tool.id} className="card border-[var(--iron)] bg-white hover:border-[#ff7a59]/30 transition-all duration-200 shadow-sm overflow-hidden group">
+                            <CardContent className="p-4">
                               <div className="flex items-start justify-between gap-2 mb-2">
-                                <h4 className="font-medium text-sm leading-tight">{tool.name}</h4>
+                                <h4 className="font-bold text-sm text-[var(--night)] group-hover:text-[#ff7a59] transition-colors">{tool.name}</h4>
                                 <div className="flex gap-1 flex-shrink-0">
-                                  <Badge variant="secondary" className="text-xs">{tool.category}</Badge>
                                   {result.score > 0.7 && (
-                                    <Badge variant="default" className="text-xs bg-green-500">
-                                      Great Match
+                                    <Badge className="text-[10px] bg-[#10b981] text-white border-0 px-1.5 h-4">
+                                      Match
                                     </Badge>
                                   )}
                                 </div>
                               </div>
-                              <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{tool.description}</p>
-                              {result.reasons.length > 0 && (
-                                <div className="mb-3">
-                                  {result.reasons.map((reason: string, idx: number) => (
-                                    <Badge key={idx} variant="outline" className="text-xs mr-1 mb-1">
-                                      {reason}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              )}
-                              <Button size="sm" className="w-full" asChild>
+                              <p className="text-xs text-[var(--steel)] mb-4 line-clamp-2 leading-relaxed">{tool.description}</p>
+                              <Button size="sm" className="btn btn-primary w-full h-9" asChild>
                                 <a href={tool.href} target="_blank" rel="noopener noreferrer">
-                                  Try Now <ArrowRight className="w-3 h-3 ml-1" />
+                                  Use Tool <ArrowRight className="w-3.5 h-3.5 ml-2" />
                                 </a>
                               </Button>
                             </CardContent>
@@ -381,8 +374,8 @@ export default function SmartToolAssistant({ tools }: SmartToolAssistantProps) {
                 </div>
                 
                 {message.sender === 'user' && (
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <User className="w-4 h-4 text-primary-foreground" />
+                  <div className="w-8 h-8 bg-[var(--night)] rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+                    <User className="w-4 h-4 text-white" />
                   </div>
                 )}
               </div>
@@ -393,33 +386,40 @@ export default function SmartToolAssistant({ tools }: SmartToolAssistantProps) {
           </div>
         </ScrollArea>
         
-        <div className="border-t p-4 space-y-2">
-          <div className="flex gap-2">
+        <div className="border-t border-[var(--iron)] p-4 bg-white">
+          <div className="flex gap-2 mb-3">
             <Input
-              placeholder="Type your message..."
+              placeholder="How can I help you today?"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleTextInput()}
-              className="flex-1"
+              className="input flex-1 h-11"
             />
-            <Button size="icon" onClick={handleTextInput} disabled={!inputValue.trim()}>
-              <Send className="h-4 w-4" />
+            <Button 
+              size="icon" 
+              onClick={handleTextInput} 
+              disabled={!inputValue.trim()}
+              className="h-11 w-11 rounded-xl bg-[var(--night)] hover:bg-[var(--night)]/90"
+            >
+              <Send className="h-5 w-5 text-white" />
             </Button>
           </div>
           <div className="flex gap-2">
-            <Button variant="ghost" size="sm" onClick={resetChat} className="flex-1">
-              <RotateCcw className="w-3 h-3 mr-1" />
-              Start Over
+            <Button variant="ghost" size="sm" onClick={resetChat} className="flex-1 text-[11px] font-bold text-[var(--steel)] hover:text-[#ff7a59] hover:bg-[#ff7a59]/5 h-8">
+              <RotateCcw className="w-3 h-3 mr-1.5" />
+              START OVER
             </Button>
+            <div className="w-[1px] bg-[var(--iron)] h-4 self-center"></div>
             <Button 
               variant="ghost" 
               size="sm" 
+              className="flex-1 text-[11px] font-bold text-[var(--steel)] hover:text-[var(--night)] hover:bg-[var(--mist)] h-8"
               onClick={() => {
                 addMessage('assistant', 'What specific functionality are you looking for?', 'text')
                 setCurrentQuestion('describe-need')
               }}
             >
-              Ask Question
+              SKIP TO QUEST
             </Button>
           </div>
         </div>

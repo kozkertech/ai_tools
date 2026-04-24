@@ -41,49 +41,7 @@ interface DomainAPIResult {
 type ViewMode = "grid" | "list"
 type FilterMode = "all" | "available" | "unavailable"
 
-// Theme-aware color system
-const getThemeColors = (isDark: boolean) => ({
-  background: isDark ? '#0F172A' : '#F9FAFB',
-  cardBackground: isDark ? '#1E293B' : '#FFFFFF',
-  headerBackground: isDark ? 'linear-gradient(90deg, #1E293B 0%, #334155 100%)' : 'linear-gradient(90deg, #FFF7ED 0%, #FFF9F6 100%)',
-  textPrimary: isDark ? '#F1F5F9' : '#111827',
-  textSecondary: isDark ? '#94A3B8' : '#6B7280',
-  textTertiary: isDark ? '#64748B' : '#9CA3AF',
-  border: isDark ? '#334155' : '#E5E7EB',
-  inputBackground: isDark ? '#334155' : '#FFFFFF',
-  hoverBackground: isDark ? '#334155' : '#F9FAFB',
-  accent: '#FF7435', // Keep brand color consistent
-  accentHover: '#E6651E',
-  success: isDark ? '#059669' : '#10B981',
-  successBackground: isDark ? '#064E3B' : '#D1FAE5',
-  successBorder: isDark ? '#047857' : '#A7F3D0',
-  error: isDark ? '#DC2626' : '#EF4444',
-  errorBackground: isDark ? '#7F1D1D' : '#FEE2E2',
-  errorBorder: isDark ? '#B91C1C' : '#FECACA',
-})
-
 export default function DomainCheckerPage() {
-  const [isDark, setIsDark] = useState(false)
-  
-  // Detect theme changes from external navbar toggle
-  useEffect(() => {
-    const checkTheme = () => {
-      setIsDark(document.documentElement.classList.contains('dark'))
-    }
-    
-    checkTheme() // Initial check
-    
-    // Watch for theme changes
-    const observer = new MutationObserver(checkTheme)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    })
-    
-    return () => observer.disconnect()
-  }, [])
-  
-  const colors = getThemeColors(isDark)
   
   const [formData, setFormData] = useState<FormDataState>({
     name: "",
@@ -348,15 +306,15 @@ export default function DomainCheckerPage() {
   const renderSkeleton = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-        <Card key={i} className="animate-pulse shadow-sm rounded-xl overflow-hidden" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
+        <Card key={i} className="animate-pulse flex flex-col justify-between card border-[var(--iron)]">
           <CardContent className="p-5 h-40 flex flex-col justify-between">
             <div>
-              <div className="w-1/3 h-5 bg-gray-200 dark:bg-gray-700 rounded-full mb-4"></div>
-              <div className="w-3/4 h-8 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+              <div className="w-1/3 h-5 bg-[var(--iron)] rounded-full mb-4"></div>
+              <div className="w-3/4 h-8 bg-[var(--iron)] rounded mb-4"></div>
             </div>
             <div className="flex justify-end gap-2 mt-auto">
-                <div className="w-20 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-                <div className="w-24 h-8 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
+                <div className="w-20 h-8 bg-[var(--iron)] rounded-full"></div>
+                <div className="w-24 h-8 bg-[var(--iron)] rounded-full"></div>
             </div>
           </CardContent>
         </Card>
@@ -366,11 +324,11 @@ export default function DomainCheckerPage() {
 
   const renderEmptyState = () => (
     <div className="text-center py-20 px-4 w-full animate-in fade-in duration-700">
-      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 mx-auto shadow-sm" style={{ backgroundColor: colors.cardBackground, border: `1px solid ${colors.border}` }}>
-        <Globe className="w-8 h-8 opacity-40 text-gray-400" />
+      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 mx-auto bg-[var(--mist)] border border-[var(--iron)] text-[var(--night)]">
+        <Globe className="w-8 h-8 opacity-40" />
       </div>
-      <h3 className="text-2xl md:text-3xl font-bold mb-3 font-['Poppins'] tracking-tight" style={{ color: colors.textPrimary }}>Start your search</h3>
-      <p className="text-lg max-w-lg mx-auto leading-relaxed" style={{ color: colors.textSecondary }}>
+      <h3 className="text-2xl md:text-3xl font-bold mb-3 tracking-tight text-[var(--night)]">Start your search</h3>
+      <p className="text-lg max-w-lg mx-auto leading-relaxed text-[var(--steel)]">
         Enter a keyword, business name, or idea in the search box above to instantly generate matching domain suggestions.
       </p>
     </div>
@@ -379,11 +337,7 @@ export default function DomainCheckerPage() {
   const renderDomainCard = (result: DomainAPIResult, index: number) => (
     <Card
       key={index}
-      className="transition-all duration-300 ease-out transform hover:-translate-y-1 hover:shadow-xl rounded-xl overflow-hidden border cursor-pointer"
-      style={{ 
-        backgroundColor: colors.cardBackground,
-        borderColor: colors.border
-      }}
+      className="card hover:-translate-y-1 hover:shadow-lg cursor-pointer"
       onClick={() => handleDomainCardClick(result)}
     >
       <CardContent className="p-6">
@@ -392,9 +346,9 @@ export default function DomainCheckerPage() {
             variant={result.Availability === "Available" ? "default" : "secondary"}
             className={`${
               result.Availability === "Available"
-                ? "bg-green-100/90 text-green-700 border-green-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-800"
-                : "bg-red-100/90 text-red-700 border-red-200 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800"
-            } flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full`}
+                ? "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30"
+                : "bg-[#ef4444]/10 text-[#ef4444] border-[#ef4444]/30"
+            } flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full border`}
           >
             {result.Availability === "Available" ? <CheckCircle size={14} className="opacity-80" /> : <XCircle size={14} className="opacity-80" />}
             {result.Availability}
@@ -402,8 +356,7 @@ export default function DomainCheckerPage() {
           <Button
              variant="ghost"
              size="icon"
-             className={`w-8 h-8 rounded-full transition-colors ${favorites.includes(result.Domain) ? 'bg-orange-50 dark:bg-orange-900/20' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
-             style={{ color: favorites.includes(result.Domain) ? colors.accent : colors.textTertiary }}
+             className={`w-8 h-8 rounded-full transition-colors ${favorites.includes(result.Domain) ? 'text-[#ff7a59] bg-[var(--mist)]' : 'text-[var(--steel)] hover:bg-[var(--mist)]'}`}
              onClick={(e) => {
                e.stopPropagation()
                toggleFavorite(result.Domain)
@@ -413,7 +366,7 @@ export default function DomainCheckerPage() {
           </Button>
         </div>
         
-        <h3 className="font-bold text-xl mb-6 break-all leading-tight font-['Poppins'] tracking-tight" style={{ color: colors.textPrimary }}>
+        <h3 className="card-title text-xl mb-6 break-all">
           {result.Domain}
         </h3>
         
@@ -421,14 +374,7 @@ export default function DomainCheckerPage() {
           <Button
             variant="outline"
             size="sm"
-            className="text-xs px-4 rounded-full font-medium transition-all shadow-sm"
-            style={{ 
-              borderColor: colors.border,
-              color: colors.textSecondary,
-              backgroundColor: 'transparent'
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.hoverBackground }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}
+            className="btn-outline text-xs px-4"
             onClick={(e) => {
               e.stopPropagation()
               copyToClipboard(result.Domain)
@@ -439,10 +385,7 @@ export default function DomainCheckerPage() {
           {result.Availability === "Available" && (
             <Button
               size="sm"
-              className="text-white text-xs px-5 rounded-full font-bold transition-all shadow-md hover:shadow-lg"
-              style={{ backgroundColor: colors.accent }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.accentHover }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = colors.accent }}
+              className="btn-primary text-xs px-5"
               onClick={(e) => {
                 e.stopPropagation()
                 handleDomainCardClick(result)
@@ -459,13 +402,7 @@ export default function DomainCheckerPage() {
   const renderDomainRow = (result: DomainAPIResult, index: number) => (
     <div
       key={index}
-      className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-xl border cursor-pointer transition-all duration-200 hover:shadow-md"
-      style={{ 
-        backgroundColor: colors.cardBackground,
-        borderColor: colors.border
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.hoverBackground }}
-      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = colors.cardBackground }}
+      className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-xl border cursor-pointer transition-all duration-200 hover:shadow-md bg-[var(--cloud)] border-[var(--iron)] hover:bg-[var(--mist)]"
       onClick={() => handleDomainCardClick(result)}
     >
       <div className="flex items-center gap-5 flex-1 min-w-0 mb-4 sm:mb-0">
@@ -473,23 +410,22 @@ export default function DomainCheckerPage() {
           variant={result.Availability === "Available" ? "default" : "secondary"}
           className={`${
             result.Availability === "Available"
-              ? "bg-green-100/90 text-green-700 border-green-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-800"
-              : "bg-red-100/90 text-red-700 border-red-200 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800"
-          } flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full shrink-0`}
+              ? "bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30"
+              : "bg-[#ef4444]/10 text-[#ef4444] border-[#ef4444]/30"
+          } flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full shrink-0 border`}
         >
           {result.Availability === "Available" ? <CheckCircle size={14} /> : <XCircle size={14} />}
           {result.Availability}
         </Badge>
         <div className="flex-1 min-w-0">
-          <h3 className="font-bold text-lg xl:text-xl break-all font-['Poppins'] tracking-tight" style={{ color: colors.textPrimary }}>{result.Domain}</h3>
+          <h3 className="font-semibold text-lg xl:text-xl break-all text-[var(--night)] tracking-tight">{result.Domain}</h3>
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-2 shrink-0">
         <Button
           variant="ghost"
           size="icon"
-          className="w-9 h-9 rounded-full transition-colors"
-          style={{ color: favorites.includes(result.Domain) ? colors.accent : colors.textTertiary }}
+          className={`w-9 h-9 rounded-full transition-colors ${favorites.includes(result.Domain) ? 'text-[#ff7a59] bg-[var(--mist)]' : 'text-[var(--steel)] hover:bg-[var(--mist)]'}`}
           onClick={(e) => {
             e.stopPropagation()
             toggleFavorite(result.Domain)
@@ -500,10 +436,7 @@ export default function DomainCheckerPage() {
         <Button
           variant="outline"
           size="sm"
-          className="font-medium rounded-full px-4 transition-colors shadow-sm"
-          style={{ borderColor: colors.border, color: colors.textSecondary, backgroundColor: 'transparent' }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.hoverBackground }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}
+          className="btn-outline font-medium rounded-full px-4"
           onClick={(e) => {
             e.stopPropagation()
             copyToClipboard(result.Domain)
@@ -514,10 +447,7 @@ export default function DomainCheckerPage() {
         {result.Availability === "Available" && (
           <Button
             size="sm"
-            className="text-white font-bold rounded-full px-6 transition-all shadow-md hover:shadow-lg"
-            style={{ backgroundColor: colors.accent }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.accentHover }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = colors.accent }}
+            className="btn-primary rounded-full px-6"
             onClick={(e) => {
               e.stopPropagation()
               handleDomainCardClick(result)
@@ -531,81 +461,60 @@ export default function DomainCheckerPage() {
   )
 
   return (
-    <div className="min-h-screen w-full font-sans transition-colors duration-200" style={{ backgroundColor: colors.background }}>
+    <div className="w-full">
       {/* Hero Section */}
-      <div 
-        className="w-full pt-16 pb-12 px-4 md:px-8 border-b"
-        style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}
-      >
+      <div className="w-full pt-16 pb-12 px-4 md:px-8 border-b border-[var(--iron)] bg-[var(--cloud)]">
         <div className="max-w-4xl mx-auto text-center space-y-6">
-            <div className="inline-flex items-center justify-center p-3.5 rounded-2xl mb-2 shadow-sm" style={{ backgroundColor: `${colors.accent}15`, color: colors.accent }}>
+            <div className="inline-flex items-center justify-center p-3.5 rounded-2xl mb-2 shadow-sm bg-[#ff7a59]/10 text-[#ff7a59]">
               <Globe className="w-8 h-8" />
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight font-['Poppins']" style={{ color: colors.textPrimary }}>
-              Domain Name <span style={{ color: colors.accent }}>Genie</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-[var(--night)]">
+              Domain Name <span className="text-[#ff7a59]">Genie</span>
             </h1>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium" style={{ color: colors.textSecondary }}>
+            <p className="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed text-[var(--steel)]">
               Generate premium, brandable domain names powered by AI instantly. 
             </p>
 
-            <Card className="mt-8 md:mt-12 w-full shadow-xl rounded-2xl overflow-hidden border" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
+            <Card className="card mt-8 md:mt-12 w-full text-left">
                 <CardContent className="p-6 md:p-8">
-                    <form onSubmit={handleSubmit} className="space-y-6 text-left">
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <Label htmlFor="name" className="text-xs font-bold tracking-wider uppercase" style={{ color: colors.textSecondary }}>NAME</Label>
+                            <div className="field">
+                                <Label htmlFor="name" className="field-label">NAME</Label>
                                 <Input
                                     id="name" name="name" type="text"
                                     placeholder="Enter your name"
                                     value={formData.name} onChange={handleInputChange}
-                                    className={`rounded-xl h-12 transition-all shadow-sm ${errors.name ? "border-red-400 ring-2 ring-red-100" : ""}`}
-                                    style={{ 
-                                        backgroundColor: colors.inputBackground,
-                                        borderColor: errors.name ? '#F87171' : colors.border,
-                                        color: colors.textPrimary
-                                    }}
+                                    className={`input ${errors.name ? "border-[#ef4444]" : ""}`}
                                 />
-                                {errors.name && <p className="text-xs text-red-500 font-bold flex items-center gap-1 mt-1"><AlertTriangle size={12} />{errors.name}</p>}
+                                {errors.name && <p className="text-xs text-[#ef4444] font-bold flex items-center gap-1 mt-1"><AlertTriangle size={12} />{errors.name}</p>}
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="email" className="text-xs font-bold tracking-wider uppercase" style={{ color: colors.textSecondary }}>EMAIL</Label>
+                            <div className="field">
+                                <Label htmlFor="email" className="field-label">EMAIL</Label>
                                 <Input
                                     id="email" name="email" type="email"
                                     placeholder="your@email.com"
                                     value={formData.email} onChange={handleInputChange}
-                                    className={`rounded-xl h-12 transition-all shadow-sm ${errors.email ? "border-red-400 ring-2 ring-red-100" : ""}`}
-                                    style={{ 
-                                        backgroundColor: colors.inputBackground,
-                                        borderColor: errors.email ? '#F87171' : colors.border,
-                                        color: colors.textPrimary
-                                    }}
+                                    className={`input ${errors.email ? "border-[#ef4444]" : ""}`}
                                 />
-                                {errors.email && <p className="text-xs text-red-500 font-bold flex items-center gap-1 mt-1"><AlertTriangle size={12} />{errors.email}</p>}
+                                {errors.email && <p className="text-xs text-[#ef4444] font-bold flex items-center gap-1 mt-1"><AlertTriangle size={12} />{errors.email}</p>}
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="keywords" className="text-xs font-bold tracking-wider uppercase" style={{ color: colors.textSecondary }}>KEYWORDS OR DESCRIPTION</Label>
+                        <div className="field">
+                            <Label htmlFor="keywords" className="field-label">KEYWORDS OR DESCRIPTION</Label>
                             <Textarea
                                 id="keywords" name="keywords"
                                 placeholder="Enter keywords (e.g. tech, food, AI...) or describe your business"
                                 value={formData.keywords} onChange={handleInputChange}
-                                className={`min-h-[120px] rounded-xl p-4 transition-all text-base leading-relaxed shadow-inner ${errors.keywords ? "border-red-400 ring-2 ring-red-100" : ""}`}
-                                style={{ 
-                                    backgroundColor: colors.inputBackground,
-                                    borderColor: errors.keywords ? '#F87171' : colors.border,
-                                    color: colors.textPrimary
-                                }}
+                                className={`textarea min-h-[120px] ${errors.keywords ? "border-[#ef4444]" : ""}`}
                             />
-                            {errors.keywords && <p className="text-xs text-red-500 font-bold flex items-center gap-1 mt-1"><AlertTriangle size={12} />{errors.keywords}</p>}
+                            {errors.keywords && <p className="text-xs text-[#ef4444] font-bold flex items-center gap-1 mt-1"><AlertTriangle size={12} />{errors.keywords}</p>}
                         </div>
 
                         <Button
                             type="submit" disabled={isLoading}
-                            className={`w-full h-14 text-lg text-white font-bold rounded-xl transition-all duration-300 ${isLoading ? 'opacity-80 cursor-not-allowed' : 'shadow-lg hover:-translate-y-0.5'}`}
-                            style={{ backgroundColor: colors.accent, ...(!isLoading ? { boxShadow: `0 8px 24px -4px ${colors.accent}` } : {}) }}
-                            onMouseEnter={(e) => { if (!isLoading) e.currentTarget.style.backgroundColor = colors.accentHover }}
-                            onMouseLeave={(e) => { if (!isLoading) e.currentTarget.style.backgroundColor = colors.accent }}
+                            className={`btn-primary w-full h-14 text-lg ${isLoading ? 'opacity-80 cursor-not-allowed' : ''}`}
                         >
                             {isLoading ? (
                                 <><Loader2 className="w-6 h-6 mr-3 animate-spin" /> Generating Domains...</>
@@ -624,19 +533,19 @@ export default function DomainCheckerPage() {
         
         {/* Errors & Raw Responses */}
         {apiError && (
-          <div className="mb-10 p-6 rounded-xl border border-red-200 bg-red-50 dark:bg-red-900/10 dark:border-red-800/30">
-            <h3 className="text-lg font-bold text-red-600 flex items-center gap-2 mb-2"><AlertTriangle size={18} /> API Error</h3>
-            <p className="text-red-700 dark:text-red-400 font-medium">{apiError}</p>
+          <div className="mb-10 p-6 rounded-[2rem] border border-[#ef4444]/30 bg-[#ef4444]/5">
+            <h3 className="text-lg font-bold text-[#ef4444] flex items-center gap-2 mb-2"><AlertTriangle size={18} /> API Error</h3>
+            <p className="text-[#ef4444] font-medium">{apiError}</p>
           </div>
         )}
 
         {rawApiResponse && domainResults.length === 0 && !isLoading && !apiError && (
-            <Card className="mb-10 rounded-xl shadow-sm border overflow-hidden" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
-                <CardHeader className="border-b" style={{ borderColor: `${colors.border}40` }}>
-                    <CardTitle className="text-lg font-bold" style={{ color: colors.textPrimary }}>Raw Output Diagnostics</CardTitle>
+            <Card className="card mb-10 overflow-hidden">
+                <CardHeader className="border-b border-[var(--iron)]">
+                    <CardTitle className="text-lg font-bold">Raw Output Diagnostics</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <pre className="text-sm p-6 overflow-x-auto" style={{ color: colors.textSecondary, backgroundColor: colors.hoverBackground }}>
+                    <pre className="text-sm p-6 overflow-x-auto text-[var(--night)] bg-[var(--mist)]">
                         {rawApiResponse}
                     </pre>
                 </CardContent>
@@ -647,9 +556,9 @@ export default function DomainCheckerPage() {
         {isLoading && (
             <div className="w-full pt-4">
                 <div className="flex gap-4 mb-8 max-w-lg">
-                   <div className="w-24 h-10 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse transition-colors" style={{ backgroundColor: colors.border }}></div>
-                   <div className="w-24 h-10 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse transition-colors" style={{ backgroundColor: colors.border }}></div>
-                   <div className="w-24 h-10 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse transition-colors" style={{ backgroundColor: colors.border }}></div>
+                   <div className="w-24 h-10 bg-[var(--iron)] rounded-full animate-pulse"></div>
+                   <div className="w-24 h-10 bg-[var(--iron)] rounded-full animate-pulse"></div>
+                   <div className="w-24 h-10 bg-[var(--iron)] rounded-full animate-pulse"></div>
                 </div>
                 {renderSkeleton()}
             </div>
@@ -660,10 +569,10 @@ export default function DomainCheckerPage() {
           <section className="animate-in fade-in slide-in-from-bottom-8 duration-700">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10">
               <div>
-                <h2 className="text-2xl md:text-3xl font-extrabold mb-1 font-['Poppins'] tracking-tight" style={{ color: colors.textPrimary }}>
+                <h2 className="text-2xl md:text-3xl font-semibold mb-1 tracking-tight text-[var(--night)]">
                     Generated Domains
                 </h2>
-                <p className="font-medium" style={{ color: colors.textSecondary }}>
+                <p className="font-medium text-[var(--steel)]">
                   Showing {filteredDomains.length} outstanding choices
                 </p>
               </div>
@@ -674,48 +583,38 @@ export default function DomainCheckerPage() {
                 {/* Visual Mock Ext Chips */}
                 <div className="hidden md:flex gap-1.5 mr-2">
                     {['.com', '.ai', '.io'].map(ext => (
-                        <div key={ext} className="px-3.5 py-1.5 text-xs font-bold rounded-full border opacity-50 cursor-not-allowed select-none transition-opacity" 
-                             style={{ color: colors.textSecondary, backgroundColor: colors.background, borderColor: colors.border }}>
+                        <div key={ext} className="px-3.5 py-1.5 text-xs font-bold rounded-full border border-[var(--iron)] text-[var(--steel)] bg-transparent opacity-50 cursor-not-allowed select-none transition-opacity">
                             {ext}
                         </div>
                     ))}
                 </div>
 
-                <div className="flex gap-1.5 items-center p-1.5 rounded-full shadow-inner w-full sm:w-auto" style={{ backgroundColor: colors.hoverBackground }}>
+                <div className="flex gap-1.5 items-center p-1.5 rounded-full shadow-inner w-full sm:w-auto bg-[var(--mist)]">
                     {["all", "available", "unavailable"].map((mode) => (
                         <Button
                             key={mode}
                             variant="ghost"
                             size="sm"
                             onClick={() => setFilterMode(mode as FilterMode)}
-                            className={`rounded-full px-5 font-bold transition-all duration-300 capitalize text-xs md:text-sm h-8 ${
-                                filterMode === mode ? "shadow-sm bg-white text-gray-900 dark:bg-gray-700 dark:text-white" : ""
+                            className={`rounded-full px-5 transition-all duration-300 capitalize text-xs md:text-sm h-8 font-bold ${
+                                filterMode === mode ? "bg-[var(--cloud)] border border-[var(--iron)] text-[var(--night)] shadow-sm" : "text-[var(--steel)] hover:text-[var(--night)] hover:bg-transparent"
                             }`}
-                            style={filterMode !== mode ? { color: colors.textSecondary } : {}}
                         >
                             {mode}
                         </Button>
                     ))}
                 </div>
                 
-                <div className="flex gap-1 rounded-full p-1 border shadow-sm w-full sm:w-auto justify-center" style={{ backgroundColor: colors.cardBackground, borderColor: colors.border }}>
+                <div className="flex gap-1 rounded-full p-1 border border-[var(--iron)] w-full sm:w-auto justify-center bg-[var(--cloud)]">
                   <Button
                     variant="ghost" size="icon" onClick={() => setViewMode("grid")}
-                    className={`rounded-full w-8 h-8 transition-colors`}
-                    style={{ 
-                        color: viewMode === "grid" ? colors.accent : colors.textTertiary,
-                        backgroundColor: viewMode === "grid" ? colors.hoverBackground : 'transparent'
-                    }}
+                    className={`rounded-full w-8 h-8 transition-colors ${viewMode === 'grid' ? 'text-[#ff7a59] bg-[var(--mist)]' : 'text-[var(--steel)] hover:bg-[var(--mist)]'}`}
                   >
                     <Grid size={15} />
                   </Button>
                   <Button
                     variant="ghost" size="icon" onClick={() => setViewMode("list")}
-                    className={`rounded-full w-8 h-8 transition-colors`}
-                    style={{ 
-                        color: viewMode === "list" ? colors.accent : colors.textTertiary,
-                        backgroundColor: viewMode === "list" ? colors.hoverBackground : 'transparent'
-                    }}
+                    className={`rounded-full w-8 h-8 transition-colors ${viewMode === 'list' ? 'text-[#ff7a59] bg-[var(--mist)]' : 'text-[var(--steel)] hover:bg-[var(--mist)]'}`}
                   >
                     <List size={15} />
                   </Button>
@@ -736,12 +635,11 @@ export default function DomainCheckerPage() {
             </div>
 
             {filteredDomains.length === 0 && (
-              <div className="text-center py-16 px-4 border rounded-2xl border-dashed mt-8" style={{ borderColor: colors.border }}>
-                <p className="text-lg font-medium mb-5" style={{ color: colors.textSecondary }}>No domains match your current filters.</p>
+              <div className="text-center py-16 px-4 border rounded-2xl border-dashed mt-8 border-[var(--iron)]">
+                <p className="text-lg font-medium mb-5 text-[var(--steel)]">No domains match your current filters.</p>
                 <Button
                   variant="outline" onClick={() => { setFilterMode("all"); setSearchFilter(""); }}
-                  className="font-bold px-6 rounded-full transition-colors shadow-sm"
-                  style={{ borderColor: colors.border, color: colors.textPrimary, backgroundColor: colors.cardBackground }}
+                  className="btn-outline px-6"
                 >
                   Clear Filters
                 </Button>
@@ -757,23 +655,16 @@ export default function DomainCheckerPage() {
 
         {/* History Area */}
         {searchHistory.length > 0 && !isLoading && (
-            <div className="mt-20 pt-10 border-t flex flex-col items-center animate-in fade-in" style={{ borderColor: colors.border }}>
+            <div className="mt-20 pt-10 border-t border-[var(--iron)] flex flex-col items-center animate-in fade-in">
                 <div className="flex flex-col items-center w-full max-w-3xl">
-                    <h4 className="text-xs font-bold uppercase tracking-widest mb-6 flex items-center gap-2" style={{ color: colors.textSecondary }}>
+                    <h4 className="text-xs font-bold uppercase tracking-widest mb-6 flex items-center gap-2 text-[var(--steel)]">
                         <History size={16} /> Recent Searches
                     </h4>
                     <div className="flex flex-wrap justify-center gap-3">
                         {searchHistory.map((searchTerm, index) => (
                         <div
                             key={index}
-                            className="cursor-pointer px-4 py-2 rounded-full text-sm font-semibold transition-all border shadow-sm hover:-translate-y-0.5"
-                            style={{ 
-                                backgroundColor: colors.cardBackground,
-                                color: colors.textPrimary,
-                                borderColor: colors.border
-                            }}
-                            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.hoverBackground; e.currentTarget.style.borderColor = colors.accent }}
-                            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = colors.cardBackground; e.currentTarget.style.borderColor = colors.border }}
+                            className="cursor-pointer px-4 py-2 rounded-full text-sm font-semibold transition-all border shadow-sm hover:-translate-y-0.5 bg-[var(--cloud)] border-[var(--iron)] text-[var(--night)] hover:bg-[var(--mist)] hover:border-[#ff7a59]"
                             onClick={() => {
                                 setFormData((prev) => ({ ...prev, keywords: searchTerm }))
                                 window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -788,9 +679,6 @@ export default function DomainCheckerPage() {
             </div>
         )}
 
-        <footer className="text-center mt-24 pt-8 border-t text-sm font-medium opacity-70" style={{ color: colors.textSecondary, borderColor: colors.border }}>
-          <p>&copy; {new Date().getFullYear()} Domain Name Genie. All rights reserved.</p>
-        </footer>
       </div>
     </div>
   )

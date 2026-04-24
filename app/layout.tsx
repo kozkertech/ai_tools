@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { IBM_Plex_Sans, DM_Sans, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -11,7 +11,23 @@ import ChatWidget from '@/components/ChatWidget';
 
 import { Suspense } from "react"
 
-const inter = Inter({ subsets: ["latin"] })
+const ibmPlexSans = IBM_Plex_Sans({ 
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-display",
+})
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-body",
+})
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-mono",
+})
 
 export const metadata: Metadata = {
   title: {
@@ -78,12 +94,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${ibmPlexSans.variable} ${dmSans.variable} ${jetBrainsMono.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <Suspense fallback={null}>
-              <div className="flex min-h-screen flex-col">
+              <div className="app-shell">
                 <Header />
-                <main className="flex-1">{children}</main>
+                <main className="page section flex-1">{children}</main>
                 <Footer />
               </div>
               <Analytics />

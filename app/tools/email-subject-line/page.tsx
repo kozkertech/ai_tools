@@ -1,16 +1,15 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, Mail, TrendingUp, Star } from "lucide-react"
+import { Loader2, Mail, TrendingUp, Star, Sparkles, XCircle, ChevronRight, Copy, Share2, MousePointer2, ArrowRight, Zap, Target, Activity, ShieldCheck, CheckCircle } from "lucide-react"
 import { ContentLoadingScreen } from "@/components/loading-screen"
 
 interface GeneratedLine {
@@ -52,10 +51,6 @@ export default function EmailGenerator() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  if (loading) {
-    return <ContentLoadingScreen />
-  }
-
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
@@ -78,7 +73,7 @@ export default function EmailGenerator() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to generate email lines")
+        throw new Error("Linguistic node failed to synchronize.")
       }
 
       const data: ApiResponse[] = await response.json()
@@ -86,90 +81,99 @@ export default function EmailGenerator() {
         setResults(data[0].results.generated_lines)
         setMetadata(data[0].metadata)
       } else {
-        throw new Error("Generation failed")
+        throw new Error("Generation failure.")
       }
     } catch (err) {
-      setError("Failed to generate email lines. Please try again.")
+      setError("Strategic synthesis failed. Please re-engage.")
       console.error(err)
     } finally {
       setLoading(false)
     }
   }
 
-  const getCategoryColor = (category: string) => {
+  const getCategoryStyles = (category: string) => {
     switch (category.toLowerCase()) {
       case "urgency":
-        return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100"
+        return "bg-red-500 text-white border-none shadow-red-500/20"
       case "offer":
-        return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100"
+        return "bg-emerald-500 text-white border-none shadow-emerald-500/20"
       case "general":
-        return "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100"
+        return "bg-[var(--night)] text-white border-none"
       default:
-        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100"
+        return "bg-[var(--iron)] text-[var(--steel)] border-none"
     }
   }
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-r from-orange-50 to-orange-25 dark:from-[#0a0a0a] dark:to-[#111111] text-gray-900 dark:text-white">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 font-poppins">Email Subject-Line Generator</h1>
-          <p className="text-gray-600 dark:text-gray-400 text-lg font-inter">
-            Generate high-converting email subject lines and preview text with AI
-          </p>
+    <div className="min-h-screen bg-[var(--mist)] text-[var(--night)] transition-colors duration-300 pb-32">
+      {/* Premium Sticky Header */}
+      <div className="bg-[var(--cloud)]/60 backdrop-blur-2xl border-b border-[var(--iron)] pt-24 pb-8 fixed top-0 w-full z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 bg-[#FF7435] rounded-2xl flex items-center justify-center shadow-2xl shadow-[#FF7435]/30">
+                <Mail className="w-8 h-8 text-white" />
+              </div>
+              <div className="hidden md:block">
+                <h1 className="text-3xl font-black font-poppins text-[var(--night)] tracking-tighter uppercase leading-none mb-1">
+                   Subject <span className="text-[#FF7435]">Nexus</span>
+                </h1>
+                <Badge className="bg-[var(--night)] text-white border-none font-black px-3 py-1 rounded-lg text-[9px] uppercase tracking-widest opacity-80">v4.2 Synthesis Protocol</Badge>
+              </div>
+            </div>
+            <div className="flex items-center gap-6">
+               <div className="text-right hidden sm:block">
+                  <div className="text-[9px] font-black uppercase tracking-widest text-[var(--steel)]">Neural Mode</div>
+                  <div className="text-xs font-black text-[var(--night)] uppercase flex items-center gap-2">
+                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                     Engaged
+                  </div>
+               </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
-          <Card className="bg-white dark:bg-zinc-900 shadow-lg border border-gray-200 dark:border-zinc-800">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Mail className="w-5 h-5 text-orange-500" />
-                Campaign Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label>Campaign Type</Label>
-                  <Select onValueChange={(value) => handleInputChange("campaign_type", value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select campaign type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="promotional">Promotional</SelectItem>
-                      <SelectItem value="newsletter">Newsletter</SelectItem>
-                      <SelectItem value="welcome">Welcome</SelectItem>
-                      <SelectItem value="abandoned_cart">Abandoned Cart</SelectItem>
-                      <SelectItem value="follow_up">Follow Up</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+      <div className="pt-[164px] max-w-7xl mx-auto px-6 lg:px-10 mt-16 lg:mt-24">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-12 items-start">
+          
+          {/* Diagnostic Form Panel */}
+          <div className="xl:col-span-5 space-y-8 animate-in fade-in slide-in-from-left-8 duration-700">
+            <Card className="card p-10 shadow-2xl shadow-black/5 border-2 border-[var(--iron)]/50">
+              <CardHeader className="px-0 pt-0 pb-10 border-b-2 border-[var(--iron)]/40 mb-10">
+                 <div className="flex items-center gap-3">
+                    <Target className="w-6 h-6 text-[#FF7435]" />
+                    <CardTitle className="text-2xl font-black font-poppins uppercase tracking-tighter">Campaign Vectors</CardTitle>
+                 </div>
+                 <CardDescription className="font-bold text-[var(--steel)] italic uppercase tracking-widest text-[10px] mt-2">Initialize linguistic parameters.</CardDescription>
+              </CardHeader>
+              
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <Label className="field-label font-black text-xs uppercase tracking-widest">Logic Core</Label>
+                    <Select onValueChange={(value) => handleInputChange("campaign_type", value)}>
+                      <SelectTrigger className="input h-14 rounded-2xl">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="promotional">Promotional</SelectItem>
+                        <SelectItem value="newsletter">Newsletter</SelectItem>
+                        <SelectItem value="welcome">Welcome</SelectItem>
+                        <SelectItem value="abandoned_cart">Abandoned Cart</SelectItem>
+                        <SelectItem value="follow_up">Follow Up</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                <div className="space-y-2">
-                  <Label>Target Audience</Label>
-                  <Textarea
-                    placeholder="e.g., young e-commerce founders..."
-                    value={formData.target_audience}
-                    onChange={(e) => handleInputChange("target_audience", e.target.value)}
-                    className="min-h-[80px] bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Product/Service</Label>
-                  <Input
-                    placeholder="e.g., AI-powered email automation platform"
-                    value={formData.product_service}
-                    onChange={(e) => handleInputChange("product_service", e.target.value)}
-                    className="bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Brand Voice</Label>
+                  <div className="space-y-3">
+                    <Label className="field-label font-black text-xs uppercase tracking-widest">Tonal Frequency</Label>
                     <Select onValueChange={(value) => handleInputChange("brand_voice", value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="input h-14 rounded-2xl">
                         <SelectValue placeholder="Select voice" />
                       </SelectTrigger>
                       <SelectContent>
@@ -181,151 +185,207 @@ export default function EmailGenerator() {
                       </SelectContent>
                     </Select>
                   </div>
+                </div>
 
-                  <div className="space-y-2">
-                    <Label>Industry</Label>
+                <div className="space-y-3">
+                  <Label className="field-label font-black text-xs uppercase tracking-widest">Target Persona</Label>
+                  <Textarea
+                    placeholder="Identify the specific segment for engagement..."
+                    value={formData.target_audience}
+                    onChange={(e) => handleInputChange("target_audience", e.target.value)}
+                    className="min-h-[120px] input rounded-[2.5rem] pt-8"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <Label className="field-label font-black text-xs uppercase tracking-widest">Mission Objective / Service</Label>
+                  <Input
+                    placeholder="The core offering to be communicated..."
+                    value={formData.product_service}
+                    onChange={(e) => handleInputChange("product_service", e.target.value)}
+                    className="input h-14"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <Label className="field-label font-black text-xs uppercase tracking-widest">Industry Cluster</Label>
                     <Select onValueChange={(value) => handleInputChange("industry", value)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select industry" />
+                      <SelectTrigger className="input h-14 rounded-2xl">
+                        <SelectValue placeholder="Select cluster" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="saas">SaaS</SelectItem>
                         <SelectItem value="ecommerce">E-commerce</SelectItem>
                         <SelectItem value="finance">Finance</SelectItem>
                         <SelectItem value="healthcare">Healthcare</SelectItem>
-                        <SelectItem value="education">Education</SelectItem>
                         <SelectItem value="marketing">Marketing</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
+
+                  <div className="space-y-3">
+                    <Label className="field-label font-black text-xs uppercase tracking-widest">Base Calibration (%)</Label>
+                    <Input
+                      type="number"
+                      step="0.1"
+                      placeholder="20.6"
+                      value={formData.average_open_rate}
+                      onChange={(e) => handleInputChange("average_open_rate", e.target.value)}
+                      className="input h-14"
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Best Performing Subject (Optional)</Label>
+                <div className="space-y-3">
+                  <Label className="field-label font-black text-xs uppercase tracking-widest">Performance Anchor (Optional)</Label>
                   <Input
-                    placeholder="e.g., Unlock smarter outreach with AI..."
+                    placeholder="Baseline for current performance comparison..."
                     value={formData.best_subject}
                     onChange={(e) => handleInputChange("best_subject", e.target.value)}
-                    className="bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white"
+                    className="input h-14"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Current Average Open Rate (%)</Label>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    placeholder="20.6"
-                    value={formData.average_open_rate}
-                    onChange={(e) => handleInputChange("average_open_rate", e.target.value)}
-                    className="bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white"
-                  />
-                </div>
-
-                {error && <div className="text-red-600 dark:text-red-300 text-sm bg-red-50 dark:bg-red-900 p-3 rounded-lg">{error}</div>}
+                {error && (
+                  <Alert variant="destructive" className="rounded-2xl border-2 animate-in shake-in">
+                    <XCircle className="h-5 w-5" />
+                    <AlertDescription className="font-black text-[10px] uppercase tracking-widest">{error}</AlertDescription>
+                  </Alert>
+                )}
 
                 <Button
                   type="submit"
                   disabled={loading || !formData.campaign_type || !formData.target_audience}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors"
+                  className="btn-primary w-full h-20 text-xs font-black uppercase tracking-[0.3em] rounded-full shadow-2xl shadow-[#FF7435]/30 group"
                 >
                   {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Generating...
-                    </>
+                    <Loader2 className="w-6 h-6 animate-spin" />
                   ) : (
-                    "Generate Subject Lines"
+                    <>
+                      Execute Linguistic Synthesis
+                      <ArrowRight className="w-5 h-5 ml-4 group-hover:translate-x-1" />
+                    </>
                   )}
                 </Button>
               </form>
-            </CardContent>
-          </Card>
+            </Card>
+          </div>
 
-          <div className="space-y-6">
+          {/* Synthesis Results Panel */}
+          <div className="xl:col-span-7 space-y-12 animate-in fade-in slide-in-from-right-8 duration-700">
             {metadata && (
-              <Card className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-orange-500" />
-                    Performance Overview
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg">
-                      <div className="text-2xl font-bold font-poppins">{metadata.total_options}</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Generated Options</div>
-                    </div>
-                    <div className="text-center p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg">
-                      <div className="text-2xl font-bold text-orange-500 font-poppins">
-                        {metadata.avg_predicted_open_rate}
-                      </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Avg. Open Rate</div>
-                    </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <Card className="card p-10 flex flex-col items-center justify-center text-center space-y-4 border-2 border-[var(--iron)]/50 bg-white">
+                  <div className="text-5xl font-black font-poppins text-[var(--night)] tracking-tighter">{metadata.total_options}</div>
+                  <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--steel)]">Variations Synthesized</div>
+                </Card>
+                <Card className="card p-10 flex flex-col items-center justify-center text-center space-y-4 border-2 border-[#FF7435]/20 bg-orange-50/10">
+                  <div className="text-5xl font-black font-poppins text-[#FF7435] tracking-tighter">
+                    {metadata.avg_predicted_open_rate}
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--steel)]">Avg. Conversion Probability</div>
+                </Card>
+              </div>
             )}
 
-            {results.length > 0 && (
-              <Card className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Star className="w-5 h-5 text-orange-500" />
-                    Generated Subject Lines
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4 max-h-96 overflow-y-auto">
-                    {results
-                      .sort((a, b) => b.predicted_open_rate - a.predicted_open_rate)
-                      .map((line, index) => (
-                        <div
-                          key={line.id}
-                          className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-orange-300 dark:hover:border-orange-600 transition-colors"
-                        >
-                          <div className="flex items-start justify-between mb-2">
-                            <Badge className={getCategoryColor(line.category)}>{line.category}</Badge>
-                            <div className="flex items-center gap-1 text-orange-500 font-semibold">
-                              <TrendingUp className="w-4 h-4" />
-                              {line.predicted_open_rate}%
-                            </div>
+            {results.length > 0 ? (
+              <div className="space-y-10">
+                <div className="flex items-center justify-between px-2">
+                   <div className="flex items-center gap-4">
+                      <Star className="w-8 h-8 text-[#FF7435] fill-[#FF7435]" />
+                      <h3 className="text-3xl font-black font-poppins uppercase tracking-tighter">High-Yield Outputs</h3>
+                   </div>
+                   <Badge className="bg-[var(--night)] text-white border-none font-black px-4 py-2 rounded-full text-[10px] uppercase tracking-widest animate-pulse">Live Ranking</Badge>
+                </div>
+                
+                <div className="space-y-8 max-h-[1000px] overflow-y-auto custom-scrollbar pr-4">
+                  {results
+                    .sort((a, b) => b.predicted_open_rate - a.predicted_open_rate)
+                    .map((line, index) => (
+                      <div
+                        key={line.id}
+                        className={`card p-10 md:p-14 border-2 transition-all duration-700 relative group overflow-hidden ${
+                          index === 0 
+                            ? "border-[#FF7435] bg-white shadow-2xl shadow-orange-500/10 scale-[1.02]" 
+                            : "border-[var(--iron)]/50 hover:border-[#FF7435]/40 hover:bg-white"
+                        }`}
+                      >
+                         {/* Ambient Background for Winner */}
+                         {index === 0 && (
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FF7435]/5 rounded-bl-[10rem] pointer-events-none -z-10 animate-in fade-in duration-1000"></div>
+                         )}
+
+                        <div className="flex items-center justify-between mb-10">
+                          <Badge className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg ${getCategoryStyles(line.category)}`}>
+                            {line.category}
+                          </Badge>
+                          <div className="flex items-center gap-3 text-[#FF7435]">
+                             <Activity className="w-5 h-5 opacity-40" />
+                             <div className="flex flex-col items-end">
+                                <span className="text-[9px] font-black uppercase tracking-widest text-[var(--steel)]">Conv. Prob.</span>
+                                <span className="text-2xl font-black font-poppins leading-none">{line.predicted_open_rate}%</span>
+                             </div>
                           </div>
-
-                          <div className="space-y-2">
-                            <div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">SUBJECT LINE</div>
-                              <div className="font-semibold text-gray-900 dark:text-white font-inter">{line.subject}</div>
-                            </div>
-
-                            <div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">PREVIEW TEXT</div>
-                              <div className="text-gray-600 dark:text-gray-300 text-sm font-inter">{line.preview}</div>
-                            </div>
-                          </div>
-
-                          {index === 0 && (
-                            <Badge className="mt-2 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200">
-                              Best Performing
-                            </Badge>
-                          )}
                         </div>
-                      ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
 
-            {results.length === 0 && !loading && (
-              <Card className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg">
-                <CardContent className="text-center py-12">
-                  <Mail className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-500 dark:text-gray-400 font-inter">
-                    Fill out the form and click "Generate Subject Lines" to see your results here.
+                        <div className="space-y-10">
+                          <div className="space-y-4">
+                            <div className="text-[9px] font-black text-[#FF7435] uppercase tracking-[0.4em] flex items-center gap-3">
+                              <MousePointer2 className="w-3.5 h-3.5" /> Subject Vector
+                            </div>
+                            <div className="flex items-start justify-between gap-10">
+                              <p className="text-2xl md:text-3xl font-black text-[var(--night)] leading-[1.1] font-poppins tracking-tight break-words">{line.subject}</p>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="shrink-0 h-14 w-14 rounded-2xl bg-[var(--mist)] border-2 border-[var(--iron)]/40 hover:bg-[#FF7435] hover:text-white hover:border-[#FF7435] transition-all"
+                                onClick={() => copyToClipboard(line.subject)}
+                              >
+                                <Copy className="w-6 h-6" />
+                              </Button>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4 pt-10 border-t-2 border-[var(--iron)]/40">
+                            <div className="text-[9px] font-black text-[var(--steel)] uppercase tracking-[0.4em] flex items-center gap-3">
+                              <ShieldCheck className="w-3.5 h-3.5" /> Integrated Preview String
+                            </div>
+                            <p className="text-lg text-[var(--steel)] font-bold leading-relaxed italic opacity-80 pl-6 border-l-4 border-[var(--iron)]">
+                               "{line.preview}"
+                            </p>
+                          </div>
+                        </div>
+
+                        {index === 0 && (
+                          <div className="absolute top-6 right-6 flex flex-col items-end gap-2">
+                             <div className="bg-[#FF7435] text-white text-[9px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-2xl border-2 border-white animate-pulse">
+                                Highest Confidence Pick
+                             </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                </div>
+              </div>
+            ) : (
+              <div className="card p-32 flex flex-col items-center justify-center text-center space-y-10 border-dashed border-4 border-[var(--iron)]/40 grayscale opacity-40 bg-[var(--mist)]/30 rounded-[3rem]">
+                <div className="w-24 h-24 bg-white rounded-[2.5rem] flex items-center justify-center border-2 border-[var(--iron)] shadow-inner">
+                  <Activity className="w-12 h-12 text-[var(--steel)]" />
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-3xl font-black font-poppins text-[var(--night)] uppercase tracking-tighter">Diagnostic Nexus</h3>
+                  <p className="text-[var(--steel)] max-w-sm mx-auto font-bold italic leading-relaxed">
+                    Awaiting vector input through the primary terminal. Once synchronized, AI will extrapolate performance metrics here.
                   </p>
-                </CardContent>
-              </Card>
+                </div>
+                <div className="w-full max-w-md space-y-6 pt-12 opacity-50 flex flex-col items-center pointer-events-none">
+                   <div className="h-20 bg-white rounded-3xl w-full border-2 border-dashed border-[var(--iron)]"></div>
+                   <div className="h-16 bg-white rounded-full w-2/3 border-2 border-dashed border-[var(--iron)]"></div>
+                </div>
+              </div>
             )}
           </div>
         </div>

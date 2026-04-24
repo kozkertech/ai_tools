@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Palette, CheckCircle, XCircle, Copy, Check } from "lucide-react"
+import { Loader2, Palette, CheckCircle, XCircle, Copy, Check, Sparkles, Building2, User, Mail, Compass } from "lucide-react"
 
 interface FormData {
   name: string
@@ -112,10 +111,10 @@ export default function LogoPaletteGenerator() {
         setSuccess(true)
         setResponse(responseData)
       } else {
-        setError(responseData.message || "Failed to generate palette")
+        setError(responseData.message || "The palette engine failed. Please verify your inputs.")
       }
     } catch (err) {
-      setError("Network error. Please try again.")
+      setError("Strategic connection error. Please try again.")
       console.error("Webhook error:", err)
     } finally {
       setIsLoading(false)
@@ -134,214 +133,214 @@ export default function LogoPaletteGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] font-body">
-      {/* Header with gradient */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 py-12 border-b border-gray-200 dark:border-gray-800">
-        <div className="container mx-auto max-w-4xl px-4">
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-4">
-              <Palette className="h-12 w-12 text-orange-500 mr-3" />
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white font-heading">
-                Logo Colour Palette Generator
-              </h1>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 text-lg md:text-xl">Generate the perfect colour palette for your brand</p>
-          </div>
+    <div className="min-h-screen bg-[var(--mist)] text-[var(--night)] transition-colors duration-300 pb-20">
+      {/* Header */}
+      <div className="border-b border-[var(--iron)] bg-[var(--cloud)]/50 backdrop-blur-md pt-24 pb-8 sticky top-0 z-10 shadow-sm">
+        <div className="container mx-auto max-w-5xl px-6">
+           <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-[#FF7435] rounded-xl flex items-center justify-center shadow-lg shadow-[#FF7435]/20">
+                 <Palette className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                 <h1 className="text-2xl font-black font-poppins text-[var(--night)] tracking-tight uppercase">Logo Palette Studio</h1>
+                 <p className="text-sm font-medium text-[var(--steel)]">Advanced color theory engine for premium brand identities.</p>
+              </div>
+           </div>
         </div>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="container mx-auto max-w-5xl px-6 mt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* Form Section */}
-          <Card className="bg-white dark:bg-[#111111] shadow-lg border-0 border border-gray-200 dark:border-gray-800">
-            <CardHeader>
-              <CardTitle className="text-2xl text-gray-900 dark:text-white font-heading">Tell us about your brand</CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400">
-                We'll create a custom colour palette based on your preferences
-              </CardDescription>
-            </CardHeader>
+          <div className="lg:col-span-12 xl:col-span-5">
+            <Card className="card border-2 border-[var(--iron)]/50 shadow-none">
+              <CardHeader className="bg-[var(--cloud)]/20 border-b border-[var(--iron)]/50 px-8 py-6">
+                <CardTitle className="text-xl font-black font-poppins flex items-center gap-3">
+                   <Sparkles className="w-5 h-5 text-[#FF7435]" />
+                   Brand DNA
+                </CardTitle>
+                <CardDescription className="font-medium text-[var(--steel)]">Describe your vision to generate a custom palette.</CardDescription>
+              </CardHeader>
 
-            <CardContent className="space-y-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="p-8">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label className="field-label flex items-center gap-2">
+                        <User className="w-3 h-3 text-[var(--steel)]" /> Full Name
+                      </Label>
+                      <Input
+                        value={formData.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        className="input"
+                        placeholder="John Doe"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="field-label flex items-center gap-2">
+                        <Mail className="w-3 h-3 text-[var(--steel)]" /> Business Email
+                      </Label>
+                      <Input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        className="input"
+                        placeholder="john@example.com"
+                        required
+                      />
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-gray-900 dark:text-white font-medium">
-                      Name *
+                    <Label className="field-label flex items-center gap-2">
+                      <Building2 className="w-3 h-3 text-[var(--steel)]" /> Industry Vertical
                     </Label>
                     <Input
-                      id="name"
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
-                      placeholder="Your full name"
+                      value={formData.industry}
+                      onChange={(e) => handleInputChange("industry", e.target.value)}
+                      className="input"
+                      placeholder="e.g. Fintech, SaaS, Wellness"
                       required
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gray-900 dark:text-white font-medium">
-                      Email *
+                    <Label className="field-label flex items-center gap-2">
+                      <Compass className="w-3 h-3 text-[var(--steel)]" /> Brand Mission & Vibe
                     </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
-                      placeholder="your@email.com"
+                    <Textarea
+                      value={formData.brandDescription}
+                      onChange={(e) => handleInputChange("brandDescription", e.target.value)}
+                      className="input min-h-[120px] rounded-[2rem]"
+                      placeholder="Identify your values, audience, and what makes you unique..."
                       required
                     />
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="industry" className="text-gray-900 dark:text-white font-medium">
-                    Industry *
-                  </Label>
-                  <Input
-                    id="industry"
-                    type="text"
-                    value={formData.industry}
-                    onChange={(e) => handleInputChange("industry", e.target.value)}
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
-                    placeholder="e.g., Technology, Healthcare, Fashion"
-                    required
-                  />
-                </div>
+                  <div className="space-y-2">
+                    <Label className="field-label">Aesthetic Preference</Label>
+                    <Select
+                      value={formData.stylePreferences}
+                      onValueChange={(value) => handleInputChange("stylePreferences", value)}
+                      required
+                    >
+                      <SelectTrigger className="input h-14 rounded-full">
+                        <SelectValue placeholder="Choose a style direction" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {styleOptions.map((style) => (
+                          <SelectItem key={style} value={style.toLowerCase()}>
+                            {style}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="brandDescription" className="text-gray-900 dark:text-white font-medium">
-                    Brand Description *
-                  </Label>
-                  <Textarea
-                    id="brandDescription"
-                    value={formData.brandDescription}
-                    onChange={(e) => handleInputChange("brandDescription", e.target.value)}
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500 min-h-[100px]"
-                    placeholder="Describe your brand, values, and target audience..."
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="stylePreferences" className="text-gray-900 dark:text-white font-medium">
-                    Style Preferences *
-                  </Label>
-                  <Select
-                    value={formData.stylePreferences}
-                    onValueChange={(value) => handleInputChange("stylePreferences", value)}
-                    required
+                  <Button
+                    type="submit"
+                    disabled={!isFormValid || isLoading}
+                    className="btn-primary w-full h-14 text-sm font-black uppercase tracking-widest shadow-xl shadow-[#FF7435]/20"
                   >
-                    <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
-                      <SelectValue placeholder="Choose your preferred style" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
-                      {styleOptions.map((style) => (
-                        <SelectItem key={style} value={style.toLowerCase()} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
-                          {style}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Analyzing...
+                      </>
+                    ) : (
+                      <>
+                        <Palette className="mr-2 h-5 w-5" />
+                        Generate Strategic Palette
+                      </>
+                    )}
+                  </Button>
+                </form>
 
-                <Button
-                  type="submit"
-                  disabled={!isFormValid || isLoading}
-                  className="w-full bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold py-4 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Generating Palette...
-                    </>
-                  ) : (
-                    <>
-                      <Palette className="mr-2 h-5 w-5" />
-                      Generate Colour Palette
-                    </>
-                  )}
-                </Button>
-              </form>
+                {error && (
+                  <Alert variant="destructive" className="mt-8 rounded-2xl border-2 animate-in shake-in">
+                    <XCircle className="h-4 w-4" />
+                    <AlertDescription className="font-bold text-xs">{error}</AlertDescription>
+                  </Alert>
+                )}
 
-              {/* Status Messages */}
-              {error && (
-                <Alert className="bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800 animate-in slide-in-from-top-2 duration-300">
-                  <XCircle className="h-4 w-4 text-red-600" />
-                  <AlertDescription className="text-red-800 dark:text-red-100">{error}</AlertDescription>
-                </Alert>
-              )}
-
-              {success && (
-                <Alert className="bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800 animate-in slide-in-from-top-2 duration-300">
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-green-800 dark:text-green-100">Colour palette generated successfully!</AlertDescription>
-                </Alert>
-              )}
-            </CardContent>
-          </Card>
+                {success && (
+                  <Alert className="mt-8 bg-emerald-500/10 border-emerald-500/20 text-emerald-600 rounded-2xl border-2 animate-in slide-in-from-top-2">
+                    <CheckCircle className="h-4 w-4" />
+                    <AlertDescription className="font-black uppercase text-[10px] tracking-widest">Synthesis Complete!</AlertDescription>
+                  </Alert>
+                )}
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Results Section */}
-          <div className="space-y-6">
-            {parsedColors.length > 0 && (
-              <Card className="bg-white dark:bg-[#111111] shadow-lg border-0 border border-gray-200 dark:border-gray-800 animate-in slide-in-from-right-4 duration-500">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-gray-900 dark:text-white font-heading flex items-center">
-                    <Palette className="mr-2 h-6 w-6 text-orange-500" />
-                    Your Brand Colour Palette
-                  </CardTitle>
-                  <CardDescription className="text-gray-600 dark:text-gray-400">
-                    Here are the perfect colours for your brand
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {parsedColors.map((color, index) => (
-                    <div key={index} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 space-y-3 bg-gray-50 dark:bg-zinc-800">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-heading">{color.name}</h3>
-                        <div
-                          className="w-12 h-12 rounded-lg shadow-md border border-gray-200 dark:border-gray-600"
-                          style={{ backgroundColor: color.hexCode }}
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <div>
-                          <span className="font-bold text-gray-900 dark:text-white">Role:</span>{" "}
-                          <span className="text-gray-600 dark:text-gray-400">{color.role}</span>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="font-bold text-gray-900 dark:text-white">Hex Code:</span>{" "}
-                            <span className="text-gray-600 dark:text-gray-400 font-mono">{color.hexCode}</span>
+          <div className="lg:col-span-12 xl:col-span-7">
+            {parsedColors.length > 0 ? (
+              <div className="grid grid-cols-1 gap-8 animate-in slide-in-from-right-8 duration-700">
+                <Card className="card border-2 border-[var(--iron)] xl:sticky xl:top-[12rem]">
+                  <CardHeader className="bg-[var(--night)] text-white p-8">
+                    <CardTitle className="text-xl font-black font-poppins flex items-center justify-between">
+                       <span>Brand Color Specification</span>
+                       <Badge className="bg-white/10 text-white border-white/20 font-black px-2 py-0 text-[10px] uppercase tracking-tighter">Hex/v1</Badge>
+                    </CardTitle>
+                    <CardDescription className="text-white/60 font-medium">Strategically chosen for your industrial profile.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-8 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {parsedColors.map((color, index) => (
+                        <div key={index} className="p-6 bg-[var(--mist)] border-2 border-[var(--iron)]/40 rounded-[2rem] group hover:border-[#FF7435]/30 transition-all">
+                          <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-sm font-black font-poppins text-[var(--night)] truncate max-w-[120px]">{color.name}</h3>
+                            <div
+                              className="w-12 h-12 rounded-xl shadow-lg border border-black/5"
+                              style={{ backgroundColor: color.hexCode }}
+                            />
                           </div>
-                          <Button
-                            onClick={() => copyToClipboard(color.hexCode)}
-                            variant="outline"
-                            size="sm"
-                            className="ml-2 h-8 w-8 p-0 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white dark:border-orange-500 dark:text-orange-500 dark:hover:bg-orange-500"
-                          >
-                            {copiedHex === color.hexCode ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                          </Button>
-                        </div>
 
-                        <div>
-                          <span className="font-bold text-gray-900 dark:text-white">Description:</span>
-                          <p className="text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">{color.description}</p>
+                          <div className="space-y-3">
+                            <div className="flex flex-col">
+                              <span className="text-[10px] font-black uppercase text-[var(--steel)] tracking-widest mb-1">Visual Role</span>
+                              <span className="text-xs font-bold text-[var(--night)]">{color.role}</span>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-2">
+                              <div className="flex flex-col">
+                                <span className="text-[10px] font-black uppercase text-[var(--steel)] tracking-widest mb-1">Hex Code</span>
+                                <span className="text-xs font-mono font-black text-[#FF7435]">{color.hexCode}</span>
+                              </div>
+                              <Button
+                                onClick={() => copyToClipboard(color.hexCode)}
+                                variant="ghost"
+                                size="sm"
+                                className="h-10 w-10 p-0 rounded-xl hover:bg-[#FF7435]/10"
+                              >
+                                {copiedHex === color.hexCode ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4 text-[#FF7435]" />}
+                              </Button>
+                            </div>
+
+                            <div className="pt-3 border-t border-[var(--iron)]/50">
+                              <span className="text-[10px] font-black uppercase text-[var(--steel)] tracking-widest mb-1 block">Context</span>
+                              <p className="text-[11px] font-medium text-[var(--steel)] leading-relaxed italic line-clamp-3">"{color.description}"</p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : !isLoading && (
+              <div className="h-full flex flex-col items-center justify-center p-12 bg-[var(--cloud)]/30 border-4 border-dashed border-[var(--iron)] rounded-[3rem] text-center opacity-60">
+                 <div className="w-20 h-20 bg-[var(--iron)]/30 rounded-full flex items-center justify-center mb-6">
+                    <Compass className="w-10 h-10 text-[var(--steel)]" />
+                 </div>
+                 <h3 className="text-lg font-black font-poppins text-[var(--night)]">Awaiting Input</h3>
+                 <p className="text-sm font-medium text-[var(--steel)] max-w-xs mt-2">Fill in your brand details to generate a professional color specification.</p>
+              </div>
             )}
           </div>
-        </div>
-
-        <div className="text-center mt-12">
-          <p className="text-gray-600 dark:text-gray-400 text-sm">Powered by advanced colour theory and brand psychology</p>
         </div>
       </div>
     </div>

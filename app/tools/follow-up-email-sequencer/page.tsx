@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Mail, Sparkles, CheckCircle, XCircle, Copy, User, AtSign } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Loader2, Mail, Sparkles, CheckCircle, XCircle, Copy, User, AtSign, Settings2, Trash2, ArrowRight, ChevronRight, Eye, Send, Target, ShieldCheck, Zap, MousePointer2 } from "lucide-react"
 
 interface FormData {
   name: string
@@ -45,7 +46,7 @@ export default function EmailGenerator() {
     emailType: "",
     otherEmailType: "",
     followUpGoal: "",
-    tone: "",
+    tone: "Professional",
     recipientName: "",
     recipientRelationship: "",
     followUpNumber: "",
@@ -79,16 +80,13 @@ export default function EmailGenerator() {
     let subject = ""
     let body = ""
     
-    // Find subject line
     const subjectLine = lines.find((line) => line.startsWith("Subject:"))
     if (subjectLine) {
       subject = subjectLine.replace("Subject:", "").trim()
     }
 
-    // Find body (everything after the first empty line after subject)
     const subjectIndex = lines.findIndex((line) => line.startsWith("Subject:"))
     if (subjectIndex !== -1) {
-      // Find the first non-empty line after subject
       let bodyStartIndex = subjectIndex + 1
       while (bodyStartIndex < lines.length && lines[bodyStartIndex].trim() === "") {
         bodyStartIndex++
@@ -97,7 +95,6 @@ export default function EmailGenerator() {
         body = lines.slice(bodyStartIndex).join("\n").trim()
       }
     } else {
-      // If no subject found, treat entire content as body
       body = content.trim()
     }
 
@@ -105,21 +102,15 @@ export default function EmailGenerator() {
   }
 
   const getEmailContent = (response: WebhookResponse): string => {
-    // Handle n8n response format
     if (Array.isArray(response) && response.length > 0 && response[0].output) {
       return response[0].output
     }
-
-    // Handle direct output
     if (response.output) {
       return response.output
     }
-
-    // Handle generatedEmail field
     if (response.generatedEmail) {
       return response.generatedEmail
     }
-
     return ""
   }
 
@@ -129,7 +120,7 @@ export default function EmailGenerator() {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
-      console.error("Failed to copy text: ", err)
+      console.error("Linguistic buffer copy failed: ", err)
     }
   }
 
@@ -154,316 +145,362 @@ export default function EmailGenerator() {
       })
 
       if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`)
+        throw new Error(`Neural node synchronization failed: ${res.status}`)
       }
 
       const data = await res.json()
       setResponse(data)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred while generating the email")
+      setError(err instanceof Error ? err.message : "Spectral connection failure in linguistic synthesis.")
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      email: "",
+      originalEmailContent: "",
+      emailType: "",
+      otherEmailType: "",
+      followUpGoal: "",
+      tone: "Professional",
+      recipientName: "",
+      recipientRelationship: "",
+      followUpNumber: "",
+    })
+    setResponse(null)
+    setError(null)
   }
 
   const emailContent = response ? getEmailContent(response) : ""
   const parsedEmail = emailContent ? parseEmailContent(emailContent) : null
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-6 py-8 text-center">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-10 h-10 bg-[#FF7435] rounded-lg flex items-center justify-center">
-              <Mail className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-[var(--mist)] text-[var(--night)] transition-colors duration-300 pb-32">
+      {/* Premium Sticky Header */}
+      <div className="bg-[var(--cloud)]/60 backdrop-blur-2xl border-b border-[var(--iron)] pt-24 pb-8 fixed top-0 w-full z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 bg-[#FF7435] rounded-2xl flex items-center justify-center shadow-2xl shadow-[#FF7435]/30">
+                <Send className="w-8 h-8 text-white" />
+              </div>
+              <div className="hidden md:block">
+                <h1 className="text-3xl font-black font-poppins text-[var(--night)] tracking-tighter uppercase leading-none mb-1">
+                   Sequence <span className="text-[#FF7435]">Nexus</span>
+                </h1>
+                <Badge className="bg-[var(--night)] text-white border-none font-black px-3 py-1 rounded-lg text-[9px] uppercase tracking-widest opacity-80">v5.0 Multi-Chain Unit</Badge>
+              </div>
             </div>
-            <h1 className="text-3xl font-bold font-poppins">Follow-up Email Generator</h1>
+            <div className="flex items-center gap-4">
+               <div className="text-right hidden sm:block">
+                  <div className="text-[9px] font-black uppercase tracking-widest text-[var(--steel)]">System Status</div>
+                  <div className="text-xs font-black text-[var(--night)] uppercase">Synchronized</div>
+               </div>
+               <div className="w-px h-10 bg-[var(--iron)]/60 mx-2"></div>
+               <Button variant="ghost" onClick={resetForm} className="h-12 px-6 text-xs font-black uppercase tracking-widest text-red-500 hover:bg-red-50 rounded-xl">
+                  <Trash2 className="w-4 h-4 mr-2" /> Reset
+               </Button>
+            </div>
           </div>
-          <p className="text-gray-500 dark:text-gray-400 font-inter text-lg max-w-2xl mx-auto">
-            Generate personalized follow-up emails with the power of AI. Create compelling messages that get responses.
-          </p>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex flex-col lg:flex-row h-auto lg:h-[calc(100vh-180px)]">
-        {/* Form Section */}
-        <div className="w-full lg:w-1/2 bg-gray-50 dark:bg-[#0a0a0a] p-8 overflow-y-auto">
-          <div className="max-w-md mx-auto">
-            <Card className="bg-white dark:bg-[#111111] border-gray-100 dark:border-gray-800">
-              <CardHeader>
-                <CardTitle className="text-xl font-semibold font-poppins text-gray-900 dark:text-white">
-                  Email Details
-                </CardTitle>
-                <CardDescription className="text-gray-500 dark:text-gray-400 font-inter">
-                  Fill in the details below to generate your perfect follow-up email
-                </CardDescription>
+      <div className="pt-[164px] max-w-[1440px] mx-auto px-6 lg:px-10 mt-16 lg:mt-24">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-12 items-start">
+          
+          {/* Mission Deployment Form */}
+          <div className="xl:col-span-5 space-y-8 animate-in fade-in slide-in-from-left-8 duration-700">
+            <Card className="card p-10 shadow-2xl shadow-black/5 border-2 border-[var(--iron)]/50">
+              <CardHeader className="px-0 pt-0 pb-10 border-b-2 border-[var(--iron)]/40 mb-10">
+                <div className="flex items-center gap-3">
+                   <Settings2 className="w-6 h-6 text-[#FF7435]" />
+                   <CardTitle className="text-2xl font-black font-poppins uppercase tracking-tighter">Mission Config</CardTitle>
+                </div>
+                <CardDescription className="font-bold text-[var(--steel)] italic uppercase tracking-widest text-[10px] mt-2">Initialize linguistic chain parameters.</CardDescription>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name" className="font-medium font-inter text-gray-900 dark:text-white">
-                      Name
-                    </Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg text-gray-900 dark:text-white"
-                      placeholder="Your full name"
-                      required
-                    />
-                  </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="font-medium font-inter text-gray-900 dark:text-white">
-                      Email
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg text-gray-900 dark:text-white"
-                      placeholder="your.email@example.com"
-                      required
-                    />
+              <form onSubmit={handleSubmit} className="space-y-10">
+                <div className="space-y-8">
+                   <div className="flex items-center gap-3 text-[10px] font-black text-[#FF7435] uppercase tracking-[0.3em]">
+                    <ShieldCheck className="w-4 h-4" /> Identity Vectors
                   </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <Label className="field-label font-black">Lead Signal</Label>
+                      <Input
+                        value={formData.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        className="input h-14"
+                        placeholder="e.g. Alex"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <Label className="field-label font-black">Return Terminal</Label>
+                      <Input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        className="input h-14"
+                        placeholder="alex@nexus.com"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="originalEmailContent" className="font-medium font-inter text-gray-900 dark:text-white">
-                      Original Email Content
-                    </Label>
+                <div className="space-y-8 pt-10 border-t-2 border-[var(--iron)]/40">
+                  <div className="flex items-center gap-3 text-[10px] font-black text-[#FF7435] uppercase tracking-[0.3em]">
+                    <Zap className="w-4 h-4" /> Context Logic
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="field-label font-black">Previous Linguistic Stream</Label>
                     <Textarea
-                      id="originalEmailContent"
                       value={formData.originalEmailContent}
                       onChange={(e) => handleInputChange("originalEmailContent", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter min-h-[120px] resize-none rounded-lg text-gray-900 dark:text-white"
-                      placeholder="Paste the content of your original email here..."
+                      className="input min-h-[140px] rounded-[2.5rem] pt-8"
+                      placeholder="Input the core context or previous email chain..."
                       required
                     />
                   </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <Label className="field-label font-black">Sequence Logic</Label>
+                      <Select value={formData.emailType} onValueChange={(value) => handleInputChange("emailType", value)}>
+                        <SelectTrigger className="input h-14 rounded-2xl">
+                          <SelectValue placeholder="Select Type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {emailTypes.map((type) => (
+                            <SelectItem key={type} value={type}>{type}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label className="font-medium font-inter text-gray-900 dark:text-white">Email Type</Label>
-                    <Select value={formData.emailType} onValueChange={(value) => handleInputChange("emailType", value)}>
-                      <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg text-gray-900 dark:text-white">
-                        <SelectValue placeholder="Select email type" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
-                        {emailTypes.map((type) => (
-                          <SelectItem key={type} value={type} className="text-gray-900 dark:text-white font-inter">
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="space-y-3">
+                      <Label className="field-label font-black">Tonal Protocol</Label>
+                      <Select value={formData.tone} onValueChange={(value) => handleInputChange("tone", value)}>
+                        <SelectTrigger className="input h-14 rounded-2xl">
+                          <SelectValue placeholder="Select Frequency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {tones.map((tone) => (
+                            <SelectItem key={tone} value={tone}>{tone}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-
                   {formData.emailType === "Others" && (
-                    <div className="space-y-2">
-                      <Label htmlFor="otherEmailType" className="font-medium font-inter text-gray-900 dark:text-white">
-                        Please Specify
-                      </Label>
+                    <div className="pt-2 animate-in slide-in-from-top-4">
                       <Input
-                        id="otherEmailType"
                         value={formData.otherEmailType}
                         onChange={(e) => handleInputChange("otherEmailType", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg text-gray-900 dark:text-white"
-                        placeholder="Specify email type"
+                        className="input h-14"
+                        placeholder="Specify Custom Protocol..."
                         required
                       />
                     </div>
                   )}
+                </div>
 
-                  <div className="space-y-2">
-                    <Label className="font-medium font-inter text-gray-900 dark:text-white">Tone of Follow-up</Label>
-                    <Select value={formData.tone} onValueChange={(value) => handleInputChange("tone", value)}>
-                      <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg text-gray-900 dark:text-white">
-                        <SelectValue placeholder="Select tone" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
-                        {tones.map((tone) => (
-                          <SelectItem key={tone} value={tone} className="text-gray-900 dark:text-white font-inter">
-                            {tone}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                <div className="space-y-8 pt-10 border-t-2 border-[var(--iron)]/40">
+                  <div className="flex items-center gap-3 text-[10px] font-black text-[#FF7435] uppercase tracking-[0.3em]">
+                    <Target className="w-4 h-4" /> Objective Parameters
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="followUpGoal" className="font-medium font-inter text-gray-900 dark:text-white">
-                      Follow-up Goal
-                    </Label>
-                    <Input
-                      id="followUpGoal"
-                      value={formData.followUpGoal}
-                      onChange={(e) => handleInputChange("followUpGoal", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg text-gray-900 dark:text-white"
-                      placeholder="Close sale, get reply, reschedule meeting etc"
-                      required
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Recipient Identity</Label>
+                      <Input
+                        value={formData.recipientName}
+                        onChange={(e) => handleInputChange("recipientName", e.target.value)}
+                        className="input h-14"
+                        placeholder="e.g. Sarah"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Environmental Status</Label>
+                      <Input
+                        value={formData.recipientRelationship}
+                        onChange={(e) => handleInputChange("recipientRelationship", e.target.value)}
+                        className="input h-14"
+                        placeholder="e.g. Sales Prospect"
+                        required
+                      />
+                    </div>
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="recipientName" className="font-medium font-inter text-gray-900 dark:text-white">
-                      Recipient Name
-                    </Label>
-                    <Input
-                      id="recipientName"
-                      value={formData.recipientName}
-                      onChange={(e) => handleInputChange("recipientName", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg text-gray-900 dark:text-white"
-                      placeholder="Recipient's name"
-                      required
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Conversion Goal</Label>
+                      <Input
+                        value={formData.followUpGoal}
+                        onChange={(e) => handleInputChange("followUpGoal", e.target.value)}
+                        className="input h-14"
+                        placeholder="e.g. Schedule Demo"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Sequence Index</Label>
+                      <Input
+                        value={formData.followUpNumber}
+                        onChange={(e) => handleInputChange("followUpNumber", e.target.value)}
+                        className="input h-14"
+                        placeholder="e.g. 1st Follow-up"
+                        required
+                      />
+                    </div>
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="recipientRelationship" className="font-medium font-inter text-gray-900 dark:text-white">
-                      Recipient Relationship
-                    </Label>
-                    <Input
-                      id="recipientRelationship"
-                      value={formData.recipientRelationship}
-                      onChange={(e) => handleInputChange("recipientRelationship", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg text-gray-900 dark:text-white"
-                      placeholder="client, prospect, partner etc"
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="followUpNumber" className="font-medium font-inter text-gray-900 dark:text-white">
-                      Follow-up Mail Number
-                    </Label>
-                    <Input
-                      id="followUpNumber"
-                      value={formData.followUpNumber}
-                      onChange={(e) => handleInputChange("followUpNumber", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-[#FF7435] focus:ring-[#FF7435] font-inter rounded-lg text-gray-900 dark:text-white"
-                      placeholder="1st, 2nd, 3rd..."
-                      required
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full bg-[#FF7435] hover:bg-[#E6681F] dark:hover:bg-[#d45616] text-white font-semibold rounded-lg transition-colors duration-200 font-inter"
-                    style={{ padding: "16px", fontWeight: 600 }}
-                  >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Generating Email...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        Generate Follow-up Email
-                      </>
-                    )}
-                  </Button>
-                </form>
+                </div>
 
                 {error && (
-                  <Alert className="mt-4 bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800 text-red-800 dark:text-red-100">
-                    <XCircle className="w-4 h-4" />
-                    <AlertDescription className="font-inter">
-                      <strong>Error:</strong> {error}
-                    </AlertDescription>
+                  <Alert variant="destructive" className="rounded-2xl border-2 animate-in shake-in">
+                    <XCircle className="h-5 w-5" />
+                    <AlertDescription className="font-black text-[10px] uppercase tracking-widest">{error}</AlertDescription>
                   </Alert>
                 )}
-              </CardContent>
+
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="btn-primary w-full h-20 text-xs font-black uppercase tracking-[0.3em] rounded-full shadow-2xl shadow-[#FF7435]/30 group"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  ) : (
+                    <>
+                      Execute Sequence Logic
+                      <ArrowRight className="w-5 h-5 ml-4 group-hover:translate-x-1" />
+                    </>
+                  )}
+                </Button>
+              </form>
             </Card>
           </div>
-        </div>
 
-        {/* Email Preview Section */}
-        <div className="w-full lg:w-1/2 bg-white dark:bg-[#111111] p-8 overflow-y-auto border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-gray-800">
-          <div className="max-w-2xl mx-auto">
+          {/* High-Fidelity Sequence Preview */}
+          <div className="xl:col-span-12 xl:col-span-7 space-y-12 animate-in fade-in slide-in-from-right-8 duration-700">
             {parsedEmail ? (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-poppins">Generated Email</h2>
+              <div className="space-y-10">
+                <div className="flex flex-wrap items-center justify-between gap-8 px-4">
+                  <div className="flex items-center gap-5">
+                    <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center border-2 border-emerald-500/20">
+                      <Eye className="w-8 h-8 text-emerald-500" />
+                    </div>
+                    <div>
+                        <h2 className="text-3xl font-black font-poppins text-[var(--night)] uppercase tracking-tighter">Draft Inspection</h2>
+                        <p className="text-[10px] font-black text-[var(--steel)] uppercase tracking-[0.3em] opacity-60">High-Probability Conversion Chain</p>
+                    </div>
+                  </div>
                   <Button
                     onClick={() => copyToClipboard(emailContent)}
-                    variant="outline"
-                    size="sm"
-                    className="border-[#FF7435] text-[#FF7435] hover:bg-[#FF7435] hover:text-white font-inter border-gray-200 dark:border-gray-700 bg-transparent dark:text-[#FF7435]"
+                    className="btn-primary h-14 px-10 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl shadow-[#FF7435]/30 group"
                   >
-                    <Copy className="w-4 h-4 mr-2" />
-                    {copied ? "Copied!" : "Copy Email"}
+                    {copied ? (
+                      <CheckCircle className="w-5 h-5 mr-3" />
+                    ) : (
+                      <Copy className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+                    )}
+                    {copied ? "Synthesized" : "Export Payload"}
                   </Button>
                 </div>
 
-                {/* Email Preview Card */}
-                <Card className="bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-gray-700">
-                  <CardContent className="p-6">
-                    {/* Email Header */}
-                    <div className="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <User className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-                        <span className="text-sm font-medium text-gray-900 dark:text-white font-inter">
-                          {formData.name}
-                        </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400 font-inter">
-                          &lt;{formData.email}&gt;
-                        </span>
-                      </div>
-                      
-                      {parsedEmail.subject && (
-                        <div className="mb-2">
-                          <span className="text-sm font-medium text-gray-900 dark:text-white font-inter">Subject: </span>
-                          <span className="text-sm text-gray-700 dark:text-gray-300 font-inter">
-                            {parsedEmail.subject}
-                          </span>
-                        </div>
-                      )}
-                      
-                      <div className="flex items-center space-x-2">
-                        <AtSign className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-                        <span className="text-sm font-medium text-gray-900 dark:text-white font-inter">To: </span>
-                        <span className="text-sm text-gray-700 dark:text-gray-300 font-inter">
-                          {formData.recipientName}
-                        </span>
-                      </div>
+                <div className="card p-0 overflow-hidden shadow-2xl border-2 border-[var(--iron)]/80 bg-white">
+                  {/* Digital Signature / Header */}
+                  <div className="bg-[var(--night)] text-white p-10 md:p-14 mb-0">
+                    <div className="space-y-8">
+                       <div className="flex items-center gap-6 pb-6 border-b border-white/10">
+                          <div className="w-14 h-14 rounded-full bg-[#FF7435] flex items-center justify-center text-white font-black text-xl shadow-2xl">
+                             {formData.name.charAt(0) || "U"}
+                          </div>
+                          <div className="flex flex-col">
+                             <span className="text-white font-black font-poppins text-lg tracking-tight">{formData.name || "Signal Lead"}</span>
+                             <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">Terminated: {formData.email || "email@nexus.com"}</span>
+                          </div>
+                          <div className="ml-auto hidden md:block">
+                             <Badge className="bg-white/10 text-white/60 border-none font-black text-[9px] px-3 h-6 uppercase tracking-widest">SECURE OUTBOUND</Badge>
+                          </div>
+                       </div>
+                       
+                       <div className="space-y-6">
+                          <div className="flex items-baseline gap-6">
+                             <span className="text-white/30 font-black text-[10px] uppercase tracking-[0.4em] min-w-[100px]">Subject</span>
+                             <p className="text-white font-black text-xl font-poppins tracking-tight leading-tight">
+                               {parsedEmail.subject || "(Awaiting Subject Logic)"}
+                             </p>
+                          </div>
+                          
+                          <div className="flex items-center gap-6">
+                             <span className="text-white/30 font-black text-[10px] uppercase tracking-[0.4em] min-w-[100px]">Recpt.</span>
+                             <div className="flex items-center gap-3">
+                                <Badge className="bg-[#FF7435] text-white border-none font-black text-[10px] h-6 px-4 uppercase">
+                                   {formData.recipientName || "Target"}
+                                </Badge>
+                                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">({formData.recipientRelationship})</span>
+                             </div>
+                          </div>
+                       </div>
                     </div>
+                  </div>
 
-                    {/* Email Body */}
-                    <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-300 font-inter leading-relaxed whitespace-pre-wrap">
-                      {parsedEmail.body}
+                  {/* Linguistic Synthesis / Email Body */}
+                  <div className="p-12 md:p-24 bg-white min-h-[600px] relative">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#FF7435]/5 rounded-bl-[10rem] pointer-events-none -z-10"></div>
+                    <div className="prose prose-lg max-w-none text-[var(--steel)] font-medium leading-relaxed pb-20 border-b-2 border-dashed border-[var(--iron)]/40">
+                      <p className="whitespace-pre-wrap font-inter">
+                        {parsedEmail.body}
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
+                    
+                    {/* Meta diagnostic footer */}
+                    <div className="pt-10 flex items-center justify-between">
+                       <div className="flex items-center gap-6">
+                          <div className="flex flex-col">
+                             <span className="text-[9px] font-black uppercase tracking-widest text-[var(--steel)] mb-1">Tone Calibration</span>
+                             <Badge className="bg-[var(--mist)] text-[var(--night)] border-2 border-[var(--iron)] font-black text-[10px] uppercase">{formData.tone}</Badge>
+                          </div>
+                          <div className="flex flex-col">
+                             <span className="text-[9px] font-black uppercase tracking-widest text-[var(--steel)] mb-1">Sequence Index</span>
+                             <Badge className="bg-[var(--night)] text-white border-none font-black text-[10px] uppercase">{formData.followUpNumber}</Badge>
+                          </div>
+                       </div>
+                       <div className="text-right">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-[var(--steel)] block mb-1">Neural Goal</span>
+                          <span className="text-xs font-black text-[var(--night)] uppercase italic">"Goal: {formData.followUpGoal}"</span>
+                       </div>
+                    </div>
+                  </div>
+                </div>
 
-                {/* Debug Information */}
-                <details className="mt-4">
-                  <summary className="cursor-pointer text-gray-500 dark:text-gray-400 font-inter text-sm">
-                    View Raw Response
-                  </summary>
-                  <pre className="mt-2 p-4 bg-gray-100 dark:bg-zinc-800 rounded-lg text-xs text-gray-600 dark:text-gray-300 overflow-auto max-h-48 border border-gray-200 dark:border-gray-700">
-                    {JSON.stringify(response, null, 2)}
-                  </pre>
-                </details>
+                <div className="flex items-center justify-center gap-4 py-8 bg-[var(--cloud)]/50 rounded-[3rem] border border-[var(--iron)]/50 mx-4">
+                   <ShieldCheck className="w-6 h-6 text-emerald-500" />
+                   <p className="text-sm font-black text-[var(--steel)] uppercase tracking-widest">Verified for professional outbound transmission.</p>
+                </div>
               </div>
             ) : (
-              <div className="flex items-center justify-center h-full min-h-[400px]">
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-gray-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto">
-                    <Mail className="w-8 h-8 text-gray-400 dark:text-gray-500" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white font-poppins mb-2">
-                      Your follow-up email will appear here
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400 font-inter">
-                      Fill out the form and click generate to get started
-                    </p>
-                  </div>
+              <div className="card p-32 flex flex-col items-center justify-center text-center space-y-12 border-dashed border-4 border-[var(--iron)]/40 grayscale opacity-40 bg-[var(--mist)]/30 rounded-[3rem] h-full min-h-[700px]">
+                <div className="relative">
+                   <div className="absolute inset-0 bg-[#FF7435]/10 rounded-[3rem] scale-125 blur-2xl"></div>
+                   <div className="w-32 h-32 bg-white rounded-[3rem] flex items-center justify-center mx-auto border-2 border-[var(--iron)] shadow-inner relative z-10">
+                     <AtSign className="w-16 h-16 text-[var(--steel)]" />
+                   </div>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-3xl font-black font-poppins text-[var(--night)] uppercase tracking-tighter">Draft Terminal</h3>
+                  <p className="text-[var(--steel)] max-w-sm mx-auto font-bold italic leading-relaxed">
+                    Initialize your sequence parameters to visualize the linguistic chain in a professional high-fidelity mail container.
+                  </p>
+                </div>
+                
+                <div className="w-full max-w-md pt-12 space-y-8 relative z-10 opacity-30 select-none pointer-events-none flex flex-col items-center">
+                   <div className="h-20 bg-white rounded-3xl w-full border-2 border-dashed border-[var(--iron)]"></div>
+                   <div className="h-16 bg-white rounded-full w-2/3 border-2 border-dashed border-[var(--iron)] text-center flex items-center justify-center">*** *** ***</div>
+                   <div className="h-40 bg-white rounded-[2rem] w-full border-2 border-dashed border-[var(--iron)]"></div>
                 </div>
               </div>
             )}

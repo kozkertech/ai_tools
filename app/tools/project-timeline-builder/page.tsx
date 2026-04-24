@@ -396,22 +396,22 @@ export default function AIProjectPlanner() {
    };
 
    return (
-      <div className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100 font-sans selection:bg-orange-500/30 transition-colors duration-300">
+      <div className="min-h-screen bg-[var(--mist)] text-[var(--night)] transition-colors duration-300">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
             {mode !== 'DASHBOARD' && (
                <header className="mb-8 sm:mb-12 text-center space-y-4">
                   <motion.div
                      initial={{ scale: 0.9, opacity: 0 }}
                      animate={{ scale: 1, opacity: 1 }}
-                     className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 rounded-full border border-orange-500/20 mb-2 sm:mb-4"
+                     className="inline-flex items-center gap-2 px-4 py-2 bg-[#ff7a59]/10 rounded-full border border-[#ff7a59]/20 mb-2 sm:mb-4"
                   >
-                     <Sparkles className="w-4 h-4 text-orange-500" />
-                     <span className="text-[10px] sm:text-xs font-bold text-orange-500 uppercase tracking-widest">Next-Gen Planning Engine</span>
+                     <Sparkles className="w-4 h-4 text-[#ff7a59]" />
+                     <span className="text-[10px] sm:text-xs font-bold text-[#ff7a59] uppercase tracking-widest">Next-Gen Planning Engine</span>
                   </motion.div>
-                  <h1 className="text-4xl sm:text-6xl font-black text-zinc-900 dark:text-white tracking-tighter leading-none">
-                     Project Planner <span className="text-orange-500">AI</span>
+                  <h1 className="text-4xl sm:text-6xl font-black tracking-tighter leading-none">
+                     Project Planner <span className="text-[#ff7a59]">AI</span>
                   </h1>
-                  <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto font-medium px-4">
+                  <p className="text-base sm:text-lg text-[var(--steel)] max-w-2xl mx-auto font-medium px-4">
                      Describe your project in a few simple inputs. The AI will generate a full project plan with timeline, tasks, milestones, priorities, and visual insights.
                   </p>
                </header>
@@ -447,16 +447,16 @@ export default function AIProjectPlanner() {
             </AnimatePresence>
          </div>
 
-         <footer className="py-12 border-t border-zinc-200 dark:border-zinc-900 mt-20 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-sm">
+         <footer className="py-12 border-t border-[var(--iron)] mt-20 bg-[var(--cloud)]/50 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-8 flex flex-col sm:flex-row items-center justify-between gap-8">
                <div className="space-y-1 text-center sm:text-left">
-                  <h4 className="text-sm font-bold text-zinc-700 dark:text-zinc-300">Kozker AI Tools</h4>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-600 text-balance">Built for high-velocity teams and agile managers.</p>
+                  <h4 className="text-sm font-bold text-[var(--night)]">Kozker AI Tools</h4>
+                  <p className="text-xs text-[var(--steel)] text-balance">Built for high-velocity teams and agile managers.</p>
                </div>
                <div className="flex gap-8">
-                  <a href="#" className="text-xs font-bold text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors uppercase tracking-widest">Privacy</a>
-                  <a href="#" className="text-xs font-bold text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors uppercase tracking-widest">Terms</a>
-                  <a href="#" className="text-xs font-bold text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors uppercase tracking-widest underline decoration-orange-500/50">Stitch API Support</a>
+                  <a href="#" className="text-xs font-bold text-[var(--steel)] hover:text-[#ff7a59] transition-colors uppercase tracking-widest">Privacy</a>
+                  <a href="#" className="text-xs font-bold text-[var(--steel)] hover:text-[#ff7a59] transition-colors uppercase tracking-widest">Terms</a>
+                  <a href="#" className="text-xs font-bold text-[var(--steel)] hover:text-[#ff7a59] transition-colors uppercase tracking-widest underline decoration-[#ff7a59]/50">Stitch API Support</a>
                </div>
             </div>
          </footer>

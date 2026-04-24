@@ -43,13 +43,13 @@ export function TagInputField({ label, tags, onTagsChange, placeholder = "Add ne
           <Badge 
             key={index} 
             variant="secondary" 
-            className="group px-3 py-1 bg-zinc-800 border-white/5 text-gray-300 hover:text-white transition-all flex items-center gap-1.5"
+            className="group px-3 py-1 bg-[var(--mist)] border border-[var(--iron)] text-[var(--night)] flex items-center gap-1.5"
           >
             {tag}
             <button 
               type="button" 
               onClick={() => removeTag(index)}
-              className="p-0.5 rounded-full hover:bg-zinc-700 text-gray-500 hover:text-red-400 transition-colors"
+              className="p-0.5 rounded-full text-[var(--steel)] hover:text-[#ef4444] transition-colors"
             >
               <X className="w-3 h-3" />
             </button>
@@ -64,13 +64,13 @@ export function TagInputField({ label, tags, onTagsChange, placeholder = "Add ne
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600 focus:border-primary/50 h-10 pr-10"
+          className="input h-10 pr-10"
         />
         <button
           type="button"
           onClick={addTag}
           className={`absolute inset-y-0 right-0 px-3 flex items-center transition-colors ${
-            inputValue.trim() ? "text-primary hover:text-primary-dark" : "text-gray-600 cursor-not-allowed"
+            inputValue.trim() ? "text-[#ff7a59]" : "text-[var(--steel)] cursor-not-allowed"
           }`}
           disabled={!inputValue.trim()}
         >

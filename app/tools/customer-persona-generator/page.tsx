@@ -161,14 +161,14 @@ export default function ICPGeneratorPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white pb-12">
+    <main className="w-full pb-12">
       {/* Navigation / Header */}
-      <nav className="border-b border-white/5 bg-zinc-950/50 backdrop-blur-md sticky top-0 z-40 no-print">
+      <nav className="border-b border-[var(--iron)] bg-[var(--cloud)]/80 backdrop-blur-md sticky top-0 z-40 no-print">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Button 
             variant="ghost" 
             onClick={() => state === "INITIAL" ? window.history.back() : setState("INITIAL")}
-            className="text-gray-400 hover:text-white"
+            className="text-[var(--steel)] hover:text-[var(--night)]"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {state === "INITIAL" ? "Back to Tools" : "Start Over"}
@@ -196,8 +196,8 @@ export default function ICPGeneratorPage() {
         {state === "REVIEW" && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 relative">
             <div className="max-w-2xl px-2">
-              <h1 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Review Business Profile</h1>
-              <p className="text-gray-400 leading-relaxed">
+              <h1 className="text-3xl md:text-4xl font-semibold mb-3 tracking-tight text-[var(--night)]">Review Business Profile</h1>
+              <p className="text-[var(--steel)] leading-relaxed">
                 {websiteUrl 
                   ? `We analyzed ${websiteUrl} and extracted the following details. Fine-tune them below to improve the ICP quality.`
                   : "Enter your business details below to generate a focused Ideal Customer Profile."}
@@ -215,7 +215,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.businessOverview.businessName} 
                   onChange={(e) => updateField('businessOverview', 'businessName', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
               <div className="space-y-2">
@@ -223,7 +223,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.businessOverview.businessType} 
                   onChange={(e) => updateField('businessOverview', 'businessType', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
               <div className="md:col-span-2 space-y-2">
@@ -231,7 +231,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.businessOverview.coreOffering} 
                   onChange={(e) => updateField('businessOverview', 'coreOffering', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
               <div className="md:col-span-2 space-y-2">
@@ -239,7 +239,7 @@ export default function ICPGeneratorPage() {
                 <Textarea 
                   value={formData.businessOverview.businessDescription} 
                   onChange={(e) => updateField('businessOverview', 'businessDescription', e.target.value)}
-                  className="bg-zinc-900 border-white/10 min-h-[100px]"
+                  className="textarea min-h-[100px]"
                 />
               </div>
             </EditableSectionCard>
@@ -255,7 +255,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.targetMarket.audienceType} 
                   onChange={(e) => updateField('targetMarket', 'audienceType', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
               <div className="space-y-2">
@@ -263,7 +263,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.targetMarket.targetSegment} 
                   onChange={(e) => updateField('targetMarket', 'targetSegment', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
               <div className="space-y-2">
@@ -271,7 +271,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.targetMarket.companySize} 
                   onChange={(e) => updateField('targetMarket', 'companySize', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
               <div className="space-y-2">
@@ -279,7 +279,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.targetMarket.geography} 
                   onChange={(e) => updateField('targetMarket', 'geography', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
             </EditableSectionCard>
@@ -294,7 +294,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.personaBase.personaName} 
                   onChange={(e) => updateField('personaBase', 'personaName', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
               <div className="space-y-2">
@@ -302,7 +302,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.personaBase.jobRole} 
                   onChange={(e) => updateField('personaBase', 'jobRole', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
               <div className="space-y-2">
@@ -310,7 +310,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.personaBase.seniority} 
                   onChange={(e) => updateField('personaBase', 'seniority', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
               <div className="space-y-2">
@@ -318,7 +318,7 @@ export default function ICPGeneratorPage() {
                 <Input 
                   value={formData.personaBase.location} 
                   onChange={(e) => updateField('personaBase', 'location', e.target.value)}
-                  className="bg-zinc-900 border-white/10"
+                  className="input"
                 />
               </div>
             </EditableSectionCard>
@@ -393,9 +393,9 @@ export default function ICPGeneratorPage() {
             </EditableSectionCard>
 
             {error && (
-              <Alert variant="destructive" className="bg-red-500/10 border-red-500/50">
+              <Alert variant="destructive" className="bg-[#ef4444]/10 border-[#ef4444]/30 text-[#ef4444] rounded-[1rem]">
                 <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription className="font-bold">{error}</AlertDescription>
               </Alert>
             )}
 
@@ -410,17 +410,17 @@ export default function ICPGeneratorPage() {
         {state === "GENERATING" && (
           <div className="flex flex-col items-center justify-center min-h-[500px] text-center space-y-8">
             <div className="relative">
-              <div className="absolute inset-0 bg-primary/20 blur-[100px] rounded-full animate-pulse" />
-              <div className="relative w-24 h-24 bg-zinc-900 border border-white/10 rounded-3xl flex items-center justify-center">
-                <Zap className="w-12 h-12 text-primary animate-bounce" />
+              <div className="absolute inset-0 bg-[#ff7a59]/20 blur-[100px] rounded-full animate-pulse" />
+              <div className="relative w-24 h-24 bg-[var(--cloud)] border border-[var(--iron)] rounded-3xl flex items-center justify-center">
+                <Zap className="w-12 h-12 text-[#ff7a59] animate-bounce" />
               </div>
             </div>
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tight">Synthesizing Strategy</h2>
-              <p className="text-gray-400 max-w-sm mx-auto">Building a consulting-grade ICP based on your business profile and audience signals.</p>
+              <h2 className="text-3xl font-semibold tracking-tight text-[var(--night)]">Synthesizing Strategy</h2>
+              <p className="text-[var(--steel)] max-w-sm mx-auto">Building a consulting-grade ICP based on your business profile and audience signals.</p>
             </div>
-            <div className="w-64 h-1.5 bg-zinc-900 rounded-full overflow-hidden border border-white/5">
-              <div className="h-full bg-primary animate-[loading_5s_ease-in-out_infinite]" />
+            <div className="w-64 h-1.5 bg-[var(--iron)] rounded-full overflow-hidden">
+              <div className="h-full bg-[#ff7a59] animate-[loading_2s_ease-in-out_infinite]" />
             </div>
           </div>
         )}

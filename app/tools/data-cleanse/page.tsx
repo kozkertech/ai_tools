@@ -1,17 +1,15 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
-import { Upload, FileText, CheckCircle, AlertCircle, Loader2, BarChart3, Database, AlertTriangle } from "lucide-react"
+import { Upload, FileText, CheckCircle, AlertCircle, Loader2, BarChart3, Database, AlertTriangle, Sparkles, XCircle, Trash2, ShieldCheck, Zap, ArrowRight, Table, Fingerprint, Activity } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-
-import { ContentLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
+import { Badge } from "@/components/ui/badge"
+import { ContentLoadingScreen } from "@/components/loading-screen"
 
 interface FormData {
   name: string
@@ -42,8 +40,10 @@ export default function DataAnalyzer() {
 
   const [dragActive, setDragActive] = useState(false)
 
-  if (submissionState.isLoading) {    
-    return < ContentLoadingScreen />  }     
+  if (submissionState.isLoading) {
+    return <ContentLoadingScreen />
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({
@@ -100,10 +100,7 @@ export default function DataAnalyzer() {
 
   const extractAnalysisOutput = (responseText: string): string => {
     try {
-      // Parse the JSON response from n8n
       const jsonResponse = JSON.parse(responseText)
-
-      // Extract the output from the n8n response structure
       if (Array.isArray(jsonResponse) && jsonResponse[0]?.output) {
         return jsonResponse[0].output
       } else if (jsonResponse.output) {
@@ -123,7 +120,7 @@ export default function DataAnalyzer() {
     if (!formData.name || !formData.email || formData.files.length === 0) {
       setSubmissionState((prev) => ({
         ...prev,
-        error: "Please fill in all fields and upload at least one CSV file.",
+        error: "Required parameters missing. Minimum 1 CSV required.",
       }))
       return
     }
@@ -140,7 +137,6 @@ export default function DataAnalyzer() {
       formDataToSend.append("name", formData.name)
       formDataToSend.append("email", formData.email)
 
-      // Add each file with the expected field name format from n8n
       formData.files.forEach((file, index) => {
         formDataToSend.append(`Please_upload_the_CSV_file_${index}`, file)
       })
@@ -161,146 +157,133 @@ export default function DataAnalyzer() {
           result: analysisOutput,
         })
       } else {
-        throw new Error(`Server responded with status: ${response.status}`)
+        throw new Error(`Data node failed: ${response.status}`)
       }
     } catch (error) {
       setSubmissionState({
         isLoading: false,
         success: false,
-        error: error instanceof Error ? error.message : "An unexpected error occurred",
+        error: error instanceof Error ? error.message : "Spectral connection failure.",
         result: null,
       })
     }
   }
 
-
-        
   const formatAnalysisOutput = (output: string) => {
-    // Split the output into sections and format them
     const sections = output.split(/###\s*\d+\.\s*/)
 
     return sections
       .map((section, index) => {
         if (index === 0 && section.trim()) {
-          // This is the introduction paragraph before the first section
           return (
-            <div key={index} className="mb-6">
-              <p className="text-body leading-relaxed">{section.trim()}</p>
+            <div key={index} className="mb-12 text-center max-w-2xl mx-auto">
+              <p className="text-xl font-black font-poppins text-[#FF7435] leading-relaxed italic uppercase tracking-tighter">
+                "{section.trim()}"
+              </p>
             </div>
           )
         }
 
         if (!section.trim()) return null
 
-        // Extract section title and content
         const lines = section.trim().split("\n")
         const title = lines[0]?.replace(/[*:]/g, "").trim()
         const content = lines.slice(1).join("\n").trim()
 
-        // Determine section icon and color based on title
-        let icon = <Database className="w-5 h-5 text-primary" />
-        let bgColor = "bg-blue-50"
-        let borderColor = "border-blue-200"
+        let icon = <Database className="w-6 h-6 text-[#FF7435]" />
+        let accentClass = "border-[#FF7435]/20 bg-orange-50/10 shadow-orange-500/5"
 
         if (title?.toLowerCase().includes("anomalies")) {
-          icon = <AlertTriangle className="w-5 h-5 text-yellow-500" />
-          bgColor = "bg-yellow-50"
-          borderColor = "border-yellow-200"
+          icon = <AlertTriangle className="w-6 h-6 text-yellow-500" />
+          accentClass = "border-yellow-500/20 bg-yellow-50/10 shadow-yellow-500/5"
         } else if (title?.toLowerCase().includes("star schema")) {
-          icon = <BarChart3 className="w-5 h-5 text-purple-500" />
-          bgColor = "bg-purple-50"
-          borderColor = "border-purple-200"
+          icon = <BarChart3 className="w-6 h-6 text-purple-500" />
+          accentClass = "border-purple-500/20 bg-purple-50/10 shadow-purple-500/5"
         }
 
         return (
-          <Card key={index} className={`border-gray-200 mb-6`}>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-heading font-heading">
-                {icon}
-                {title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className={`${bgColor} ${borderColor} border rounded-lg p-4`}>
-                <div className="space-y-3">
-                  {content.split("\n").map((line, lineIndex) => {
-                    const trimmedLine = line.trim()
+          <div key={index} className={`card p-10 md:p-14 mb-12 border-2 ${accentClass} animate-in fade-in slide-in-from-bottom-8 duration-700`}>
+            <div className="flex items-center justify-between mb-8">
+               <h3 className="text-2xl font-black font-poppins flex items-center gap-4 text-[var(--night)] uppercase tracking-tight">
+                 {icon}
+                 {title}
+               </h3>
+               <Badge className="bg-[var(--night)] text-white border-none font-black text-[10px] h-6 px-3">REPORT NO. {index}</Badge>
+            </div>
+            
+            <div className="space-y-6">
+              {content.split("\n").map((line, lineIndex) => {
+                const trimmedLine = line.trim()
+                if (!trimmedLine) return <div key={lineIndex} className="h-6" />
 
-                    if (!trimmedLine) return <div key={lineIndex} className="h-2" />
+                if (trimmedLine.includes("**") && trimmedLine.includes("Table:**")) {
+                  return (
+                    <div key={lineIndex} className="mt-12 mb-6 flex items-center gap-4 border-b-4 border-[var(--night)] pb-4 first:mt-0">
+                       <Table className="w-5 h-5 text-[var(--night)]" />
+                       <h4 className="text-xl font-black text-[var(--night)] font-poppins uppercase tracking-tighter">
+                         {trimmedLine.replace(/\*\*/g, "").replace(" Table:", " Entity")}
+                       </h4>
+                    </div>
+                  )
+                }
 
-                    // Handle table headers (bold text with **)
-                    if (trimmedLine.includes("**") && trimmedLine.includes("Table:**")) {
-                      return (
-                        <h4 key={lineIndex} className="font-semibold text-heading font-heading mt-4 mb-2 text-lg">
-                          {trimmedLine.replace(/\*\*/g, "").replace(" Table:", " Table")}
-                        </h4>
-                      )
-                    }
+                if (trimmedLine.includes("**")) {
+                  return (
+                    <h5 key={lineIndex} className="text-[10px] font-black text-[var(--night)] mt-8 mb-4 uppercase tracking-[0.3em] bg-[var(--night)] text-white px-4 py-1.5 rounded-full w-fit">
+                      {trimmedLine.replace(/\*\*/g, "")}
+                    </h5>
+                  )
+                }
 
-                    // Handle other bold text
-                    if (trimmedLine.includes("**")) {
-                      return (
-                        <h5 key={lineIndex} className="font-semibold text-heading font-heading mt-3 mb-1">
-                          {trimmedLine.replace(/\*\*/g, "")}
-                        </h5>
-                      )
-                    }
+                if (trimmedLine.startsWith("- ") && trimmedLine.includes(":")) {
+                  const parts = trimmedLine.substring(2).split(":")
+                  const fieldName = parts[0].trim()
+                  const description = parts.slice(1).join(":").trim()
 
-                    // Handle bullet points with code formatting
-                    if (trimmedLine.startsWith("- ") && trimmedLine.includes(":")) {
-                      const parts = trimmedLine.substring(2).split(":")
-                      const fieldName = parts[0].trim()
-                      const description = parts.slice(1).join(":").trim()
+                  return (
+                    <div key={lineIndex} className="flex items-start gap-5 py-4 px-6 bg-white dark:bg-zinc-800/50 rounded-2xl border-2 border-[var(--iron)]/40 group hover:border-[#FF7435]/30 transition-all">
+                      <div className="w-2 h-2 rounded-full bg-[#FF7435] mt-2 shrink-0 group-hover:scale-125 transition-transform" />
+                      <div className="flex flex-col gap-1">
+                        <code className="text-xs font-black font-mono text-[#FF7435] uppercase tracking-widest bg-orange-50 px-2 py-0.5 rounded-lg w-fit">
+                          {fieldName}
+                        </code>
+                        <span className="text-[var(--steel)] font-bold text-sm leading-relaxed">{description}</span>
+                      </div>
+                    </div>
+                  )
+                }
 
-                      return (
-                        <div key={lineIndex} className="flex items-start gap-3 py-1">
-                          <span className="text-primary font-bold">•</span>
-                          <div className="flex-1">
-                            <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-primary mr-2">
-                              {fieldName}
-                            </code>
-                            <span className="text-body">{description}</span>
-                          </div>
-                        </div>
-                      )
-                    }
+                if (trimmedLine.startsWith("- ")) {
+                  return (
+                    <div key={lineIndex} className="flex items-start gap-5 py-4 px-6 bg-[var(--mist)]/40 rounded-2xl border border-[var(--iron)]/40 group hover:bg-white transition-all">
+                      <Zap className="w-4 h-4 text-[#FF7435] mt-1 shrink-0 group-hover:rotate-12 transition-transform" />
+                      <span className="text-[var(--night)] font-bold text-sm leading-relaxed">{trimmedLine.substring(2)}</span>
+                    </div>
+                  )
+                }
 
-                    // Handle regular bullet points
-                    if (trimmedLine.startsWith("- ")) {
-                      return (
-                        <div key={lineIndex} className="flex items-start gap-3 py-1">
-                          <span className="text-primary font-bold">•</span>
-                          <span className="text-body flex-1">{trimmedLine.substring(2)}</span>
-                        </div>
-                      )
-                    }
-
-                    // Handle numbered lists
-                    if (trimmedLine.match(/^\d+\.\s/)) {
-                      const match = trimmedLine.match(/^(\d+)\.\s(.*)/)
-                      if (match) {
-                        return (
-                          <div key={lineIndex} className="flex items-start gap-3 py-1">
-                            <span className="text-primary font-semibold text-sm bg-primary/10 rounded-full w-6 h-6 flex items-center justify-center">
-                              {match[1]}
-                            </span>
-                            <span className="text-body flex-1">{match[2]}</span>
-                          </div>
-                        )
-                      }
-                    }
-
-                    // Handle regular paragraphs
+                if (trimmedLine.match(/^\d+\.\s/)) {
+                  const match = trimmedLine.match(/^(\d+)\.\s(.*)/)
+                  if (match) {
                     return (
-                      <p key={lineIndex} className="text-body leading-relaxed">
-                        {trimmedLine}
-                      </p>
+                      <div key={lineIndex} className="flex items-start gap-5 py-4 px-6 border-l-4 border-[#FF7435]/20 group hover:border-[#FF7435] transition-all">
+                        <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--night)] text-white text-[10px] font-black shrink-0">
+                          {match[1]}
+                        </span>
+                        <span className="text-[var(--night)] font-black text-sm leading-relaxed pt-1">{match[2]}</span>
+                      </div>
                     )
-                  })}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                  }
+                }
+
+                return (
+                  <p key={lineIndex} className="text-[var(--steel)] font-medium leading-relaxed bg-white p-6 rounded-[2rem] border-2 border-dashed border-[var(--iron)]">
+                    {trimmedLine}
+                  </p>
+                )
+              })}
+            </div>
+          </div>
         )
       })
       .filter(Boolean)
@@ -310,22 +293,25 @@ export default function DataAnalyzer() {
     if (!submissionState.result) return null
 
     return (
-      <div className="space-y-6">
-        <div className="text-center space-y-4 py-6">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
-          <h3 className="text-2xl font-semibold text-heading font-heading">Analysis Complete!</h3>
-          <p className="text-body">Your CSV files have been analyzed successfully. Here are the complete results:</p>
+      <div className="space-y-16 animate-in fade-in duration-1000 pb-20">
+        <div className="text-center space-y-6">
+          <div className="w-24 h-24 bg-emerald-500/10 rounded-[2.5rem] flex items-center justify-center mx-auto border-4 border-emerald-500/20 shadow-2xl shadow-emerald-500/10">
+            <CheckCircle className="w-12 h-12 text-emerald-500" />
+          </div>
+          <h3 className="text-4xl font-black font-poppins text-[var(--night)] tracking-tighter uppercase">Synthesis Complete</h3>
+          <p className="text-[var(--steel)] font-bold italic max-w-xl mx-auto px-6">
+            The data engine has processed your vectors. Review the schema optimizations and anomalies below.
+          </p>
         </div>
 
-        {/* Complete Analysis Output */}
-        <div className="space-y-6">{formatAnalysisOutput(submissionState.result)}</div>
+        <div className="space-y-12">{formatAnalysisOutput(submissionState.result)}</div>
 
-        <div className="text-center pt-6">
+        <div className="text-center pt-12 border-t-4 border-[var(--iron)]/30">
           <Button
             onClick={resetForm}
-            className="bg-primary hover:bg-primary-hover text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            className="btn-primary px-12 h-16 text-xs font-black uppercase tracking-[0.2em] rounded-full shadow-2xl shadow-[#FF7435]/30 group"
           >
-            Analyze Another Dataset
+            Initiate New Scan <ArrowRight className="w-5 h-5 ml-4 group-hover:translate-x-1" />
           </Button>
         </div>
       </div>
@@ -333,149 +319,171 @@ export default function DataAnalyzer() {
   }
 
   return (
-    <div className="min-h-screen bg-section">
-      {/* Header */}
-      <div className="bg-header-gradient border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="text-center space-y-4">
-            <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-              <FileText className="w-8 h-8 text-primary" />
-            </div>
-            <h1 className="text-4xl font-bold text-heading font-heading">Star Schema Data Cleanser</h1>
-            <p className="text-lg text-body max-w-2xl mx-auto">
-              Upload your CSV files for intelligent data analysis and schema optimization powered by AI
-            </p>
+    <div className="min-h-screen bg-[var(--mist)] text-[var(--night)] transition-colors duration-300 pb-32">
+      {/* Premium Sticky Header */}
+      <div className="bg-[var(--cloud)]/60 backdrop-blur-2xl border-b border-[var(--iron)] pt-24 pb-8 sticky top-0 z-30 shadow-sm text-center">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="flex flex-col items-center gap-4">
+             <div className="w-14 h-14 bg-[#FF7435] rounded-2xl flex items-center justify-center shadow-2xl shadow-[#FF7435]/30 mb-2">
+                <Database className="w-8 h-8 text-white" />
+             </div>
+             <div>
+                <h1 className="text-3xl font-black font-poppins text-[var(--night)] tracking-tighter uppercase mb-1">
+                   Star Schema <span className="text-[#FF7435]">Nexus</span>
+                </h1>
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--steel)] opacity-60">High-Fidelity Data Cleansing Unit</p>
+             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <Card className="shadow-lg border-gray-200">
-          <CardContent className="p-8">
-            {submissionState.success && submissionState.result ? (
-              renderAnalysisResults()
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {submissionState.error && (
-                  <Alert className="bg-red-50 border-red-200 text-red-800">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{submissionState.error}</AlertDescription>
-                  </Alert>
-                )}
+      <div className="max-w-5xl mx-auto px-6 mt-16 lg:mt-24">
+        {!submissionState.success ? (
+          <form onSubmit={handleSubmit} className="card p-10 md:p-16 space-y-12 shadow-2xl shadow-black/5 border-2 border-[var(--iron)]/50">
+            <div className="flex items-center justify-between mb-8 pb-8 border-b-2 border-[var(--iron)]/40">
+               <div>
+                  <h2 className="text-xl font-black font-poppins text-[var(--night)] uppercase tracking-tight">Mission Input</h2>
+                  <p className="text-xs font-bold text-[var(--steel)] italic uppercase tracking-widest mt-1">Status: Awaiting Vectors</p>
+               </div>
+               <div className="flex items-center gap-3">
+                  <Fingerprint className="w-6 h-6 text-[#FF7435] opacity-20" />
+                  <Activity className="w-6 h-6 text-[#FF7435] opacity-20" />
+               </div>
+            </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name" className="text-heading font-medium">
-                      Name
-                    </Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      type="text"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="border-gray-300 focus:border-primary focus:ring-primary"
-                      placeholder="Enter your name"
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-heading font-medium">
-                      Email
-                    </Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="border-gray-300 focus:border-primary focus:ring-primary"
-                      placeholder="Enter your email"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <Label className="text-heading font-medium">CSV Files Upload</Label>
-
-                  <div
-                    className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300 ${
-                      dragActive
-                        ? "border-primary bg-primary/5"
-                        : "border-gray-300 hover:border-primary/50 hover:bg-gray-50"
-                    }`}
-                    onDragEnter={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDragOver={handleDrag}
-                    onDrop={handleDrop}
-                  >
-                    <input
-                      type="file"
-                      multiple
-                      accept=".csv"
-                      onChange={handleFileChange}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    />
-                    <Upload className="w-12 h-12 text-primary mx-auto mb-4" />
-                    <p className="text-heading text-lg mb-2 font-medium">Drop your CSV files here or click to browse</p>
-                    <p className="text-body text-sm">Supports multiple CSV files for comprehensive analysis</p>
-                  </div>
-
-                  {formData.files.length > 0 && (
-                    <div className="space-y-3">
-                      <p className="text-heading text-sm font-medium">Selected Files ({formData.files.length}):</p>
-                      <div className="space-y-2 max-h-40 overflow-y-auto">
-                        {formData.files.map((file, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between bg-section rounded-lg p-3 border border-gray-200"
-                          >
-                            <div className="flex items-center space-x-3">
-                              <FileText className="w-4 h-4 text-primary" />
-                              <span className="text-heading text-sm truncate font-medium">{file.name}</span>
-                              <span className="text-body text-xs">({(file.size / 1024).toFixed(1)} KB)</span>
-                            </div>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeFile(index)}
-                              className="text-body hover:text-heading hover:bg-gray-100 h-8 w-8 p-0"
-                            >
-                              ×
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={submissionState.isLoading}
-                  className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-4 px-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-[1.02]"
-                >
-                  {submissionState.isLoading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Processing Data...
-                    </>
-                  ) : (
-                    "Start Data Analysis"
-                  )}
-                </Button>
-              </form>
+            {submissionState.error && (
+              <Alert variant="destructive" className="rounded-2xl border-2 animate-in shake-in">
+                <XCircle className="h-5 w-5" />
+                <AlertDescription className="font-black text-[10px] uppercase tracking-widest">{submissionState.error}</AlertDescription>
+              </Alert>
             )}
-          </CardContent>
-        </Card>
 
-        <div className="mt-8 text-center">
-          <p className="text-body text-sm">Powered by AI • Secure data processing • Star schema optimization</p>
-        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="space-y-3">
+                <Label className="field-label flex items-center gap-2 font-black uppercase tracking-[0.1em]">
+                   Lead Analyst
+                </Label>
+                <Input
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="input h-14"
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
+
+              <div className="space-y-3">
+                <Label className="field-label flex items-center gap-2 font-black uppercase tracking-[0.1em]">
+                   Contact Terminal
+                </Label>
+                <Input
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="input h-14"
+                  placeholder="john@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <Label className="field-label flex items-center justify-between">
+                <span className="font-black uppercase tracking-[0.1em]">Dataset Carrier (CSV)</span>
+                <Badge className="bg-[#FF7435] text-white border-none font-black text-[9px] uppercase tracking-[0.2em]">{formData.files.length} UNIT(S)</Badge>
+              </Label>
+
+              <div
+                className={`relative border-4 border-dashed rounded-[3rem] p-16 text-center transition-all duration-700 group overflow-hidden ${
+                  dragActive
+                    ? "border-[#FF7435] bg-[#FF7435]/5 scale-[1.02]"
+                    : "border-[var(--iron)]/40 bg-[var(--cloud)]/30 hover:border-[#FF7435]/40 hover:bg-white"
+                }`}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+              >
+                 {dragActive && (
+                    <div className="absolute inset-0 bg-[#FF7435]/5 animate-pulse" />
+                 )}
+                <input
+                  type="file"
+                  multiple
+                  accept=".csv"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                />
+                <div className="relative z-10 space-y-6">
+                  <div className="w-24 h-24 bg-white dark:bg-zinc-800 rounded-[2rem] flex items-center justify-center mx-auto shadow-2xl border-2 border-[var(--iron)]/50 group-hover:bg-[#FF7435] group-hover:rotate-12 transition-all duration-700">
+                    <Upload className="w-10 h-10 text-[#FF7435] group-hover:text-white transition-colors" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black font-poppins text-[var(--night)] mb-2 tracking-tight uppercase">Upload Dataset</h3>
+                    <p className="text-[var(--steel)] font-bold italic">Drag vectors here or interact with terminal</p>
+                  </div>
+                  <div className="pt-6 flex items-center justify-center gap-5 text-[10px] font-black text-[var(--steel)] uppercase tracking-[0.2em] opacity-60">
+                     <span className="flex items-center gap-2"><Table className="w-4 h-4" /> Multi-Source</span>
+                     <div className="w-1.5 h-1.5 rounded-full bg-[var(--iron)] opacity-40"></div>
+                     <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4" /> Secure Pipeline</span>
+                  </div>
+                </div>
+              </div>
+
+              {formData.files.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 animate-in slide-in-from-bottom-8">
+                  {formData.files.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-white dark:bg-zinc-800/80 rounded-[1.5rem] p-6 border-2 border-[var(--iron)]/40 group hover:border-[#FF7435]/40 transition-all shadow-sm"
+                    >
+                      <div className="flex items-center gap-4 overflow-hidden">
+                        <div className="w-12 h-12 bg-[var(--mist)] rounded-xl flex items-center justify-center shrink-0 border-2 border-[var(--iron)]/50">
+                          <FileText className="w-6 h-6 text-[#FF7435]" />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-[var(--night)] text-xs font-black truncate uppercase tracking-tighter">{file.name}</span>
+                          <span className="text-[10px] font-bold text-[var(--steel)]">SIZE: {(file.size / 1024).toFixed(1)} KB</span>
+                        </div>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeFile(index)}
+                        className="text-[var(--steel)] hover:text-red-500 hover:bg-red-50 h-10 w-10 p-0 rounded-xl transition-all"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              disabled={submissionState.isLoading}
+              className="btn-primary w-full h-20 text-xs font-black uppercase tracking-[0.3em] rounded-full shadow-2xl shadow-[#FF7435]/30 group"
+            >
+              {submissionState.isLoading ? (
+                <>
+                  <Loader2 className="w-6 h-6 mr-4 animate-spin" />
+                  Analyzing Quantum Vectors...
+                </>
+              ) : (
+                <>
+                  <Activity className="w-6 h-6 mr-4 group-hover:scale-110 transition-transform" />
+                  Engage Analysis Protocol
+                </>
+              )}
+            </Button>
+          </form>
+        ) : (
+          renderAnalysisResults()
+        )}
       </div>
     </div>
   )

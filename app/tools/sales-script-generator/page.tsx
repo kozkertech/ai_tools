@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
+import { Badge } from "@/components/ui/badge"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   Loader2,
   Sparkles,
@@ -24,6 +26,14 @@ import {
   ShoppingCart,
   Users,
   Settings,
+  ArrowRight,
+  ShieldCheck,
+  Zap,
+  Briefcase,
+  Mail,
+  UserCheck,
+  LayoutDashboard,
+  Coins
 } from "lucide-react"
 
 // Types
@@ -51,26 +61,19 @@ interface FormattedOutputProps {
 }
 
 function FormattedOutput({ content }: FormattedOutputProps) {
-  // Parse the n8n output format
   const parseContent = (text: string) => {
-    // Clean the n8n output format more thoroughly
     let cleanText = text
       .replace(/<n8n-output>|<\/n8n-output>/g, "")
       .replace(/^\[|\]$/g, "")
       .trim()
 
-    // Remove JSON wrapper if present
     if (cleanText.startsWith("{") && cleanText.endsWith("}")) {
       cleanText = cleanText.slice(1, -1).trim()
     }
 
-    // Remove "text": prefix if present
     cleanText = cleanText.replace(/^"?text"?\s*:\s*"?/, "").replace(/"$/, "")
-
-    // Clean up escape characters and normalize line breaks
     cleanText = cleanText.replace(/\\n/g, "\n").replace(/\\"/g, '"').replace(/\\\\/g, "\\").replace(/\\'/g, "'")
 
-    // Split into lines and process
     const lines = cleanText
       .split("\n")
       .map((line) => line.trim())
@@ -78,67 +81,67 @@ function FormattedOutput({ content }: FormattedOutputProps) {
 
     return lines
       .map((line, index) => {
-        // Handle main headings (surrounded by **)
         if (line.match(/^\*\*[^*:]+\*\*$/)) {
           const heading = line.replace(/\*\*/g, "")
           return (
-            <h2 key={index} className="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3 first:mt-0">
+            <h2 key={index} className="text-2xl font-black font-poppins text-[var(--night)] tracking-tighter uppercase mb-6 mt-12 first:mt-0 border-b-4 border-[#FF7435] pb-4 inline-block">
               {heading}
             </h2>
           )
         }
 
-        // Handle section headings (** with colon)
         if (line.match(/^\*\*[^*]+:\*\*$/)) {
           const heading = line.replace(/\*\*/g, "").replace(":", "")
           return (
-            <h3 key={index} className="text-lg font-semibold text-gray-900 dark:text-white mt-5 mb-2">
+            <h3 key={index} className="text-lg font-black font-poppins text-[var(--night)] tracking-tighter uppercase mb-4 mt-8 flex items-center gap-3">
+              <div className="h-6 w-1.5 bg-[#FF7435] rounded-full"></div>
               {heading}:
             </h3>
           )
         }
 
-        // Handle italic quotes (surrounded by *" and "*)
         if (line.match(/^\*".*"\*$/)) {
           const text = line.replace(/^\*"|"\*$/g, "")
           return (
             <div
               key={index}
-              className="italic text-gray-700 dark:text-gray-300 mb-3 pl-4 border-l-2 border-orange-200 bg-orange-50 dark:bg-orange-900/20 py-2 px-4 rounded"
+              className="text-xl font-black font-poppins text-[var(--night)] italic mb-8 pl-10 py-10 pr-10 border-l-8 border-[#FF7435] bg-[var(--mist)] rounded-r-[3rem] shadow-inner relative overflow-hidden"
             >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF7435]/5 rounded-bl-full"></div>
               "{text}"
             </div>
           )
         }
 
-        // Handle bullet points with checkmarks
         if (line.startsWith("✔")) {
           const text = line.replace("✔", "").trim()
           return (
-            <div key={index} className="flex items-start gap-2 mb-2">
-              <span className="text-green-500 mt-1 flex-shrink-0">✔</span>
-              <div className="text-gray-700 dark:text-gray-300 flex-1" dangerouslySetInnerHTML={{ __html: formatInlineText(text) }} />
+            <div key={index} className="flex items-start gap-4 mb-4 group px-4">
+              <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center mt-1 group-hover:scale-110 transition-transform shrink-0">
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+              </div>
+              <div className="text-sm font-bold text-[var(--night)]/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: formatInlineText(text) }} />
             </div>
           )
         }
 
-        // Handle arrow points (objection handling)
         if (line.startsWith("→")) {
           const text = line.replace("→", "").trim()
           return (
-            <div key={index} className="flex items-start gap-2 mb-2 ml-4">
-              <span className="text-blue-500 mt-1 flex-shrink-0">→</span>
-              <div className="text-gray-700 dark:text-gray-300 flex-1" dangerouslySetInnerHTML={{ __html: formatInlineText(text) }} />
+            <div key={index} className="flex items-start gap-4 mb-4 ml-8 group px-4">
+              <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center mt-1 group-hover:scale-110 transition-transform shrink-0">
+                <ArrowRight className="w-3.5 h-3.5 text-blue-600" />
+              </div>
+              <div className="text-sm font-bold text-[var(--night)]/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: formatInlineText(text) }} />
             </div>
           )
         }
 
-        // Handle regular paragraphs
         if (line && !line.startsWith("*") && !line.startsWith("✔") && !line.startsWith("→")) {
           return (
             <p
               key={index}
-              className="text-gray-700 dark:text-gray-300 mb-3 leading-relaxed"
+              className="text-sm font-bold text-[var(--night)]/70 leading-loose mb-6 italic px-4"
               dangerouslySetInnerHTML={{ __html: formatInlineText(line) }}
             />
           )
@@ -149,15 +152,11 @@ function FormattedOutput({ content }: FormattedOutputProps) {
       .filter(Boolean)
   }
 
-  // Helper function to format inline text (bold, italic, etc.)
   const formatInlineText = (text: string) => {
     return (
       text
-        // Convert **text** to bold
-        .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-gray-800 dark:text-gray-200">$1</strong>')
-        // Convert *text* to italic (but not if it's already in quotes)
-        .replace(/(?<!")(\*)([^*"]+)(\*)(?!")/g, '<em class="italic">$2</em>')
-        // Clean up any remaining escape characters
+        .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-black text-[var(--night)] bg-[var(--mist)] px-1.5 rounded-md border border-[var(--iron)]/40">$1</strong>')
+        .replace(/(?<!")(\*)([^*"]+)(\*)(?!")/g, '<em class="italic opacity-80">$2</em>')
         .replace(/\\(.)/g, "$1")
     )
   }
@@ -165,702 +164,43 @@ function FormattedOutput({ content }: FormattedOutputProps) {
   return <div className="space-y-2 text-left">{parseContent(content)}</div>
 }
 
-// Product Details Step Component
-interface ProductDetailsStepProps {
-  formData: FormData
-  onChange: (field: keyof FormData, value: string) => void
-  errors: Partial<FormData>
-}
-
-function ProductDetailsStep({ formData, onChange, errors }: ProductDetailsStepProps) {
-  return (
-    <div className="space-y-6">
-      <div>
-        <Label className="text-lg font-semibold text-gray-900 dark:text-white">Product Information</Label>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">Tell us about your product or service</p>
-      </div>
-
-      <div className="space-y-6">
-        {/* Name and Email */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-white">
-              Full Name *
-            </Label>
-            <Input
-              id="name"
-              placeholder="e.g., John Smith"
-              value={formData.name}
-              onChange={(e) => onChange("name", e.target.value)}
-              className={`bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white ${errors.name ? "border-red-500 focus:border-red-500" : "border-gray-300 dark:border-zinc-700 focus:border-orange-500"}`}
-            />
-            {errors.name && <p className="text-red-600 dark:text-red-400 text-sm">{errors.name}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-white">
-              Email Address *
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="e.g., john@company.com"
-              value={formData.email}
-              onChange={(e) => onChange("email", e.target.value)}
-              className={`bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white ${errors.email ? "border-red-500 focus:border-red-500" : "border-gray-300 dark:border-zinc-700 focus:border-orange-500"}`}
-            />
-            {errors.email && <p className="text-red-600 dark:text-red-400 text-sm">{errors.email}</p>}
-          </div>
-        </div>
-
-        {/* Product Name */}
-        <div className="space-y-2">
-          <Label htmlFor="productName" className="text-sm font-medium text-gray-700 dark:text-white">
-            Product Name *
-          </Label>
-          <Input
-            id="productName"
-            placeholder="e.g., Mr Food's fries"
-            value={formData.productName}
-            onChange={(e) => onChange("productName", e.target.value)}
-            className={`bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white ${errors.productName ? "border-red-500 focus:border-red-500" : "border-gray-300 dark:border-zinc-700 focus:border-orange-500"}`}
-          />
-          {errors.productName && <p className="text-red-600 dark:text-red-400 text-sm">{errors.productName}</p>}
-        </div>
-
-        {/* Industry */}
-        <div className="space-y-2">
-          <Label htmlFor="industry" className="text-sm font-medium text-gray-700 dark:text-white">
-            Industry (Optional)
-          </Label>
-          <Input
-            id="industry"
-            placeholder="e.g., Technology, Healthcare, Food & Beverage"
-            value={formData.industry}
-            onChange={(e) => onChange("industry", e.target.value)}
-            className="bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border-gray-300 dark:border-zinc-700 focus:border-orange-500"
-          />
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Specify the industry your product belongs to
-          </p>
-        </div>
-
-        {/* Price Range */}
-        <div className="space-y-2">
-          <Label htmlFor="priceRange" className="text-sm font-medium text-gray-700 dark:text-white">
-            Price Range (Optional)
-          </Label>
-          <Input
-            id="priceRange"
-            placeholder="e.g., $99-$299, Under $50, Premium pricing"
-            value={formData.priceRange}
-            onChange={(e) => onChange("priceRange", e.target.value)}
-            className="bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border-gray-300 dark:border-zinc-700 focus:border-orange-500"
-          />
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Help us tailor the script to your pricing strategy
-          </p>
-        </div>
-      </div>
-
-      <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
-        <h4 className="font-semibold text-orange-800 dark:text-orange-300 mb-2">💡 Product Tips</h4>
-        <ul className="text-sm text-orange-700 dark:text-orange-300 space-y-1">
-          <li>• Use a clear, memorable product name</li>
-          <li>• Industry helps us use relevant terminology</li>
-          <li>• Price range affects the sales approach we recommend</li>
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-// Target Audience Step Component
-interface TargetAudienceStepProps {
-  formData: FormData
-  onChange: (field: keyof FormData, value: string) => void
-  errors: Partial<FormData>
-}
-
-const tones = [
-  { value: "persuasive", label: "Persuasive", description: "Compelling and convincing" },
-  { value: "professional", label: "Professional", description: "Formal and business-focused" },
-  { value: "casual", label: "Casual", description: "Friendly and conversational" },
-  { value: "urgent", label: "Urgent", description: "Time-sensitive and action-driven" },
-  { value: "friendly", label: "Friendly", description: "Warm and approachable" },
-  { value: "enthusiastic", label: "Enthusiastic", description: "Energetic and exciting" },
-  { value: "consultative", label: "Consultative", description: "Advisory and helpful" },
-  { value: "authoritative", label: "Authoritative", description: "Expert and confident" },
-]
-
-function TargetAudienceStep({ formData, onChange, errors }: TargetAudienceStepProps) {
-  return (
-    <div className="space-y-6">
-      <div>
-        <Label className="text-lg font-semibold text-gray-900 dark:text-white">Target Audience & Tone</Label>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">Define who you're selling to and how you want to sound</p>
-      </div>
-
-      <div className="space-y-6">
-        {/* Target Audience */}
-        <div className="space-y-2">
-          <Label htmlFor="targetAudience" className="text-sm font-medium text-gray-700 dark:text-white">
-            Target Audience *
-          </Label>
-          <Textarea
-            id="targetAudience"
-            placeholder="e.g., children, busy parents, small business owners, enterprise decision makers"
-            value={formData.targetAudience}
-            onChange={(e) => onChange("targetAudience", e.target.value)}
-            className={`min-h-[100px] bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white ${errors.targetAudience ? "border-red-500 focus:border-red-500" : "border-gray-300 dark:border-zinc-700 focus:border-orange-500"}`}
-            rows={3}
-          />
-          {errors.targetAudience && <p className="text-red-600 dark:text-red-400 text-sm">{errors.targetAudience}</p>}
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Describe your ideal customer - their demographics, role, or characteristics
-          </p>
-        </div>
-
-        {/* Tone */}
-        <div className="space-y-2">
-          <Label htmlFor="tone" className="text-sm font-medium text-gray-700 dark:text-white">
-            Script Tone *
-          </Label>
-          <Select value={formData.tone} onValueChange={(value) => onChange("tone", value)}>
-            <SelectTrigger className={`bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white ${errors.tone ? "border-red-500" : "border-gray-300 dark:border-zinc-700"}`}>
-              <SelectValue placeholder="Select the tone for your script" />
-            </SelectTrigger>
-            <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
-              {tones.map((tone) => (
-                <SelectItem key={tone.value} value={tone.value} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
-                  <div>
-                    <div className="font-medium">{tone.label}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{tone.description}</div>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.tone && <p className="text-red-600 dark:text-red-400 text-sm">{errors.tone}</p>}
-        </div>
-      </div>
-
-      <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
-        <h4 className="font-semibold text-orange-800 dark:text-orange-300 mb-2">🎯 Audience Tips</h4>
-        <ul className="text-sm text-orange-700 dark:text-orange-300 space-y-1">
-          <li>• Be specific about your target audience</li>
-          <li>• Consider their pain points and motivations</li>
-          <li>• Choose a tone that resonates with your audience</li>
-          <li>• Match the tone to your brand personality</li>
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-// Script Configuration Step Component
-interface ScriptConfigStepProps {
-  formData: FormData
-  onChange: (field: keyof FormData, value: string | string[]) => void
-  errors: Partial<FormData>
-}
-
-function ScriptConfigStep({ formData, onChange, errors }: ScriptConfigStepProps) {
-  const handleBenefitChange = (index: number, value: string) => {
-    const newBenefits = [...formData.keyBenefits]
-    newBenefits[index] = value
-    onChange("keyBenefits", newBenefits)
-  }
-
-  const addBenefit = () => {
-    onChange("keyBenefits", [...formData.keyBenefits, ""])
-  }
-
-  const removeBenefit = (index: number) => {
-    if (formData.keyBenefits.length > 1) {
-      const newBenefits = formData.keyBenefits.filter((_, i) => i !== index)
-      onChange("keyBenefits", newBenefits)
-    }
-  }
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <Label className="text-lg font-semibold text-gray-900 dark:text-white">Script Configuration</Label>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">Configure the key elements of your sales script</p>
-      </div>
-
-      <div className="space-y-6">
-        {/* Key Benefits */}
-        <div className="space-y-2">
-          <Label className="text-sm font-medium text-gray-700 dark:text-white">Key Benefits *</Label>
-          <div className="space-y-3">
-            {formData.keyBenefits.map((benefit, index) => (
-              <div key={index} className="flex gap-2">
-                <Input
-                  value={benefit}
-                  onChange={(e) => handleBenefitChange(index, e.target.value)}
-                  placeholder="Enter a key benefit"
-                  className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border-gray-300 dark:border-zinc-700 focus:border-orange-500"
-                />
-                {formData.keyBenefits.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeBenefit(index)}
-                    className="shrink-0 border-gray-300 dark:border-zinc-700 hover:border-red-400 hover:text-red-600 bg-transparent"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-            ))}
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={addBenefit}
-              className="w-full border-2 border-dashed border-gray-300 dark:border-zinc-700 hover:border-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Another Benefit
-            </Button>
-          </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            List the main advantages or benefits of your product
-          </p>
-        </div>
-
-        {/* Call to Action */}
-        <div className="space-y-2">
-          <Label htmlFor="callToAction" className="text-sm font-medium text-gray-700 dark:text-white">
-            Call to Action *
-          </Label>
-          <Input
-            id="callToAction"
-            placeholder="e.g., Hurry! Grab your first pack now, Sign up for a free trial today"
-            value={formData.callToAction}
-            onChange={(e) => onChange("callToAction", e.target.value)}
-            className={`bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white ${errors.callToAction ? "border-red-500 focus:border-red-500" : "border-gray-300 dark:border-zinc-700 focus:border-orange-500"}`}
-          />
-          {errors.callToAction && <p className="text-red-600 dark:text-red-400 text-sm">{errors.callToAction}</p>}
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            What action do you want your audience to take?
-          </p>
-        </div>
-
-        {/* Script Length */}
-        <div className="space-y-2">
-          <Label className="text-sm font-medium text-gray-700 dark:text-white">Script Length *</Label>
-          <div className="flex gap-6">
-            {["short", "medium", "long"].map((length) => (
-              <div key={length} className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id={length}
-                  name="scriptLength"
-                  value={length}
-                  checked={formData.scriptLength === length}
-                  onChange={(e) => onChange("scriptLength", e.target.value)}
-                  className="w-4 h-4 text-orange-600 focus:ring-orange-500 border-gray-300 dark:border-zinc-700"
-                />
-                <Label htmlFor={length} className="text-gray-700 dark:text-gray-300 capitalize cursor-pointer">
-                  {length}
-                </Label>
-              </div>
-            ))}
-          </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Choose the desired length for your sales script
-          </p>
-        </div>
-      </div>
-
-      <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
-        <h4 className="font-semibold text-orange-800 dark:text-orange-300 mb-2">⚙️ Configuration Tips</h4>
-        <ul className="text-sm text-orange-700 dark:text-orange-300 space-y-1">
-          <li>• Focus on benefits, not just features</li>
-          <li>• Make your call-to-action clear and compelling</li>
-          <li>• Short scripts work well for social media</li>
-          <li>• Long scripts are great for presentations</li>
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-// Script Results Component
-interface ScriptResultsProps {
-  response: ScriptResponse
-  formData: FormData
-  onReset: () => void
-}
-
-function ScriptResults({ response, formData, onReset }: ScriptResultsProps) {
-  const [copied, setCopied] = useState(false)
-  const [isGeneratingFile, setIsGeneratingFile] = useState(false)
-
-  // Scroll to top when results component mounts
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
-  const copyToClipboard = async () => {
-    try {
-      // Extract plain text from the formatted content for copying
-      const plainText = response.script.replace(/<[^>]*>/g, "").replace(/\\n/g, "\n")
-      await navigator.clipboard.writeText(plainText)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch (err) {
-      console.error("Failed to copy text: ", err)
-    }
-  }
-
-  const downloadJSON = () => {
-    const exportData = {
-      script: response.script,
-      formData: formData,
-      generatedAt: new Date().toISOString()
-    }
-    const dataStr = JSON.stringify(exportData, null, 2)
-    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr)
-
-    const exportFileDefaultName = `${formData.productName.replace(/\s+/g, "_")}_sales_script.json`
-
-    const linkElement = document.createElement("a")
-    linkElement.setAttribute("href", dataUri)
-    linkElement.setAttribute("download", exportFileDefaultName)
-    linkElement.click()
-  }
-
-  const downloadText = async () => {
-    setIsGeneratingFile(true)
-
-    try {
-      // Create a formatted text version
-      let textContent = `Sales Script Report\n${"=".repeat(25)}\n\n`
-      
-      textContent += `Product: ${formData.productName}\n`
-      if (formData.industry) textContent += `Industry: ${formData.industry}\n`
-      if (formData.priceRange) textContent += `Price Range: ${formData.priceRange}\n`
-      textContent += `Target Audience: ${formData.targetAudience}\n`
-      textContent += `Tone: ${formData.tone}\n`
-      textContent += `Length: ${formData.scriptLength}\n\n`
-      
-      textContent += `Generated Script:\n${"-".repeat(17)}\n`
-      
-      // Clean script content for text file
-      const cleanScript = response.script
-        .replace(/<[^>]*>/g, "")
-        .replace(/\\n/g, "\n")
-        .replace(/\*\*(.*?)\*\*/g, "$1")
-        .replace(/\*(.*?)\*/g, "$1")
-
-      textContent += cleanScript
-
-      // Create download
-      const dataUri = "data:text/plain;charset=utf-8," + encodeURIComponent(textContent)
-      const linkElement = document.createElement("a")
-      linkElement.setAttribute("href", dataUri)
-      linkElement.setAttribute("download", `${formData.productName.replace(/\s+/g, "_")}_sales_script.txt`)
-      linkElement.click()
-    } catch (error) {
-      console.error("Error generating text file:", error)
-    } finally {
-      setIsGeneratingFile(false)
-    }
-  }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white dark:from-zinc-900 dark:to-zinc-900">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Sparkles className="h-8 w-8 text-orange-600" />
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Your Sales Script</h1>
-          </div>
-          <p className="text-gray-600 dark:text-gray-400">Generated for {formData.productName}</p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          <Button
-            onClick={copyToClipboard}
-            className="bg-orange-600 hover:bg-orange-700 dark:hover:bg-orange-600 text-white"
-          >
-            {copied ? (
-              <>
-                <Check className="w-4 h-4 mr-2 text-green-600" />
-                Copied!
-              </>
-            ) : (
-              <>
-                <Copy className="w-4 h-4 mr-2" />
-                Copy Script
-              </>
-            )}
-          </Button>
-          <Button
-            onClick={downloadText}
-            disabled={isGeneratingFile}
-            variant="outline"
-            className="border-orange-200 dark:border-orange-600 text-orange-700 dark:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 bg-transparent"
-          >
-            {isGeneratingFile ? (
-              <>
-                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                Generating File...
-              </>
-            ) : (
-              <>
-                <FileText className="w-4 h-4 mr-2" />
-                Download Report
-              </>
-            )}
-          </Button>
-          <Button
-            onClick={downloadJSON}
-            variant="outline"
-            className="border-orange-200 dark:border-orange-600 text-orange-700 dark:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 bg-transparent"
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Download JSON
-          </Button>
-          <Button
-            onClick={onReset}
-            variant="outline"
-            className="border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 bg-transparent"
-          >
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Create New Script
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Script Card */}
-          <div className="lg:col-span-2">
-            <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
-              <CardHeader className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                    <Sparkles className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-2xl">Sales Script</CardTitle>
-                    <CardDescription className="text-orange-100">
-                      {formData.tone} • {formData.scriptLength} length
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-6 max-h-96 overflow-y-auto">
-                  <FormattedOutput content={response.script} />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Script Details */}
-            <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-orange-800 dark:text-orange-300">
-                  <Target className="w-5 h-5" />
-                  Script Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Product</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{formData.productName}</p>
-                </div>
-                {formData.industry && (
-                  <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Industry</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{formData.industry}</p>
-                  </div>
-                )}
-                {formData.priceRange && (
-                  <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Price Range</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{formData.priceRange}</p>
-                  </div>
-                )}
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Target Audience</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{formData.targetAudience}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Tone</p>
-                  <p className="font-medium text-gray-900 dark:text-white capitalize">{formData.tone}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Length</p>
-                  <p className="font-medium text-gray-900 dark:text-white capitalize">{formData.scriptLength}</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Key Benefits */}
-            <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
-              <CardHeader>
-                <CardTitle className="text-orange-800 dark:text-orange-300">Key Benefits</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {formData.keyBenefits.filter(benefit => benefit.trim()).map((benefit, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <span className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0" />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Call to Action */}
-            <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
-              <CardHeader>
-                <CardTitle className="text-orange-800 dark:text-orange-300">Call to Action</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg border-l-4 border-orange-400">
-                  <p className="text-gray-700 dark:text-gray-300 font-medium">{formData.callToAction}</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// API Functions
-async function generateScript(formData: FormData): Promise<ScriptResponse> {
-  try {
-    const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/sales-script", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const result = await response.json()
-
-    // Handle the response - it might be an array or object
-    let scriptContent = ""
-    if (Array.isArray(result) && result.length > 0) {
-      scriptContent = typeof result[0] === "string" ? result[0] : JSON.stringify(result[0])
-    } else if (result.script) {
-      scriptContent = result.script
-    } else if (result.generatedScript) {
-      scriptContent = result.generatedScript
-    } else {
-      scriptContent = JSON.stringify(result, null, 2)
-    }
-
-    return {
-      script: scriptContent,
-      webhookResponse: result
-    }
-  } catch (error) {
-    console.error("Error generating sales script:", error)
-    throw new Error(`Failed to generate sales script: ${error instanceof Error ? error.message : "Unknown error"}`)
-  }
-}
-
-// Main Component
+// Form Steps
 const STEPS = [
-  { id: 1, title: "Product Details", description: "Basic product information", icon: ShoppingCart },
-  { id: 2, title: "Target Audience", description: "Who you're selling to", icon: Users },
-  { id: 3, title: "Script Config", description: "Benefits and call-to-action", icon: Settings },
+  { id: 1, title: "Product Blueprint", description: "Identity & Core Metrics", icon: ShoppingCart },
+  { id: 2, title: "Target Analysis", description: "Audience & Resonance", icon: Users },
+  { id: 3, title: "Script Protocol", description: "Benefits & Triggers", icon: Settings },
 ]
 
 export default function SalesScriptGenerator() {
   const [currentStep, setCurrentStep] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [response, setResponse] = useState<ScriptResponse | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [isCopied, setIsCopied] = useState(false)
+
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    productName: "",
-    targetAudience: "",
-    keyBenefits: [""],
-    callToAction: "",
-    tone: "",
-    scriptLength: "short",
-    industry: "",
-    priceRange: "",
+    name: "", email: "", productName: "", targetAudience: "", keyBenefits: [""], callToAction: "", tone: "persuasive", scriptLength: "medium", industry: "", priceRange: "",
   })
+
   const [errors, setErrors] = useState<Partial<FormData>>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [scriptResponse, setScriptResponse] = useState<ScriptResponse | null>(null)
-  const [submitError, setSubmitError] = useState<string>("")
-  const [submitSuccess, setSubmitSuccess] = useState(false)
 
-  // Load saved progress from localStorage and scroll to top
-  useEffect(() => {
-    const savedData = localStorage.getItem("sales-script-generator-data")
-    const savedStep = localStorage.getItem("sales-script-generator-step")
-
-    if (savedData) {
-      try {
-        setFormData(JSON.parse(savedData))
-      } catch (error) {
-        console.error("Error loading saved data:", error)
-      }
-    }
-
-    if (savedStep) {
-      setCurrentStep(Number.parseInt(savedStep))
-    }
-
-    // Scroll to top when component mounts
-    window.scrollTo(0, 0)
-  }, [])
-
-  // Save progress to localStorage
-  useEffect(() => {
-    localStorage.setItem("sales-script-generator-data", JSON.stringify(formData))
-    localStorage.setItem("sales-script-generator-step", currentStep.toString())
-  }, [formData, currentStep])
-
-  const updateFormData = (field: keyof FormData, value: string | string[]) => {
+  const handleInputChange = (field: keyof FormData, value: string | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
-    // Clear error when user starts typing
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }))
+      setErrors((prev) => ({ ...prev, [field]: undefined }))
     }
   }
 
-  const validateStep = (step: number): boolean => {
+  const validateStep = (step: number) => {
     const newErrors: Partial<FormData> = {}
-
-    switch (step) {
-      case 1:
-        if (!formData.name.trim()) newErrors.name = "Full Name is required"
-        if (!formData.email.trim()) newErrors.email = "Email Address is required"
-        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email Address is invalid"
-        if (!formData.productName.trim()) newErrors.productName = "Product name is required"
-        break
-      case 2:
-        if (!formData.targetAudience.trim()) newErrors.targetAudience = "Target audience is required"
-        if (!formData.tone) newErrors.tone = "Tone is required"
-        break
-      case 3:
-        if (!formData.keyBenefits.some((benefit) => benefit.trim())) {
-          newErrors.keyBenefits = "At least one key benefit is required"
-        }
-        if (!formData.callToAction.trim()) newErrors.callToAction = "Call to action is required"
-        break
+    if (step === 1) {
+      if (!formData.name) newErrors.name = "Identity required."
+      if (!formData.email) newErrors.email = "Terminal email required."
+      if (!formData.productName) newErrors.productName = "Product designation required."
+    } else if (step === 2) {
+      if (!formData.targetAudience) newErrors.targetAudience = "Audience vector required."
+    } else if (step === 3) {
+      if (!formData.callToAction) newErrors.callToAction = "Mission directive required."
     }
 
     setErrors(newErrors)
@@ -870,181 +210,387 @@ export default function SalesScriptGenerator() {
   const nextStep = () => {
     if (validateStep(currentStep)) {
       setCurrentStep((prev) => Math.min(prev + 1, STEPS.length))
-      // Scroll to top when going to next step
-      window.scrollTo(0, 0)
     }
   }
 
-  const prevStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 1))
-    // Scroll to top when going to previous step
-    window.scrollTo(0, 0)
-  }
+  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1))
 
-  const submitForm = async () => {
-    if (!validateStep(3)) return
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validateStep(currentStep)) return
 
-    setIsSubmitting(true)
-    setSubmitError("")
-    setSubmitSuccess(false)
+    setIsLoading(true)
+    setError(null)
+    setResponse(null)
 
     try {
-      const result = await generateScript(formData)
-      setScriptResponse(result)
-      setSubmitSuccess(true)
+      const res = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/sales-script", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
 
-      // Clear saved progress after successful submission
-      localStorage.removeItem("sales-script-generator-data")
-      localStorage.removeItem("sales-script-generator-step")
-      
-      // Scroll to top when results are displayed
-      window.scrollTo(0, 0)
-    } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : "An error occurred")
+      if (!res.ok) throw new Error(`Logical breach in script synthesis: ${res.status}`)
+
+      const result = await res.json()
+      let scriptContent = ""
+      if (Array.isArray(result) && result.length > 0) {
+        scriptContent = typeof result[0] === "string" ? result[0] : JSON.stringify(result[0])
+      } else if (result.script) {
+        scriptContent = result.script
+      } else if (result.generatedScript) {
+        scriptContent = result.generatedScript
+      } else {
+        scriptContent = JSON.stringify(result, null, 2)
+      }
+
+      setResponse({ script: scriptContent, webhookResponse: result })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "A critical fault occurred during linguistic synthesis.")
     } finally {
-      setIsSubmitting(false)
+      setIsLoading(false)
     }
   }
 
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      email: "",
-      productName: "",
-      targetAudience: "",
-      keyBenefits: [""],
-      callToAction: "",
-      tone: "",
-      scriptLength: "short",
-      industry: "",
-      priceRange: "",
-    })
-    setCurrentStep(1)
-    setScriptResponse(null)
-    setSubmitSuccess(false)
-    setSubmitError("")
-    setErrors({})
-    localStorage.removeItem("sales-script-generator-data")
-    localStorage.removeItem("sales-script-generator-step")
-    
-    // Scroll to top when form is reset
-    window.scrollTo(0, 0)
+  const copyToClipboard = async () => {
+    if (!response) return
+    try {
+      const plainText = response.script.replace(/<[^>]*>/g, "").replace(/\\n/g, "\n")
+      await navigator.clipboard.writeText(plainText)
+      setIsCopied(true)
+      setTimeout(() => setIsCopied(false), 2000)
+    } catch (err) {
+      console.error("Failed to copy node: ", err)
+    }
   }
 
-  const progress = (currentStep / STEPS.length) * 100
+  const downloadText = () => {
+    if (!response) return
+    let textContent = `SALES SCRIPT MANIFEST\n${"=".repeat(30)}\n\n`
+    textContent += `PROJECT: ${formData.productName}\n`
+    textContent += `AUDIENCE: ${formData.targetAudience}\n`
+    textContent += `TONE: ${formData.tone}\n\n`
+    textContent += `MANIFEST:\n${"-".repeat(10)}\n`
+    textContent += response.script.replace(/<[^>]*>/g, "").replace(/\\n/g, "\n").replace(/\*\*(.*?)\*\*/g, "$1")
+    
+    const dataUri = "data:text/plain;charset=utf-8," + encodeURIComponent(textContent)
+    const link = document.createElement("a")
+    link.setAttribute("href", dataUri)
+    link.setAttribute("download", `script-${formData.productName.toLowerCase().replace(/\s+/g, "-")}.txt`)
+    link.click()
+  }
 
-  if (scriptResponse && submitSuccess) {
-    return <ScriptResults response={scriptResponse} formData={formData} onReset={resetForm} />
+  const resetGenerator = () => {
+    setResponse(null)
+    setCurrentStep(1)
+    setFormData({
+       name: "", email: "", productName: "", targetAudience: "", keyBenefits: [""], callToAction: "", tone: "persuasive", scriptLength: "medium", industry: "", priceRange: "",
+    })
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white dark:from-zinc-900 dark:to-zinc-900">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Sparkles className="h-8 w-8 text-orange-600" />
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Sales Script Generator</h1>
-          </div>
-          <p className="text-gray-600 dark:text-gray-400">Create compelling sales scripts in 3 simple steps</p>
-        </div>
-
-        {/* Progress Bar */}
-        <Card className="mb-8 border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between mb-2">
-              <CardTitle className="text-lg text-orange-800 dark:text-orange-300">
-                Step {currentStep} of {STEPS.length}: {STEPS[currentStep - 1].title}
-              </CardTitle>
-              <span className="text-sm text-gray-500 dark:text-gray-400">{Math.round(progress)}% Complete</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-            <CardDescription className="mt-2 text-gray-600 dark:text-gray-400">{STEPS[currentStep - 1].description}</CardDescription>
-          </CardHeader>
-        </Card>
-
-        {/* Form Steps */}
-        <Card className="border-orange-200 dark:border-orange-600 bg-white dark:bg-[#111111]">
-          <CardContent className="p-6">
-            {currentStep === 1 && (
-              <ProductDetailsStep
-                formData={formData}
-                onChange={updateFormData}
-                errors={errors}
-              />
-            )}
-
-            {currentStep === 2 && (
-              <TargetAudienceStep
-                formData={formData}
-                onChange={updateFormData}
-                errors={errors}
-              />
-            )}
-
-            {currentStep === 3 && (
-              <ScriptConfigStep
-                formData={formData}
-                onChange={updateFormData}
-                errors={errors}
-              />
-            )}
-
-            {/* Error Alert */}
-            {submitError && (
-              <Alert className="mt-6 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
-                <AlertDescription className="text-red-800 dark:text-red-100">{submitError}</AlertDescription>
-              </Alert>
-            )}
-
-            {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8">
-              <Button
-                variant="outline"
-                onClick={prevStep}
-                disabled={currentStep === 1}
-                className="border-orange-200 dark:border-orange-600 text-orange-700 dark:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 bg-transparent"
-              >
-                Previous
-              </Button>
-
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={resetForm}
-                  className="border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 bg-transparent"
-                >
-                  Reset
-                </Button>
-
-                {currentStep < STEPS.length ? (
-                  <Button onClick={nextStep} className="bg-orange-600 hover:bg-orange-700 dark:hover:bg-orange-600 text-white">
-                    Next Step
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={submitForm}
-                    disabled={isSubmitting}
-                    className="bg-orange-600 hover:bg-orange-700 dark:hover:bg-orange-600 text-white"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Generating Script...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        Generate Sales Script
-                      </>
-                    )}
-                  </Button>
-                )}
+    <div className="min-h-screen bg-[var(--mist)] text-[var(--night)] pb-32">
+       {/* High-Performance Stepper Header */}
+      <div className="bg-[var(--cloud)]/60 backdrop-blur-2xl border-b border-[var(--iron)] pt-24 pb-8 sticky top-0 w-full z-50">
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 bg-[#FF7435] rounded-2xl flex items-center justify-center shadow-2xl shadow-[#FF7435]/30">
+                <Zap className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-black font-poppins text-[var(--night)] tracking-tighter uppercase leading-none mb-1">
+                   Script <span className="text-[#FF7435]">Nexus</span>
+                </h1>
+                <p className="text-[10px] font-black text-[var(--steel)] uppercase tracking-[0.4em]">Persuasion Engine v2.0</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+
+            <div className="flex flex-1 max-w-2xl items-center gap-8 px-10">
+              {STEPS.map((step, i) => (
+                <div key={step.id} className="flex-1 relative flex flex-col items-center group">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center border-2 transition-all duration-500 z-10 ${currentStep >= step.id ? "bg-[var(--night)] border-[var(--night)] text-white" : "bg-white border-[var(--iron)] text-[var(--steel)]"}`}>
+                    <step.icon className="w-5 h-5" />
+                  </div>
+                  <div className="absolute top-5 left-[50%] w-full h-0.5 bg-[var(--iron)] -z-0 last:hidden">
+                    <div className={`h-full bg-[#FF7435] transition-all duration-700 ${currentStep > step.id ? "w-full" : "w-0"}`}></div>
+                  </div>
+                  <span className={`text-[9px] font-black uppercase tracking-widest mt-3 transition-colors ${currentStep >= step.id ? "text-[var(--night)]" : "text-[var(--steel)]"}`}>{step.title}</span>
+                </div>
+              ))}
+            </div>
+
+            <Button onClick={resetGenerator} variant="outline" className="h-14 px-8 border-2 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-white transition-all border-[var(--iron)] group">
+               <RefreshCw className="w-4 h-4 mr-3 group-hover:rotate-180 transition-transform duration-500" /> Reset Node
+            </Button>
+          </div>
+        </div>
       </div>
+
+      <div className="pt-16 max-w-7xl mx-auto px-6 lg:px-10 mt-12">
+        <AnimatePresence mode="wait">
+          {!response ? (
+            <motion.div key="form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+               
+               {/* Strategic Parameters workspace */}
+               <div className="lg:col-span-8">
+                  <Card className="card p-12 md:p-16 shadow-2xl shadow-black/5 border-2 border-[var(--iron)]/50 bg-white relative overflow-hidden group">
+                     <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF7435]/5 rounded-bl-[10rem] pointer-events-none group-hover:scale-110 transition-transform duration-1000"></div>
+                     
+                     <CardHeader className="px-0 pt-0 pb-12 border-b-2 border-dashed border-[var(--iron)]/40 mb-12">
+                        <div className="flex items-center gap-4">
+                           <LayoutDashboard className="w-6 h-6 text-[#FF7435]" />
+                           <div>
+                              <CardTitle className="text-2xl font-black font-poppins uppercase tracking-tighter">{STEPS[currentStep - 1].title}</CardTitle>
+                              <CardDescription className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--steel)] mt-1">{STEPS[currentStep - 1].description}</CardDescription>
+                           </div>
+                        </div>
+                     </CardHeader>
+
+                     <CardContent className="px-0 pb-0">
+                        <form onSubmit={handleSubmit} className="space-y-10">
+                           {currentStep === 1 && (
+                              <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-3">
+                                       <Label className="field-label font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><UserCheck className="w-3 h-3 text-[#FF7435]"/> Administrator Identity *</Label>
+                                       <Input value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} placeholder="John Doe" className="input h-14" />
+                                       {errors.name && <p className="text-[9px] font-black text-red-500 uppercase tracking-widest">{errors.name}</p>}
+                                    </div>
+                                    <div className="space-y-3">
+                                       <Label className="field-label font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><Mail className="w-3 h-3 text-[#FF7435]"/> Terminal Email *</Label>
+                                       <Input type="email" value={formData.email} onChange={(e) => handleInputChange("email", e.target.value)} placeholder="john@nexus.com" className="input h-14" />
+                                       {errors.email && <p className="text-[9px] font-black text-red-500 uppercase tracking-widest">{errors.email}</p>}
+                                    </div>
+                                 </div>
+                                 <div className="space-y-3">
+                                    <Label className="field-label font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><ShoppingCart className="w-3 h-3 text-[#FF7435]"/> Product/Service Designation *</Label>
+                                    <Input value={formData.productName} onChange={(e) => handleInputChange("productName", e.target.value)} placeholder="Nexus Premium Service" className="input h-14" />
+                                    {errors.productName && <p className="text-[9px] font-black text-red-500 uppercase tracking-widest">{errors.productName}</p>}
+                                 </div>
+                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-3">
+                                       <Label className="field-label font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><Briefcase className="w-3 h-3 text-[#FF7435]"/> Market Industry</Label>
+                                       <Input value={formData.industry} onChange={(e) => handleInputChange("industry", e.target.value)} placeholder="SaaS / Fintech" className="input h-14" />
+                                    </div>
+                                    <div className="space-y-3">
+                                       <Label className="field-label font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><Coins className="w-3 h-3 text-[#FF7435]"/> Pricing Spectrum</Label>
+                                       <Input value={formData.priceRange} onChange={(e) => handleInputChange("priceRange", e.target.value)} placeholder="Enterprise / Premium" className="input h-14" />
+                                    </div>
+                                 </div>
+                              </div>
+                           )}
+
+                           {currentStep === 2 && (
+                              <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+                                 <div className="space-y-3">
+                                    <Label className="field-label font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><Target className="w-3 h-3 text-[#FF7435]"/> Audience Resonance Vector *</Label>
+                                    <Textarea value={formData.targetAudience} onChange={(e) => handleInputChange("targetAudience", e.target.value)} placeholder="Define the psychographic profile of your ideal client..." rows={5} className="input pt-6 px-6 min-h-[160px] rounded-[3rem]" />
+                                    {errors.targetAudience && <p className="text-[9px] font-black text-red-500 uppercase tracking-widest">{errors.targetAudience}</p>}
+                                 </div>
+                                 <div className="space-y-3">
+                                    <Label className="field-label font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><Sparkles className="w-3 h-3 text-[#FF7435]"/> Linguistic Resonance (Tone)</Label>
+                                    <Select value={formData.tone} onValueChange={(val) => handleInputChange("tone", val)}>
+                                       <SelectTrigger className="input h-14">
+                                          <SelectValue placeholder="Select Resonance Frequency" />
+                                       </SelectTrigger>
+                                       <SelectContent className="bg-white border-2 border-[var(--iron)] rounded-2xl shadow-2xl">
+                                          {["persuasive", "professional", "casual", "urgent", "friendly", "consultative", "authoritative"].map((t) => (
+                                             <SelectItem key={t} value={t} className="font-bold py-3 uppercase text-[10px] tracking-widest">
+                                                {t}
+                                             </SelectItem>
+                                          ))}
+                                       </SelectContent>
+                                    </Select>
+                                 </div>
+                              </div>
+                           )}
+
+                           {currentStep === 3 && (
+                              <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+                                 <div className="space-y-4">
+                                    <Label className="field-label font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><Zap className="w-3 h-3 text-[#FF7435]"/> Strategic Levers (Benefits) *</Label>
+                                    <div className="grid grid-cols-1 gap-4">
+                                       {formData.keyBenefits.map((benefit, i) => (
+                                          <div key={i} className="flex gap-4">
+                                             <Input value={benefit} onChange={(e) => {
+                                                const newB = [...formData.keyBenefits];
+                                                newB[i] = e.target.value;
+                                                handleInputChange("keyBenefits", newB);
+                                             }} placeholder={`Strategic Benefit #${i+1}...`} className="input h-14" />
+                                             {formData.keyBenefits.length > 1 && (
+                                                <Button type="button" variant="outline" size="icon" onClick={() => {
+                                                   const newB = formData.keyBenefits.filter((_, idx) => idx !== i);
+                                                   handleInputChange("keyBenefits", newB);
+                                                }} className="h-14 w-14 shrink-0 rounded-2xl border-2 border-[var(--iron)] hover:border-red-400 hover:text-red-500">
+                                                   <Trash2 className="w-5 h-5" />
+                                                </Button>
+                                             )}
+                                          </div>
+                                       ))}
+                                       <Button type="button" variant="ghost" onClick={() => handleInputChange("keyBenefits", [...formData.keyBenefits, ""])} className="w-full h-14 border-2 border-dashed border-[var(--iron)] rounded-2xl hover:bg-[#FF7435]/5 hover:border-[#FF7435] font-black uppercase text-[10px] tracking-widest transition-all">
+                                          <Plus className="w-4 h-4 mr-2" /> Add Lever
+                                       </Button>
+                                    </div>
+                                 </div>
+                                 <div className="space-y-3">
+                                    <Label className="field-label font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><Target className="w-3 h-3 text-[#FF7435]"/> Conversion Directive (CTA) *</Label>
+                                    <Input value={formData.callToAction} onChange={(e) => handleInputChange("callToAction", e.target.value)} placeholder="Define the primary action threshold..." className="input h-14" />
+                                    {errors.callToAction && <p className="text-[9px] font-black text-red-500 uppercase tracking-widest">{errors.callToAction}</p>}
+                                 </div>
+                                 <div className="space-y-3">
+                                    <Label className="field-label font-black text-[10px] uppercase tracking-widest">Protocol Density (Length)</Label>
+                                    <div className="flex items-center gap-4 bg-[var(--mist)] p-3 rounded-2xl border-2 border-[var(--iron)]/40">
+                                       {["short", "medium", "long"].map(l => (
+                                          <button key={l} type="button" onClick={() => handleInputChange("scriptLength", l)} className={`flex-1 h-12 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.scriptLength === l ? "bg-[var(--night)] text-white shadow-xl" : "text-[var(--steel)] hover:bg-white"}`}>
+                                             {l}
+                                          </button>
+                                       ))}
+                                    </div>
+                                 </div>
+                              </div>
+                           )}
+
+                           <div className="pt-8 border-t-2 border-dashed border-[var(--iron)]/40 flex items-center justify-between gap-6">
+                              <Button type="button" onClick={prevStep} disabled={currentStep === 1} variant="outline" className="h-14 px-10 border-2 rounded-full font-black uppercase text-[10px] tracking-widest disabled:opacity-30">
+                                 Back
+                              </Button>
+                              {currentStep < 3 ? (
+                                 <Button type="button" onClick={nextStep} className="btn-primary h-14 px-14 rounded-full text-[10px] font-black uppercase tracking-widest group">
+                                    Next Phase <ArrowRight className="w-4 h-4 ml-4 group-hover:translate-x-2 transition-transform" />
+                                 </Button>
+                              ) : (
+                                 <Button type="submit" disabled={isLoading} className="btn-primary h-20 px-20 rounded-full text-xs font-black uppercase tracking-[0.3em] shadow-2xl shadow-[#FF7435]/30 group">
+                                    {isLoading ? (
+                                       <><Loader2 className="w-6 h-6 mr-4 animate-spin" /> Synthesizing...</>
+                                    ) : (
+                                       <>Manifest Script <Sparkles className="w-6 h-6 ml-4 group-hover:scale-125 transition-transform" /></>
+                                    )}
+                                 </Button>
+                              )}
+                           </div>
+                        </form>
+                     </CardContent>
+                  </Card>
+               </div>
+
+               {/* Strategic sidebar */}
+               <div className="lg:col-span-4 space-y-8">
+                  <div className="card p-10 bg-[var(--night)] text-white border-none rounded-[3rem] shadow-2xl relative overflow-hidden group">
+                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-bl-[8rem] pointer-events-none group-hover:scale-110 transition-transform duration-1000"></div>
+                     <div className="relative z-10 space-y-8">
+                        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
+                           <ShieldCheck className="w-6 h-6 text-[#FF7435]" />
+                        </div>
+                        <div className="space-y-2">
+                           <h3 className="text-xl font-black font-poppins uppercase tracking-tighter">Protocol Guard</h3>
+                           <p className="text-xs font-bold text-white/50 leading-relaxed italic">Your strategy is calibrated against 250+ top-performing psychological sales anchors.</p>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                           <Badge className="bg-white/10 text-white font-black px-4 py-2 rounded-xl text-[8px] uppercase tracking-widest border-none">AI Optimized</Badge>
+                           <Badge className="bg-white/10 text-white font-black px-4 py-2 rounded-xl text-[8px] uppercase tracking-widest border-none">Conversion Focused</Badge>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div className="card p-10 border-2 border-[var(--iron)]/50 bg-white rounded-[3rem] space-y-8 grayscale opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+                     <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--steel)]">Calibration Metrics</h4>
+                     <div className="space-y-6">
+                        {["Resonance", "Impact", "Retention"].map(m => (
+                           <div key={m} className="space-y-2">
+                              <div className="flex justify-between text-[8px] font-black uppercase tracking-widest">
+                                 <span>{m}</span>
+                                 <span>95%</span>
+                              </div>
+                              <div className="h-1.5 bg-[var(--iron)]/40 rounded-full overflow-hidden">
+                                 <div className="h-full bg-[#FF7435] w-[95%]"></div>
+                              </div>
+                           </div>
+                        ))}
+                     </div>
+                  </div>
+               </div>
+            </motion.div>
+          ) : (
+            <motion.div key="results" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12">
+               {/* Fixed Action Bar for Results */}
+               <div className="flex flex-wrap items-center justify-between gap-6 mb-12">
+                  <div className="flex items-center gap-6">
+                    <div className="w-14 h-14 bg-[var(--night)] rounded-2xl flex items-center justify-center shadow-2xl">
+                      <FileText className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-black font-poppins text-[var(--night)] tracking-tighter uppercase leading-none mb-1">Generated Manifest</h2>
+                      <p className="text-[10px] font-black text-[var(--steel)] uppercase tracking-[0.4em]">Protocol: {formData.productName}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                     <Button onClick={copyToClipboard} className="h-14 px-8 bg-[var(--night)] hover:bg-[#FF7435] text-white font-black uppercase text-[10px] tracking-widest rounded-2xl shadow-2xl transition-all group">
+                        {isCopied ? <><Check className="w-4 h-4 mr-3" /> Node Copied</> : <><Copy className="w-4 h-4 mr-3" /> Copy Full Node</>}
+                     </Button>
+                     <Button variant="outline" onClick={downloadText} className="h-14 px-8 border-2 border-[var(--iron)] rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-white transition-all group">
+                        <Download className="w-4 h-4 mr-3 group-hover:translate-y-1 transition-transform" /> Export Report
+                     </Button>
+                  </div>
+               </div>
+
+               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                  {/* Main Script Manifest */}
+                  <div className="lg:col-span-8">
+                     <Card className="card p-12 md:p-20 border-2 border-[var(--iron)] shadow-2xl shadow-black/5 bg-white relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-[50rem] h-[50rem] bg-[#FF7435]/5 rounded-bl-[30rem] pointer-events-none"></div>
+                        <CardContent className="p-0 relative z-10 prose-custom max-h-[800px] overflow-y-auto custom-scrollbar">
+                           <FormattedOutput content={response.script} />
+                        </CardContent>
+                     </Card>
+                  </div>
+
+                  {/* Sidebar stats */}
+                  <div className="lg:col-span-4 space-y-8">
+                     <Card className="card p-10 border-2 border-[var(--iron)]/50 bg-white rounded-[3rem] relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF7435]/5 rounded-bl-[5rem] pointer-events-none"></div>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--steel)] mb-10 border-b-2 border-dashed border-[var(--iron)] pb-6">Protocol Anchors</h4>
+                        <div className="space-y-8">
+                           <div className="space-y-2">
+                              <Label className="text-[9px] font-black text-[var(--night)]/40 uppercase tracking-widest">Resonance Frequency</Label>
+                              <p className="text-sm font-black uppercase tracking-widest text-[#FF7435]">{formData.tone}</p>
+                           </div>
+                           <div className="space-y-2">
+                              <Label className="text-[9px] font-black text-[var(--night)]/40 uppercase tracking-widest">Density Payload</Label>
+                              <p className="text-sm font-black uppercase tracking-widest text-[#FF7435]">{formData.scriptLength}</p>
+                           </div>
+                           <div className="space-y-4">
+                              <Label className="text-[9px] font-black text-[var(--night)]/40 uppercase tracking-widest">Target Vector</Label>
+                              <p className="text-[10px] font-bold text-[var(--night)]/80 leading-relaxed italic">{formData.targetAudience}</p>
+                           </div>
+                           <div className="pt-6 border-t-2 border-dashed border-[var(--iron)]/40">
+                              <Label className="text-[9px] font-black text-[var(--night)]/40 uppercase tracking-widest block mb-4">Strategic Levers</Label>
+                              <div className="flex flex-wrap gap-2">
+                                 {formData.keyBenefits.filter(b => b.trim()).map((b, i) => (
+                                    <Badge key={i} className="bg-[var(--mist)] text-[var(--night)] border border-[var(--iron)]/60 font-black px-3 py-1.5 rounded-lg text-[8px] uppercase tracking-widest italic">{b}</Badge>
+                                 ))}
+                              </div>
+                           </div>
+                        </div>
+                     </Card>
+
+                     <Button onClick={resetGenerator} className="w-full h-20 rounded-[2.5rem] bg-[var(--night)] hover:bg-[#FF7435] text-white font-black uppercase text-xs tracking-[0.3em] shadow-2xl transition-all group">
+                        Initialize New Protocol <RefreshCw className="w-5 h-5 ml-4 group-hover:rotate-180 transition-transform duration-500" />
+                     </Button>
+                  </div>
+               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+       {/* Security Status Badge - Floating Footer */}
+       <div className="fixed bottom-10 left-10 z-50 hidden sm:block">
+          <div className="bg-[var(--night)] text-white px-6 py-3 rounded-2xl flex items-center gap-4 shadow-2xl border border-white/10 group">
+             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+             <span className="text-[9px] font-black uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">Neural Synthesis Secured</span>
+          </div>
+       </div>
     </div>
   )
 }

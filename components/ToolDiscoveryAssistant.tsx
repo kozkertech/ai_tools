@@ -33,7 +33,7 @@ interface QuickStartOption {
   icon: any
   category: string
   solution: string
-  gradient: string
+  color: string
   count: number
 }
 
@@ -62,7 +62,7 @@ export default function SmartFilterIntegration({
       icon: Rocket,
       category: 'Branding',
       solution: 'LaunchPad',
-      gradient: 'from-blue-500 to-cyan-500',
+      color: '#ff7a59',
       count: tools.filter(t => t.category === 'Branding' && t.solution === 'LaunchPad').length
     },
     {
@@ -72,7 +72,7 @@ export default function SmartFilterIntegration({
       icon: TrendingUp,
       category: 'Marketing',
       solution: 'GrowthSuite',
-      gradient: 'from-purple-500 to-pink-500',
+      color: '#8b5cf6',
       count: tools.filter(t => t.category === 'Marketing' && t.solution === 'GrowthSuite').length
     },
     {
@@ -82,7 +82,7 @@ export default function SmartFilterIntegration({
       icon: Wand2,
       category: 'Content',
       solution: 'All',
-      gradient: 'from-green-500 to-emerald-500',
+      color: '#10b981',
       count: tools.filter(t => t.category === 'Content').length
     },
     {
@@ -92,7 +92,7 @@ export default function SmartFilterIntegration({
       icon: BarChart3,
       category: 'Analytics',
       solution: 'All',
-      gradient: 'from-orange-500 to-red-500',
+      color: '#3b82f6',
       count: tools.filter(t => t.category === 'Analytics').length
     }
   ]
@@ -197,42 +197,44 @@ export default function SmartFilterIntegration({
   return (
     <div className="relative">
       {/* Main Assistant Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-slate-50 to-blue-50/50 dark:from-slate-900 dark:to-blue-950/50">
+      <section className="py-24 px-4 bg-[var(--cloud)] border-b border-[var(--iron)]">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Brain className="w-4 h-4" />
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-[#ff7a59]/10 text-[#ff7a59] px-4 py-2 rounded-full border border-[#ff7a59]/20 text-xs font-bold uppercase tracking-widest mb-6">
+              <Sparkles className="w-4 h-4" />
               Smart Tool Discovery
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Find Your Perfect Tools Instantly
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[var(--night)] tracking-tight">
+              What are you building today?
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Click a category below or describe your needs. We'll automatically apply the right filters to show exactly what you're looking for.
+            <p className="text-lg text-[var(--steel)] max-w-2xl mx-auto leading-relaxed">
+              Describe your needs or select a quick-start pathway. We'll automatically build your personalized tool kit.
             </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-12">
             {/* Applied Filter Indicator */}
             {isFilterActive && appliedFilter && (
-              <div className="max-w-2xl mx-auto">
-                <Card className="bg-primary/5 border-primary/20">
+              <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-top-4">
+                <Card className="bg-[#10b981]/5 border-[#10b981]/20 shadow-sm rounded-2xl overflow-hidden">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-[#10b981]/10 rounded-full flex items-center justify-center border border-[#10b981]/20">
+                          <CheckCircle className="w-5 h-5 text-[#10b981]" />
+                        </div>
                         <div>
-                          <p className="font-medium text-primary">
+                          <p className="font-bold text-[var(--night)] leading-tight">
                             Smart filter applied for "{appliedFilter.title}"
                           </p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs text-[var(--steel)] font-medium mt-1">
                             Showing {appliedFilter.count} tools • {appliedFilter.category} → {appliedFilter.solution}
                           </p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm" onClick={clearAppliedFilter}>
-                        <X className="w-4 h-4" />
+                      <Button variant="ghost" size="icon" onClick={clearAppliedFilter} className="hover:bg-[#10b981]/10 text-[#10b981]">
+                        <X className="w-5 h-5" />
                       </Button>
                     </div>
                   </CardContent>
@@ -242,8 +244,7 @@ export default function SmartFilterIntegration({
 
             {/* Quick Start Cards */}
             <div>
-              <h3 className="text-xl font-semibold mb-6 text-center">What best describes your current needs?</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {quickStartOptions.map((option) => {
                   const IconComponent = option.icon
                   const isActive = currentCategory === option.category && 
@@ -252,32 +253,29 @@ export default function SmartFilterIntegration({
                   return (
                     <Card 
                       key={option.id}
-                      className={`group cursor-pointer hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:scale-105 overflow-hidden relative ${
-                        isActive ? 'ring-2 ring-primary shadow-lg' : ''
+                      className={`card border-[var(--iron)] bg-white group cursor-pointer hover:border-[#ff7a59]/40 hover:shadow-xl transition-all duration-500 overflow-hidden relative ${
+                        isActive ? 'ring-2 ring-[#ff7a59] border-[#ff7a59]/40 shadow-lg' : ''
                       }`}
                       onClick={() => handleQuickStart(option)}
                     >
-                      {isActive && (
-                        <div className="absolute top-3 right-3 z-10">
-                          <CheckCircle className="w-5 h-5 text-primary bg-white rounded-full" />
+                      <CardContent className="p-8 text-center relative flex flex-col h-full">
+                        <div 
+                          className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm relative overflow-hidden"
+                          style={{ backgroundColor: `${option.color}10`, border: `1px solid ${option.color}20` }}
+                        >
+                          <IconComponent className="w-8 h-8 relative z-10" style={{ color: option.color }} />
                         </div>
-                      )}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${option.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${
-                        isActive ? 'opacity-5' : ''
-                      }`} />
-                      <CardContent className="p-6 text-center relative">
-                        <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${option.gradient} flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg`}>
-                          <IconComponent className="w-8 h-8 text-white" />
-                        </div>
-                        <h4 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
+                        <h4 className="font-bold text-lg mb-3 text-[var(--night)] group-hover:text-[#ff7a59] transition-colors leading-tight">
                           {option.title}
                         </h4>
-                        <p className="text-sm text-muted-foreground mb-3">
+                        <p className="text-sm text-[var(--steel)] mb-6 flex-grow leading-relaxed">
                           {option.description}
                         </p>
-                        <Badge variant={isActive ? "default" : "secondary"} className={isActive ? "bg-primary" : "bg-primary/10 text-primary"}>
-                          {option.count} tools
-                        </Badge>
+                        <div className="flex items-center justify-center">
+                          <Badge variant={isActive ? "default" : "outline"} className={`tag ${isActive ? "bg-[#ff7a59] text-white border-0" : "!bg-[var(--mist)] !text-[var(--steel)] !border-[var(--iron)]"}`}>
+                            {option.count} tools
+                          </Badge>
+                        </div>
                       </CardContent>
                     </Card>
                   )
@@ -286,71 +284,77 @@ export default function SmartFilterIntegration({
             </div>
 
             {/* Divider */}
-            <div className="relative">
+            <div className="relative py-4">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-dashed" />
+                <span className="w-full border-t border-[var(--iron)]" />
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-gradient-to-br from-slate-50 to-blue-50/50 dark:from-slate-900 dark:to-blue-950/50 px-6 text-muted-foreground font-medium">
-                  OR SEARCH WITH NATURAL LANGUAGE
+              <div className="relative flex justify-center">
+                <span className="bg-[var(--cloud)] px-8 text-[10px] font-bold text-[var(--steel)] uppercase tracking-[0.2em]">
+                  Or describe your needs
                 </span>
               </div>
             </div>
 
             {/* Smart Search */}
-            <div className="max-w-2xl mx-auto">
-              <Card className="border-0 shadow-lg bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
-                <CardContent className="p-6">
-                  <div className="relative">
-                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-                      <Search className="w-5 h-5 text-muted-foreground" />
+            <div className="max-w-3xl mx-auto">
+              <Card className="card border-[var(--iron)] bg-white shadow-xl overflow-hidden p-2">
+                <CardContent className="p-4">
+                  <div className="relative flex items-center">
+                    <div className="absolute left-4 z-10 flex items-center gap-3">
+                      <Search className="w-5 h-5 text-[var(--steel)]" />
                       {isSearching && (
                         <div className="flex space-x-1">
-                          <div className="w-1 h-1 bg-primary rounded-full animate-bounce" />
-                          <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '0.1s'}} />
-                          <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '0.2s'}} />
+                          <div className="w-1 h-1 bg-[#ff7a59] rounded-full animate-bounce" />
+                          <div className="w-1 h-1 bg-[#ff7a59] rounded-full animate-bounce" style={{animationDelay: '0.1s'}} />
+                          <div className="w-1 h-1 bg-[#ff7a59] rounded-full animate-bounce" style={{animationDelay: '0.2s'}} />
                         </div>
                       )}
                     </div>
                     <Input
-                      placeholder="Try: 'help with email marketing', 'create a business plan', 'design a logo'..."
+                      placeholder="e.g. 'I need help with my email marketing and building a brand'"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                      className="pl-12 pr-28 h-14 text-base bg-transparent border-2 border-gray-100 dark:border-gray-700 focus:border-primary"
+                      className="pl-14 pr-32 h-16 text-base bg-transparent border-0 focus-visible:ring-0 text-[var(--night)] placeholder:text-[var(--iron)]"
                       disabled={isSearching}
                     />
                     <Button
                       onClick={handleSearch}
                       disabled={!searchQuery.trim() || isSearching}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 px-4"
+                      className="absolute right-2 h-12 px-6 btn btn-primary"
                     >
                       {isSearching ? (
                         <div className="flex items-center gap-2">
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Searching...
+                          Analyzing...
                         </div>
                       ) : (
-                        'Apply Filter'
+                        'Build Kit'
                       )}
                     </Button>
                   </div>
-                  <p className="text-sm text-muted-foreground text-center mt-3">
-                    <Sparkles className="w-4 h-4 inline mr-1" />
-                    AI analyzes your needs and applies the perfect category + solution filters
-                  </p>
                 </CardContent>
               </Card>
+              <div className="flex items-center justify-center gap-2 mt-6">
+                <div className="flex -space-x-2">
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="w-6 h-6 rounded-full border-2 border-white bg-[var(--iron)]" />
+                    ))}
+                </div>
+                <p className="text-xs text-[var(--steel)] font-medium">
+                  Join 2,000+ business owners using AI to scale
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Scroll Indicator */}
           {showSuccess && (
-            <div className="flex justify-center mt-8 animate-bounce">
-              <div className="flex items-center gap-2 text-primary">
-                <ArrowDown className="w-4 h-4" />
-                <span className="text-sm font-medium">Filters applied! See results below</span>
-                <ArrowDown className="w-4 h-4" />
+            <div className="flex justify-center mt-12 animate-bounce">
+              <div className="flex items-center gap-3 text-[#ff7a59]">
+                <ArrowDown className="w-5 h-5" />
+                <span className="text-sm font-bold uppercase tracking-widest">Results Loaded Below</span>
+                <ArrowDown className="w-5 h-5" />
               </div>
             </div>
           )}
@@ -359,16 +363,18 @@ export default function SmartFilterIntegration({
 
       {/* Success Notification */}
       {showSuccess && appliedFilter && (
-        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right duration-300">
-          <Card className="bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800 shadow-lg">
-            <CardContent className="p-4 flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+        <div className="fixed top-24 right-8 z-50 animate-in slide-in-from-right duration-500">
+          <Card className="bg-white border-[#10b981]/30 shadow-2xl rounded-2xl overflow-hidden border-l-4 border-l-[#10b981]">
+            <CardContent className="p-5 flex items-center gap-4">
+              <div className="w-10 h-10 bg-[#10b981]/10 rounded-full flex items-center justify-center border border-[#10b981]/20">
+                <CheckCircle className="w-6 h-6 text-[#10b981]" />
+              </div>
               <div>
-                <p className="font-medium text-green-800 dark:text-green-200">
-                  Filters Applied Successfully!
+                <p className="font-bold text-[var(--night)] leading-tight">
+                  Kozker AI Intelligence
                 </p>
-                <p className="text-sm text-green-600 dark:text-green-300">
-                  Found {appliedFilter.count} tools for "{appliedFilter.title}"
+                <p className="text-xs text-[var(--steel)] font-medium mt-1">
+                  Found {appliedFilter.count} tools matched to your profile
                 </p>
               </div>
             </CardContent>

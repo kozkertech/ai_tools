@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, CheckCircle, XCircle, FileText } from "lucide-react"
+import { Loader2, CheckCircle, XCircle, FileText, Sparkles, MessageSquare, ListChecks, ArrowRight, User, Mail, Zap } from "lucide-react"
 import { ContentLoadingScreen } from "@/components/loading-screen"
 
 interface FormData {
@@ -61,16 +61,16 @@ export default function MeetingSummaryExtractor() {
 
       if (response.ok) {
         const responseData: WebhookResponse = await response.json()
-        setMessage({ type: "success", text: "Meeting transcript processed successfully!", data: responseData })
+        setMessage({ type: "success", text: "Transcript analyzed with specialized AI models.", data: responseData })
         setFormData({ name: "", email: "", transcript: "" })
       } else {
         const errorData = await response.text()
-        throw new Error(errorData || "Failed to submit transcript")
+        throw new Error(errorData || "Failed to process transcript")
       }
     } catch (error) {
       setMessage({
         type: "error",
-        text: `Failed to submit transcript: ${error instanceof Error ? error.message : "Unknown error"}`,
+        text: `Analysis failed: ${error instanceof Error ? error.message : "Internal system error"}`,
       })
     } finally {
       setIsLoading(false)
@@ -78,142 +78,154 @@ export default function MeetingSummaryExtractor() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-orange-50 to-orange-100 dark:from-gray-950 dark:to-gray-900 flex items-center justify-center p-4 transition-colors">
-      <div className="w-full max-w-4xl">
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="flex items-center justify-center mb-4">
-            <div className="bg-orange-500 dark:bg-orange-600 rounded-full p-3 shadow-lg">
-              <FileText className="h-8 w-8 text-white" />
-            </div>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2 font-poppins">Meeting Summary Extractor</h1>
-          <p className="text-gray-500 dark:text-gray-300 text-lg font-inter">
-            Transform your meeting transcripts into actionable summaries
-          </p>
+    <div className="min-h-screen bg-[var(--mist)] text-[var(--night)] transition-colors duration-300 pb-20">
+      {/* Header */}
+      <div className="border-b border-[var(--iron)] bg-[var(--cloud)]/50 backdrop-blur-md pt-24 pb-8 sticky top-0 z-10 shadow-sm">
+        <div className="container mx-auto max-w-5xl px-6">
+           <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-[#FF7435] rounded-xl flex items-center justify-center shadow-lg shadow-[#FF7435]/20">
+                 <MessageSquare className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                 <h1 className="text-2xl font-black font-poppins text-[var(--night)] tracking-tight uppercase">Meeting Intelligence</h1>
+                 <p className="text-sm font-medium text-[var(--steel)]">Advanced extraction of action items, summaries, and key insights.</p>
+              </div>
+           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Card className="bg-white dark:bg-gray-900 shadow-xl border dark:border-gray-800">
-            <CardHeader className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-gray-800 dark:to-gray-900 rounded-t-lg">
-              <CardTitle className="text-2xl text-gray-900 dark:text-white font-poppins">Submit Your Meeting Transcript</CardTitle>
-              <CardDescription className="text-gray-500 dark:text-gray-300 font-inter">
-                Fill in your details and paste your meeting transcript below
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-gray-900 dark:text-gray-100 font-medium font-inter">Name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="border-gray-200 dark:border-gray-700 focus:border-orange-500 focus:ring-orange-500 font-inter bg-white dark:bg-gray-800 dark:text-white"
-                    placeholder="Enter your full name"
-                  />
-                </div>
+      <div className="container mx-auto max-w-5xl px-6 mt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          {/* Input Area */}
+          <div className="lg:col-span-12 xl:col-span-5">
+            <Card className="card border-2 border-[var(--iron)]/50 shadow-none">
+              <CardHeader className="bg-[var(--cloud)]/20 border-b border-[var(--iron)]/50 px-8 py-6">
+                 <CardTitle className="text-xl font-black font-poppins flex items-center gap-3">
+                    <Zap className="w-5 h-5 text-[#FF7435]" />
+                    Transcript Data
+                 </CardTitle>
+                 <CardDescription className="text-xs font-bold text-[var(--steel)] uppercase tracking-widest italic">Phase 01: Capture</CardDescription>
+              </CardHeader>
+              <CardContent className="p-8">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                       <Label className="field-label flex items-center gap-2">
+                          <User className="w-3 h-3 text-[var(--night)]" /> Full Name
+                       </Label>
+                       <Input
+                         name="name"
+                         value={formData.name}
+                         onChange={handleInputChange}
+                         className="input"
+                         placeholder="Jane Smith"
+                         required
+                       />
+                    </div>
+                    <div className="space-y-2">
+                       <Label className="field-label flex items-center gap-2">
+                          <Mail className="w-3 h-3 text-[var(--night)]" /> Email Address
+                       </Label>
+                       <Input
+                         name="email"
+                         type="email"
+                         value={formData.email}
+                         onChange={handleInputChange}
+                         className="input"
+                         placeholder="jane@corporate.com"
+                         required
+                       />
+                    </div>
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-900 dark:text-gray-100 font-medium font-inter">Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="border-gray-200 dark:border-gray-700 focus:border-orange-500 focus:ring-orange-500 font-inter bg-white dark:bg-gray-800 dark:text-white"
-                    placeholder="Enter your email address"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="transcript" className="text-gray-900 dark:text-gray-100 font-medium font-inter">Meeting Transcript</Label>
-                  <Textarea
-                    id="transcript"
-                    name="transcript"
-                    value={formData.transcript}
-                    onChange={handleInputChange}
-                    required
-                    rows={8}
-                    className="border-gray-200 dark:border-gray-700 focus:border-orange-500 focus:ring-orange-500 resize-none font-inter bg-white dark:bg-gray-800 dark:text-white"
-                    placeholder="Paste your meeting transcript here..."
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:transform-none disabled:opacity-70 font-inter"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    "Extract Summary"
-                  )}
-                </Button>
-              </form>
-
-              {message && (
-                <div className="mt-6 animate-fade-in">
-                  <Alert
-                    className={`border-0 ${
-                      message.type === "success"
-                        ? "bg-green-50 text-green-800 dark:bg-green-900 dark:text-green-200"
-                        : "bg-red-50 text-red-800 dark:bg-red-900 dark:text-red-200"
-                    }`}
-                  >
-                    {message.type === "success" ? <CheckCircle className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
-                    <AlertDescription className="ml-2 font-inter">{message.text}</AlertDescription>
-                  </Alert>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white dark:bg-gray-900 shadow-xl border dark:border-gray-800">
-            <CardHeader className="bg-gray-50 dark:bg-gray-800 rounded-t-lg">
-              <CardTitle className="text-2xl text-gray-900 dark:text-white font-poppins flex items-center">
-                <FileText className="h-5 w-5 mr-2 text-orange-500" />
-                Meeting Summary
-              </CardTitle>
-              <CardDescription className="text-gray-500 dark:text-gray-300 font-inter">
-                Your processed meeting summary will appear here
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6">
-              {message?.type === "success" && message.data?.output ? (
-                <div className="animate-fade-in">
-                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-                    <div
-                      className="prose prose-gray max-w-none font-inter text-gray-600 dark:text-gray-200 leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: parseMarkdown(message.data.output) }}
-                      style={{ fontSize: "14px", lineHeight: "1.6" }}
+                  <div className="space-y-2">
+                    <Label className="field-label flex items-center gap-2">
+                       <FileText className="w-3 h-3 text-[var(--night)]" /> Full Transcript
+                    </Label>
+                    <Textarea
+                      name="transcript"
+                      value={formData.transcript}
+                      onChange={handleInputChange}
+                      className="input min-h-[300px] rounded-[2.5rem] pt-8"
+                      placeholder="Paste meeting raw text or notes here..."
+                      required
                     />
                   </div>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <FileText className="h-12 w-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-500 dark:text-gray-300 font-inter">
-                    Submit a meeting transcript to see the summary here
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
 
-        <div className="text-center mt-8 animate-fade-in">
-          <p className="text-gray-500 dark:text-gray-300 text-sm font-inter">
-            Your transcript will be processed securely and the summary will appear above.
-          </p>
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="btn-primary w-full h-14 rounded-full font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-[#FF7435]/20 group"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <>
+                        Start Extraction <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+
+                {message?.type === "error" && (
+                  <Alert variant="destructive" className="mt-8 rounded-2xl border-2">
+                    <XCircle className="h-4 w-4" />
+                    <AlertDescription className="font-bold text-xs">{message.text}</AlertDescription>
+                  </Alert>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Results Area */}
+          <div className="lg:col-span-12 xl:col-span-7">
+            {message?.type === "success" && message.data?.output ? (
+              <div className="animate-in slide-in-from-right-8 duration-700">
+                <Card className="card border-2 border-[var(--iron)]">
+                  <CardHeader className="bg-[var(--night)] text-white p-8">
+                     <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60">Meeting Synthesis</span>
+                        <Badge className="bg-emerald-500 text-white border-none text-[10px] h-5">Verified</Badge>
+                     </div>
+                     <CardTitle className="text-2xl font-black font-poppins flex items-center gap-3">
+                        <ListChecks className="w-6 h-6 text-emerald-400" />
+                        Executive Summary
+                     </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-10">
+                    <div 
+                      className="prose prose-stone max-w-none 
+                      [&>ul]:space-y-4 [&>ul]:list-none [&>ul]:pl-0 
+                      [&>ul>li]:p-4 [&>ul>li]:bg-[var(--mist)] [&>ul>li]:border-2 [&>ul>li]:border-[var(--iron)]/40 [&>ul>li]:rounded-2xl [&>ul>li]:font-medium [&>ul>li]:text-sm [&>ul>li]:text-[var(--night)]
+                      [&>strong]:text-[#FF7435] [&>strong]:font-black
+                      leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: parseMarkdown(message.data.output) }}
+                    />
+                    
+                    <div className="mt-10 pt-10 border-t border-[var(--iron)]/50 flex items-center justify-between">
+                       <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                             <CheckCircle className="w-4 h-4" />
+                          </div>
+                          <span className="text-xs font-black uppercase tracking-widest text-[var(--steel)]">Analysis Validated</span>
+                       </div>
+                       <Button variant="ghost" onClick={() => window.print()} className="text-[10px] font-black uppercase tracking-widest hover:text-[#FF7435]">
+                          Download Report
+                       </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : !isLoading && (
+              <div className="h-full flex flex-col items-center justify-center p-12 bg-[var(--cloud)]/30 border-4 border-dashed border-[var(--iron)] rounded-[3rem] text-center opacity-60">
+                 <div className="w-20 h-20 bg-[var(--iron)]/30 rounded-full flex items-center justify-center mb-6">
+                    <Sparkles className="w-10 h-10 text-[var(--steel)]" />
+                 </div>
+                 <h3 className="text-lg font-black font-poppins text-[var(--night)]">Intelligent Analysis Awaits</h3>
+                 <p className="text-sm font-medium text-[var(--steel)] max-w-xs mt-2">Paste your meeting raw transcript to witness the AI synthesis. We extract key decisions and next steps.</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -547,21 +547,23 @@ export default function ToolsPageClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="w-full">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 text-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-purple-500/10 rounded-3xl mx-4"></div>
-        <div className="relative max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+      <section className="w-full pt-32 pb-20 px-4 bg-[var(--cloud)] overflow-hidden relative">
+        {/* Ambient Decor */}
+        <div className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-[#ff7a59]/5 to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-1/4 h-64 bg-gradient-to-tl from-[#ff7a59]/5 to-transparent blur-3xl pointer-events-none" />
+        
+        <div className="max-w-4xl mx-auto flex flex-col items-center relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 bg-[#ff7a59]/10 text-[#ff7a59] px-5 py-2 rounded-2xl text-[10px] font-bold uppercase tracking-widest mb-8 border border-[#ff7a59]/20 shadow-sm animate-in fade-in slide-in-from-bottom-4">
             <Sparkles className="w-4 h-4" />
-            AI-Powered Business Tools
+            Strategic Asset Repository
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-            Best Free AI Tools for Business Growth
+          <h1 className="text-5xl md:text-7xl font-semibold mb-8 tracking-tight text-[var(--night)] leading-[1.1]">
+            Executive AI <span className="text-[#ff7a59]">Toolkit</span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Discover our collection of free AI tools, generative AI solutions, and AI automation tools designed to streamline your workflow, enhance creativity, and
-            drive business growth for startups and enterprises.
+          <p className="text-xl text-[var(--steel)] mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+            A high-performance collection of generative AI solutions and automation protocols designed to optimize growth for founders and modern enterprises.
           </p>
         </div>
       </section>
@@ -575,23 +577,23 @@ export default function ToolsPageClient() {
       />
 
       {/* Filter Section with Enhanced Intelligent Filter Indicator */} 
-      <section id="filter-section" className="py-8 px-4 bg-white/50 dark:bg-slate-800/50">
-        <div className="max-w-7xl mx-auto">
+      <section id="filter-section" className="py-8 px-4 bg-[var(--cloud)] border-y border-[var(--iron)]">
+         <div className="max-w-7xl mx-auto">
           
           {/* Enhanced Intelligent Filter Indicator */}
           {intelligentFilter.active && intelligentFilter.toolIds.length > 0 && (
-            <div className="mb-6 p-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950 dark:to-red-950 border-l-4 border-primary rounded-lg">
+            <div className="mb-6 p-4 border border-[#ff7a59]/30 bg-[#ff7a59]/5 rounded-[2rem]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-primary animate-pulse" />
-                    <span className="font-semibold text-primary">AI Intelligent Filter Active</span>
+                    <Sparkles className="w-5 h-5 text-[#ff7a59] animate-pulse" />
+                    <span className="font-bold text-[#ff7a59]">AI Intelligent Filter Active</span>
                   </div>
-                  <Badge variant="secondary" className="bg-primary/10 text-primary">
+                  <Badge variant="secondary" className="bg-[var(--mist)] text-[var(--night)] border border-[var(--iron)] font-bold rounded-full">
                     {filteredTools.length} perfectly matched tools
                   </Badge>
                   {process.env.NODE_ENV === 'development' && (
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-widest border-[var(--iron)] rounded-full text-[var(--steel)]">
                       Debug: {intelligentFilter.toolIds.join(', ')}
                     </Badge>
                   )}
@@ -600,20 +602,20 @@ export default function ToolsPageClient() {
                   variant="ghost" 
                   size="sm" 
                   onClick={clearAllFilters}
-                  className="hover:bg-primary/10"
+                  className="hover:bg-[var(--mist)] text-[var(--night)] font-bold rounded-xl"
                 >
                   <X className="w-4 h-4 mr-1" />
                   Clear AI Filter
                 </Button>
               </div>
-              <p className="text-sm text-muted-foreground mt-2 ml-7">
-                Showing tools specifically matched to: <span className="font-medium">"{intelligentFilter.searchTerm}"</span>
+              <p className="text-sm text-[var(--steel)] mt-2 ml-7 font-medium">
+                Showing tools specifically matched to: <span className="font-bold text-[var(--night)]">"{intelligentFilter.searchTerm}"</span>
               </p>
               {process.env.NODE_ENV === 'development' && (
                 <div className="mt-2 ml-7">
-                  <details className="text-xs text-muted-foreground">
+                  <details className="text-[10px] text-[var(--steel)] uppercase tracking-widest font-bold">
                     <summary className="cursor-pointer">Debug Info</summary>
-                    <div className="mt-1 p-2 bg-gray-100 dark:bg-gray-800 rounded">
+                    <div className="mt-1 p-2 bg-[var(--mist)] border border-[var(--iron)] rounded-xl normal-case tracking-normal">
                       <p>Tool IDs: {intelligentFilter.toolIds.join(', ')}</p>
                       <p>Filtered Tools: {filteredTools.map(t => t.name).join(', ')}</p>
                     </div>
@@ -625,13 +627,13 @@ export default function ToolsPageClient() {
 
           {/* Filter section header with AI indicator */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-            <h2 className="text-2xl font-bold">AI Tools by Category</h2> 
+            <h2 className="text-2xl font-bold text-[var(--night)]">AI Tools by Category</h2> 
             <div className="flex items-center gap-2">
-              <p className="text-muted-foreground">
+               <p className="text-[var(--steel)] font-medium">
                 {filteredTools.length} tool{filteredTools.length !== 1 ? "s" : ""} available
               </p>
               {intelligentFilter.active && (
-                <Badge variant="outline" className="text-xs ml-2">
+                <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-widest ml-2 border-[#ff7a59]/30 text-[#ff7a59] bg-[#ff7a59]/5 rounded-full">
                   <Sparkles className="w-3 h-3 mr-1 animate-pulse" />
                   AI Filtered
                 </Badge>
@@ -642,7 +644,7 @@ export default function ToolsPageClient() {
           {/* Enhanced Filter Dropdowns with Clear Indicators */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex items-center gap-4">
-              <label htmlFor="category-filter" className="text-sm font-medium text-muted-foreground">Filter by Category:</label>
+               <label htmlFor="category-filter" className="text-sm font-bold text-[var(--steel)] uppercase tracking-widest">Filter by Category:</label>
               <Select value={activeCategory} onValueChange={(value) => {
                 console.log('Category changed to:', value)
                 setActiveCategory(value)
@@ -651,18 +653,18 @@ export default function ToolsPageClient() {
                   setIntelligentFilter({ active: false, toolIds: [], searchTerm: '' })
                 }
               }}> 
-                <SelectTrigger className={`w-[200px] ${activeCategory !== 'All' ? 'border-primary text-primary' : ''}`}> 
+                  <SelectTrigger className={`w-[200px] h-12 rounded-xl bg-[var(--cloud)] border-[var(--iron)] text-[var(--night)] font-bold ${activeCategory !== 'All' ? 'border-[#ff7a59]/50 text-[#ff7a59] bg-[#ff7a59]/5' : ''}`}> 
                   <SelectValue placeholder="Select category" /> 
                 </SelectTrigger>
-                <SelectContent> 
+                <SelectContent className="bg-[var(--cloud)] border-[var(--iron)] rounded-xl"> 
                   {categories.map((category) => ( 
-                    <SelectItem key={category} value={category}>{category}</SelectItem> 
+                    <SelectItem key={category} value={category} className="cursor-pointer font-medium hover:bg-[var(--mist)] focus:bg-[var(--mist)] text-[var(--night)]">{category}</SelectItem> 
                   ))} 
                 </SelectContent>
               </Select> 
             </div>
             <div className="flex items-center gap-4">
-              <label htmlFor="solution-filter" className="text-sm font-medium text-muted-foreground">Filter by Solution:</label>
+               <label htmlFor="solution-filter" className="text-sm font-bold text-[var(--steel)] uppercase tracking-widest">Filter by Solution:</label>
               <Select value={activeSolution} onValueChange={(value) => {
                 console.log('Solution changed to:', value)
                 setActiveSolution(value)
@@ -671,12 +673,12 @@ export default function ToolsPageClient() {
                   setIntelligentFilter({ active: false, toolIds: [], searchTerm: '' })
                 }
               }}> 
-                <SelectTrigger className={`w-[200px] ${activeSolution !== 'All' ? 'border-primary text-primary' : ''}`}> 
+                  <SelectTrigger className={`w-[200px] h-12 rounded-xl bg-[var(--cloud)] border-[var(--iron)] text-[var(--night)] font-bold ${activeSolution !== 'All' ? 'border-[#ff7a59]/50 text-[#ff7a59] bg-[#ff7a59]/5' : ''}`}> 
                   <SelectValue placeholder="Select solution" /> 
                 </SelectTrigger>
-                <SelectContent> 
+                <SelectContent className="bg-[var(--cloud)] border-[var(--iron)] rounded-xl"> 
                   {solutions.map((solution) => ( 
-                    <SelectItem key={solution} value={solution}>{solution}</SelectItem> 
+                    <SelectItem key={solution} value={solution} className="cursor-pointer font-medium hover:bg-[var(--mist)] focus:bg-[var(--mist)] text-[var(--night)]">{solution}</SelectItem> 
                   ))} 
                 </SelectContent>
               </Select> 
@@ -688,7 +690,7 @@ export default function ToolsPageClient() {
                 variant="outline" 
                 size="sm" 
                 onClick={clearAllFilters}
-                className="ml-auto"
+                className="ml-auto h-12 rounded-xl bg-[var(--cloud)] border-[var(--iron)] text-[var(--night)] font-bold hover:bg-[var(--mist)] transition-colors"
               >
                 <X className="w-4 h-4 mr-1" />
                 Clear All Filters
@@ -703,12 +705,12 @@ export default function ToolsPageClient() {
         <div className="max-w-7xl mx-auto">
           {filteredTools.length === 0 ? (
             <div className="text-center py-20">
-              <div className="max-w-md mx-auto">
-                <div className="w-24 h-24 mx-auto mb-6 bg-muted rounded-full flex items-center justify-center">
-                  <Filter className="w-12 h-12 text-muted-foreground" />
+               <div className="max-w-md mx-auto">
+                <div className="w-24 h-24 mx-auto mb-6 bg-[var(--mist)] border border-[var(--iron)] rounded-full flex items-center justify-center">
+                  <Filter className="w-12 h-12 text-[var(--steel)]" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-muted-foreground">No Tools Found</h3>
-                <p className="text-muted-foreground mb-6">
+                <h3 className="text-2xl font-bold mb-4 text-[var(--night)]">No Tools Found</h3>
+                <p className="text-[var(--steel)] font-medium mb-6">
                   {intelligentFilter.active 
                     ? `No tools match your AI search for "${intelligentFilter.searchTerm}". The AI couldn't find relevant tools with the current parameters.`
                     : "No tools match your current filter selection. Try adjusting your category or solution filters to see more results."
@@ -717,29 +719,29 @@ export default function ToolsPageClient() {
                 
                 {/* Enhanced Debug Information */}
                 {process.env.NODE_ENV === 'development' && (
-                  <div className="mb-6 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm text-left">
-                    <h4 className="font-bold mb-2">Debug Information:</h4>
-                    <p><strong>Active Category:</strong> {activeCategory}</p>
-                    <p><strong>Active Solution:</strong> {activeSolution}</p>
-                    <p><strong>Intelligent Filter Active:</strong> {intelligentFilter.active ? 'Yes' : 'No'}</p>
+                  <div className="mb-6 p-4 bg-[var(--mist)] border border-[var(--iron)] rounded-xl text-sm text-left">
+                    <h4 className="font-bold mb-2 text-[var(--night)]">Debug Information:</h4>
+                    <p className="text-[var(--steel)]"><strong className="text-[var(--night)]">Active Category:</strong> {activeCategory}</p>
+                    <p className="text-[var(--steel)]"><strong className="text-[var(--night)]">Active Solution:</strong> {activeSolution}</p>
+                    <p className="text-[var(--steel)]"><strong className="text-[var(--night)]">Intelligent Filter Active:</strong> {intelligentFilter.active ? 'Yes' : 'No'}</p>
                     {intelligentFilter.active && (
                       <>
-                        <p><strong>AI Search Term:</strong> {intelligentFilter.searchTerm}</p>
-                        <p><strong>AI Tool IDs:</strong> {intelligentFilter.toolIds.join(', ') || 'None'}</p>
-                        <p><strong>Valid Tool Names:</strong> {tools.filter(t => intelligentFilter.toolIds.includes(t.id)).map(t => t.name).join(', ') || 'None found'}</p>
+                        <p className="text-[var(--steel)]"><strong className="text-[var(--night)]">AI Search Term:</strong> {intelligentFilter.searchTerm}</p>
+                        <p className="text-[var(--steel)]"><strong className="text-[var(--night)]">AI Tool IDs:</strong> {intelligentFilter.toolIds.join(', ') || 'None'}</p>
+                        <p className="text-[var(--steel)]"><strong className="text-[var(--night)]">Valid Tool Names:</strong> {tools.filter(t => intelligentFilter.toolIds.includes(t.id)).map(t => t.name).join(', ') || 'None found'}</p>
                       </>
                     )}
-                    <p><strong>Total Tools Available:</strong> {tools.length}</p>
-                    <p><strong>Filtered Tools Count:</strong> {filteredTools.length}</p>
+                    <p className="text-[var(--steel)]"><strong className="text-[var(--night)]">Total Tools Available:</strong> {tools.length}</p>
+                    <p className="text-[var(--steel)]"><strong className="text-[var(--night)]">Filtered Tools Count:</strong> {filteredTools.length}</p>
                     
-                    <div className="mt-2 p-2 bg-orange-100 dark:bg-orange-900 rounded">
-                      <p className="font-medium text-orange-800 dark:text-orange-200">Current Filter Logic:</p>
+                    <div className="mt-2 p-2 bg-[#ff7a59]/10 border border-[#ff7a59]/20 rounded-lg">
+                      <p className="font-bold text-[#ff7a59]">Current Filter Logic:</p>
                       {intelligentFilter.active ? (
-                        <p className="text-xs text-orange-700 dark:text-orange-300">
+                        <p className="text-xs text-[var(--night)] font-medium">
                           Using AI filter with {intelligentFilter.toolIds.length} specific tool IDs
                         </p>
                       ) : (
-                        <p className="text-xs text-orange-700 dark:text-orange-300">
+                        <p className="text-xs text-[var(--night)] font-medium">
                           Using category ({activeCategory}) and solution ({activeSolution}) filters
                         </p>
                       )}
@@ -750,19 +752,22 @@ export default function ToolsPageClient() {
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button 
                     variant="outline" 
-                    onClick={clearAllFilters}
+                     onClick={clearAllFilters}
+                     className="bg-[var(--cloud)] border-[var(--iron)] text-[var(--night)] font-bold hover:bg-[var(--mist)] h-12 rounded-xl transition-colors"
                   >
                     Clear All Filters
                   </Button>
                   <Button 
                     variant="outline" 
-                    onClick={() => setActiveCategory("All")}
+                     onClick={() => setActiveCategory("All")}
+                     className="bg-[var(--cloud)] border-[var(--iron)] text-[var(--night)] font-bold hover:bg-[var(--mist)] h-12 rounded-xl transition-colors"
                   >
                     Reset Category
                   </Button>
                   <Button 
                     variant="outline" 
-                    onClick={() => setActiveSolution("All")}
+                     onClick={() => setActiveSolution("All")}
+                     className="bg-[var(--cloud)] border-[var(--iron)] text-[var(--night)] font-bold hover:bg-[var(--mist)] h-12 rounded-xl transition-colors"
                   >
                     Reset Solution
                   </Button>
@@ -773,19 +778,19 @@ export default function ToolsPageClient() {
             <>
               {/* Results Summary */}
               {(intelligentFilter.active || activeCategory !== 'All' || activeSolution !== 'All') && (
-                <div className="mb-8 p-4 bg-orange-50 dark:bg-orange-950/50 rounded-lg border border-orange-200 dark:border-orange-800">
+                <div className="mb-8 p-4 bg-[#ff7a59]/5 rounded-[2rem] border border-[#ff7a59]/20">
                   <div className="flex items-center gap-2">
                     {intelligentFilter.active ? (
                       <>
-                        <Sparkles className="w-5 h-5 text-orange-600" />
-                        <span className="font-medium text-orange-800 dark:text-orange-200">
+                        <Sparkles className="w-5 h-5 text-[#ff7a59]" />
+                        <span className="font-bold text-[var(--night)]">
                           AI found {filteredTools.length} tools matching "{intelligentFilter.searchTerm}"
                         </span>
                       </>
                     ) : (
                       <>
-                        <Filter className="w-5 h-5 text-orange-600" />
-                        <span className="font-medium text-orange-800 dark:text-orange-200">
+                        <Filter className="w-5 h-5 text-[#ff7a59]" />
+                        <span className="font-bold text-[var(--night)]">
                           Showing {filteredTools.length} tools filtered by {activeCategory !== 'All' && `Category: ${activeCategory}`}{activeCategory !== 'All' && activeSolution !== 'All' && ' + '}{activeSolution !== 'All' && `Solution: ${activeSolution}`}
                         </span>
                       </>
@@ -794,7 +799,7 @@ export default function ToolsPageClient() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {filteredTools.map((tool) => {
                   const IconComponent = tool.icon
                   const isAvailable = tool.status === "Available"
@@ -803,27 +808,27 @@ export default function ToolsPageClient() {
                   return (
                     <Card
                       key={tool.id}
-                      className={`group hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20 flex flex-col h-full ${
-                        isAIMatched ? 'ring-2 ring-orange-500 bg-orange-50/50 dark:bg-orange-950/50' : ''
+                      className={`card bg-[var(--cloud)] border-[var(--iron)] overflow-hidden flex flex-col h-full transition-all duration-300 hover:border-[#ff7a59]/30 hover:shadow-lg rounded-[2rem] group ${
+                        isAIMatched ? 'ring-2 ring-[#ff7a59]/50 shadow-[0_0_20px_rgba(255,122,89,0.1)]' : ''
                       }`}
                     >
-                      <CardHeader>
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-start gap-3">
-                            <div className={`p-2 rounded-lg ${isAIMatched ? 'bg-orange-100 dark:bg-orange-900' : 'bg-primary/10'}`}>
-                              <IconComponent className={`w-6 h-6 ${isAIMatched ? 'text-orange-600' : 'text-primary'}`} />
+                      <CardHeader className="p-6 sm:p-8 pb-4">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-start gap-4">
+                            <div className={`w-12 h-12 flex items-center justify-center rounded-2xl ${isAIMatched ? 'bg-[#ff7a59]/10 border border-[#ff7a59]/20' : 'bg-[var(--mist)] border border-[var(--iron)]'}`}>
+                              <IconComponent className={`w-6 h-6 ${isAIMatched ? 'text-[#ff7a59]' : 'text-[var(--night)] group-hover:text-[#ff7a59] transition-colors'}`} />
                             </div>
-                            <div className="flex flex-wrap items-center gap-2 min-w-0">
-                              <Badge variant={isAvailable ? "default" : "secondary"} className="text-xs whitespace-nowrap">
+                            <div className="flex flex-wrap items-center gap-2 min-w-0 pt-1">
+                              <Badge variant={isAvailable ? "default" : "secondary"} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${isAvailable ? 'bg-[#10b981]/10 text-[#10b981] border-none' : 'bg-[var(--mist)] text-[var(--steel)] border-none'}`}>
                                 {tool.status}
                               </Badge>
                               {isAIMatched && (
-                                <Badge variant="secondary" className="bg-orange-100 text-orange-800 text-xs">
+                                <Badge variant="secondary" className="bg-[#ff7a59]/10 text-[#ff7a59] border-none text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full">
                                   <Sparkles className="w-3 h-3 mr-1" />
-                                  AI Match
+                                  Match
                                 </Badge>
                               )}
-                              <Badge variant="outline" className="text-xs whitespace-nowrap">
+                              <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border-[var(--iron)] text-[var(--steel)]">
                                 {tool.category}
                               </Badge>
                               {tool.solution === "GrowthSuite" ? (
@@ -838,7 +843,7 @@ export default function ToolsPageClient() {
                                 >
                                   <Badge 
                                     variant="outline" 
-                                    className="text-xs whitespace-nowrap border-[#2563EB] text-[#2563EB] bg-[#2563EB]/10 hover:bg-[#2563EB]/20 transition-colors cursor-pointer"
+                                    className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border-[#3b82f6]/30 text-[#3b82f6] bg-[#3b82f6]/5 hover:bg-[#3b82f6]/10 transition-colors cursor-pointer"
                                   >
                                     {tool.solution}
                                   </Badge>
@@ -855,7 +860,7 @@ export default function ToolsPageClient() {
                                 >
                                   <Badge 
                                     variant="outline" 
-                                    className="text-xs whitespace-nowrap border-[#059669] text-[#059669] bg-[#059669]/10 hover:bg-[#059669]/20 transition-colors cursor-pointer"
+                                    className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border-[#10b981]/30 text-[#10b981] bg-[#10b981]/5 hover:bg-[#10b981]/10 transition-colors cursor-pointer"
                                   >
                                     {tool.solution}
                                   </Badge>
@@ -872,48 +877,50 @@ export default function ToolsPageClient() {
                                 >
                                   <Badge 
                                     variant="outline" 
-                                    className="text-xs whitespace-nowrap border-[#7C3AED] text-[#7C3AED] bg-[#7C3AED]/10 hover:bg-[#7C3AED]/20 transition-colors cursor-pointer"
+                                    className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border-[#a855f7]/30 text-[#a855f7] bg-[#a855f7]/5 hover:bg-[#a855f7]/10 transition-colors cursor-pointer"
                                   >
                                     {tool.solution}
                                   </Badge>
                                 </Link>
                               ) : (
-                                <Badge variant="outline" className="text-xs whitespace-nowrap">
+                                <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border-[var(--iron)] text-[var(--steel)]">
                                   {tool.solution}
                                 </Badge>
                               )}
                             </div>
                           </div>
                         </div>
-                        <CardTitle className={`text-xl group-hover:text-primary transition-colors ${isAIMatched ? 'text-orange-700 dark:text-orange-300' : ''}`}>
+                        <CardTitle className={`text-xl sm:text-2xl font-bold tracking-tight transition-colors line-clamp-2 ${isAIMatched ? 'text-[#ff7a59]' : 'text-[var(--night)] group-hover:text-[#ff7a59]'}`}>
                           {tool.name}
                         </CardTitle>
-                        <CardDescription className="text-base">{tool.description}</CardDescription>
+                        <CardDescription className="text-sm font-medium text-[var(--steel)] mt-2 line-clamp-3 leading-relaxed">
+                          {tool.description}
+                        </CardDescription>
                       </CardHeader>
-                      <CardContent className="flex-grow flex flex-col">
-                        <div className="space-y-4 flex-grow">
+                      <CardContent className="p-6 sm:p-8 pt-0 flex-grow flex flex-col">
+                        <div className="space-y-4 flex-grow border-t border-[var(--iron)] pt-6 mt-2">
                           <div>
-                            <h4 className="font-medium text-sm text-muted-foreground mb-2">Key Features:</h4>
-                            <ul className="space-y-1">
+                            <h4 className="font-bold text-[10px] uppercase tracking-widest text-[var(--steel)] mb-3">Key Features:</h4>
+                            <ul className="space-y-2">
                               {tool.features.map((feature, index) => (
-                                <li key={index} className="text-sm flex items-center gap-2">
-                                  <div className={`w-1.5 h-1.5 rounded-full ${isAIMatched ? 'bg-orange-500' : 'bg-primary'}`}></div>
-                                  {feature}
+                                <li key={index} className="text-sm text-[var(--night)] font-medium flex items-start gap-2.5">
+                                  <div className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${isAIMatched ? 'bg-[#ff7a59]' : 'bg-[#10b981]'}`}></div>
+                                  <span className="leading-tight">{feature}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
                         </div>
-                        <div className="mt-auto pt-4">
+                        <div className="mt-8 pt-4">
                           {isAvailable ? (
-                            <Button asChild className={`w-full group ${isAIMatched ? 'bg-orange-600 hover:bg-orange-700' : ''}`}>
+                            <Button asChild className={`w-full px-6 h-12 text-sm sm:text-base font-bold shadow-sm rounded-xl ${isAIMatched ? 'btn-primary' : 'bg-[var(--night)] text-[var(--cloud)] hover:bg-[#ff7a59] transition-colors'}`}>
                               <Link href={tool.href}>
                                 Try Now
                                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                               </Link>
                             </Button>
                           ) : (
-                            <Button disabled className="w-full">
+                            <Button disabled className="w-full h-12 rounded-xl bg-[var(--mist)] text-[var(--steel)] border border-[var(--iron)] font-bold cursor-not-allowed text-sm sm:text-base">
                               Coming Soon
                             </Button>
                           )}
@@ -929,21 +936,20 @@ export default function ToolsPageClient() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-primary text-primary-foreground">
+      <section className="section py-20 bg-[var(--sand)] text-[var(--night)] border-t border-[var(--mist)] mt-12 rounded-[var(--radius-lg)] mb-12 max-w-[calc(100%-80px)] mx-auto">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Business with Free AI Tools?</h2>
           <p className="text-xl mb-8 opacity-90">
             Start with our AI-powered Domain Name Genie to discover the perfect domain for your business. Explore our complete directory of generative AI tools and find the best AI solutions for your enterprise needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" variant="secondary" className="text-lg px-8">
-              <Link href="/tools/digital-readiness">Try Domain Name Genie</Link>
+            <Button asChild className="btn-primary h-12 px-8 text-base font-bold rounded-xl shadow-sm">
+              <Link href="/tools/domain-name-generator">Try Domain Name Genie</Link>
             </Button>
             <Button
               asChild
-              size="lg"
               variant="outline"
-              className="text-lg px-8 border-white hover:bg-white hover:text-primary text-slate-600 bg-transparent"
+              className="h-12 px-8 text-base font-bold rounded-xl bg-[var(--cloud)] border-[var(--iron)] text-[var(--night)] hover:bg-[var(--mist)] transition-colors"
             >
               <Link href="/contact">Request Custom Tool</Link>
             </Button>

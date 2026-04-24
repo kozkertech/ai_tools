@@ -17,12 +17,12 @@ interface ProjectMetricsGridProps {
 
 export const ProjectMetricsGrid: React.FC<ProjectMetricsGridProps> = ({ summary }) => {
    const metrics = [
-      { label: "Duration", val: summary.estimatedDuration, icon: Calendar, color: "text-blue-500", bg: "bg-blue-500/10" },
-      { label: "Total Phases", val: summary.totalPhases, icon: Briefcase, color: "text-purple-500", bg: "bg-purple-500/10" },
-      { label: "Work Items", val: summary.totalTasks, icon: ListTodo, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-      { label: "Milestones", val: summary.totalMilestones, icon: Flag, color: "text-orange-500", bg: "bg-orange-500/10" },
-      { label: "Critical Path", val: summary.criticalTasksCount, icon: Zap, color: "text-amber-500", bg: "bg-amber-500/10" },
-      { label: "High Risks", val: summary.highRiskCount, icon: ShieldAlert, color: "text-red-500", bg: "bg-red-500/10" }
+      { label: "Duration", val: summary.estimatedDuration, icon: Calendar, color: "text-[#3b82f6]", bg: "bg-[#3b82f6]/10" },
+      { label: "Total Phases", val: summary.totalPhases, icon: Briefcase, color: "text-[#8b5cf6]", bg: "bg-[#8b5cf6]/10" },
+      { label: "Work Items", val: summary.totalTasks, icon: ListTodo, color: "text-[#10b981]", bg: "bg-[#10b981]/10" },
+      { label: "Milestones", val: summary.totalMilestones, icon: Flag, color: "text-[#ff7a59]", bg: "bg-[#ff7a59]/10" },
+      { label: "Critical Path", val: summary.criticalTasksCount, icon: Zap, color: "text-[#f59e0b]", bg: "bg-[#f59e0b]/10" },
+      { label: "High Risks", val: summary.highRiskCount, icon: ShieldAlert, color: "text-[#ef4444]", bg: "bg-[#ef4444]/10" }
    ];
 
    return (
@@ -30,14 +30,14 @@ export const ProjectMetricsGrid: React.FC<ProjectMetricsGridProps> = ({ summary 
          {metrics.map((item, i) => (
             <div 
                key={i} 
-               className="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl flex flex-col items-center justify-center text-center space-y-3 hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all group shadow-sm dark:shadow-none"
+               className="card p-6 bg-[var(--cloud)] border border-[var(--iron)] rounded-3xl flex flex-col items-center justify-center text-center space-y-3 hover:border-[var(--iron)] hover:bg-[#ff7a59]/5 transition-all group shadow-sm"
             >
                <div className={`p-3 ${item.bg} rounded-2xl group-hover:scale-110 transition-transform`}>
                   <item.icon className={`w-5 h-5 ${item.color}`} />
                </div>
                <div>
-                  <p className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">{item.val}</p>
-                  <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mt-1">{item.label}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-[var(--night)] tracking-tighter">{item.val}</p>
+                  <p className="text-[10px] font-bold text-[var(--steel)] uppercase tracking-widest mt-1">{item.label}</p>
                </div>
             </div>
          ))}

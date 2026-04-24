@@ -1,15 +1,15 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2, Send, CheckCircle, XCircle, FileText, Copy, Download } from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Loader2, Send, CheckCircle, XCircle, FileText, Copy, Download, Sparkles, Globe, Megaphone, Newspaper, UserCheck, Mail, Pin, Calendar, ArrowRight, ShieldCheck, Zap, Activity } from 'lucide-react'
 
 interface FormData {
   eventNews: string
@@ -76,7 +76,7 @@ export default function PressReleaseGenerator() {
     } catch (error) {
       setResponse({
         success: false,
-        error: "Failed to generate press release. Please try again.",
+        error: "Critical transmission failure. News cycle synchronization lost.",
       })
       setShowResponse(true)
     } finally {
@@ -101,9 +101,7 @@ export default function PressReleaseGenerator() {
 
   const parseN8nResponse = (webhookResponse: any): string => {
     try {
-      // Handle string response that might contain n8n-output tags
       if (typeof webhookResponse === "string") {
-        // Check if it contains n8n-output tags
         const n8nMatch = webhookResponse.match(/<n8n-output>\s*(.*?)\s*<\/n8n-output>/s)
         if (n8nMatch) {
           try {
@@ -111,46 +109,31 @@ export default function PressReleaseGenerator() {
             if (Array.isArray(jsonContent) && jsonContent[0]?.output) {
               return extractMarkdownContent(jsonContent[0].output)
             }
-          } catch {
-            // If parsing fails, return the original content
-          }
+          } catch { }
         }
         return webhookResponse
       }
 
-      // Handle array response (direct n8n format)
       if (Array.isArray(webhookResponse) && webhookResponse[0]?.output) {
         return extractMarkdownContent(webhookResponse[0].output)
       }
 
-      // Handle object response
       if (typeof webhookResponse === "object" && webhookResponse !== null) {
-        if (webhookResponse.output) {
-          return extractMarkdownContent(webhookResponse.output)
-        }
-        if (webhookResponse.pressRelease) {
-          return extractMarkdownContent(webhookResponse.pressRelease)
-        }
-        if (webhookResponse.content) {
-          return extractMarkdownContent(webhookResponse.content)
-        }
-        if (webhookResponse.result) {
-          return extractMarkdownContent(webhookResponse.result)
-        }
-        if (webhookResponse.message) {
-          return extractMarkdownContent(webhookResponse.message)
-        }
+        if (webhookResponse.output) return extractMarkdownContent(webhookResponse.output)
+        if (webhookResponse.pressRelease) return extractMarkdownContent(webhookResponse.pressRelease)
+        if (webhookResponse.content) return extractMarkdownContent(webhookResponse.content)
+        if (webhookResponse.result) return extractMarkdownContent(webhookResponse.result)
+        if (webhookResponse.message) return extractMarkdownContent(webhookResponse.message)
       }
 
       return JSON.stringify(webhookResponse, null, 2)
     } catch (error) {
-      console.error("Error parsing n8n response:", error)
+      console.error("Linguistic parsing error:", error)
       return String(webhookResponse)
     }
   }
 
   const extractMarkdownContent = (content: string): string => {
-    // Remove markdown code block wrapper if present
     const markdownMatch = content.match(/```markdown\s*([\s\S]*?)\s*```/)
     if (markdownMatch) {
       return markdownMatch[1].trim()
@@ -168,7 +151,7 @@ export default function PressReleaseGenerator() {
         const paragraphText = currentParagraph.join(' ').trim()
         if (paragraphText) {
           elements.push(
-            <p key={elements.length} className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 font-inter">
+            <p key={elements.length} className="text-[var(--night)]/80 leading-relaxed mb-6 font-inter text-lg">
               {renderInlineFormatting(paragraphText)}
             </p>
           )
@@ -185,12 +168,11 @@ export default function PressReleaseGenerator() {
         return
       }
 
-      // Handle headings
       if (trimmedLine.startsWith('# ')) {
         flushParagraph()
         const headingText = trimmedLine.substring(2).trim()
         elements.push(
-          <h1 key={elements.length} className="text-3xl font-bold text-gray-900 dark:text-white mb-6 font-poppins">
+          <h1 key={elements.length} className="text-4xl font-black text-[var(--night)] mb-10 font-poppins tracking-tighter leading-tight border-b-4 border-[#FF7435]/20 pb-6 uppercase">
             {renderInlineFormatting(headingText)}
           </h1>
         )
@@ -198,7 +180,7 @@ export default function PressReleaseGenerator() {
         flushParagraph()
         const headingText = trimmedLine.substring(3).trim()
         elements.push(
-          <h2 key={elements.length} className="text-2xl font-bold text-gray-900 dark:text-white mb-4 mt-6 font-poppins">
+          <h2 key={elements.length} className="text-2xl font-black text-[var(--night)] mb-6 mt-10 font-poppins tracking-tight uppercase">
             {renderInlineFormatting(headingText)}
           </h2>
         )
@@ -206,36 +188,25 @@ export default function PressReleaseGenerator() {
         flushParagraph()
         const headingText = trimmedLine.substring(4).trim()
         elements.push(
-          <h3 key={elements.length} className="text-xl font-bold text-gray-900 dark:text-white mb-3 mt-5 font-poppins">
+          <h3 key={elements.length} className="text-xl font-black text-[var(--night)] mb-4 mt-8 font-poppins opacity-80 uppercase tracking-widest">
             {renderInlineFormatting(headingText)}
           </h3>
         )
       } else {
-        // Regular content - add to current paragraph
         currentParagraph.push(trimmedLine)
       }
     })
 
-    // Flush any remaining paragraph
     flushParagraph()
-
     return elements
   }
 
   const renderInlineFormatting = (text: string) => {
-    // Handle bold text (**text** or __text__)
     const parts = text.split(/(\*\*.*?\*\*|__.*?__)/g)
-    
     return parts.map((part, index) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
+      if ((part.startsWith('**') && part.endsWith('**')) || (part.startsWith('__') && part.endsWith('__'))) {
         return (
-          <strong key={index} className="font-semibold text-gray-900 dark:text-white">
-            {part.slice(2, -2)}
-          </strong>
-        )
-      } else if (part.startsWith('__') && part.endsWith('__')) {
-        return (
-          <strong key={index} className="font-semibold text-gray-900 dark:text-white">
+          <strong key={index} className="font-black text-[var(--night)] bg-[#FF7435]/5 px-1 px-1 rounded">
             {part.slice(2, -2)}
           </strong>
         )
@@ -250,7 +221,7 @@ export default function PressReleaseGenerator() {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
-      console.error("Failed to copy text: ", err)
+      console.error("Vector copy error: ", err)
     }
   }
 
@@ -272,321 +243,339 @@ export default function PressReleaseGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a]">
-      {/* Header with gradient background */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-25 dark:from-zinc-900 dark:to-zinc-900 border-b border-gray-200 dark:border-gray-800">
-        <div className="container mx-auto max-w-6xl px-4 py-12">
-          <div className="text-center">
-            <div className="inline-flex items-center gap-3 mb-6">
-              <div className="p-3 rounded-full bg-orange-500 shadow-lg">
-                <FileText className="h-8 w-8 text-white" />
+    <div className="min-h-screen bg-[var(--mist)] text-[var(--night)] transition-colors duration-300 pb-32">
+      {/* Premium Sticky Identity Header */}
+      <div className="bg-[var(--cloud)]/60 backdrop-blur-2xl border-b border-[var(--iron)] pt-24 pb-8 fixed top-0 w-full z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 bg-[#FF7435] rounded-2xl flex items-center justify-center shadow-2xl shadow-[#FF7435]/30">
+                <Newspaper className="w-8 h-8 text-white" />
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white font-poppins">Press Release Generator</h1>
+              <div className="hidden md:block">
+                <h1 className="text-3xl font-black font-poppins text-[var(--night)] tracking-tighter uppercase leading-none mb-1">
+                   Media <span className="text-[#FF7435]">Nexus</span>
+                </h1>
+                <Badge className="bg-[var(--night)] text-white border-none font-black px-3 py-1 rounded-lg text-[9px] uppercase tracking-widest opacity-80">v4.2 News Cycle Engine</Badge>
+              </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto font-inter">
-              Transform your news and events into professional press releases with AI assistance
-            </p>
+            <div className="flex items-center gap-6">
+               <div className="text-right hidden sm:block">
+                  <div className="text-[9px] font-black uppercase tracking-widest text-[var(--steel)]">Global Status</div>
+                  <div className="text-xs font-black text-[var(--night)] uppercase flex items-center gap-2">
+                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                     Broadcasting
+                  </div>
+               </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto max-w-6xl px-4 py-8">
-        <div className="grid gap-8 lg:grid-cols-2">
-          {/* Form Section */}
-          <Card className="bg-white dark:bg-[#111111] shadow-lg border border-gray-200 dark:border-gray-800">
-            <CardHeader className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-gray-800">
-              <CardTitle className="text-gray-900 dark:text-white text-2xl font-poppins font-semibold">Event Details</CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400 font-inter">
-                Fill in the details to generate your press release
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="eventNews" className="text-gray-900 dark:text-white font-medium font-inter">
-                    Event/News *
-                  </Label>
-                  <Textarea
-                    id="eventNews"
-                    name="eventNews"
-                    value={formData.eventNews}
-                    onChange={handleInputChange}
-                    placeholder="Describe your news or event..."
-                    required
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 min-h-[100px] resize-none font-inter"
-                  />
+      <div className="pt-[164px] max-w-7xl mx-auto px-6 lg:px-10 mt-16 lg:mt-24">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-12 items-start">
+          
+          {/* Mission Configuration Panel */}
+          <div className="xl:col-span-5 space-y-10 animate-in fade-in slide-in-from-left-8 duration-700">
+            <Card className="card p-10 shadow-2xl shadow-black/5 border-2 border-[var(--iron)]/50">
+              <CardHeader className="px-0 pt-0 pb-10 border-b-2 border-[var(--iron)]/40 mb-10">
+                <div className="flex items-center gap-3">
+                   <Megaphone className="w-6 h-6 text-[#FF7435]" />
+                   <CardTitle className="text-2xl font-black font-poppins uppercase tracking-tighter">News Blueprint</CardTitle>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="companyName" className="text-gray-900 dark:text-white font-medium font-inter">
-                      Company Name *
+                <CardDescription className="font-bold text-[var(--steel)] italic uppercase tracking-widest text-[10px] mt-2">Initialize dissemination protocol.</CardDescription>
+              </CardHeader>
+              
+              <CardContent className="px-0 pb-0">
+                <form onSubmit={handleSubmit} className="space-y-10">
+                  <div className="space-y-4">
+                    <Label className="field-label font-black text-xs uppercase tracking-widest flex items-center gap-2">
+                       <Zap className="w-3.5 h-3.5 text-[#FF7435]" /> Primary Event Narrative *
                     </Label>
-                    <Input
-                      id="companyName"
-                      name="companyName"
-                      value={formData.companyName}
+                    <Textarea
+                      name="eventNews"
+                      value={formData.eventNews}
                       onChange={handleInputChange}
-                      placeholder="Your company name"
+                      placeholder="Describe the core news vector..."
                       required
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
+                      className="min-h-[140px] input rounded-[2.5rem] pt-8"
+                      disabled={isLoading}
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="industry" className="text-gray-900 dark:text-white font-medium font-inter">
-                      Industry *
-                    </Label>
-                    <Input
-                      id="industry"
-                      name="industry"
-                      value={formData.industry}
-                      onChange={handleInputChange}
-                      placeholder="e.g., Technology, Healthcare"
-                      required
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="dateOfRelease" className="text-gray-900 dark:text-white font-medium font-inter">
-                      Date of Release *
-                    </Label>
-                    <Input
-                      id="dateOfRelease"
-                      name="dateOfRelease"
-                      type="date"
-                      value={formData.dateOfRelease}
-                      onChange={handleInputChange}
-                      required
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500/20 font-inter"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10 border-t-2 border-[var(--iron)]/40">
+                    <div className="space-y-4">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Entity Name *</Label>
+                      <Input
+                        name="companyName"
+                        value={formData.companyName}
+                        onChange={handleInputChange}
+                        placeholder="Corporate Brand..."
+                        required
+                        className="input h-14"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Sector Cluster *</Label>
+                      <Input
+                        name="industry"
+                        value={formData.industry}
+                        onChange={handleInputChange}
+                        placeholder="e.g. AI, Biotech..."
+                        required
+                        className="input h-14"
+                        disabled={isLoading}
+                      />
+                    </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="location" className="text-gray-900 dark:text-white font-medium font-inter">
-                      Location *
-                    </Label>
-                    <Input
-                      id="location"
-                      name="location"
-                      value={formData.location}
-                      onChange={handleInputChange}
-                      placeholder="City, State/Country"
-                      required
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Release Date *</Label>
+                      <Input
+                        name="dateOfRelease"
+                        type="date"
+                        value={formData.dateOfRelease}
+                        onChange={handleInputChange}
+                        required
+                        className="input h-14"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Geographical Hub *</Label>
+                      <div className="relative">
+                         <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#FF7435]" />
+                         <Input
+                           name="location"
+                           value={formData.location}
+                           onChange={handleInputChange}
+                           placeholder="City, HQ..."
+                           required
+                           className="input h-14 pl-12"
+                           disabled={isLoading}
+                         />
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="boilerplate" className="text-gray-900 dark:text-white font-medium font-inter">
-                    Company Description/Boilerplate *
-                  </Label>
-                  <Textarea
-                    id="boilerplate"
-                    name="boilerplate"
-                    value={formData.boilerplate}
-                    onChange={handleInputChange}
-                    placeholder="Brief description of your company..."
-                    required
-                    className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 min-h-[80px] resize-none font-inter"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="mediaContactName" className="text-gray-900 dark:text-white font-medium font-inter">
-                      Media Contact Name & Designation *
+                  <div className="space-y-4 pt-10 border-t-2 border-[var(--iron)]/40">
+                    <Label className="field-label font-black text-xs uppercase tracking-widest flex items-center gap-2">
+                       <Activity className="w-3.5 h-3.5 text-[#FF7435]" /> Narrative Boilerplate *
                     </Label>
-                    <Input
-                      id="mediaContactName"
-                      name="mediaContactName"
-                      value={formData.mediaContactName}
+                    <Textarea
+                      name="boilerplate"
+                      value={formData.boilerplate}
                       onChange={handleInputChange}
-                      placeholder="John Doe, PR Manager"
+                      placeholder="Detailed corporate description protocol..."
                       required
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
+                      className="min-h-[100px] input rounded-[2.5rem] pt-8"
+                      disabled={isLoading}
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="mediaContactEmail" className="text-gray-900 dark:text-white font-medium font-inter">
-                      Media Contact Email *
-                    </Label>
-                    <Input
-                      id="mediaContactEmail"
-                      name="mediaContactEmail"
-                      type="email"
-                      value={formData.mediaContactEmail}
-                      onChange={handleInputChange}
-                      placeholder="contact@company.com"
-                      required
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500/20 font-inter"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Contact Identity *</Label>
+                      <div className="relative">
+                         <UserCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#FF7435]" />
+                         <Input
+                           name="mediaContactName"
+                           value={formData.mediaContactName}
+                           onChange={handleInputChange}
+                           placeholder="PR Lead Name..."
+                           required
+                           className="input h-14 pl-12"
+                           disabled={isLoading}
+                         />
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <Label className="field-label font-black text-xs uppercase tracking-widest">Contact Terminal *</Label>
+                      <div className="relative">
+                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#FF7435]" />
+                         <Input
+                           name="mediaContactEmail"
+                           type="email"
+                           value={formData.mediaContactEmail}
+                           onChange={handleInputChange}
+                           placeholder="pr@brand.io"
+                           required
+                           className="input h-14 pl-12"
+                           disabled={isLoading}
+                         />
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex gap-4 pt-4">
-                  <Button
-                    type="submit"
-                    disabled={isLoading}
-                    className="flex-1 bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold py-4 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 font-inter"
-                    style={{ fontWeight: 600 }}
-                  >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="mr-2 h-4 w-4" />
-                        Generate Press Release
-                      </>
-                    )}
-                  </Button>
+                  <div className="flex gap-4 pt-8">
+                    <Button
+                      type="submit"
+                      disabled={isLoading}
+                      className="btn-primary flex-1 h-20 text-xs font-black uppercase tracking-[0.3em] rounded-full shadow-2xl shadow-[#FF7435]/30 group"
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-3 h-5 w-5 animate-spin" />
+                          Synthesizing...
+                        </>
+                      ) : (
+                        <>
+                          Execute Media Broadcast
+                          <ArrowRight className="w-5 h-5 ml-4 group-hover:translate-x-1 transition-transform" />
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={resetForm}
+                      className="px-8 h-20 border-2 rounded-full font-black uppercase text-[10px] tracking-widest hover:bg-white transition-all border-[var(--iron)]"
+                    >
+                      Reset
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
 
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={resetForm}
-                    className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 py-4 px-4 rounded-lg font-inter bg-transparent dark:bg-transparent"
-                    style={{ fontWeight: 600 }}
-                  >
-                    Reset
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Response Section */}
-          <div className="space-y-6">
-            {showResponse && response && (
-              <Card className="bg-white dark:bg-[#111111] shadow-lg border border-gray-200 dark:border-gray-800 animate-in slide-in-from-right duration-700">
-                <CardHeader
-                  className={`${response.success ? "bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800" : "bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800"} border-b`}
-                >
-                  <CardTitle className="text-gray-900 dark:text-white text-2xl font-poppins font-semibold flex items-center gap-2">
-                    {response.success ? (
-                      <>
-                        <CheckCircle className="h-6 w-6 text-green-500" />
-                        Press Release Generated
-                      </>
-                    ) : (
-                      <>
-                        <XCircle className="h-6 w-6 text-red-500" />
-                        Generation Failed
-                      </>
-                    )}
-                  </CardTitle>
+          {/* Newsroom Manifestation Panel */}
+          <div className="xl:col-span-7 space-y-10 animate-in fade-in slide-in-from-right-8 duration-700">
+            {showResponse && response ? (
+              <Card className="card p-0 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] border-2 border-[var(--iron)]/60 overflow-hidden bg-white">
+                <CardHeader className={`p-12 border-b-2 relative overflow-hidden ${response.success ? "bg-emerald-500 text-white border-emerald-400" : "bg-red-500 text-white border-red-400"}`}>
+                  {/* Atmospheric Background Logo */}
+                  <Newspaper className="absolute top-0 right-0 w-64 h-64 text-white/10 -rotate-12 translate-x-12 -translate-y-6 pointer-events-none" />
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-4">
+                       <ShieldCheck className="w-6 h-6 text-white/80" />
+                       <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-80">Cycle State: Synchronized</span>
+                    </div>
+                    <CardTitle className="text-4xl font-black font-poppins tracking-tighter uppercase leading-none">
+                      {response.success ? "Media Payload Ready" : "Protocol Breach Detected"}
+                    </CardTitle>
+                  </div>
                 </CardHeader>
-                <CardContent className="p-6">
+                
+                <CardContent className="p-12 md:p-16">
                   {response.success ? (
-                    <div className="space-y-6">
+                    <div className="space-y-12">
                       {response.message && (
-                        <Alert className="bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          <AlertDescription className="text-green-800 dark:text-green-100 font-inter">{response.message}</AlertDescription>
-                        </Alert>
+                        <div className="p-6 bg-emerald-50 border-1 border-emerald-100 rounded-2xl flex items-center gap-4">
+                           <Activity className="w-5 h-5 text-emerald-600 animate-pulse" />
+                           <p className="text-emerald-900 font-bold text-xs uppercase tracking-widest">{response.message}</p>
+                        </div>
                       )}
 
-                      {/* Display formatted press release */}
                       {response.webhookResponse && (
-                        <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-                          <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-gray-900 dark:text-white font-semibold font-poppins text-lg">
-                              Generated Press Release:
-                            </h3>
-                            <div className="flex gap-2">
+                        <div className="space-y-10">
+                          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-10 border-b-2 border-[var(--iron)]/40">
+                            <div>
+                               <h3 className="text-2xl font-black font-poppins text-[var(--night)] uppercase tracking-tighter">
+                                 Linguistic Artifact
+                               </h3>
+                               <p className="text-[10px] font-black text-[var(--steel)] uppercase tracking-[0.3em] mt-1">High-Fidelity Press Release</p>
+                            </div>
+                            <div className="flex gap-4">
                               <Button
                                 onClick={() => copyToClipboard(getParsedContent())}
                                 variant="outline"
-                                size="sm"
-                                className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-inter"
+                                className="h-14 px-8 border-2 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-[#FF7435] hover:text-white hover:border-[#FF7435] transition-all group"
                               >
                                 {copied ? (
                                   <>
-                                    <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
-                                    Copied!
+                                    <CheckCircle className="h-4 w-4 mr-3 animate-in zoom-in" />
+                                    Synced
                                   </>
                                 ) : (
                                   <>
-                                    <Copy className="h-4 w-4 mr-1" />
-                                    Copy
+                                    <Copy className="h-4 w-4 mr-3 group-hover:scale-110 transition-transform" />
+                                    Copy Vector
                                   </>
                                 )}
                               </Button>
                               <Button
-                                onClick={() => downloadAsText(getParsedContent(), `press-release-${formData.companyName.toLowerCase().replace(/\s+/g, '-')}.txt`)}
+                                onClick={() => downloadAsText(getParsedContent(), `pr-${formData.companyName.toLowerCase().replace(/\s+/g, '-')}.txt`)}
                                 variant="outline"
-                                size="sm"
-                                className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-inter"
+                                className="h-14 px-8 border-2 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-[var(--night)] hover:text-white hover:border-[var(--night)] transition-all group"
                               >
-                                <Download className="h-4 w-4 mr-1" />
-                                Download
+                                <Download className="h-4 w-4 mr-3 group-hover:translate-y-0.5 transition-transform" />
+                                Export .txt
                               </Button>
                             </div>
                           </div>
                           
-                          {/* Formatted content display */}
-                          <div className="bg-white dark:bg-zinc-900 rounded-md p-6 border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto">
-                            <div className="prose prose-gray max-w-none">
-                              {renderMarkdownContent(getParsedContent())}
-                            </div>
+                          <div className="bg-[var(--mist)]/40 rounded-[3rem] p-10 md:p-16 border-2 border-[var(--iron)]/40 relative shadow-inner group/content">
+                             {/* Floating indicator */}
+                             <div className="absolute top-10 right-10 flex items-center gap-2 opacity-20 group-hover/content:opacity-60 transition-opacity">
+                                <Activity className="w-4 h-4" />
+                                <span className="text-[10px] font-black uppercase tracking-widest">Read Density: Optimal</span>
+                             </div>
+                             
+                             <div className="prose prose-zinc prose-lg max-w-none prose-headings:font-black prose-headings:font-poppins prose-p:font-inter prose-strong:text-[#FF7435]">
+                                {renderMarkdownContent(getParsedContent())}
+                             </div>
                           </div>
                         </div>
                       )}
                     </div>
                   ) : (
-                    <Alert className="bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-800">
-                      <XCircle className="h-4 w-4 text-red-500" />
-                      <AlertDescription className="text-red-800 dark:text-red-100 font-inter">
-                        {response.error || "An error occurred while generating the press release."}
-                      </AlertDescription>
-                    </Alert>
+                    <div className="p-10 bg-red-50 border-2 border-red-100 rounded-[2.5rem] text-center space-y-6">
+                       <div className="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto shadow-xl shadow-red-500/20">
+                          <XCircle className="w-10 h-10 text-white" />
+                       </div>
+                       <div>
+                         <h4 className="text-xl font-black text-red-900 uppercase font-poppins">Broadcast Interrupted</h4>
+                         <p className="text-red-700/70 font-bold text-xs uppercase tracking-widest mt-2">
+                           {response.error || "A synchronized news sequence could not be established."}
+                         </p>
+                       </div>
+                       <Button onClick={() => setShowResponse(false)} variant="outline" className="h-12 px-8 border-2 border-red-200 text-red-700 font-black uppercase text-[10px] tracking-widest hover:bg-red-50 rounded-xl">Re-Initiate Protocol</Button>
+                    </div>
                   )}
                 </CardContent>
               </Card>
-            )}
+            ) : (
+              /* Newsroom Instructions Display */
+              <Card className="card p-0 shadow-2xl shadow-black/5 border-2 border-[var(--iron)]/40 bg-white overflow-hidden h-full min-h-[800px]">
+                <CardHeader className="bg-[var(--night)] p-12 relative">
+                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-[4rem]"></div>
+                   <div className="flex items-center gap-3 mb-4">
+                      <Megaphone className="w-5 h-5 text-[#FF7435]" />
+                      <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/40">Newsroom Manual</span>
+                   </div>
+                   <CardTitle className="text-3xl font-black font-poppins text-white uppercase tracking-tighter">Dissemination Manual</CardTitle>
+                </CardHeader>
+                <CardContent className="p-12 space-y-12">
+                  <div className="grid gap-8">
+                    {[
+                      { step: 1, title: "Narrative Input", desc: "Parameterize your core event details and corporate identity vectors." },
+                      { step: 2, title: "Neural Synthesis", desc: "Our high-density logic engines structure the release into professional news format." },
+                      { step: 3, title: "Artifact Review", desc: "Validate the linguistic payload and ensure all key mission targets are addressed." },
+                      { step: 4, title: "Media Export", desc: "Synchronize the final artifact with your media dissemination terminals." }
+                    ].map((item) => (
+                      <div key={item.step} className="flex items-start gap-8 group">
+                        <div className="w-12 h-12 bg-[var(--mist)] border-2 border-[var(--iron)] rounded-2xl flex items-center justify-center font-black text-xl group-hover:bg-[#FF7435] group-hover:text-white group-hover:border-[#FF7435] transition-all shrink-0">
+                          {item.step}
+                        </div>
+                        <div className="pt-1">
+                          <h4 className="text-lg font-black font-poppins uppercase text-[var(--night)] tracking-tight group-hover:text-[#FF7435] transition-colors">{item.title}</h4>
+                          <p className="text-[var(--steel)] font-bold text-sm leading-relaxed mt-1 opacity-80">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
-            {/* Instructions Card */}
-            <Card className="bg-white dark:bg-[#111111] shadow-lg border border-gray-200 dark:border-gray-800">
-              <CardHeader className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-gray-800">
-                <CardTitle className="text-gray-900 dark:text-white text-xl font-poppins font-semibold">How it works</CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="text-gray-600 dark:text-gray-400 space-y-3 font-inter">
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold mt-0.5">
-                      1
-                    </div>
-                    <p>Fill in all the required fields with your event details</p>
+                  <div className="pt-12 border-t-2 border-[var(--iron)]/20 text-center space-y-8 grayscale opacity-30 select-none">
+                     <FileText className="w-24 h-24 mx-auto text-[var(--steel)] opacity-20" />
+                     <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--steel)] max-w-xs mx-auto">Awaiting payload initialization to manifest news artifact.</p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold mt-0.5">
-                      2
-                    </div>
-                    <p>Our AI will generate a professional press release</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold mt-0.5">
-                      3
-                    </div>
-                    <p>Review and use the generated content for your media outreach</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold mt-0.5">
-                      4
-                    </div>
-                    <p>Copy or download the formatted press release</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
