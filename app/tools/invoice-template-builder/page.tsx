@@ -12,6 +12,7 @@ import { Plus, Trash2, ArrowLeft, ArrowRight, Loader2, CheckCircle, XCircle, Edi
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import jsPDF from "jspdf"
 import "jspdf-autotable"
+import html2canvas from "html2canvas"
 
 interface LineItem {
   id: string
@@ -25,28 +26,37 @@ interface InvoiceData {
   // Company info
   companyName: string
   companyEmail: string
-  companyAddress: string
-  companyCity: string
-  companyZip: string
-  companyCountry: string
-  companyState: string
+  companyPhone: string
+  companyGSTIN: string
+  companyWebsite: string
+  companyLogo: string | null
 
   // Customer info
   customerName: string
   customerEmail: string
-  customerAddress: string
-  customerCity: string
-  customerZip: string
-  customerCountry: string
-  customerState: string
+  customerPhone: string
+  customerGSTIN: string
   invoiceNumber: string
   invoiceDate: string
+  dueDate: string
+  placeOfSupply: string
 
   // Items
   lineItems: LineItem[]
   notes: string
   taxRate: number
   currency: string
+
+  // Bank Details
+  bankName: string
+  accountHolder: string
+  accountNumber: string
+  ifscCode: string
+  branch: string
+  upiQrCode: string | null
+
+  // Summary
+  totalAmountInWords: string
 }
 
 const currencies = [
@@ -62,117 +72,51 @@ const currencies = [
   { code: "BRL", symbol: "R$", name: "Brazilian Real" },
 ]
 
-const countries = [
-  "United States",
-  "India",
-  "Canada",
-  "United Kingdom",
-  "Australia",
-  "Germany",
-  "France",
-  "Japan",
-  "China",
-  "Brazil",
-  "Mexico",
-  "Italy",
-  "Spain",
-  "Netherlands",
-  "Sweden",
-]
 
-const usStates = [
-  "Alabama",
-  "Alaska",
-  "Arizona",
-  "Arkansas",
-  "California",
-  "Colorado",
-  "Connecticut",
-  "Delaware",
-  "Florida",
-  "Georgia",
-  "Hawaii",
-  "Idaho",
-  "Illinois",
-  "Indiana",
-  "Iowa",
-  "Kansas",
-  "Kentucky",
-  "Louisiana",
-  "Maine",
-  "Maryland",
-  "Massachusetts",
-  "Michigan",
-  "Minnesota",
-  "Mississippi",
-  "Missouri",
-  "Montana",
-  "Nebraska",
-  "Nevada",
-  "New Hampshire",
-  "New Jersey",
-  "New Mexico",
-  "New York",
-  "North Carolina",
-  "North Dakota",
-  "Ohio",
-  "Oklahoma",
-  "Oregon",
-  "Pennsylvania",
-  "Rhode Island",
-  "South Carolina",
-  "South Dakota",
-  "Tennessee",
-  "Texas",
-  "Utah",
-  "Vermont",
-  "Virginia",
-  "Washington",
-  "West Virginia",
-  "Wisconsin",
-  "Wyoming",
-]
 
-const indianStates = [
-  // States
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  // Union Territories
-  "Andaman and Nicobar Islands",
-  "Chandigarh",
-  "Dadra and Nagar Haveli and Daman and Diu",
-  "Delhi",
-  "Jammu and Kashmir",
-  "Ladakh",
-  "Lakshadweep",
-  "Puducherry",
-]
+
+
+
+
+const numberToWords = (num: number): string => {
+  const sng = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+  const dbl = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  
+  const formatGroup = (n: number) => {
+    let out = "";
+    if (n >= 100) {
+      out += sng[Math.floor(n / 100)] + " Hundred ";
+      n %= 100;
+    }
+    if (n >= 20) {
+      out += dbl[Math.floor(n / 10)] + (n % 10 !== 0 ? "-" + sng[n % 10] : "") + " ";
+    } else if (n > 0) {
+      out += sng[n] + " ";
+    }
+    return out;
+  };
+
+  if (num === 0) return "Zero";
+  
+  let whole = Math.floor(num);
+  let str = "";
+  
+  if (whole >= 10000000) {
+    str += formatGroup(Math.floor(whole / 10000000)) + "Crore ";
+    whole %= 10000000;
+  }
+  if (whole >= 100000) {
+    str += formatGroup(Math.floor(whole / 100000)) + "Lakh ";
+    whole %= 100000;
+  }
+  if (whole >= 1000) {
+    str += formatGroup(Math.floor(whole / 1000)) + "Thousand ";
+    whole %= 1000;
+  }
+  str += formatGroup(whole);
+
+  return str.trim();
+};
 
 export default function InvoiceGenerator() {
   const [currentStep, setCurrentStep] = useState(1)
@@ -182,56 +126,42 @@ export default function InvoiceGenerator() {
   const [isEditingTax, setIsEditingTax] = useState(false)
   const [showInvoicePreview, setShowInvoicePreview] = useState(false)
 
-  const [invoiceData, setInvoiceData] = useState<InvoiceData>({
+    const [invoiceData, setInvoiceData] = useState<InvoiceData>({
     companyName: "",
     companyEmail: "",
-    companyAddress: "",
-    companyCity: "",
-    companyZip: "",
-    companyCountry: "United States",
-    companyState: "",
+    companyPhone: "",
+    companyGSTIN: "",
+    companyWebsite: "",
+    companyLogo: null,
     customerName: "",
     customerEmail: "",
-    customerAddress: "",
-    customerCity: "",
-    customerZip: "",
-    customerCountry: "United States",
-    customerState: "",
-    invoiceNumber: "01",
+    customerPhone: "",
+    customerGSTIN: "",
+    invoiceNumber: "", // Default to empty string for initial state, will be auto-generated on render if empty or on submit
     invoiceDate: new Date().toISOString().split("T")[0],
+    dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+    placeOfSupply: "",
     lineItems: [{ id: "1", item: "", description: "", quantity: 1, price: 0 }],
     notes: "",
-    taxRate: 13,
-    currency: "USD",
+    taxRate: 18,
+    currency: "INR",
+    bankName: "",
+    accountHolder: "",
+    accountNumber: "",
+    ifscCode: "",
+    branch: "",
+    upiQrCode: null,
+    totalAmountInWords: "",
   })
 
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+
   const updateInvoiceData = (field: keyof InvoiceData, value: any) => {
-    setInvoiceData((prev) => {
-      const updated = { ...prev, [field]: value }
-      // Reset state when country changes
-      if (field === "companyCountry") {
-        updated.companyState = ""
-      }
-      if (field === "customerCountry") {
-        updated.customerState = ""
-      }
-      return updated
-    })
+    setInvoiceData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const getStatesForCountry = (country: string) => {
-    switch (country) {
-      case "United States":
-        return usStates
-      case "India":
-        return indianStates
-      default:
-        return []
-    }
-  }
-
-  const shouldShowStateDropdown = (country: string) => {
-    return country === "United States" || country === "India"
+  const formatDate = (date: Date) => {
+    return date.toISOString().split("T")[0]
   }
 
   const addLineItem = () => {
@@ -278,21 +208,121 @@ export default function InvoiceGenerator() {
     return currencies.find((c) => c.code === invoiceData.currency) || currencies[0]
   }
 
-  const formatCurrency = (amount: number) => {
-    const currency = getCurrentCurrency()
-    return `${currency.symbol}${amount.toFixed(2)}`
+  const formatCurrency = (amount: number, currency = invoiceData.currency) => {
+    const num = Number(amount || 0)
+
+    if (currency === "INR") {
+      return `₹${num.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })}`
+    }
+
+    return num.toLocaleString("en-US", {
+      style: "currency",
+      currency
+    })
   }
 
-  const handleSubmit = async () => {
+  const formatDisplayDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
+  const generateDefaultInvoiceNumber = () => {
+    const year = new Date().getFullYear();
+    const random = Math.floor(1000 + Math.random() * 9000);
+    return `INV-${year}-${random}`;
+  }
+
+  const resetForm = () => {
+    setInvoiceData({
+      companyName: "",
+      companyEmail: "",
+      companyPhone: "",
+      companyGSTIN: "",
+      companyWebsite: "",
+      companyLogo: null,
+      customerName: "",
+      customerEmail: "",
+      customerPhone: "",
+      customerGSTIN: "",
+      invoiceNumber: generateDefaultInvoiceNumber(),
+      invoiceDate: formatDate(new Date()),
+      dueDate: formatDate(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)),
+      placeOfSupply: "",
+      lineItems: [{ id: "1", item: "", description: "", quantity: 1, price: 0 }],
+      notes: "",
+      taxRate: 18,
+      currency: "INR",
+      bankName: "",
+      accountHolder: "",
+      accountNumber: "",
+      ifscCode: "",
+      branch: "",
+      upiQrCode: null,
+      totalAmountInWords: "",
+    })
+    setCurrentStep(1)
+    setShowInvoicePreview(false)
+    setSubmitStatus("idle")
+  }
+
+        const handleSubmit = async () => {
+    // Validation
+    if (!invoiceData.companyName || !invoiceData.companyEmail || !invoiceData.companyPhone) {
+      alert("Please fill in your company name, email, and phone.")
+      return
+    }
+    if (!invoiceData.customerName) {
+      alert("Please fill in the customer name.")
+      return
+    }
+
     setIsLoading(true)
     setSubmitStatus("idle")
 
     try {
+      // Auto-set dates and invoice number if empty
+      const today = new Date()
+      const thirtyDaysLater = new Date()
+      thirtyDaysLater.setDate(today.getDate() + 30)
+
+      const finalInvoiceDate = invoiceData.invoiceDate || formatDate(today)
+      const finalDueDate = invoiceData.dueDate || formatDate(thirtyDaysLater)
+      const finalInvNumber = invoiceData.invoiceNumber || generateDefaultInvoiceNumber();
+      
+      const totalAmount = calculateTotal();
+      const words = numberToWords(totalAmount);
+
+      // Update state for preview
+      setInvoiceData(prev => ({
+        ...prev,
+        invoiceDate: finalInvoiceDate,
+        dueDate: finalDueDate,
+        invoiceNumber: finalInvNumber,
+        totalAmountInWords: words
+      }))
+
+      // Prepare payload (minimal base64)
       const payload = {
         ...invoiceData,
+        invoiceDate: finalInvoiceDate,
+        dueDate: finalDueDate,
+        invoiceNumber: finalInvNumber,
+        totalAmountInWords: words,
+        hasLogo: !!invoiceData.companyLogo,
+        hasUpiQrCode: !!invoiceData.upiQrCode,
+        companyLogo: invoiceData.companyLogo ? "EXISTS" : null,
+        upiQrCode: invoiceData.upiQrCode ? "EXISTS" : null,
         subtotal: calculateSubtotal(),
         taxAmount: calculateTax(),
-        total: calculateTotal(),
+        total: totalAmount,
         currencySymbol: getCurrentCurrency().symbol,
       }
 
@@ -310,6 +340,11 @@ export default function InvoiceGenerator() {
       if (response.ok) {
         setSubmitStatus("success")
         setShowInvoicePreview(true)
+        // Scroll to preview
+        setTimeout(() => {
+          const el = document.getElementById('invoice-preview-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 100)
       } else {
         setSubmitStatus("error")
       }
@@ -322,112 +357,65 @@ export default function InvoiceGenerator() {
     }
   }
 
-  const generatePDF = () => {
-    const doc = new jsPDF()
-    const currency = getCurrentCurrency()
+    const generatePDF = async () => {
+    const element = document.getElementById("invoice-preview")
+    if (!element) return
 
-    // Use text representation for currency symbols to avoid encoding issues
-    const getCurrencyText = (symbol: string) => {
-      switch (symbol) {
-        case "₹":
-          return "Rs."
-        case "$":
-          return "$"
-        case "€":
-          return "EUR"
-        case "£":
-          return "GBP"
-        case "¥":
-          return "JPY"
-        default:
-          return symbol
+    setIsGeneratingPDF(true)
+    
+    // Wait for the DOM to apply the compact class
+    await new Promise(resolve => setTimeout(resolve, 100))
+
+    try {
+      const fullHeight = element.scrollHeight
+      const fullWidth = element.scrollWidth
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        width: fullWidth,
+        height: fullHeight,
+        windowWidth: fullWidth,
+        windowHeight: fullHeight,
+        scrollX: 0,
+        scrollY: 0
+      })
+
+      const imgData = canvas.toDataURL("image/jpeg", 0.98)
+
+      const pdf = new jsPDF("p", "mm", "a4")
+
+      const pageWidth = 210
+      const pageHeight = 297
+
+      const margin = 0
+      const usableWidth = pageWidth - margin * 2
+      const usableHeight = pageHeight - margin * 2
+
+      const imgWidth = usableWidth
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+
+      let finalWidth = imgWidth
+      let finalHeight = imgHeight
+
+      if (finalHeight > usableHeight) {
+        const scaleFactor = usableHeight / finalHeight
+        finalHeight = usableHeight
+        finalWidth = finalWidth * scaleFactor
       }
+
+      const x = (pageWidth - finalWidth) / 2
+      const y = (pageHeight - finalHeight) / 2
+
+      pdf.addImage(imgData, "JPEG", x, y, finalWidth, finalHeight)
+      pdf.save(`Invoice-${invoiceData.invoiceNumber}.pdf`)
+    } catch (error) {
+      console.error("PDF generation failed:", error)
+      alert("Failed to generate PDF. Please try again.")
+    } finally {
+      setIsGeneratingPDF(false)
     }
-
-    const currencyText = getCurrencyText(currency.symbol)
-
-    const formatPDFCurrency = (amount: number) => {
-      return `${currencyText}${amount.toFixed(2)}`
-    }
-
-    // Header
-    doc.setFontSize(20)
-    doc.setFont("helvetica", "bold")
-    doc.text("INVOICE", 20, 30)
-
-    // Invoice details
-    doc.setFontSize(10)
-    doc.setFont("helvetica", "normal")
-    doc.text(`Invoice #: ${invoiceData.invoiceNumber}`, 140, 30)
-    doc.text(`Invoice Date: ${invoiceData.invoiceDate}`, 140, 40)
-    doc.text(`Amount Due: ${formatPDFCurrency(calculateTotal())}`, 140, 50)
-
-    // Bill From
-    doc.setFont("helvetica", "bold")
-    doc.text("BILL FROM:", 20, 60)
-    doc.setFont("helvetica", "normal")
-    let yPos = 70
-    doc.text(invoiceData.companyName, 20, yPos)
-    yPos += 10
-    doc.text(invoiceData.companyAddress, 20, yPos)
-    yPos += 10
-    doc.text(`${invoiceData.companyCity}, ${invoiceData.companyState} ${invoiceData.companyZip}`, 20, yPos)
-    yPos += 10
-    doc.text(invoiceData.companyCountry, 20, yPos)
-    yPos += 10
-    doc.text(invoiceData.companyEmail, 20, yPos)
-
-    // Bill To
-    doc.setFont("helvetica", "bold")
-    doc.text("BILL TO:", 20, yPos + 20)
-    doc.setFont("helvetica", "normal")
-    yPos += 30
-    doc.text(invoiceData.customerName, 20, yPos)
-    yPos += 10
-    doc.text(invoiceData.customerAddress, 20, yPos)
-    yPos += 10
-    doc.text(`${invoiceData.customerCity}, ${invoiceData.customerState} ${invoiceData.customerZip}`, 20, yPos)
-    yPos += 10
-    doc.text(invoiceData.customerCountry, 20, yPos)
-    yPos += 10
-    doc.text(invoiceData.customerEmail, 20, yPos)
-
-    // Items table with correct headers
-    const tableData = invoiceData.lineItems.map((item) => [
-      item.item,
-      item.description,
-      item.quantity.toString(),
-      formatPDFCurrency(item.price),
-      formatPDFCurrency(item.quantity * item.price),
-    ])
-
-    doc.autoTable({
-      startY: yPos + 20,
-      head: [["Item", "Description", "Quantity", "Price", "Amount"]],
-      body: tableData,
-      theme: "grid",
-      headStyles: { fillColor: [255, 116, 53] },
-    })
-
-    // Summary
-    const finalY = doc.lastAutoTable.finalY + 10
-    const subtotal = calculateSubtotal()
-    const tax = calculateTax()
-    const total = calculateTotal()
-
-    doc.text(`Subtotal: ${formatPDFCurrency(subtotal)}`, 140, finalY)
-    doc.text(`Tax (${invoiceData.taxRate}%): ${formatPDFCurrency(tax)}`, 140, finalY + 10)
-    doc.setFont("helvetica", "bold")
-    doc.text(`Total: ${formatPDFCurrency(total)}`, 140, finalY + 20)
-
-    // Notes
-    if (invoiceData.notes) {
-      doc.setFont("helvetica", "normal")
-      doc.text("Notes:", 20, finalY + 40)
-      doc.text(invoiceData.notes, 20, finalY + 50, { maxWidth: 170 })
-    }
-
-    doc.save(`Invoice-${invoiceData.invoiceNumber}.pdf`)
   }
 
   const nextStep = () => {
@@ -445,13 +433,13 @@ export default function InvoiceGenerator() {
         <div className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-zinc-900 dark:to-zinc-900 rounded-2xl p-8 mb-8 text-center border border-gray-200 dark:border-gray-800">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="text-4xl font-bold mb-2 text-gray-900 dark:text-white font-poppins">
-              Free Invoice Generator
+              Professional Invoice Generator
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">Create professional invoices in minutes</p>
+            <p className="text-gray-600 dark:text-gray-400">GST-Compliant & Professional Design</p>
           </motion.div>
         </div>
 
-        <Card className="shadow-xl border-0 bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-gray-800">
+        <Card className="shadow-xl border-0 bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-gray-800" id="invoice-preview-section">
           <CardHeader className="text-center pb-6">
             <div className="flex justify-center items-center gap-2 mb-4">
               {[1, 2, 3].map((step) => (
@@ -477,13 +465,13 @@ export default function InvoiceGenerator() {
                 </div>
               ))}
             </div>
-            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white font-poppins">
+            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white font-poppins text-center">
               STEP {currentStep} OF 3
             </CardTitle>
           </CardHeader>
 
           <CardContent className="p-6">
-            <AnimatePresence mode="wait">
+                        <AnimatePresence mode="wait">
               {currentStep === 1 && (
                 <motion.div
                   key="step1"
@@ -492,129 +480,202 @@ export default function InvoiceGenerator() {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6"
                 >
-                  <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white font-poppins">
-                    Enter your company information
+                  <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white font-poppins text-center">
+                    Biller Information
                   </h2>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Logo Upload Section */}
+                  <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900/50 mb-8">
+                    {invoiceData.companyLogo ? (
+                      <div className="relative group">
+                        <img src={invoiceData.companyLogo} alt="Company Logo" className="max-h-32 rounded-lg shadow-sm" />
+                        <button 
+                          onClick={() => updateInvoiceData('companyLogo', null)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <Label htmlFor="logo-upload" className="cursor-pointer flex flex-col items-center gap-2">
+                          <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-full text-orange-500">
+                             <Plus className="h-8 w-8" />
+                          </div>
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Upload Company Logo</span>
+                        </Label>
+                        <Input 
+                          id="logo-upload" 
+                          type="file" 
+                          accept="image/*" 
+                          className="hidden" 
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                updateInvoiceData('companyLogo', reader.result);
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="companyName" className="text-gray-900 dark:text-white">
-                        Your company name
-                      </Label>
+                      <Label htmlFor="companyName">Business Name *</Label>
                       <Input
                         id="companyName"
-                        placeholder="Your company name"
+                        placeholder="e.g. Kozker Technologies"
                         value={invoiceData.companyName}
                         onChange={(e) => updateInvoiceData("companyName", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="companyEmail" className="text-gray-900 dark:text-white">
-                        Your email address
-                      </Label>
+                      <Label htmlFor="companyGSTIN">GSTIN (Optional)</Label>
+                      <Input
+                        id="companyGSTIN"
+                        placeholder="e.g. 29AAAAA0000A1Z5"
+                        value={invoiceData.companyGSTIN}
+                        onChange={(e) => updateInvoiceData("companyGSTIN", e.target.value.toUpperCase())}
+                        className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="companyEmail">Email Address *</Label>
                       <Input
                         id="companyEmail"
                         type="email"
-                        placeholder="Your email address"
+                        placeholder="contact@business.com"
                         value={invoiceData.companyEmail}
                         onChange={(e) => updateInvoiceData("companyEmail", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="companyPhone">Phone Number *</Label>
+                      <Input
+                        id="companyPhone"
+                        placeholder="+91 9876543210"
+                        value={invoiceData.companyPhone}
+                        onChange={(e) => updateInvoiceData("companyPhone", e.target.value)}
+                        className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="companyAddress" className="text-gray-900 dark:text-white">
-                      Address
-                    </Label>
+                    <Label htmlFor="companyWebsite">Website (Optional)</Label>
                     <Input
-                      id="companyAddress"
-                      placeholder="Address"
-                      value={invoiceData.companyAddress}
-                      onChange={(e) => updateInvoiceData("companyAddress", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
+                      id="companyWebsite"
+                      placeholder="www.business.com"
+                      value={invoiceData.companyWebsite}
+                      onChange={(e) => updateInvoiceData("companyWebsite", e.target.value)}
+                      className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="companyCity" className="text-gray-900 dark:text-white">
-                        City
-                      </Label>
-                      <Input
-                        id="companyCity"
-                        placeholder="City"
-                        value={invoiceData.companyCity}
-                        onChange={(e) => updateInvoiceData("companyCity", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="companyZip" className="text-gray-900 dark:text-white">
-                        Zip/postal code
-                      </Label>
-                      <Input
-                        id="companyZip"
-                        placeholder="Zip/postal code"
-                        value={invoiceData.companyZip}
-                        onChange={(e) => updateInvoiceData("companyZip", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="companyCountry" className="text-gray-900 dark:text-white">
-                        Country/Region
-                      </Label>
-                      <Select
-                        value={invoiceData.companyCountry}
-                        onValueChange={(value) => updateInvoiceData("companyCountry", value)}
-                      >
-                        <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
-                          {countries.map((country) => (
-                            <SelectItem key={country} value={country} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
-                              {country}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="companyState" className="text-gray-900 dark:text-white">
-                        State/Province
-                      </Label>
-                      {shouldShowStateDropdown(invoiceData.companyCountry) ? (
-                        <Select
-                          value={invoiceData.companyState}
-                          onValueChange={(value) => updateInvoiceData("companyState", value)}
-                        >
-                          <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
-                            <SelectValue placeholder="Select state/province" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
-                            {getStatesForCountry(invoiceData.companyCountry).map((state) => (
-                              <SelectItem key={state} value={state} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
-                                {state}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      ) : (
+                  <div className="border-t border-gray-100 dark:border-zinc-800 pt-6 mt-6">
+                    <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white font-poppins text-center">Bank & Payment Details</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                       <div className="space-y-2">
+                        <Label htmlFor="bankName">Bank Name</Label>
                         <Input
-                          id="companyState"
-                          placeholder="State/Province"
-                          value={invoiceData.companyState}
-                          onChange={(e) => updateInvoiceData("companyState", e.target.value)}
-                          className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
+                          id="bankName"
+                          placeholder="e.g. HDFC Bank"
+                          value={invoiceData.bankName}
+                          onChange={(e) => updateInvoiceData("bankName", e.target.value)}
+                          className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
                         />
-                      )}
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="accountHolder">Account Holder Name</Label>
+                        <Input
+                          id="accountHolder"
+                          placeholder="e.g. Kozker Technologies"
+                          value={invoiceData.accountHolder}
+                          onChange={(e) => updateInvoiceData("accountHolder", e.target.value)}
+                          className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
+                        />
+                      </div>
                     </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="accountNumber">Account Number</Label>
+                        <Input
+                          id="accountNumber"
+                          placeholder="e.g. 50100000000000"
+                          value={invoiceData.accountNumber}
+                          onChange={(e) => updateInvoiceData("accountNumber", e.target.value)}
+                          className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="ifscCode">IFSC Code</Label>
+                        <Input
+                          id="ifscCode"
+                          placeholder="e.g. HDFC0000001"
+                          value={invoiceData.ifscCode}
+                          onChange={(e) => updateInvoiceData("ifscCode", e.target.value.toUpperCase())}
+                          className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 uppercase"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="branch">Branch</Label>
+                        <Input
+                          id="branch"
+                          placeholder="e.g. Koramangala"
+                          value={invoiceData.branch}
+                          onChange={(e) => updateInvoiceData("branch", e.target.value)}
+                          className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900/50">
+                    {invoiceData.upiQrCode ? (
+                      <div className="relative group">
+                        <img src={invoiceData.upiQrCode} alt="UPI QR Code" className="max-h-32 rounded-lg shadow-sm" />
+                        <button 
+                          onClick={() => updateInvoiceData('upiQrCode', null)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <Label htmlFor="qr-upload" className="cursor-pointer flex flex-col items-center gap-2">
+                          <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-full text-orange-500">
+                             <Plus className="h-8 w-8" />
+                          </div>
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Upload Payment QR Code Optional</span>
+                        </Label>
+                        <Input 
+                          id="qr-upload" 
+                          type="file" 
+                          accept=".png,.jpg,.jpeg,.svg" 
+                          className="hidden" 
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                updateInvoiceData('upiQrCode', reader.result);
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
                   </div>
                 </motion.div>
               )}
@@ -627,152 +688,97 @@ export default function InvoiceGenerator() {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6"
                 >
-                  <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white font-poppins">
-                    Enter customer and invoice information
+                  <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white font-poppins text-center">
+                    Customer & Invoice Information
                   </h2>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="customerName" className="text-gray-900 dark:text-white">
-                        Your customer's name
-                      </Label>
+                      <Label htmlFor="customerName">Customer Name *</Label>
                       <Input
                         id="customerName"
-                        placeholder="Your customer's name"
+                        placeholder="e.g. John Doe"
                         value={invoiceData.customerName}
                         onChange={(e) => updateInvoiceData("customerName", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="customerEmail" className="text-gray-900 dark:text-white">
-                        Your customer's email
-                      </Label>
+                      <Label htmlFor="customerGSTIN">Customer GSTIN (Optional)</Label>
+                      <Input
+                        id="customerGSTIN"
+                        placeholder="e.g. 29BBBBB0000B1Z5"
+                        value={invoiceData.customerGSTIN}
+                        onChange={(e) => updateInvoiceData("customerGSTIN", e.target.value.toUpperCase())}
+                        className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="customerEmail">Customer Email</Label>
                       <Input
                         id="customerEmail"
                         type="email"
-                        placeholder="Your customer's email"
+                        placeholder="customer@email.com"
                         value={invoiceData.customerEmail}
                         onChange={(e) => updateInvoiceData("customerEmail", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
+                        className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="invoiceNumber" className="text-gray-900 dark:text-white">
-                        Invoice number
-                      </Label>
+                      <Label htmlFor="customerPhone">Customer Phone</Label>
                       <Input
-                        id="invoiceNumber"
-                        placeholder="01"
-                        value={invoiceData.invoiceNumber}
-                        onChange={(e) => updateInvoiceData("invoiceNumber", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
+                        id="customerPhone"
+                        placeholder="+91 9876543210"
+                        value={invoiceData.customerPhone}
+                        onChange={(e) => updateInvoiceData("customerPhone", e.target.value)}
+                        className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="customerAddress" className="text-gray-900 dark:text-white">
-                      Customer's address
-                    </Label>
-                    <Input
-                      id="customerAddress"
-                      placeholder="Customer's address"
-                      value={invoiceData.customerAddress}
-                      onChange={(e) => updateInvoiceData("customerAddress", e.target.value)}
-                      className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="customerCity" className="text-gray-900 dark:text-white">
-                        City
-                      </Label>
-                      <Input
-                        id="customerCity"
-                        placeholder="City"
-                        value={invoiceData.customerCity}
-                        onChange={(e) => updateInvoiceData("customerCity", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="customerZip" className="text-gray-900 dark:text-white">
-                        Zip/postal code
-                      </Label>
-                      <Input
-                        id="customerZip"
-                        placeholder="Zip/postal code"
-                        value={invoiceData.customerZip}
-                        onChange={(e) => updateInvoiceData("customerZip", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="invoiceDate" className="text-gray-900 dark:text-white">
-                        Invoice date
-                      </Label>
-                      <Input
-                        id="invoiceDate"
-                        type="date"
-                        value={invoiceData.invoiceDate}
-                        onChange={(e) => updateInvoiceData("invoiceDate", e.target.value)}
-                        className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="customerCountry" className="text-gray-900 dark:text-white">
-                        Country/Region
-                      </Label>
-                      <Select
-                        value={invoiceData.customerCountry}
-                        onValueChange={(value) => updateInvoiceData("customerCountry", value)}
-                      >
-                        <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
-                          {countries.map((country) => (
-                            <SelectItem key={country} value={country} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
-                              {country}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="customerState" className="text-gray-900 dark:text-white">
-                        State/Province
-                      </Label>
-                      {shouldShowStateDropdown(invoiceData.customerCountry) ? (
-                        <Select
-                          value={invoiceData.customerState}
-                          onValueChange={(value) => updateInvoiceData("customerState", value)}
-                        >
-                          <SelectTrigger className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500">
-                            <SelectValue placeholder="Select state/province" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
-                            {getStatesForCountry(invoiceData.customerCountry).map((state) => (
-                              <SelectItem key={state} value={state} className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
-                                {state}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      ) : (
+                  <div className="border-t border-gray-100 dark:border-zinc-800 pt-6 mt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="invoiceNumber">Invoice #</Label>
                         <Input
-                          id="customerState"
-                          placeholder="State/Province"
-                          value={invoiceData.customerState}
-                          onChange={(e) => updateInvoiceData("customerState", e.target.value)}
-                          className="bg-gray-50 dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-orange-500"
+                          id="invoiceNumber"
+                          placeholder="e.g. INV-001"
+                          value={invoiceData.invoiceNumber}
+                          onChange={(e) => updateInvoiceData("invoiceNumber", e.target.value)}
+                          className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
                         />
-                      )}
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="placeOfSupply">Place of Supply</Label>
+                        <Input
+                          id="placeOfSupply"
+                          placeholder="e.g. Karnataka"
+                          value={invoiceData.placeOfSupply}
+                          onChange={(e) => updateInvoiceData("placeOfSupply", e.target.value)}
+                          className="bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                           <Label htmlFor="taxRate">Tax Rate (%)</Label>
+                           {isEditingTax ? (
+                              <button onClick={() => setIsEditingTax(false)} className="text-[10px] text-blue-500">Save</button>
+                           ) : (
+                              <button onClick={() => setIsEditingTax(true)} className="text-[10px] text-gray-400 font-medium flex items-center gap-1 cursor-pointer"><Edit className="h-2.5 w-2.5" /> Edit</button>
+                           )}
+                        </div>
+                        <Input
+                          id="taxRate"
+                          type="number"
+                          disabled={!isEditingTax}
+                          value={invoiceData.taxRate}
+                          onChange={(e) => updateInvoiceData("taxRate", Number(e.target.value))}
+                          className={`bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 ${!isEditingTax ? 'opacity-50' : ''}`}
+                        />
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -1028,186 +1034,208 @@ export default function InvoiceGenerator() {
               </motion.div>
             )}
 
-            {showInvoicePreview && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
-                <Card className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-gray-800">
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle className="text-gray-900 dark:text-white font-poppins">
-                      Invoice Preview
-                    </CardTitle>
+                        {showInvoicePreview && (
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-8 space-y-4">
+                                <div className="flex flex-wrap justify-between items-center bg-white dark:bg-zinc-800 p-4 rounded-lg border border-gray-200 dark:border-zinc-700 shadow-sm gap-4">
+                  <div className="flex gap-2">
                     <Button
-                      onClick={generatePDF}
-                      className="bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold transition-opacity px-5 py-3 rounded-lg"
+                      onClick={() => setShowInvoicePreview(false)}
+                      variant="outline"
+                      className="border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold"
                     >
-                      Download PDF
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Invoice
                     </Button>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="max-w-4xl mx-auto bg-white dark:bg-zinc-900 rounded-lg p-6">
-                      {/* Header */}
-                      <div className="flex justify-between items-start mb-8">
-                        <div>
-                          <h1 className="text-3xl font-bold text-gray-900 dark:text-white font-poppins">
-                            INVOICE
-                          </h1>
-                        </div>
-                        <div className="text-right">
-                          <div className="mb-2">
-                            <span className="font-semibold text-gray-900 dark:text-white">
-                              INVOICE #
-                            </span>
-                            <div className="text-gray-600 dark:text-gray-400">{invoiceData.invoiceNumber}</div>
-                          </div>
-                          <div className="mb-2">
-                            <span className="font-semibold text-gray-900 dark:text-white">
-                              INVOICE DATE
-                            </span>
-                            <div className="text-gray-600 dark:text-gray-400">{invoiceData.invoiceDate}</div>
-                          </div>
-                          <div>
-                            <span className="font-semibold text-gray-900 dark:text-white">
-                              AMOUNT DUE
-                            </span>
-                            <div className="text-xl font-bold text-orange-500">
-                              {formatCurrency(calculateTotal())}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    <Button
+                      onClick={resetForm}
+                      variant="ghost"
+                      className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                    >
+                      New Invoice
+                    </Button>
+                  </div>
+                  <Button
+                    onClick={generatePDF}
+                    disabled={isGeneratingPDF}
+                    className="bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold transition-opacity px-5 py-3 rounded-lg"
+                  >
+                    {isGeneratingPDF ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Generating PDF...
+                      </>
+                    ) : (
+                      "Download PDF"
+                    )}
+                  </Button>
+                </div>
 
-                      {/* Bill From and Bill To */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                        <div>
-                          <h3 className="font-bold mb-3 text-gray-900 dark:text-white">
-                            BILL FROM:
-                          </h3>
-                          <div className="text-gray-600 dark:text-gray-400 space-y-1">
-                            <div className="font-semibold">{invoiceData.companyName}</div>
-                            <div>{invoiceData.companyAddress}</div>
-                            <div>
-                              {invoiceData.companyCity}, {invoiceData.companyState} {invoiceData.companyZip}
-                            </div>
-                            <div>{invoiceData.companyCountry}</div>
-                            <div>{invoiceData.companyEmail}</div>
-                          </div>
-                        </div>
-                        <div>
-                          <h3 className="font-bold mb-3 text-gray-900 dark:text-white">
-                            BILL TO:
-                          </h3>
-                          <div className="text-gray-600 dark:text-gray-400 space-y-1">
-                            <div className="font-semibold">{invoiceData.customerName}</div>
-                            <div>{invoiceData.customerAddress}</div>
-                            <div>
-                              {invoiceData.customerCity}, {invoiceData.customerState} {invoiceData.customerZip}
-                            </div>
-                            <div>{invoiceData.customerCountry}</div>
-                            <div>{invoiceData.customerEmail}</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Items Table */}
-                      <div className="mb-8">
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse">
-                            <thead>
-                              <tr className="bg-gray-50 dark:bg-zinc-800">
-                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
-                                  Item
-                                </th>
-                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
-                                  Description
-                                </th>
-                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center font-semibold text-gray-900 dark:text-white">
-                                  Quantity
-                                </th>
-                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-right font-semibold text-gray-900 dark:text-white">
-                                  Price
-                                </th>
-                                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-right font-semibold text-gray-900 dark:text-white">
-                                  Amount
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {invoiceData.lineItems.map((item, index) => (
-                                <tr key={item.id}>
-                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-gray-600 dark:text-gray-400">
-                                    {item.item}
-                                  </td>
-                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-gray-600 dark:text-gray-400">
-                                    {item.description}
-                                  </td>
-                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-gray-600 dark:text-gray-400">
-                                    {item.quantity}
-                                  </td>
-                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-right text-gray-600 dark:text-gray-400">
-                                    {formatCurrency(item.price)}
-                                  </td>
-                                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-right font-semibold text-gray-600 dark:text-gray-400">
-                                    {formatCurrency(item.quantity * item.price)}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-
-                      {/* Summary */}
-                      <div className="flex justify-end mb-8">
-                        <div className="w-64">
-                          <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                            <span className="text-gray-600 dark:text-gray-400">SUBTOTAL</span>
-                            <span className="font-semibold text-gray-600 dark:text-gray-400">
-                              {formatCurrency(calculateSubtotal())}
-                            </span>
-                          </div>
-                          <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                            <span className="text-gray-600 dark:text-gray-400">TAX ({invoiceData.taxRate}%)</span>
-                            <span className="font-semibold text-gray-600 dark:text-gray-400">
-                              {formatCurrency(calculateTax())}
-                            </span>
-                          </div>
-                          <div className="bg-orange-500 flex justify-between py-3 text-white font-bold text-lg rounded-lg mt-2 px-4">
-                            <span>TOTAL</span>
-                            <span>{formatCurrency(calculateTotal())}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Notes */}
-                      {invoiceData.notes && (
-                        <div className="mb-8">
-                          <h3 className="font-bold mb-3 text-gray-900 dark:text-white">
-                            Notes:
-                          </h3>
-                          <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
-                            {invoiceData.notes}
-                          </p>
-                        </div>
+                                                <div 
+                  id="invoice-preview"
+                  className={`bg-white text-gray-900 p-12 rounded-lg shadow-2xl border border-gray-200 flex flex-col ${isGeneratingPDF ? 'invoice-pdf-compact' : ''}`}
+                  style={{ fontFamily: "'Inter', sans-serif" }}
+                >
+                  {/* Header */}
+                  <div className="flex justify-between items-start mb-12">
+                    <div>
+                      {invoiceData.companyLogo ? (
+                        <img src={invoiceData.companyLogo} alt="Logo" className="max-h-20 max-w-[200px] object-contain mb-8" />
+                      ) : (
+                         <div className="text-2xl font-bold text-orange-600 mb-8">{invoiceData.companyName}</div>
                       )}
-
-                      {/* Actions */}
-                      <div className="flex justify-center gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <Button
-                          onClick={() => setShowInvoicePreview(false)}
-                          variant="outline"
-                          className="border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-                        >
-                          Back to Form
-                        </Button>
-                        <Button
-                          onClick={generatePDF}
-                          className="bg-orange-500 hover:bg-orange-600 dark:hover:bg-[#d45616] text-white font-semibold transition-opacity px-6 py-3 rounded-lg"
-                        >
-                          Download PDF
-                        </Button>
+                      <div className="text-sm space-y-1">
+                        <p className="font-black text-xl tracking-tight text-gray-800">{invoiceData.companyName}</p>
+                        <p className="text-gray-500">{invoiceData.companyEmail} • {invoiceData.companyPhone}</p>
+                        {invoiceData.companyGSTIN && <p className="text-gray-700 bg-gray-50 inline-block px-2 py-0.5 rounded border">GSTIN: <span className="font-bold uppercase tracking-wider">{invoiceData.companyGSTIN}</span></p>}
+                        {invoiceData.companyWebsite && <p className="text-blue-600 text-xs mt-2 underline">{invoiceData.companyWebsite}</p>}
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                    <div className="text-right">
+                      <h1 className="text-7xl font-black text-gray-100 mb-8 tracking-tighter leading-none">INVOICE</h1>
+                      <div className="space-y-3 mt-4 text-sm">
+                        <div className="flex flex-col items-end">
+                            <span className="text-[10px] font-black uppercase text-gray-400">Invoice Number</span>
+                            <span className="font-black text-lg text-orange-600 tracking-wider">{invoiceData.invoiceNumber}</span>
+                        </div>
+                        <div className="flex flex-col items-end">
+                            <span className="text-[10px] font-black uppercase text-gray-400">Date Issued</span>
+                            <span className="font-bold whitespace-nowrap text-gray-700">{formatDisplayDate(invoiceData.invoiceDate)}</span>
+                        </div>
+                        <div className="flex flex-col items-end">
+                            <span className="text-[10px] font-black uppercase text-gray-400">Payment Due</span>
+                            <span className="font-bold whitespace-nowrap text-orange-600 font-bold">{formatDisplayDate(invoiceData.dueDate)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bill To / Details */}
+                  <div className="grid grid-cols-2 gap-12 mb-12 py-10 border-y-2 border-gray-100">
+                    <div>
+                      <h3 className="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] mb-4">Billing Recipient</h3>
+                      <div className="space-y-1">
+                        <p className="font-black text-2xl text-gray-900 tracking-tight">{invoiceData.customerName}</p>
+                        {invoiceData.customerPhone && <p className="text-gray-500 font-medium">{invoiceData.customerPhone}</p>}
+                        {invoiceData.customerEmail && <p className="text-gray-400">{invoiceData.customerEmail}</p>}
+                        {invoiceData.customerGSTIN && <p className="text-gray-700 text-xs mt-2 font-semibold bg-gray-50 px-2 py-1 border rounded inline-block">GSTIN: <span className="uppercase tracking-wider">{invoiceData.customerGSTIN}</span></p>}
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 flex flex-col justify-center">
+                       <div className="flex justify-between items-center mb-4">
+                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Place of Supply</span>
+                          <span className="text-sm font-black text-gray-700 uppercase tracking-tight">{invoiceData.placeOfSupply || 'N/A'}</span>
+                       </div>
+                       <div className="border-t-2 border-dashed border-gray-200 pt-4">
+                          <p className="text-[10px] font-black text-orange-400 uppercase tracking-[0.2em] mb-1">Total Outstanding</p>
+                          <p className="text-4xl font-black text-gray-900 tracking-tighter">{formatCurrency(calculateTotal())}</p>
+                       </div>
+                    </div>
+                  </div>
+
+                  {/* Items Table */}
+                  <div className="flex-grow mb-12">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b-4 border-gray-900 text-gray-900">
+                          <th className="py-6 text-left text-[10px] font-black uppercase tracking-[0.2em] w-3/5">Description of Services</th>
+                          <th className="py-6 text-center text-[10px] font-black uppercase tracking-[0.2em]">Qty</th>
+                          <th className="py-6 text-right text-[10px] font-black uppercase tracking-[0.2em]">Rate</th>
+                          <th className="py-6 text-right text-[10px] font-black uppercase tracking-[0.2em]">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {invoiceData.lineItems.map((item) => (
+                          <tr key={item.id} className="hover:bg-gray-50/50 transition-colors">
+                            <td className="py-8 pr-8">
+                              <p className="font-black text-gray-900 text-lg tracking-tight">{item.item}</p>
+                              <p className="text-xs text-gray-500 mt-2 font-medium leading-relaxed">{item.description}</p>
+                            </td>
+                            <td className="py-8 text-center font-black text-gray-600">{item.quantity}</td>
+                            <td className="py-8 text-right font-bold text-gray-600">{formatCurrency(item.price)}</td>
+                            <td className="py-8 text-right font-black text-gray-900 text-lg tracking-tight">{formatCurrency(item.quantity * item.price)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Bottom Footer Section */}
+                  <div className="mt-auto border-t-4 border-gray-900 pt-10 pdf-section bottom-summary-section">
+                      <div className="space-y-10 bank-details-section">
+                        {/* Bank Details */}
+                        {(invoiceData.bankName || invoiceData.accountNumber) && (
+                          <div className="space-y-4">
+                            <h4 className="text-[10px] font-black text-orange-600 uppercase tracking-[0.3em] flex items-center gap-2">Bank & Payment Details</h4>
+                            <div className="grid grid-cols-1 gap-1 text-xs">
+                               <p className="text-gray-400 font-black uppercase tracking-tighter">Bank Name: <span className="text-gray-900 font-black uppercase">{invoiceData.bankName}</span></p>
+                               <p className="text-gray-400 font-black uppercase tracking-tighter">Account Holder: <span className="text-gray-900 font-black uppercase">{invoiceData.accountHolder}</span></p>
+                               <p className="text-gray-400 font-black uppercase tracking-tighter">Account No: <span className="text-gray-900 font-black tracking-widest font-mono">{invoiceData.accountNumber}</span></p>
+                               <p className="text-gray-400 font-black uppercase tracking-tighter">IFSC Code: <span className="text-gray-900 font-black uppercase tracking-widest font-mono">{invoiceData.ifscCode}</span></p>
+                               <p className="text-gray-400 font-black uppercase tracking-tighter">Branch: <span className="text-gray-900 font-black uppercase">{invoiceData.branch}</span></p>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* UPI QR */}
+                        {invoiceData.upiQrCode && (
+                          <div className="flex items-center gap-6">
+                            <div className="p-3 border-2 border-gray-900 rounded-3xl bg-white shadow-xl">
+                               <img src={invoiceData.upiQrCode} alt="UPI QR" className="w-24 h-24 object-contain" />
+                               <p className="text-[8px] text-center mt-2 font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Scan to Pay Instantly</p>
+                            </div>
+                            <div className="space-y-1">
+                               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Instant Settlement</p>
+                               <p className="text-xs font-bold text-gray-800">Support all UPI Apps</p>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Amount in Words */}
+                        <div className="pt-4 space-y-2">
+                           <p className="text-[10px] font-black text-orange-500 uppercase tracking-[0.2em]">Total amount (in words)</p>
+                           <p className="text-lg font-black italic text-gray-900 leading-tight border-b-2 border-orange-100 pb-2">{invoiceData.currency === 'INR' ? 'INR ' : ''}{invoiceData.totalAmountInWords} {invoiceData.currency === 'INR' ? 'Rupees Only' : 'Only'}</p>
+                        </div>
+                        
+                        {invoiceData.notes && (
+                           <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Terms & Notes</h4>
+                            <p className="text-xs text-gray-600 leading-relaxed font-medium">{invoiceData.notes}</p>
+                           </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col justify-start totals-card">
+                        <div className="space-y-4 bg-gray-50 p-8 rounded-[3rem] border border-gray-100">
+                          <div className="flex justify-between items-center text-sm">
+                            <span className="text-gray-400 font-black uppercase tracking-widest">Net Subtotal</span>
+                            <span className="font-black text-gray-800 tracking-tight">{formatCurrency(calculateSubtotal())}</span>
+                          </div>
+                          <div className="flex justify-between items-center text-xs">
+                            <span className="text-gray-400 font-black uppercase tracking-widest">CGST ({(invoiceData.taxRate / 2).toFixed(1)}%)</span>
+                            <span className="font-bold text-gray-600">{formatCurrency(calculateTax() / 2)}</span>
+                          </div>
+                          <div className="flex justify-between items-center text-xs">
+                            <span className="text-gray-400 font-black uppercase tracking-widest">SGST ({(invoiceData.taxRate / 2).toFixed(1)}%)</span>
+                            <span className="font-bold text-gray-600">{formatCurrency(calculateTax() / 2)}</span>
+                          </div>
+                          <div className="flex justify-between items-center pt-6 mt-2 border-t-2 border-gray-200">
+                            <span className="text-xs font-black uppercase tracking-[0.3em] text-gray-400">Grand Total</span>
+                            <div className="text-right">
+                               <span className="text-3xl font-black text-orange-600 tracking-tighter">{formatCurrency(calculateTotal())}</span>
+                               <p className="text-[8px] font-black text-gray-300 uppercase tracking-widest mt-1">Total Payable</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <div className="mt-20 flex justify-between items-end">
+                        <div className="space-y-1">
+                            <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest">This is a system generated document</p>
+                            <p className="text-[8px] text-gray-300 font-bold uppercase tracking-tight">Generated via Kozker Invoice Studio</p>
+                        </div>
+                        <div className="h-1 w-24 bg-gray-900"></div>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             )}
           </CardContent>
@@ -1216,6 +1244,62 @@ export default function InvoiceGenerator() {
 
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+        
+        #invoice-preview {
+          width: 794px;
+          min-height: auto;
+          max-height: none;
+          background: #ffffff;
+          color: #111827;
+          overflow: visible;
+          box-sizing: border-box;
+        }
+
+        .invoice-pdf-compact {
+          width: 794px !important;
+          padding: 36px 44px !important;
+          transform: none !important;
+        }
+
+        .invoice-pdf-compact img[alt="Logo"] {
+          max-height: 54px !important;
+        }
+        
+        .invoice-pdf-compact .mb-12 {
+          margin-bottom: 32px !important;
+        }
+        
+        .invoice-pdf-compact .py-10 {
+          padding-top: 24px !important;
+          padding-bottom: 24px !important;
+        }
+
+        .invoice-pdf-compact .py-8 {
+          padding-top: 12px !important;
+          padding-bottom: 12px !important;
+        }
+        
+        .invoice-pdf-compact img[alt="UPI QR Code"] {
+          width: 90px !important;
+          height: 90px !important;
+        }
+
+        .invoice-pdf-compact .mt-auto {
+          gap: 20px !important;
+          margin-top: 28px !important;
+        }
+        .pdf-section {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+        .bottom-summary-section {
+          display: grid;
+          grid-template-columns: 1fr 320px;
+          gap: 32px;
+          align-items: start;
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
         
         /* Remove number input spinners */
         input[type="number"]::-webkit-outer-spin-button,
