@@ -246,7 +246,7 @@ export default function ProposalGenerator() {
         generatedAt: new Date().toISOString()
       }
 
-      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook-test/fdf6b12c-513e-4fd8-a13c-b3049fc958f7", {
+      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/fdf6b12c-513e-4fd8-a13c-b3049fc958f7", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
