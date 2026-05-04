@@ -301,44 +301,44 @@ export default function KeywordContentGapReport() {
 
   // --- Helpers ---
   const getScoreColor = (score: number) => {
-    if (score <= 40) return "text-red-500 border-red-200 bg-red-50";
-    if (score <= 70) return "text-yellow-600 border-yellow-200 bg-yellow-50";
-    return "text-green-600 border-green-200 bg-green-50";
+    if (score <= 40) return "text-red-500 dark:text-[#EF4444] border-red-200 dark:border-[#EF4444]/30 bg-red-50 dark:bg-[#EF4444]/10";
+    if (score <= 70) return "text-yellow-600 dark:text-[#FACC15] border-yellow-200 dark:border-[#FACC15]/30 bg-yellow-50 dark:bg-[#FACC15]/10";
+    return "text-green-600 dark:text-[#22C55E] border-green-200 dark:border-[#22C55E]/30 bg-green-50 dark:bg-[#22C55E]/10";
   }
 
   const getCompetitorTypeBadge = (type: string) => {
     const t = type.toLowerCase();
-    if (t === 'direct') return "bg-red-100 text-red-700";
-    if (t === 'indirect') return "bg-yellow-100 text-yellow-700";
-    if (t === 'marketplace') return "bg-blue-100 text-blue-700";
-    return "bg-slate-100 text-slate-700";
+    if (t === 'direct') return "bg-red-100 dark:bg-[#EF4444]/20 text-red-700 dark:text-[#EF4444] border-0";
+    if (t === 'indirect') return "bg-yellow-100 dark:bg-[#FACC15]/20 text-yellow-700 dark:text-[#FACC15] border-0";
+    if (t === 'marketplace') return "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 border-0";
+    return "bg-slate-100 dark:bg-[#0B1220] text-slate-700 dark:text-[#CBD5E1] border-0";
   }
 
   const getServiceMatchBadge = (match: string) => {
     const m = match.toLowerCase();
-    if (m === 'high') return "bg-green-100 text-green-700";
-    if (m === 'medium') return "bg-orange-100 text-orange-700";
-    if (m === 'low') return "bg-slate-100 text-slate-700";
-    return "bg-slate-100 text-slate-700";
+    if (m === 'high') return "bg-green-100 dark:bg-[#22C55E]/20 text-green-700 dark:text-[#22C55E] border-0";
+    if (m === 'medium') return "bg-orange-100 dark:bg-[#FF6B1A]/20 text-orange-700 dark:text-[#FF6B1A] border-0";
+    if (m === 'low') return "bg-slate-100 dark:bg-[#0B1220] text-slate-700 dark:text-[#CBD5E1] border-0";
+    return "bg-slate-100 dark:bg-[#0B1220] text-slate-700 dark:text-[#CBD5E1] border-0";
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 section-bg print:bg-white pb-20">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0F172A] section-bg print:bg-white pb-20">
 
       {/* Hero Section */}
-      <div className="bg-white border-b print:hidden">
+      <div className="bg-white dark:bg-[#111827] border-b dark:border-[#334155] print:hidden">
         <div className="max-w-4xl mx-auto px-4 py-12 text-center">
           <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center shadow-sm">
+            <div className="w-16 h-16 bg-orange-500 dark:bg-[#FF6B1A] rounded-2xl flex items-center justify-center shadow-sm">
               <Search className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">Keyword + Content Gap Report</h1>
-          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-6">
+          <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-[#F8FAFC] mb-4 tracking-tight">Keyword + Content Gap Report</h1>
+          <p className="text-lg md:text-xl text-slate-600 dark:text-[#CBD5E1] max-w-2xl mx-auto mb-6">
             Find keyword opportunities, missing content, and simple SEO actions for your website.
           </p>
-          <div className="inline-flex items-center gap-2 bg-slate-100 text-slate-600 px-4 py-2 rounded-full text-sm font-medium">
-            <CheckCircle2 className="w-4 h-4 text-green-600" />
+          <div className="inline-flex items-center gap-2 bg-slate-100 dark:bg-[rgba(255,255,255,0.08)] text-slate-600 dark:text-[#E2E8F0] px-4 py-2 rounded-full text-sm font-medium border border-transparent dark:border-[rgba(255,255,255,0.15)]">
+            <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-[#22C55E]" />
             Minimal input. Practical output. Built for business websites.
           </div>
         </div>
@@ -348,26 +348,26 @@ export default function KeywordContentGapReport() {
 
         {/* Input Card */}
         {!loading && !reportData && (
-          <Card className="max-w-2xl mx-auto shadow-sm border-slate-200">
+          <Card className="max-w-2xl mx-auto shadow-sm dark:shadow-none border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033]">
             <CardContent className="p-6 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
 
                 {error && (
-                  <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+                  <div className="p-4 bg-red-50 dark:bg-[#EF4444]/10 border border-red-200 dark:border-[#EF4444]/30 rounded-xl flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-[#EF4444] mt-0.5" />
                     <div>
-                      <p className="text-red-800 font-medium text-sm">{error}</p>
+                      <p className="text-red-800 dark:text-[#F8FAFC] font-medium text-sm">{error}</p>
                       {process.env.NODE_ENV === 'development' && (
-                        <p className="text-red-500 text-xs mt-1">Dev note: Webhook likely returned 404/CORS. Make sure N8N is running.</p>
+                        <p className="text-red-500 dark:text-[#EF4444]/80 text-xs mt-1">Dev note: Webhook likely returned 404/CORS. Make sure N8N is running.</p>
                       )}
                     </div>
                   </div>
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="websiteUrl" className="text-slate-800 font-semibold flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-slate-500" />
-                    Website URL <span className="text-red-500">*</span>
+                  <Label htmlFor="websiteUrl" className="text-slate-800 dark:text-[#CBD5E1] font-semibold flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-slate-500 dark:text-[#94A3B8]" />
+                    Website URL <span className="text-red-500 dark:text-[#FF6B1A]">*</span>
                   </Label>
                   <Input
                     id="websiteUrl"
@@ -377,14 +377,14 @@ export default function KeywordContentGapReport() {
                     onChange={handleInputChange}
                     placeholder="https://yourwebsite.com"
                     required
-                    className="h-12 border-slate-200 focus:border-orange-500 focus:ring-orange-500"
+                    className="h-12 border-slate-200 dark:border-[#334155] dark:bg-[#0B1220] dark:text-[#F8FAFC] dark:placeholder-[#64748B] focus:border-orange-500 dark:focus:border-[#FF6B1A] focus:ring-orange-500 dark:focus:ring-[rgba(255,107,26,0.25)]"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="location" className="text-slate-800 font-semibold flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-slate-500" />
+                    <Label htmlFor="location" className="text-slate-800 dark:text-[#CBD5E1] font-semibold flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-slate-500 dark:text-[#94A3B8]" />
                       Business Location
                     </Label>
                     <Input
@@ -394,13 +394,13 @@ export default function KeywordContentGapReport() {
                       value={formData.location}
                       onChange={handleInputChange}
                       placeholder="India, Kerala, UAE..."
-                      className="h-12 border-slate-200 focus:border-orange-500 focus:ring-orange-500"
+                      className="h-12 border-slate-200 dark:border-[#334155] dark:bg-[#0B1220] dark:text-[#F8FAFC] dark:placeholder-[#64748B] focus:border-orange-500 dark:focus:border-[#FF6B1A] focus:ring-orange-500 dark:focus:ring-[rgba(255,107,26,0.25)]"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="industry" className="text-slate-800 font-semibold flex items-center gap-2">
-                      <Tag className="w-4 h-4 text-slate-500" />
+                    <Label htmlFor="industry" className="text-slate-800 dark:text-[#CBD5E1] font-semibold flex items-center gap-2">
+                      <Tag className="w-4 h-4 text-slate-500 dark:text-[#94A3B8]" />
                       Industry / Topic
                     </Label>
                     <Input
@@ -410,12 +410,12 @@ export default function KeywordContentGapReport() {
                       value={formData.industry}
                       onChange={handleInputChange}
                       placeholder="SaaS, healthcare, e-commerce..."
-                      className="h-12 border-slate-200 focus:border-orange-500 focus:ring-orange-500"
+                      className="h-12 border-slate-200 dark:border-[#334155] dark:bg-[#0B1220] dark:text-[#F8FAFC] dark:placeholder-[#64748B] focus:border-orange-500 dark:focus:border-[#FF6B1A] focus:ring-orange-500 dark:focus:ring-[rgba(255,107,26,0.25)]"
                     />
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white h-14 text-lg rounded-xl shadow-sm transition-colors">
+                <Button type="submit" className="w-full bg-orange-500 dark:bg-[#FF6B1A] hover:bg-orange-600 dark:hover:bg-[#F97316] text-white disabled:opacity-60 h-14 text-lg rounded-xl shadow-sm transition-colors">
                   Generate Keyword + Content Gap Report
                 </Button>
               </form>
@@ -425,12 +425,12 @@ export default function KeywordContentGapReport() {
 
         {/* Loading Section */}
         {loading && (
-          <Card className="max-w-2xl mx-auto shadow-sm border-slate-200 text-center py-16">
+          <Card className="max-w-2xl mx-auto shadow-sm dark:shadow-none border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] text-center py-16">
             <CardContent>
               <div className="flex justify-center mb-6">
-                <Loader2 className="w-12 h-12 text-orange-500 animate-spin" />
+                <Loader2 className="w-12 h-12 text-orange-500 dark:text-[#FF6B1A] animate-spin" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-6">Analyzing your website</h3>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-[#F8FAFC] mb-6">Analyzing your website</h3>
 
               <div className="space-y-4 max-w-sm mx-auto text-left">
                 {loadingSteps.map((step, index) => {
@@ -439,13 +439,13 @@ export default function KeywordContentGapReport() {
                   return (
                     <div key={index} className={`flex items-center gap-3 transition-opacity duration-300 ${isPast || isActive ? 'opacity-100' : 'opacity-40'}`}>
                       {isPast ? (
-                        <CheckCircle2 className="w-5 h-5 text-green-500" />
+                        <CheckCircle2 className="w-5 h-5 text-green-500 dark:text-[#22C55E]" />
                       ) : isActive ? (
-                        <Loader2 className="w-5 h-5 text-orange-500 animate-spin" />
+                        <Loader2 className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A] animate-spin" />
                       ) : (
-                        <div className="w-5 h-5 rounded-full border-2 border-slate-200" />
+                        <div className="w-5 h-5 rounded-full border-2 border-slate-200 dark:border-[#334155]" />
                       )}
-                      <span className={`font-medium ${isActive ? 'text-slate-900' : 'text-slate-600'}`}>{step}</span>
+                      <span className={`font-medium ${isActive ? 'text-slate-900 dark:text-[#F8FAFC]' : 'text-slate-600 dark:text-[#CBD5E1]'}`}>{step}</span>
                     </div>
                   )
                 })}
@@ -460,14 +460,14 @@ export default function KeywordContentGapReport() {
 
             {/* Header Actions */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 print:hidden">
-              <Button onClick={resetForm} variant="outline" className="border-slate-300 text-slate-700">
+              <Button onClick={resetForm} variant="outline" className="border-slate-300 dark:border-[#334155] text-slate-700 dark:text-[#CBD5E1] dark:bg-transparent dark:hover:bg-slate-800">
                 &larr; New Report
               </Button>
               <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap w-full sm:w-auto">
-                <Button onClick={handleCopyReport} variant="outline" className="flex-1 sm:flex-none gap-2 border-slate-300 text-slate-700">
+                <Button onClick={handleCopyReport} variant="outline" className="flex-1 sm:flex-none gap-2 border-slate-300 dark:border-[#334155] text-slate-700 dark:text-[#CBD5E1] dark:bg-transparent dark:hover:bg-slate-800">
                   <Copy className="w-4 h-4" /> Copy Report
                 </Button>
-                <Button onClick={handlePrint} className="flex-1 sm:flex-none gap-2 bg-slate-900 hover:bg-slate-800 text-white">
+                <Button onClick={handlePrint} className="flex-1 sm:flex-none gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200">
                   <Download className="w-4 h-4" /> Download Full Report
                 </Button>
               </div>
@@ -479,48 +479,48 @@ export default function KeywordContentGapReport() {
             </div>
 
             {/* 1. Header Summary */}
-            <Card className="shadow-sm border-slate-200 overflow-hidden break-inside-avoid">
-              <div className="bg-slate-900 px-6 py-4 border-b border-slate-800">
+            <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] overflow-hidden break-inside-avoid">
+              <div className="bg-slate-900 dark:bg-[#0B1220] px-6 py-4 border-b border-slate-800 dark:border-[#334155]">
                 <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-orange-400" /> Header Summary
+                  <BarChart3 className="w-5 h-5 text-orange-400 dark:text-[#FF6B1A]" /> Header Summary
                 </h2>
               </div>
               <CardContent className="p-0">
-                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-[#334155]">
 
                   <div className="p-6 md:col-span-2 space-y-6">
                     <div>
-                      <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Business Summary</h3>
-                      <p className="text-slate-900">{reportData.websiteSnapshot.businessSummary}</p>
+                      <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-2">Business Summary</h3>
+                      <p className="text-slate-900 dark:text-[#F8FAFC]">{reportData.websiteSnapshot.businessSummary}</p>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       <div>
-                        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Category</h3>
-                        <Badge variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100">{reportData.websiteSnapshot.businessCategory}</Badge>
+                        <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-1">Category</h3>
+                        <Badge variant="secondary" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 border dark:border-blue-800/30">{reportData.websiteSnapshot.businessCategory}</Badge>
                       </div>
                       <div>
-                        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Audience</h3>
-                        <p className="text-sm text-slate-800">{reportData.websiteSnapshot.targetAudience}</p>
+                        <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-1">Audience</h3>
+                        <p className="text-sm text-slate-800 dark:text-[#CBD5E1]">{reportData.websiteSnapshot.targetAudience}</p>
                       </div>
                       <div>
-                        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Location</h3>
+                        <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-1">Location</h3>
                         <div className="flex flex-wrap gap-1">
                           {reportData.websiteSnapshot.locationSignals.length > 0
                             ? reportData.websiteSnapshot.locationSignals.map((loc, i) => (
-                              <Badge key={i} variant="outline" className="text-xs border-slate-200 text-slate-600">{loc}</Badge>
+                              <Badge key={i} variant="outline" className="text-xs border-slate-200 dark:border-[#334155] text-slate-600 dark:text-[#CBD5E1]">{loc}</Badge>
                             ))
-                            : <span className="text-sm text-slate-500">Unspecified</span>}
+                            : <span className="text-sm text-slate-500 dark:text-[#94A3B8]">Unspecified</span>}
                         </div>
                       </div>
                     </div>
 
                     {reportData.websiteSnapshot.topIssues.length > 0 && (
                       <div>
-                        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Top Issues</h3>
+                        <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-2">Top Issues</h3>
                         <div className="flex flex-wrap gap-2">
                           {reportData.websiteSnapshot.topIssues.slice(0, 3).map((issue, i) => (
-                            <Badge key={i} variant="destructive" className="bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 font-normal">
+                            <Badge key={i} variant="destructive" className="bg-red-50 dark:bg-[#EF4444]/10 text-red-700 dark:text-[#EF4444] hover:bg-red-100 dark:hover:bg-[#EF4444]/20 border border-red-200 dark:border-[#EF4444]/30 font-normal">
                               <AlertCircle className="w-3 h-3 mr-1" /> {issue}
                             </Badge>
                           ))}
@@ -530,7 +530,7 @@ export default function KeywordContentGapReport() {
                   </div>
 
                   <div className="p-6 flex flex-col justify-center items-center text-center">
-                    <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">SEO Score</h3>
+                    <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-4">SEO Score</h3>
                     <div className={`relative w-32 h-32 flex items-center justify-center rounded-full shadow-sm border-[6px] mb-4 ${getScoreColor(reportData.websiteSnapshot.seoReadinessScore)}`}>
                       <span className="text-5xl font-bold tracking-tighter">
                         {reportData.websiteSnapshot.seoReadinessScore}
@@ -545,14 +545,14 @@ export default function KeywordContentGapReport() {
             {/* 2. Competitors Section */}
             <div className="space-y-4 break-inside-avoid">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <Users className="w-5 h-5 text-orange-500" /> Top Competitors in Your Market
+                <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2">
+                  <Users className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Top Competitors in Your Market
                 </h3>
               </div>
 
               {reportData.competitorDiscoveryStatus === 'limited' && (
-                <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center gap-2 text-yellow-800 text-sm">
-                  <AlertTriangle className="w-4 h-4 text-yellow-600" />
+                <div className="p-3 bg-yellow-50 dark:bg-[#FACC15]/10 border border-yellow-200 dark:border-[#FACC15]/30 rounded-lg flex items-center gap-2 text-yellow-800 dark:text-[#FACC15] text-sm">
+                  <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-[#FACC15]" />
                   Limited competitor data. Showing best available insights.
                 </div>
               )}
@@ -560,31 +560,31 @@ export default function KeywordContentGapReport() {
               {reportData.competitors.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {reportData.competitors.map((comp, i) => (
-                    <Card key={i} className="shadow-sm border-slate-200 flex flex-col h-full">
+                    <Card key={i} className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] flex flex-col h-full">
                       <CardContent className="p-5 flex-grow flex flex-col">
-                        <h4 className="font-bold text-slate-900 mb-2 truncate" title={comp.name}>{comp.name}</h4>
+                        <h4 className="font-bold text-slate-900 dark:text-[#F8FAFC] mb-2 truncate" title={comp.name}>{comp.name}</h4>
                         <div className="flex gap-2 mb-3 flex-wrap">
-                          <Badge variant="secondary" className={`${getCompetitorTypeBadge(comp.type)} border-0 text-xs`}>{comp.type}</Badge>
-                          <Badge variant="secondary" className={`${getServiceMatchBadge(comp.serviceMatch)} border-0 text-xs`}>{comp.serviceMatch} Match</Badge>
+                          <Badge variant="secondary" className={`${getCompetitorTypeBadge(comp.type)} text-xs`}>{comp.type}</Badge>
+                          <Badge variant="secondary" className={`${getServiceMatchBadge(comp.serviceMatch)} text-xs`}>{comp.serviceMatch} Match</Badge>
                         </div>
-                        <p className="text-sm text-slate-600 mb-4 line-clamp-2">{comp.reason}</p>
+                        <p className="text-sm text-slate-600 dark:text-[#CBD5E1] mb-4 line-clamp-2">{comp.reason}</p>
 
                         <div className="mt-auto">
-                          <p className="text-xs font-semibold text-slate-500 uppercase mb-2">Key Targets</p>
+                          <p className="text-xs font-semibold text-slate-500 dark:text-[#94A3B8] uppercase mb-2">Key Targets</p>
                           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                             {(comp.keywords || []).map((kw, idx) => (
-                              <span key={idx} className="whitespace-nowrap bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-md">{kw}</span>
+                              <span key={idx} className="whitespace-nowrap bg-slate-100 dark:bg-[#0B1220] text-slate-600 dark:text-[#CBD5E1] text-xs px-2 py-1 rounded-md border border-transparent dark:border-[#334155]">{kw}</span>
                             ))}
                           </div>
                         </div>
 
-                        <div className="mt-4 pt-4 border-t border-slate-100">
+                        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-[#334155]/50">
                           {comp.url && comp.url !== "Not verified" ? (
-                            <a href={comp.url} target="_blank" rel="noopener noreferrer" className="w-full inline-flex justify-center items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            <a href={comp.url} target="_blank" rel="noopener noreferrer" className="w-full inline-flex justify-center items-center gap-2 bg-white dark:bg-transparent border border-slate-200 dark:border-[#334155] text-slate-700 dark:text-[#CBD5E1] hover:bg-slate-50 dark:hover:bg-slate-800 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                               Visit Website <ExternalLink className="w-4 h-4" />
                             </a>
                           ) : (
-                            <Button disabled variant="outline" className="w-full text-slate-400 bg-slate-50 border-slate-200">
+                            <Button disabled variant="outline" className="w-full text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-[#0B1220]/50 border-slate-200 dark:border-[#334155]/50">
                               Not Verified
                             </Button>
                           )}
@@ -594,45 +594,45 @@ export default function KeywordContentGapReport() {
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-500 text-sm">No competitor data identified.</p>
+                <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No competitor data identified.</p>
               )}
             </div>
 
             {/* 3. SEO Score + Fixes (Merged UX) */}
             <div className="space-y-4 break-inside-avoid">
-              <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-4">
-                <Wrench className="w-5 h-5 text-orange-500" /> SEO Score & Fixes
+              <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2 mb-4">
+                <Wrench className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> SEO Score & Fixes
               </h3>
-              <Card className="shadow-sm border-slate-200">
+              <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] overflow-hidden">
                 <CardContent className="p-0">
-                  <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-                    <div className="p-6 bg-slate-50">
-                      <h4 className="font-semibold text-slate-900 mb-4">Detected Issues</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-[#334155]">
+                    <div className="p-6 bg-slate-50 dark:bg-[#0B1220]/50">
+                      <h4 className="font-semibold text-slate-900 dark:text-[#F8FAFC] mb-4">Detected Issues</h4>
                       <ul className="space-y-4">
                         {reportData.seoFixRecommendations.length > 0 ? reportData.seoFixRecommendations.map((fix, i) => (
                           <li key={i} className="flex items-start gap-3">
-                            <AlertCircle className="w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
-                            <span className="text-sm text-slate-700">{fix.issue}</span>
+                            <AlertCircle className="w-4 h-4 text-orange-500 dark:text-[#FF6B1A] mt-0.5 shrink-0" />
+                            <span className="text-sm text-slate-700 dark:text-[#CBD5E1]">{fix.issue}</span>
                           </li>
                         )) : (
-                          <p className="text-slate-500 text-sm">No major issues found.</p>
+                          <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No major issues found.</p>
                         )}
                       </ul>
                     </div>
-                    <div className="p-6 bg-white">
-                      <h4 className="font-semibold text-slate-900 mb-4">Recommended Actions</h4>
+                    <div className="p-6 bg-white dark:bg-transparent">
+                      <h4 className="font-semibold text-slate-900 dark:text-[#F8FAFC] mb-4">Recommended Actions</h4>
                       <ul className="space-y-4">
                         {reportData.seoFixRecommendations.length > 0 ? reportData.seoFixRecommendations.map((fix, i) => (
-                          <li key={i} className="flex items-start gap-3 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                          <li key={i} className="flex items-start gap-3 bg-slate-50 dark:bg-[#0B1220] p-3 rounded-lg border border-slate-100 dark:border-[#334155]">
                             <div>
-                              <Badge className={fix.priority.toLowerCase() === 'high' ? 'bg-red-100 text-red-700 hover:bg-red-200 mb-1 border-0' : 'bg-slate-200 text-slate-700 mb-1 border-0'}>
+                              <Badge className={fix.priority.toLowerCase() === 'high' ? 'bg-red-100 dark:bg-[#EF4444]/20 text-red-700 dark:text-[#EF4444] hover:bg-red-200 dark:hover:bg-[#EF4444]/30 mb-1 border-0' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-[#CBD5E1] mb-1 border-0'}>
                                 {fix.priority} Priority
                               </Badge>
-                              <p className="text-sm text-slate-900 font-medium">{fix.action}</p>
+                              <p className="text-sm text-slate-900 dark:text-[#F8FAFC] font-medium">{fix.action}</p>
                             </div>
                           </li>
                         )) : (
-                          <p className="text-slate-500 text-sm">Keep up the good work!</p>
+                          <p className="text-slate-500 dark:text-[#94A3B8] text-sm">Keep up the good work!</p>
                         )}
                       </ul>
                     </div>
@@ -645,20 +645,20 @@ export default function KeywordContentGapReport() {
             <div className="space-y-4 break-inside-avoid">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                    <Target className="w-5 h-5 text-orange-500" /> Keyword Opportunities
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2">
+                    <Target className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Keyword Opportunities
                   </h3>
-                  <p className="text-sm text-slate-500 mt-1">Based on competitor and local demand signals.</p>
+                  <p className="text-sm text-slate-500 dark:text-[#94A3B8] mt-1">Based on competitor and local demand signals.</p>
                 </div>
-                <Button onClick={handleCopyKeywords} variant="outline" size="sm" className="gap-2 print:hidden">
+                <Button onClick={handleCopyKeywords} variant="outline" size="sm" className="gap-2 print:hidden dark:border-[#334155] dark:text-[#CBD5E1] dark:bg-transparent dark:hover:bg-slate-800">
                   <Copy className="w-4 h-4" /> Copy All Keywords
                 </Button>
               </div>
-              <Card className="shadow-sm border-slate-200 overflow-hidden">
+              <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse min-w-[600px]">
                     <thead>
-                      <tr className="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500">
+                      <tr className="bg-slate-50 dark:bg-[#0B1220] border-b border-slate-200 dark:border-[#334155] text-xs uppercase tracking-wider text-slate-500 dark:text-[#94A3B8]">
                         <th className="p-4 font-semibold">Keyword</th>
                         <th className="p-4 font-semibold">Intent</th>
                         <th className="p-4 font-semibold">Difficulty</th>
@@ -666,30 +666,30 @@ export default function KeywordContentGapReport() {
                         <th className="p-4 font-semibold">Tag</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 text-sm">
+                    <tbody className="divide-y divide-slate-100 dark:divide-[#334155]/50 text-sm">
                       {reportData.keywordOpportunities.length > 0 ? reportData.keywordOpportunities.map((kw, i) => (
-                        <tr key={i} className="hover:bg-slate-50 transition-colors bg-white">
-                          <td className="p-4 font-bold text-slate-900">{kw.keyword}</td>
+                        <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors bg-white dark:bg-transparent">
+                          <td className="p-4 font-bold text-slate-900 dark:text-[#F8FAFC]">{kw.keyword}</td>
                           <td className="p-4">
-                            <Badge variant="secondary" className="bg-slate-100 text-slate-700 font-normal">{kw.intent}</Badge>
+                            <Badge variant="secondary" className="bg-slate-100 dark:bg-[#0B1220] text-slate-700 dark:text-[#CBD5E1] border-0 font-normal">{kw.intent}</Badge>
                           </td>
                           <td className="p-4">
-                            <span className={`text-xs font-medium px-2 py-1 rounded-md border ${kw.difficulty.toLowerCase() === 'high' ? 'border-red-200 text-red-700 bg-red-50' : kw.difficulty.toLowerCase() === 'medium' ? 'border-orange-200 text-orange-700 bg-orange-50' : 'border-green-200 text-green-700 bg-green-50'}`}>
+                            <span className={`text-xs font-medium px-2 py-1 rounded-md border ${kw.difficulty.toLowerCase() === 'high' ? 'border-red-200 dark:border-[#EF4444]/30 text-red-700 dark:text-[#EF4444] bg-red-50 dark:bg-[#EF4444]/10' : kw.difficulty.toLowerCase() === 'medium' ? 'border-orange-200 dark:border-[#FF6B1A]/30 text-orange-700 dark:text-[#FF6B1A] bg-orange-50 dark:bg-[#FF6B1A]/10' : 'border-green-200 dark:border-[#22C55E]/30 text-green-700 dark:text-[#22C55E] bg-green-50 dark:bg-[#22C55E]/10'}`}>
                               {kw.difficulty}
                             </span>
                           </td>
                           <td className="p-4">
-                            <Badge className={kw.priority.toLowerCase() === 'high' ? 'bg-orange-500 hover:bg-orange-600 font-normal' : 'bg-slate-500 font-normal'}>
+                            <Badge className={kw.priority.toLowerCase() === 'high' ? 'bg-orange-500 dark:bg-[#FF6B1A] hover:bg-orange-600 dark:hover:bg-[#F97316] font-normal text-white border-0' : 'bg-slate-500 dark:bg-slate-700 font-normal text-white border-0'}>
                               {kw.priority}
                             </Badge>
                           </td>
                           <td className="p-4">
-                            <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{kw.tag}</span>
+                            <span className="text-xs font-medium text-slate-500 dark:text-[#94A3B8] bg-slate-100 dark:bg-[#0B1220] px-2 py-1 rounded-md border border-transparent dark:border-[#334155]">{kw.tag}</span>
                           </td>
                         </tr>
                       )) : (
-                        <tr className="bg-white">
-                          <td colSpan={5} className="p-8 text-center text-slate-500">No keyword opportunities found.</td>
+                        <tr className="bg-white dark:bg-transparent">
+                          <td colSpan={5} className="p-8 text-center text-slate-500 dark:text-[#94A3B8]">No keyword opportunities found.</td>
                         </tr>
                       )}
                     </tbody>
@@ -701,26 +701,26 @@ export default function KeywordContentGapReport() {
             {/* 5. Content Gaps */}
             <div className="space-y-4 break-inside-avoid">
               <div className="mb-4">
-                <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <LayoutTemplate className="w-5 h-5 text-orange-500" /> Content Gaps
+                <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2">
+                  <LayoutTemplate className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Content Gaps
                 </h3>
-                <p className="text-sm text-slate-500 mt-1">Identified vs competitor patterns.</p>
+                <p className="text-sm text-slate-500 dark:text-[#94A3B8] mt-1">Identified vs competitor patterns.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {reportData.contentGaps.length > 0 ? reportData.contentGaps.map((gap, i) => (
-                  <Card key={i} className="shadow-sm border-slate-200 bg-white">
+                  <Card key={i} className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] bg-white dark:bg-[#172033]">
                     <CardContent className="p-5">
                       <div className="flex justify-between items-start gap-4 mb-3">
-                        <h4 className="font-bold text-slate-900 leading-tight">{gap.gap}</h4>
-                        <Badge className={gap.priority.toLowerCase() === 'high' ? 'bg-red-100 text-red-700 hover:bg-red-200 border-0 shrink-0' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-0 shrink-0'}>
+                        <h4 className="font-bold text-slate-900 dark:text-[#F8FAFC] leading-tight">{gap.gap}</h4>
+                        <Badge className={gap.priority.toLowerCase() === 'high' ? 'bg-red-100 dark:bg-[#EF4444]/20 text-red-700 dark:text-[#EF4444] hover:bg-red-200 dark:hover:bg-[#EF4444]/30 border-0 shrink-0' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-[#CBD5E1] hover:bg-slate-200 dark:hover:bg-slate-700 border-0 shrink-0'}>
                           {gap.priority}
                         </Badge>
                       </div>
                       <div className="space-y-3 text-sm">
-                        <p className="text-slate-600"><span className="font-semibold text-slate-800">Why it matters:</span> {gap.whyItMatters}</p>
-                        <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 mt-2">
-                          <p className="text-slate-700 font-medium flex items-start gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                        <p className="text-slate-600 dark:text-[#CBD5E1]"><span className="font-semibold text-slate-800 dark:text-[#F8FAFC]">Why it matters:</span> {gap.whyItMatters}</p>
+                        <div className="bg-slate-50 dark:bg-[#0B1220] p-3 rounded-lg border border-slate-100 dark:border-[#334155] mt-2">
+                          <p className="text-slate-700 dark:text-[#F8FAFC] font-medium flex items-start gap-2">
+                            <CheckCircle className="w-4 h-4 text-green-500 dark:text-[#22C55E] mt-0.5 shrink-0" />
                             <span>{gap.recommendedAction}</span>
                           </p>
                         </div>
@@ -728,50 +728,50 @@ export default function KeywordContentGapReport() {
                     </CardContent>
                   </Card>
                 )) : (
-                  <p className="text-slate-500 text-sm">No content gaps identified.</p>
+                  <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No content gaps identified.</p>
                 )}
               </div>
             </div>
 
             {/* 6. Content Strategy */}
             <div className="space-y-6 break-inside-avoid">
-              <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 border-b border-slate-200 pb-2">
-                <TrendingUp className="w-5 h-5 text-orange-500" /> Content Strategy
+              <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2 border-b border-slate-200 dark:border-[#334155] pb-2">
+                <TrendingUp className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Content Strategy
               </h3>
 
               {/* Local Keyword Clusters */}
               <div className="space-y-4">
-                <h4 className="text-lg font-semibold text-slate-800">Local Keyword Clusters</h4>
+                <h4 className="text-lg font-semibold text-slate-800 dark:text-[#CBD5E1]">Local Keyword Clusters</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {reportData.contentStrategy.localKeywordClusters.length > 0 ? reportData.contentStrategy.localKeywordClusters.map((cluster, i) => (
-                    <Card key={i} className="shadow-sm border-slate-200 bg-white">
+                    <Card key={i} className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] bg-white dark:bg-[#172033]">
                       <CardContent className="p-5">
-                        <h5 className="font-bold text-slate-900 mb-3">{cluster.clusterName}</h5>
+                        <h5 className="font-bold text-slate-900 dark:text-[#F8FAFC] mb-3">{cluster.clusterName}</h5>
                         <div className="flex flex-wrap gap-2 mb-4">
                           {(cluster.keywords || []).map((kw, idx) => (
-                            <span key={idx} className="bg-orange-50 text-orange-700 text-xs px-2 py-1 rounded-md border border-orange-100">{kw}</span>
+                            <span key={idx} className="bg-orange-50 dark:bg-[#FF6B1A]/10 text-orange-700 dark:text-[#FF6B1A] text-xs px-2 py-1 rounded-md border border-orange-100 dark:border-[#FF6B1A]/20">{kw}</span>
                           ))}
                         </div>
-                        <div className="bg-slate-50 p-2 rounded border border-slate-100 text-sm flex flex-col sm:flex-row sm:items-center gap-2">
-                          <span className="font-semibold text-slate-600 shrink-0">Recommended Page:</span>
-                          <span className="text-blue-600 truncate">{cluster.recommendedPage}</span>
+                        <div className="bg-slate-50 dark:bg-[#0B1220] p-2 rounded border border-slate-100 dark:border-[#334155] text-sm flex flex-col sm:flex-row sm:items-center gap-2">
+                          <span className="font-semibold text-slate-600 dark:text-[#94A3B8] shrink-0">Recommended Page:</span>
+                          <span className="text-blue-600 dark:text-blue-400 truncate">{cluster.recommendedPage}</span>
                         </div>
                       </CardContent>
                     </Card>
                   )) : (
-                    <p className="text-slate-500 text-sm">No local clusters identified.</p>
+                    <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No local clusters identified.</p>
                   )}
                 </div>
               </div>
 
               {/* Content Roadmap */}
               <div className="space-y-4 mt-6">
-                <h4 className="text-lg font-semibold text-slate-800">Content Roadmap</h4>
-                <Card className="shadow-sm border-slate-200 overflow-hidden">
+                <h4 className="text-lg font-semibold text-slate-800 dark:text-[#CBD5E1]">Content Roadmap</h4>
+                <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] overflow-hidden dark:bg-[#172033]">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse min-w-[700px]">
                       <thead>
-                        <tr className="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500">
+                        <tr className="bg-slate-50 dark:bg-[#0B1220] border-b border-slate-200 dark:border-[#334155] text-xs uppercase tracking-wider text-slate-500 dark:text-[#94A3B8]">
                           <th className="p-4 font-semibold">Type</th>
                           <th className="p-4 font-semibold w-1/3">Title</th>
                           <th className="p-4 font-semibold">Target Keyword</th>
@@ -779,26 +779,26 @@ export default function KeywordContentGapReport() {
                           <th className="p-4 font-semibold text-right print:hidden">Action</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 text-sm">
+                      <tbody className="divide-y divide-slate-100 dark:divide-[#334155]/50 text-sm">
                         {reportData.contentStrategy.contentRoadmap.length > 0 ? reportData.contentStrategy.contentRoadmap.map((item, i) => (
-                          <tr key={i} className="hover:bg-slate-50 transition-colors bg-white">
-                            <td className="p-4"><Badge variant="outline" className="text-slate-600 bg-white">{item.type}</Badge></td>
-                            <td className="p-4 font-medium text-slate-900">{item.title}</td>
-                            <td className="p-4 text-slate-600">{item.keyword}</td>
+                          <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors bg-white dark:bg-transparent">
+                            <td className="p-4"><Badge variant="outline" className="text-slate-600 dark:text-[#CBD5E1] bg-white dark:bg-slate-800 dark:border-slate-600">{item.type}</Badge></td>
+                            <td className="p-4 font-medium text-slate-900 dark:text-[#F8FAFC]">{item.title}</td>
+                            <td className="p-4 text-slate-600 dark:text-[#CBD5E1]">{item.keyword}</td>
                             <td className="p-4">
-                              <Badge className={item.priority.toLowerCase() === 'high' ? 'bg-orange-500' : 'bg-slate-500'}>
+                              <Badge className={item.priority.toLowerCase() === 'high' ? 'bg-orange-500 dark:bg-[#FF6B1A] text-white border-0' : 'bg-slate-500 dark:bg-slate-700 text-white border-0'}>
                                 {item.priority}
                               </Badge>
                             </td>
                             <td className="p-4 text-right print:hidden">
-                              <Button variant="ghost" size="sm" className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 font-medium">
+                              <Button variant="ghost" size="sm" className="text-orange-600 dark:text-[#FF6B1A] hover:text-orange-700 dark:hover:text-[#F97316] hover:bg-orange-50 dark:hover:bg-[#FF6B1A]/10 font-medium">
                                 Use this topic <ChevronRight className="w-4 h-4 ml-1" />
                               </Button>
                             </td>
                           </tr>
                         )) : (
-                          <tr className="bg-white">
-                            <td colSpan={5} className="p-8 text-center text-slate-500">No roadmap items available.</td>
+                          <tr className="bg-white dark:bg-transparent">
+                            <td colSpan={5} className="p-8 text-center text-slate-500 dark:text-[#94A3B8]">No roadmap items available.</td>
                           </tr>
                         )}
                       </tbody>
@@ -812,41 +812,41 @@ export default function KeywordContentGapReport() {
 
               {/* 7. Competitor Learnings */}
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-4">
-                  <Lightbulb className="w-5 h-5 text-orange-500" /> Competitor Learnings
+                <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2 mb-4">
+                  <Lightbulb className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Competitor Learnings
                 </h3>
                 <div className="space-y-3">
                   {reportData.competitorLearnings.length > 0 ? reportData.competitorLearnings.slice(0, 5).map((learning, i) => (
-                    <Card key={i} className="shadow-sm border-slate-200 bg-white">
+                    <Card key={i} className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] bg-white dark:bg-[#172033]">
                       <CardContent className="p-4">
-                        <p className="font-semibold text-slate-900 mb-1">{learning.insight}</p>
-                        <p className="text-sm text-slate-600">{learning.suggestion}</p>
+                        <p className="font-semibold text-slate-900 dark:text-[#F8FAFC] mb-1">{learning.insight}</p>
+                        <p className="text-sm text-slate-600 dark:text-[#CBD5E1]">{learning.suggestion}</p>
                       </CardContent>
                     </Card>
                   )) : (
-                    <p className="text-slate-500 text-sm">No competitor learnings available.</p>
+                    <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No competitor learnings available.</p>
                   )}
                 </div>
               </div>
 
               {/* 8. 7-Day Action Plan */}
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-4">
-                  <CheckCircle2 className="w-5 h-5 text-green-500" /> 7-Day Action Plan
+                <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2 mb-4">
+                  <CheckCircle2 className="w-5 h-5 text-green-500 dark:text-[#22C55E]" /> 7-Day Action Plan
                 </h3>
-                <Card className="shadow-sm border-slate-200 bg-white h-full">
+                <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] bg-white dark:bg-[#172033] h-full">
                   <CardContent className="p-6">
-                    <div className="relative border-l-2 border-slate-200 ml-3 md:ml-4 space-y-6 py-2">
+                    <div className="relative border-l-2 border-slate-200 dark:border-[#334155] ml-3 md:ml-4 space-y-6 py-2">
                       {reportData.sevenDayActionPlan.length > 0 ? reportData.sevenDayActionPlan.map((plan, i) => (
                         <div key={i} className="relative pl-6 md:pl-8 group">
-                          <div className="absolute w-4 h-4 bg-white border-2 border-orange-400 rounded-full -left-[9px] top-1 group-hover:border-orange-500 group-hover:bg-orange-50 transition-colors"></div>
+                          <div className="absolute w-4 h-4 bg-white dark:bg-[#172033] border-2 border-orange-400 dark:border-[#FF6B1A] rounded-full -left-[9px] top-1 group-hover:border-orange-500 group-hover:bg-orange-50 dark:group-hover:border-[#F97316] dark:group-hover:bg-[#FF6B1A]/20 transition-colors"></div>
                           <div>
-                            <span className="text-xs font-bold text-orange-500 uppercase tracking-wider block mb-1">{plan.day}</span>
-                            <p className="text-slate-800 font-medium">{plan.action}</p>
+                            <span className="text-xs font-bold text-orange-500 dark:text-[#FF6B1A] uppercase tracking-wider block mb-1">{plan.day}</span>
+                            <p className="text-slate-800 dark:text-[#F8FAFC] font-medium">{plan.action}</p>
                           </div>
                         </div>
                       )) : (
-                        <p className="text-slate-500 text-sm pl-6">No action plan available.</p>
+                        <p className="text-slate-500 dark:text-[#94A3B8] text-sm pl-6">No action plan available.</p>
                       )}
                     </div>
                   </CardContent>
@@ -857,15 +857,15 @@ export default function KeywordContentGapReport() {
 
             {/* 9. Revenue Opportunity (Bottom Highlight) */}
             <div className="mt-12 break-inside-avoid">
-              <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-8 text-white shadow-md relative overflow-hidden">
+              <div className="bg-gradient-to-r from-orange-500 to-amber-500 dark:from-[#FF6B1A] dark:to-orange-600 rounded-2xl p-8 text-white shadow-md relative overflow-hidden">
                 <div className="absolute top-0 right-0 -mr-8 -mt-8 opacity-10">
                   <DollarSign className="w-48 h-48" />
                 </div>
                 <div className="relative z-10 max-w-3xl">
-                  <Badge className="bg-white text-orange-600 hover:bg-slate-50 mb-4 px-3 py-1 text-xs font-bold uppercase tracking-wider">
+                  <Badge className="bg-white dark:bg-[#0B1220] text-orange-600 dark:text-[#FF6B1A] hover:bg-slate-50 dark:hover:bg-[#0B1220]/80 mb-4 px-3 py-1 text-xs font-bold uppercase tracking-wider border-0">
                     {reportData.revenueOpportunity.level} Revenue Opportunity
                   </Badge>
-                  <h3 className="text-2xl font-bold mb-3 leading-tight">{reportData.revenueOpportunity.summary}</h3>
+                  <h3 className="text-2xl font-bold mb-3 leading-tight text-white">{reportData.revenueOpportunity.summary}</h3>
                   <p className="text-orange-50 font-medium opacity-90">{reportData.revenueOpportunity.reason}</p>
                 </div>
               </div>
