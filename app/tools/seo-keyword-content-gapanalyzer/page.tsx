@@ -1,442 +1,900 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import {
   Loader2,
   Search,
-  TrendingUp,
   Target,
-  Users,
-  CheckCircle,
-  ArrowRight,
-  BarChart3,
   Globe,
-  Mail,
+  MapPin,
+  Tag,
+  BarChart3,
+  Copy,
+  Printer,
+  CheckCircle2,
+  AlertCircle,
+  Lightbulb,
+  CheckCircle,
+  TrendingUp,
+  LayoutTemplate,
+  Users,
+  Wrench,
+  Download,
+  DollarSign,
+  ChevronRight,
+  ExternalLink
 } from "lucide-react"
 
-import { SEOLoadingScreen } from "@/components/loading-screen" // Import the loading screen
-
-
-interface KeywordData {
-  word: string
-  count: number
+// --- Types ---
+interface Competitor {
+  name: string;
+  type: string; // Direct | Indirect | Marketplace
+  serviceMatch: string; // High | Medium | Low
+  reason: string;
+  keywords: string[];
+  url: string;
 }
 
-interface SEOReport {
-  analysis_date: string
-  seo_score: number
-  current_keywords: KeywordData[]
-  keyword_opportunities: {
-    total_found: number
-    priority_keywords: string[]
-    long_tail_opportunities: string[]
-  }
-  content_gaps: {
-    missing_topics: string[]
-    gap_count: number
-    coverage_score: number
-  }
-  competitor_analysis: {
-    competitors_found: number
-    competitor_domains: string[]
-  }
-  recommendations: string[]
-  next_steps: string[]
+interface SeoFixRecommendation {
+  issue: string;
+  priority: string;
+  action: string;
 }
 
-interface AnalysisResult {
-  seo_report: SEOReport
-  lead_info: {
-    email: string
-    analysis_date: string
-  }
+interface KeywordOpportunity {
+  keyword: string;
+  intent: string;
+  difficulty: string;
+  priority: string;
+  tag: string;
 }
 
-export default function SEOAnalyzer() {
+interface ContentGap {
+  gap: string;
+  whyItMatters: string;
+  recommendedAction: string;
+  priority: string;
+}
+
+interface KeywordCluster {
+  clusterName: string;
+  keywords: string[];
+  recommendedPage: string;
+}
+
+interface ContentRoadmapItem {
+  type: string;
+  title: string;
+  keyword: string;
+  priority: string;
+}
+
+interface ContentStrategy {
+  localKeywordClusters: KeywordCluster[];
+  contentRoadmap: ContentRoadmapItem[];
+}
+
+interface CompetitorLearning {
+  insight: string;
+  suggestion: string;
+}
+
+interface ActionPlanItem {
+  day: string;
+  action: string;
+}
+
+interface RevenueOpportunity {
+  level: string;
+  summary: string;
+  reason: string;
+}
+
+interface ReportData {
+  competitorDiscoveryStatus?: string;
+  websiteSnapshot: {
+    businessSummary: string;
+    businessCategory: string;
+    targetAudience: string;
+    locationSignals: string[];
+    seoReadinessScore: number;
+    topIssues: string[];
+  };
+  competitors: Competitor[];
+  seoFixRecommendations: SeoFixRecommendation[];
+  keywordOpportunities: KeywordOpportunity[];
+  contentGaps: ContentGap[];
+  contentStrategy: ContentStrategy;
+  competitorLearnings: CompetitorLearning[];
+  sevenDayActionPlan: ActionPlanItem[];
+  revenueOpportunity: RevenueOpportunity;
+}
+
+export default function KeywordContentGapReport() {
   const [formData, setFormData] = useState({
-    email: "",
-    website_url: "",
-    main_topic: "",
+    websiteUrl: "",
+    location: "India",
+    industry: "",
   })
-  const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState<AnalysisResult | null>(null)
-  const [error, setError] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [reportData, setReportData] = useState<ReportData | null>(null)
 
-    try {
-      const response = await fetch("https://n8n.srv832341.hstgr.cloud/webhook/seo-analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
+  // Loading Steps State
+  const [currentLoadingStep, setCurrentLoadingStep] = useState(0)
+  const loadingSteps = [
+    "Analyzing website...",
+    "Finding competitors...",
+    "Calculating SEO score...",
+    "Generating keywords...",
+    "Identifying gaps...",
+    "Building strategy..."
+  ]
 
-      if (!response.ok) {
-        throw new Error("Analysis failed. Please try again.")
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (loading) {
+      interval = setInterval(() => {
+        setCurrentLoadingStep((prev) => (prev < loadingSteps.length - 1 ? prev + 1 : prev))
+      }, 1500)
+    } else {
+      setCurrentLoadingStep(0)
+    }
+    return () => clearInterval(interval)
+  }, [loading, loadingSteps.length])
+
+  const normalizeWebhookResponse = (response: any): ReportData => {
+    const dataObj = Array.isArray(response) ? response[0] : response;
+
+    if (dataObj.success === false) {
+      throw new Error(dataObj.message || "Report generation failed. Please check the website URL and try again.")
+    }
+
+    const data = dataObj.data || {};
+    const snapshot = data.websiteSnapshot || {};
+
+    return {
+      competitorDiscoveryStatus: data.competitorDiscoveryStatus || "complete",
+      websiteSnapshot: {
+        businessSummary: snapshot.businessSummary || "Not specified",
+        businessCategory: snapshot.businessCategory || "Not specified",
+        targetAudience: snapshot.targetAudience || "Not specified",
+        locationSignals: Array.isArray(snapshot.locationSignals) ? snapshot.locationSignals : [],
+        seoReadinessScore: typeof snapshot.seoReadinessScore === 'number' ? snapshot.seoReadinessScore : 0,
+        topIssues: Array.isArray(snapshot.topIssues) ? snapshot.topIssues : [],
+      },
+      competitors: Array.isArray(data.competitors) ? data.competitors.map((c: any) => ({
+        ...c,
+        keywords: Array.isArray(c.keywords) ? c.keywords : []
+      })) : [],
+      seoFixRecommendations: Array.isArray(data.seoFixRecommendations) ? data.seoFixRecommendations : [],
+      keywordOpportunities: Array.isArray(data.keywordOpportunities) ? data.keywordOpportunities : [],
+      contentGaps: Array.isArray(data.contentGaps) ? data.contentGaps : [],
+      contentStrategy: {
+        localKeywordClusters: Array.isArray(data.contentStrategy?.localKeywordClusters) ? data.contentStrategy.localKeywordClusters.map((lc: any) => ({
+          ...lc,
+          keywords: Array.isArray(lc.keywords) ? lc.keywords : []
+        })) : [],
+        contentRoadmap: Array.isArray(data.contentStrategy?.contentRoadmap) ? data.contentStrategy.contentRoadmap : [],
+      },
+      competitorLearnings: Array.isArray(data.competitorLearnings) ? data.competitorLearnings : [],
+      sevenDayActionPlan: Array.isArray(data.sevenDayActionPlan) ? data.sevenDayActionPlan : [],
+      revenueOpportunity: {
+        level: data.revenueOpportunity?.level || "Unknown",
+        summary: data.revenueOpportunity?.summary || "No specific revenue summary provided.",
+        reason: data.revenueOpportunity?.reason || "Based on initial signals.",
       }
-
-      const data = await response.json()
-      setResult(Array.isArray(data) ? data[0] : data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
-    } finally {
-      setIsLoading(false)
     }
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const generateReport = async (payload: any) => {
+    const WEBHOOK_URL = "https://n8n.srv832341.hstgr.cloud/webhook/keyword-content-gap-report"
+
+    const response = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+
+    if (!response.ok) {
+      throw new Error("Network error or invalid response from server.")
+    }
+
+    const json = await response.json()
+    return normalizeWebhookResponse(json)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    setReportData(null)
+
+    const payload = {
+      websiteUrl: formData.websiteUrl,
+      location: formData.location.trim() || "India",
+      industry: formData.industry.trim() || "",
+      sourceTool: "keyword_content_gap_report",
+      submittedAt: new Date().toISOString()
+    }
+
+    try {
+      const result = await generateReport(payload)
+      setReportData(result)
+    } catch (err: any) {
+      console.error("Webhook Error:", err)
+      setError("Report generation failed. Please check the website URL and try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }))
   }
 
-  const resetForm = () => {
-    setResult(null)
-    setFormData({ email: "", website_url: "", main_topic: "" })
-    setError("")
+  const handleCopyKeywords = () => {
+    if (!reportData) return;
+    const kwText = reportData.keywordOpportunities.map(k => k.keyword).join('\n');
+    navigator.clipboard.writeText(kwText).then(() => {
+      alert("Keywords copied to clipboard!")
+    }).catch(() => {
+      alert("Failed to copy keywords.")
+    });
   }
 
-  // Show loading screen when loading 
-   if (isLoading) {  
-     return < SEOLoadingScreen />  }
+  const handleCopyReport = () => {
+    if (!reportData) return;
 
-  if (result) {
-    return (
-      <div className="min-h-screen section-bg">
-        {/* Header */}
-        <div className="header-gradient border-b">
-          <div className="max-w-7xl mx-auto px-4 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                  <BarChart3 className="w-6 h-6 text-white" />
-                </div>
-                <h1 className="text-2xl font-bold text-heading">SEO Analysis Report</h1>
-              </div>
-              <Button onClick={resetForm} variant="outline" className="font-semibold">
-                New Analysis
-              </Button>
-            </div>
-          </div>
-        </div>
+    let text = `Keyword + Content Gap Report for ${formData.websiteUrl}\n\n`;
+    text += `=== SEO Snapshot ===\n`;
+    text += `Business Summary: ${reportData.websiteSnapshot.businessSummary}\n`;
+    text += `Category: ${reportData.websiteSnapshot.businessCategory}\n`;
+    text += `Target Audience: ${reportData.websiteSnapshot.targetAudience}\n`;
+    text += `SEO Score: ${reportData.websiteSnapshot.seoReadinessScore}/100\n\n`;
 
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          {/* Overview Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-body">SEO Score</p>
-                    <p className="text-2xl font-bold text-heading">{result.seo_report.seo_score}/100</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+    text += `=== Keyword Opportunities ===\n`;
+    reportData.keywordOpportunities.forEach(k => {
+      text += `- ${k.keyword} [Intent: ${k.intent}, Difficulty: ${k.difficulty}, Priority: ${k.priority}]\n`;
+    })
+    text += `\n`;
 
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <Search className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-body">Keywords Found</p>
-                    <p className="text-2xl font-bold text-heading">{result.seo_report.current_keywords.length}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+    text += `=== Content Gaps ===\n`;
+    reportData.contentGaps.forEach(g => {
+      text += `- ${g.gap} (Priority: ${g.priority})\n  Why: ${g.whyItMatters}\n  Action: ${g.recommendedAction}\n`;
+    })
+    text += `\n`;
 
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                    <Target className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-body">Content Coverage</p>
-                    <p className="text-2xl font-bold text-heading">{result.seo_report.content_gaps.coverage_score}%</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+    text += `=== 7-Day Action Plan ===\n`;
+    reportData.sevenDayActionPlan.forEach(a => {
+      text += `${a.day}: ${a.action}\n`;
+    })
 
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <Users className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-body">Competitors</p>
-                    <p className="text-2xl font-bold text-heading">
-                      {result.seo_report.competitor_analysis.competitors_found}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Report copied to clipboard!")
+    }).catch(() => {
+      alert("Failed to copy report.")
+    });
+  }
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Current Keywords */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Search className="w-5 h-5 text-primary" />
-                  Top Keywords
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {result.seo_report.current_keywords.slice(0, 10).map((keyword, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-section rounded-lg">
-                      <span className="font-medium text-heading">{keyword.word}</span>
-                      <Badge variant="secondary" className="bg-primary/10 text-primary">
-                        {keyword.count} mentions
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+  const handlePrint = () => {
+    window.print();
+  }
 
-            {/* Competitor Analysis */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-primary" />
-                  Competitor Domains
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {result.seo_report.competitor_analysis.competitor_domains.map((domain, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 bg-section rounded-lg">
-                      <Globe className="w-4 h-4 text-body" />
-                      <span className="text-heading">{domain}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+  const resetForm = () => {
+    setReportData(null)
+    setFormData({ websiteUrl: "", location: "India", industry: "" })
+    setError(null)
+  }
 
-            {/* Recommendations */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-primary" />
-                  Recommendations
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {result.seo_report.recommendations.map((rec, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-section rounded-lg">
-                      <ArrowRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-heading">{rec}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+  // --- Helpers ---
+  const getScoreColor = (score: number) => {
+    if (score <= 40) return "text-red-500 dark:text-[#EF4444] border-red-200 dark:border-[#EF4444]/30 bg-red-50 dark:bg-[#EF4444]/10";
+    if (score <= 70) return "text-yellow-600 dark:text-[#FACC15] border-yellow-200 dark:border-[#FACC15]/30 bg-yellow-50 dark:bg-[#FACC15]/10";
+    return "text-green-600 dark:text-[#22C55E] border-green-200 dark:border-[#22C55E]/30 bg-green-50 dark:bg-[#22C55E]/10";
+  }
 
-            {/* Next Steps */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="w-5 h-5 text-primary" />
-                  Next Steps
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {result.seo_report.next_steps.map((step, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-section rounded-lg">
-                      <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0">
-                        {index + 1}
-                      </div>
-                      <span className="text-heading">{step}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+  const getCompetitorTypeBadge = (type: string) => {
+    const t = type.toLowerCase();
+    if (t === 'direct') return "bg-red-100 dark:bg-[#EF4444]/20 text-red-700 dark:text-[#EF4444] border-0";
+    if (t === 'indirect') return "bg-yellow-100 dark:bg-[#FACC15]/20 text-yellow-700 dark:text-[#FACC15] border-0";
+    if (t === 'marketplace') return "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 border-0";
+    return "bg-slate-100 dark:bg-[#0B1220] text-slate-700 dark:text-[#CBD5E1] border-0";
+  }
 
-          {/* SEO Score Progress */}
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle>SEO Score Breakdown</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-heading font-medium">Overall SEO Score</span>
-                    <span className="text-heading font-bold">{result.seo_report.seo_score}/100</span>
-                  </div>
-                  <Progress value={result.seo_report.seo_score} className="h-3" />
-                </div>
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-heading font-medium">Content Coverage</span>
-                    <span className="text-heading font-bold">{result.seo_report.content_gaps.coverage_score}/100</span>
-                  </div>
-                  <Progress value={result.seo_report.content_gaps.coverage_score} className="h-3" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    )
+  const getServiceMatchBadge = (match: string) => {
+    const m = match.toLowerCase();
+    if (m === 'high') return "bg-green-100 dark:bg-[#22C55E]/20 text-green-700 dark:text-[#22C55E] border-0";
+    if (m === 'medium') return "bg-orange-100 dark:bg-[#FF6B1A]/20 text-orange-700 dark:text-[#FF6B1A] border-0";
+    if (m === 'low') return "bg-slate-100 dark:bg-[#0B1220] text-slate-700 dark:text-[#CBD5E1] border-0";
+    return "bg-slate-100 dark:bg-[#0B1220] text-slate-700 dark:text-[#CBD5E1] border-0";
   }
 
   return (
-    <div className="min-h-screen section-bg">
-      {/* Header */}
-      <div className="header-gradient border-b">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0F172A] section-bg print:bg-white pb-20">
+
+      {/* Hero Section */}
+      <div className="bg-white dark:bg-[#111827] border-b dark:border-[#334155] print:hidden">
         <div className="max-w-4xl mx-auto px-4 py-12 text-center">
           <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center">
-              <BarChart3 className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 bg-orange-500 dark:bg-[#FF6B1A] rounded-2xl flex items-center justify-center shadow-sm">
+              <Search className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-heading mb-4">SEO Keyword & Content Gap Analyzer</h1>
-          <p className="text-xl text-body max-w-2xl mx-auto">
-            Discover keyword opportunities, analyze content gaps, and get actionable insights to boost your website's
-            SEO performance.
+          <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-[#F8FAFC] mb-4 tracking-tight">Keyword + Content Gap Report</h1>
+          <p className="text-lg md:text-xl text-slate-600 dark:text-[#CBD5E1] max-w-2xl mx-auto mb-6">
+            Find keyword opportunities, missing content, and simple SEO actions for your website.
           </p>
+          <div className="inline-flex items-center gap-2 bg-slate-100 dark:bg-[rgba(255,255,255,0.08)] text-slate-600 dark:text-[#E2E8F0] px-4 py-2 rounded-full text-sm font-medium border border-transparent dark:border-[rgba(255,255,255,0.15)]">
+            <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-[#22C55E]" />
+            Minimal input. Practical output. Built for business websites.
+          </div>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="max-w-2xl mx-auto px-4 py-12">
-        <Card className="shadow-lg border-0">
-          <CardHeader className="text-center pb-8">
-            <CardTitle className="text-2xl text-heading">Start Your SEO Analysis</CardTitle>
-            <p className="text-body">Enter your details below to get a comprehensive SEO report</p>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-heading font-medium flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  Email Address
-                </Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="your@email.com"
-                  required
-                  className="h-12 border-gray-200 focus:border-primary focus:ring-primary"
-                />
+      <div className="max-w-5xl mx-auto px-4 py-8">
+
+        {/* Input Card */}
+        {!loading && !reportData && (
+          <Card className="max-w-2xl mx-auto shadow-sm dark:shadow-none border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033]">
+            <CardContent className="p-6 md:p-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
+
+                {error && (
+                  <div className="p-4 bg-red-50 dark:bg-[#EF4444]/10 border border-red-200 dark:border-[#EF4444]/30 rounded-xl flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-[#EF4444] mt-0.5" />
+                    <div>
+                      <p className="text-red-800 dark:text-[#F8FAFC] font-medium text-sm">{error}</p>
+                      {process.env.NODE_ENV === 'development' && (
+                        <p className="text-red-500 dark:text-[#EF4444]/80 text-xs mt-1">Dev note: Webhook likely returned 404/CORS. Make sure N8N is running.</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor="websiteUrl" className="text-slate-800 dark:text-[#CBD5E1] font-semibold flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-slate-500 dark:text-[#94A3B8]" />
+                    Website URL <span className="text-red-500 dark:text-[#FF6B1A]">*</span>
+                  </Label>
+                  <Input
+                    id="websiteUrl"
+                    name="websiteUrl"
+                    type="url"
+                    value={formData.websiteUrl}
+                    onChange={handleInputChange}
+                    placeholder="https://yourwebsite.com"
+                    required
+                    className="h-12 border-slate-200 dark:border-[#334155] dark:bg-[#0B1220] dark:text-[#F8FAFC] dark:placeholder-[#64748B] focus:border-orange-500 dark:focus:border-[#FF6B1A] focus:ring-orange-500 dark:focus:ring-[rgba(255,107,26,0.25)]"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="location" className="text-slate-800 dark:text-[#CBD5E1] font-semibold flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-slate-500 dark:text-[#94A3B8]" />
+                      Business Location
+                    </Label>
+                    <Input
+                      id="location"
+                      name="location"
+                      type="text"
+                      value={formData.location}
+                      onChange={handleInputChange}
+                      placeholder="India, Kerala, UAE..."
+                      className="h-12 border-slate-200 dark:border-[#334155] dark:bg-[#0B1220] dark:text-[#F8FAFC] dark:placeholder-[#64748B] focus:border-orange-500 dark:focus:border-[#FF6B1A] focus:ring-orange-500 dark:focus:ring-[rgba(255,107,26,0.25)]"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="industry" className="text-slate-800 dark:text-[#CBD5E1] font-semibold flex items-center gap-2">
+                      <Tag className="w-4 h-4 text-slate-500 dark:text-[#94A3B8]" />
+                      Industry / Topic
+                    </Label>
+                    <Input
+                      id="industry"
+                      name="industry"
+                      type="text"
+                      value={formData.industry}
+                      onChange={handleInputChange}
+                      placeholder="SaaS, healthcare, e-commerce..."
+                      className="h-12 border-slate-200 dark:border-[#334155] dark:bg-[#0B1220] dark:text-[#F8FAFC] dark:placeholder-[#64748B] focus:border-orange-500 dark:focus:border-[#FF6B1A] focus:ring-orange-500 dark:focus:ring-[rgba(255,107,26,0.25)]"
+                    />
+                  </div>
+                </div>
+
+                <Button type="submit" className="w-full bg-orange-500 dark:bg-[#FF6B1A] hover:bg-orange-600 dark:hover:bg-[#F97316] text-white disabled:opacity-60 h-14 text-lg rounded-xl shadow-sm transition-colors">
+                  Generate Keyword + Content Gap Report
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Loading Section */}
+        {loading && (
+          <Card className="max-w-2xl mx-auto shadow-sm dark:shadow-none border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] text-center py-16">
+            <CardContent>
+              <div className="flex justify-center mb-6">
+                <Loader2 className="w-12 h-12 text-orange-500 dark:text-[#FF6B1A] animate-spin" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-[#F8FAFC] mb-6">Analyzing your website</h3>
+
+              <div className="space-y-4 max-w-sm mx-auto text-left">
+                {loadingSteps.map((step, index) => {
+                  const isActive = index === currentLoadingStep;
+                  const isPast = index < currentLoadingStep;
+                  return (
+                    <div key={index} className={`flex items-center gap-3 transition-opacity duration-300 ${isPast || isActive ? 'opacity-100' : 'opacity-40'}`}>
+                      {isPast ? (
+                        <CheckCircle2 className="w-5 h-5 text-green-500 dark:text-[#22C55E]" />
+                      ) : isActive ? (
+                        <Loader2 className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A] animate-spin" />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full border-2 border-slate-200 dark:border-[#334155]" />
+                      )}
+                      <span className={`font-medium ${isActive ? 'text-slate-900 dark:text-[#F8FAFC]' : 'text-slate-600 dark:text-[#CBD5E1]'}`}>{step}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Report Output Section */}
+        {reportData && !loading && (
+          <div className="space-y-8 animate-in fade-in duration-500 slide-in-from-bottom-4">
+
+            {/* Header Actions */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 print:hidden">
+              <Button onClick={resetForm} variant="outline" className="border-slate-300 dark:border-[#334155] text-slate-700 dark:text-[#CBD5E1] dark:bg-transparent dark:hover:bg-slate-800">
+                &larr; New Report
+              </Button>
+              <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap w-full sm:w-auto">
+                <Button onClick={handleCopyReport} variant="outline" className="flex-1 sm:flex-none gap-2 border-slate-300 dark:border-[#334155] text-slate-700 dark:text-[#CBD5E1] dark:bg-transparent dark:hover:bg-slate-800">
+                  <Copy className="w-4 h-4" /> Copy Report
+                </Button>
+                <Button onClick={handlePrint} className="flex-1 sm:flex-none gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200">
+                  <Download className="w-4 h-4" /> Download Full Report
+                </Button>
+              </div>
+            </div>
+
+            <div className="print:block mb-8 hidden">
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">Keyword + Content Gap Report</h1>
+              <p className="text-slate-600">{formData.websiteUrl}</p>
+            </div>
+
+            {/* 1. Header Summary */}
+            <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] overflow-hidden break-inside-avoid">
+              <div className="bg-slate-900 dark:bg-[#0B1220] px-6 py-4 border-b border-slate-800 dark:border-[#334155]">
+                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-orange-400 dark:text-[#FF6B1A]" /> Header Summary
+                </h2>
+              </div>
+              <CardContent className="p-0">
+                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-[#334155]">
+
+                  <div className="p-6 md:col-span-2 space-y-6">
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-2">Business Summary</h3>
+                      <p className="text-slate-900 dark:text-[#F8FAFC]">{reportData.websiteSnapshot.businessSummary}</p>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-1">Category</h3>
+                        <Badge variant="secondary" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 border dark:border-blue-800/30">{reportData.websiteSnapshot.businessCategory}</Badge>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-1">Audience</h3>
+                        <p className="text-sm text-slate-800 dark:text-[#CBD5E1]">{reportData.websiteSnapshot.targetAudience}</p>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-1">Location</h3>
+                        <div className="flex flex-wrap gap-1">
+                          {reportData.websiteSnapshot.locationSignals.length > 0
+                            ? reportData.websiteSnapshot.locationSignals.map((loc, i) => (
+                              <Badge key={i} variant="outline" className="text-xs border-slate-200 dark:border-[#334155] text-slate-600 dark:text-[#CBD5E1]">{loc}</Badge>
+                            ))
+                            : <span className="text-sm text-slate-500 dark:text-[#94A3B8]">Unspecified</span>}
+                        </div>
+                      </div>
+                    </div>
+
+                    {reportData.websiteSnapshot.topIssues.length > 0 && (
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-2">Top Issues</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {reportData.websiteSnapshot.topIssues.slice(0, 3).map((issue, i) => (
+                            <Badge key={i} variant="destructive" className="bg-red-50 dark:bg-[#EF4444]/10 text-red-700 dark:text-[#EF4444] hover:bg-red-100 dark:hover:bg-[#EF4444]/20 border border-red-200 dark:border-[#EF4444]/30 font-normal">
+                              <AlertCircle className="w-3 h-3 mr-1" /> {issue}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-6 flex flex-col justify-center items-center text-center">
+                    <h3 className="text-sm font-semibold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider mb-4">SEO Score</h3>
+                    <div className={`relative w-32 h-32 flex items-center justify-center rounded-full shadow-sm border-[6px] mb-4 ${getScoreColor(reportData.websiteSnapshot.seoReadinessScore)}`}>
+                      <span className="text-5xl font-bold tracking-tighter">
+                        {reportData.websiteSnapshot.seoReadinessScore}
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 2. Competitors Section */}
+            <div className="space-y-4 break-inside-avoid">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2">
+                  <Users className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Top Competitors in Your Market
+                </h3>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="website_url" className="text-heading font-medium flex items-center gap-2">
-                  <Globe className="w-4 h-4" />
-                  Website URL
-                </Label>
-                <Input
-                  id="website_url"
-                  name="website_url"
-                  type="url"
-                  value={formData.website_url}
-                  onChange={handleInputChange}
-                  placeholder="https://yourwebsite.com"
-                  required
-                  className="h-12 border-gray-200 focus:border-primary focus:ring-primary"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="main_topic" className="text-heading font-medium flex items-center gap-2">
-                  <Target className="w-4 h-4" />
-                  Main Topic/Industry
-                </Label>
-                <Textarea
-                  id="main_topic"
-                  name="main_topic"
-                  value={formData.main_topic}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Digital Marketing, E-commerce, SaaS, Healthcare..."
-                  required
-                  className="min-h-[100px] border-gray-200 focus:border-primary focus:ring-primary resize-none"
-                />
-              </div>
-
-              {error && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-red-600 text-sm">{error}</p>
+              {reportData.competitorDiscoveryStatus === 'limited' && (
+                <div className="p-3 bg-yellow-50 dark:bg-[#FACC15]/10 border border-yellow-200 dark:border-[#FACC15]/30 rounded-lg flex items-center gap-2 text-yellow-800 dark:text-[#FACC15] text-sm">
+                  <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-[#FACC15]" />
+                  Limited competitor data. Showing best available insights.
                 </div>
               )}
 
-              <Button type="submit" disabled={isLoading} className="w-full btn-primary h-14 text-lg">
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Analyzing Your Website...
-                  </>
-                ) : (
-                  <>
-                    <Search className="w-5 h-5 mr-2" />
-                    Analyze My Website
-                  </>
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+              {reportData.competitors.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {reportData.competitors.map((comp, i) => (
+                    <Card key={i} className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] flex flex-col h-full">
+                      <CardContent className="p-5 flex-grow flex flex-col">
+                        <h4 className="font-bold text-slate-900 dark:text-[#F8FAFC] mb-2 truncate" title={comp.name}>{comp.name}</h4>
+                        <div className="flex gap-2 mb-3 flex-wrap">
+                          <Badge variant="secondary" className={`${getCompetitorTypeBadge(comp.type)} text-xs`}>{comp.type}</Badge>
+                          <Badge variant="secondary" className={`${getServiceMatchBadge(comp.serviceMatch)} text-xs`}>{comp.serviceMatch} Match</Badge>
+                        </div>
+                        <p className="text-sm text-slate-600 dark:text-[#CBD5E1] mb-4 line-clamp-2">{comp.reason}</p>
 
-        {/* Features */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Search className="w-6 h-6 text-primary" />
+                        <div className="mt-auto">
+                          <p className="text-xs font-semibold text-slate-500 dark:text-[#94A3B8] uppercase mb-2">Key Targets</p>
+                          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                            {(comp.keywords || []).map((kw, idx) => (
+                              <span key={idx} className="whitespace-nowrap bg-slate-100 dark:bg-[#0B1220] text-slate-600 dark:text-[#CBD5E1] text-xs px-2 py-1 rounded-md border border-transparent dark:border-[#334155]">{kw}</span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-[#334155]/50">
+                          {comp.url && comp.url !== "Not verified" ? (
+                            <a href={comp.url} target="_blank" rel="noopener noreferrer" className="w-full inline-flex justify-center items-center gap-2 bg-white dark:bg-transparent border border-slate-200 dark:border-[#334155] text-slate-700 dark:text-[#CBD5E1] hover:bg-slate-50 dark:hover:bg-slate-800 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                              Visit Website <ExternalLink className="w-4 h-4" />
+                            </a>
+                          ) : (
+                            <Button disabled variant="outline" className="w-full text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-[#0B1220]/50 border-slate-200 dark:border-[#334155]/50">
+                              Not Verified
+                            </Button>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No competitor data identified.</p>
+              )}
             </div>
-            <h3 className="text-lg font-semibold text-heading mb-2">Keyword Analysis</h3>
-            <p className="text-body">Discover high-impact keywords your competitors are ranking for</p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Target className="w-6 h-6 text-primary" />
+
+            {/* 3. SEO Score + Fixes (Merged UX) */}
+            <div className="space-y-4 break-inside-avoid">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2 mb-4">
+                <Wrench className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> SEO Score & Fixes
+              </h3>
+              <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-[#334155]">
+                    <div className="p-6 bg-slate-50 dark:bg-[#0B1220]/50">
+                      <h4 className="font-semibold text-slate-900 dark:text-[#F8FAFC] mb-4">Detected Issues</h4>
+                      <ul className="space-y-4">
+                        {reportData.seoFixRecommendations.length > 0 ? reportData.seoFixRecommendations.map((fix, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <AlertCircle className="w-4 h-4 text-orange-500 dark:text-[#FF6B1A] mt-0.5 shrink-0" />
+                            <span className="text-sm text-slate-700 dark:text-[#CBD5E1]">{fix.issue}</span>
+                          </li>
+                        )) : (
+                          <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No major issues found.</p>
+                        )}
+                      </ul>
+                    </div>
+                    <div className="p-6 bg-white dark:bg-transparent">
+                      <h4 className="font-semibold text-slate-900 dark:text-[#F8FAFC] mb-4">Recommended Actions</h4>
+                      <ul className="space-y-4">
+                        {reportData.seoFixRecommendations.length > 0 ? reportData.seoFixRecommendations.map((fix, i) => (
+                          <li key={i} className="flex items-start gap-3 bg-slate-50 dark:bg-[#0B1220] p-3 rounded-lg border border-slate-100 dark:border-[#334155]">
+                            <div>
+                              <Badge className={fix.priority.toLowerCase() === 'high' ? 'bg-red-100 dark:bg-[#EF4444]/20 text-red-700 dark:text-[#EF4444] hover:bg-red-200 dark:hover:bg-[#EF4444]/30 mb-1 border-0' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-[#CBD5E1] mb-1 border-0'}>
+                                {fix.priority} Priority
+                              </Badge>
+                              <p className="text-sm text-slate-900 dark:text-[#F8FAFC] font-medium">{fix.action}</p>
+                            </div>
+                          </li>
+                        )) : (
+                          <p className="text-slate-500 dark:text-[#94A3B8] text-sm">Keep up the good work!</p>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-            <h3 className="text-lg font-semibold text-heading mb-2">Content Gaps</h3>
-            <p className="text-body">Identify missing content opportunities in your niche</p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <TrendingUp className="w-6 h-6 text-primary" />
+
+            {/* 4. Keyword Opportunities */}
+            <div className="space-y-4 break-inside-avoid">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2">
+                    <Target className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Keyword Opportunities
+                  </h3>
+                  <p className="text-sm text-slate-500 dark:text-[#94A3B8] mt-1">Based on competitor and local demand signals.</p>
+                </div>
+                <Button onClick={handleCopyKeywords} variant="outline" size="sm" className="gap-2 print:hidden dark:border-[#334155] dark:text-[#CBD5E1] dark:bg-transparent dark:hover:bg-slate-800">
+                  <Copy className="w-4 h-4" /> Copy All Keywords
+                </Button>
+              </div>
+              <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] dark:bg-[#172033] overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                      <tr className="bg-slate-50 dark:bg-[#0B1220] border-b border-slate-200 dark:border-[#334155] text-xs uppercase tracking-wider text-slate-500 dark:text-[#94A3B8]">
+                        <th className="p-4 font-semibold">Keyword</th>
+                        <th className="p-4 font-semibold">Intent</th>
+                        <th className="p-4 font-semibold">Difficulty</th>
+                        <th className="p-4 font-semibold">Priority</th>
+                        <th className="p-4 font-semibold">Tag</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-[#334155]/50 text-sm">
+                      {reportData.keywordOpportunities.length > 0 ? reportData.keywordOpportunities.map((kw, i) => (
+                        <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors bg-white dark:bg-transparent">
+                          <td className="p-4 font-bold text-slate-900 dark:text-[#F8FAFC]">{kw.keyword}</td>
+                          <td className="p-4">
+                            <Badge variant="secondary" className="bg-slate-100 dark:bg-[#0B1220] text-slate-700 dark:text-[#CBD5E1] border-0 font-normal">{kw.intent}</Badge>
+                          </td>
+                          <td className="p-4">
+                            <span className={`text-xs font-medium px-2 py-1 rounded-md border ${kw.difficulty.toLowerCase() === 'high' ? 'border-red-200 dark:border-[#EF4444]/30 text-red-700 dark:text-[#EF4444] bg-red-50 dark:bg-[#EF4444]/10' : kw.difficulty.toLowerCase() === 'medium' ? 'border-orange-200 dark:border-[#FF6B1A]/30 text-orange-700 dark:text-[#FF6B1A] bg-orange-50 dark:bg-[#FF6B1A]/10' : 'border-green-200 dark:border-[#22C55E]/30 text-green-700 dark:text-[#22C55E] bg-green-50 dark:bg-[#22C55E]/10'}`}>
+                              {kw.difficulty}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <Badge className={kw.priority.toLowerCase() === 'high' ? 'bg-orange-500 dark:bg-[#FF6B1A] hover:bg-orange-600 dark:hover:bg-[#F97316] font-normal text-white border-0' : 'bg-slate-500 dark:bg-slate-700 font-normal text-white border-0'}>
+                              {kw.priority}
+                            </Badge>
+                          </td>
+                          <td className="p-4">
+                            <span className="text-xs font-medium text-slate-500 dark:text-[#94A3B8] bg-slate-100 dark:bg-[#0B1220] px-2 py-1 rounded-md border border-transparent dark:border-[#334155]">{kw.tag}</span>
+                          </td>
+                        </tr>
+                      )) : (
+                        <tr className="bg-white dark:bg-transparent">
+                          <td colSpan={5} className="p-8 text-center text-slate-500 dark:text-[#94A3B8]">No keyword opportunities found.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
             </div>
-            <h3 className="text-lg font-semibold text-heading mb-2">Actionable Insights</h3>
-            <p className="text-body">Get specific recommendations to improve your SEO performance</p>
+
+            {/* 5. Content Gaps */}
+            <div className="space-y-4 break-inside-avoid">
+              <div className="mb-4">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2">
+                  <LayoutTemplate className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Content Gaps
+                </h3>
+                <p className="text-sm text-slate-500 dark:text-[#94A3B8] mt-1">Identified vs competitor patterns.</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {reportData.contentGaps.length > 0 ? reportData.contentGaps.map((gap, i) => (
+                  <Card key={i} className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] bg-white dark:bg-[#172033]">
+                    <CardContent className="p-5">
+                      <div className="flex justify-between items-start gap-4 mb-3">
+                        <h4 className="font-bold text-slate-900 dark:text-[#F8FAFC] leading-tight">{gap.gap}</h4>
+                        <Badge className={gap.priority.toLowerCase() === 'high' ? 'bg-red-100 dark:bg-[#EF4444]/20 text-red-700 dark:text-[#EF4444] hover:bg-red-200 dark:hover:bg-[#EF4444]/30 border-0 shrink-0' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-[#CBD5E1] hover:bg-slate-200 dark:hover:bg-slate-700 border-0 shrink-0'}>
+                          {gap.priority}
+                        </Badge>
+                      </div>
+                      <div className="space-y-3 text-sm">
+                        <p className="text-slate-600 dark:text-[#CBD5E1]"><span className="font-semibold text-slate-800 dark:text-[#F8FAFC]">Why it matters:</span> {gap.whyItMatters}</p>
+                        <div className="bg-slate-50 dark:bg-[#0B1220] p-3 rounded-lg border border-slate-100 dark:border-[#334155] mt-2">
+                          <p className="text-slate-700 dark:text-[#F8FAFC] font-medium flex items-start gap-2">
+                            <CheckCircle className="w-4 h-4 text-green-500 dark:text-[#22C55E] mt-0.5 shrink-0" />
+                            <span>{gap.recommendedAction}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )) : (
+                  <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No content gaps identified.</p>
+                )}
+              </div>
+            </div>
+
+            {/* 6. Content Strategy */}
+            <div className="space-y-6 break-inside-avoid">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2 border-b border-slate-200 dark:border-[#334155] pb-2">
+                <TrendingUp className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Content Strategy
+              </h3>
+
+              {/* Local Keyword Clusters */}
+              <div className="space-y-4">
+                <h4 className="text-lg font-semibold text-slate-800 dark:text-[#CBD5E1]">Local Keyword Clusters</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {reportData.contentStrategy.localKeywordClusters.length > 0 ? reportData.contentStrategy.localKeywordClusters.map((cluster, i) => (
+                    <Card key={i} className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] bg-white dark:bg-[#172033]">
+                      <CardContent className="p-5">
+                        <h5 className="font-bold text-slate-900 dark:text-[#F8FAFC] mb-3">{cluster.clusterName}</h5>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {(cluster.keywords || []).map((kw, idx) => (
+                            <span key={idx} className="bg-orange-50 dark:bg-[#FF6B1A]/10 text-orange-700 dark:text-[#FF6B1A] text-xs px-2 py-1 rounded-md border border-orange-100 dark:border-[#FF6B1A]/20">{kw}</span>
+                          ))}
+                        </div>
+                        <div className="bg-slate-50 dark:bg-[#0B1220] p-2 rounded border border-slate-100 dark:border-[#334155] text-sm flex flex-col sm:flex-row sm:items-center gap-2">
+                          <span className="font-semibold text-slate-600 dark:text-[#94A3B8] shrink-0">Recommended Page:</span>
+                          <span className="text-blue-600 dark:text-blue-400 truncate">{cluster.recommendedPage}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )) : (
+                    <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No local clusters identified.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Content Roadmap */}
+              <div className="space-y-4 mt-6">
+                <h4 className="text-lg font-semibold text-slate-800 dark:text-[#CBD5E1]">Content Roadmap</h4>
+                <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] overflow-hidden dark:bg-[#172033]">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[700px]">
+                      <thead>
+                        <tr className="bg-slate-50 dark:bg-[#0B1220] border-b border-slate-200 dark:border-[#334155] text-xs uppercase tracking-wider text-slate-500 dark:text-[#94A3B8]">
+                          <th className="p-4 font-semibold">Type</th>
+                          <th className="p-4 font-semibold w-1/3">Title</th>
+                          <th className="p-4 font-semibold">Target Keyword</th>
+                          <th className="p-4 font-semibold">Priority</th>
+                          <th className="p-4 font-semibold text-right print:hidden">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 dark:divide-[#334155]/50 text-sm">
+                        {reportData.contentStrategy.contentRoadmap.length > 0 ? reportData.contentStrategy.contentRoadmap.map((item, i) => (
+                          <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors bg-white dark:bg-transparent">
+                            <td className="p-4"><Badge variant="outline" className="text-slate-600 dark:text-[#CBD5E1] bg-white dark:bg-slate-800 dark:border-slate-600">{item.type}</Badge></td>
+                            <td className="p-4 font-medium text-slate-900 dark:text-[#F8FAFC]">{item.title}</td>
+                            <td className="p-4 text-slate-600 dark:text-[#CBD5E1]">{item.keyword}</td>
+                            <td className="p-4">
+                              <Badge className={item.priority.toLowerCase() === 'high' ? 'bg-orange-500 dark:bg-[#FF6B1A] text-white border-0' : 'bg-slate-500 dark:bg-slate-700 text-white border-0'}>
+                                {item.priority}
+                              </Badge>
+                            </td>
+                            <td className="p-4 text-right print:hidden">
+                              <Button variant="ghost" size="sm" className="text-orange-600 dark:text-[#FF6B1A] hover:text-orange-700 dark:hover:text-[#F97316] hover:bg-orange-50 dark:hover:bg-[#FF6B1A]/10 font-medium">
+                                Use this topic <ChevronRight className="w-4 h-4 ml-1" />
+                              </Button>
+                            </td>
+                          </tr>
+                        )) : (
+                          <tr className="bg-white dark:bg-transparent">
+                            <td colSpan={5} className="p-8 text-center text-slate-500 dark:text-[#94A3B8]">No roadmap items available.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 break-inside-avoid">
+
+              {/* 7. Competitor Learnings */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2 mb-4">
+                  <Lightbulb className="w-5 h-5 text-orange-500 dark:text-[#FF6B1A]" /> Competitor Learnings
+                </h3>
+                <div className="space-y-3">
+                  {reportData.competitorLearnings.length > 0 ? reportData.competitorLearnings.slice(0, 5).map((learning, i) => (
+                    <Card key={i} className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] bg-white dark:bg-[#172033]">
+                      <CardContent className="p-4">
+                        <p className="font-semibold text-slate-900 dark:text-[#F8FAFC] mb-1">{learning.insight}</p>
+                        <p className="text-sm text-slate-600 dark:text-[#CBD5E1]">{learning.suggestion}</p>
+                      </CardContent>
+                    </Card>
+                  )) : (
+                    <p className="text-slate-500 dark:text-[#94A3B8] text-sm">No competitor learnings available.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* 8. 7-Day Action Plan */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-2 mb-4">
+                  <CheckCircle2 className="w-5 h-5 text-green-500 dark:text-[#22C55E]" /> 7-Day Action Plan
+                </h3>
+                <Card className="shadow-sm border-slate-200 dark:border-[rgba(148,163,184,0.25)] bg-white dark:bg-[#172033] h-full">
+                  <CardContent className="p-6">
+                    <div className="relative border-l-2 border-slate-200 dark:border-[#334155] ml-3 md:ml-4 space-y-6 py-2">
+                      {reportData.sevenDayActionPlan.length > 0 ? reportData.sevenDayActionPlan.map((plan, i) => (
+                        <div key={i} className="relative pl-6 md:pl-8 group">
+                          <div className="absolute w-4 h-4 bg-white dark:bg-[#172033] border-2 border-orange-400 dark:border-[#FF6B1A] rounded-full -left-[9px] top-1 group-hover:border-orange-500 group-hover:bg-orange-50 dark:group-hover:border-[#F97316] dark:group-hover:bg-[#FF6B1A]/20 transition-colors"></div>
+                          <div>
+                            <span className="text-xs font-bold text-orange-500 dark:text-[#FF6B1A] uppercase tracking-wider block mb-1">{plan.day}</span>
+                            <p className="text-slate-800 dark:text-[#F8FAFC] font-medium">{plan.action}</p>
+                          </div>
+                        </div>
+                      )) : (
+                        <p className="text-slate-500 dark:text-[#94A3B8] text-sm pl-6">No action plan available.</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+            </div>
+
+            {/* 9. Revenue Opportunity (Bottom Highlight) */}
+            <div className="mt-12 break-inside-avoid">
+              <div className="bg-gradient-to-r from-orange-500 to-amber-500 dark:from-[#FF6B1A] dark:to-orange-600 rounded-2xl p-8 text-white shadow-md relative overflow-hidden">
+                <div className="absolute top-0 right-0 -mr-8 -mt-8 opacity-10">
+                  <DollarSign className="w-48 h-48" />
+                </div>
+                <div className="relative z-10 max-w-3xl">
+                  <Badge className="bg-white dark:bg-[#0B1220] text-orange-600 dark:text-[#FF6B1A] hover:bg-slate-50 dark:hover:bg-[#0B1220]/80 mb-4 px-3 py-1 text-xs font-bold uppercase tracking-wider border-0">
+                    {reportData.revenueOpportunity.level} Revenue Opportunity
+                  </Badge>
+                  <h3 className="text-2xl font-bold mb-3 leading-tight text-white">{reportData.revenueOpportunity.summary}</h3>
+                  <p className="text-orange-50 font-medium opacity-90">{reportData.revenueOpportunity.reason}</p>
+                </div>
+              </div>
+            </div>
+
           </div>
-        </div>
+        )}
       </div>
     </div>
+  )
+}
+// For Warning badge in competitor section
+function AlertTriangle(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+      <path d="M12 9v4" />
+      <path d="M12 17h.01" />
+    </svg>
   )
 }
