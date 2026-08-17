@@ -81,21 +81,7 @@ export default function Header() {
             ></span>
           </Link>
 
-          <Link
-            href="/about"
-            className={cn(
-              "text-sm font-medium transition-colors hover:text-primary relative group",
-              pathname === "/about" && "text-primary font-semibold",
-            )}
-          >
-            About
-            <span
-              className={cn(
-                "absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 w-0 group-hover:w-full",
-                pathname === "/about" && "w-full",
-              )}
-            ></span>
-          </Link>
+
 
           <Link
             href="/contact"
@@ -146,13 +132,7 @@ export default function Header() {
               <span className="text-base font-medium">Free Tools</span>
             </Link>
 
-            <Link
-              href="/about"
-              className="flex items-center space-x-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <span className="text-base font-medium">About</span>
-            </Link>
+
 
             <Link
               href="/contact"

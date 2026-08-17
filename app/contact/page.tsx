@@ -33,8 +33,7 @@ export default function ContactPage() {
               <Mail className="h-6 w-6 text-primary" />
             </div>
             <h3 className="text-lg font-medium mb-2">Email</h3>
-            <p className="text-muted-foreground">contact@kozker.com</p>
-            <p className="text-muted-foreground">support@kozker.com</p>
+            <p className="text-muted-foreground">info@kozkertech.com</p>
           </div>
 
           <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
@@ -49,23 +48,19 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="rounded-lg overflow-hidden h-[400px]">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.0122734352603!2d76.25938431029776!3d9.932935374144725!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b086d764998c439%3A0xe6d73818b0fca5b!2sKozker%20Tech!5e0!3m2!1sen!2sin!4v1747673120462!5m2!1sen!2sin"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-
-          <div className="bg-card rounded-lg border p-6 shadow-sm">
-            <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
-            <ContactFormAlternative />
-          </div>
+        <div className="bg-primary/5 rounded-2xl border-2 border-primary/20 p-12 shadow-sm flex flex-col items-center justify-center text-center my-16 hover:border-primary/40 transition-colors">
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Visit Our Website</h2>
+          <p className="text-lg text-muted-foreground mb-8 max-w-xl">
+            Explore our main platform to learn more about our services, products, and tailored solutions.
+          </p>
+          <a 
+            href="https://kozker.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="inline-flex items-center justify-center rounded-md text-lg font-semibold transition-all bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-10 py-3 shadow-md hover:shadow-xl hover:-translate-y-1"
+          >
+            Go to kozker.com
+          </a>
         </div>
 
         <div className="mt-16 text-center">

@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -52,14 +52,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold text-gray-900 dark:text-white">Company</h3>
             <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/about"
-                  className="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
-                >
-                  About
-                </Link>
-              </li>
+
               <li>
                 <Link
                   href="/contact"
@@ -72,39 +65,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* AI Tool Suites */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-gray-900 dark:text-white">AI Tool Suites</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/launchpad"
-                  className="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
-                >
-                  LaunchPad
-                  <span className="text-xs text-gray-500 dark:text-gray-400 block">AI Launch Toolkit</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/growthsuite"
-                  className="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
-                >
-                  GrowthSuite
-                  <span className="text-xs text-gray-500 dark:text-gray-400 block">AI Growth Automation</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/intelligence"
-                  className="text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
-                >
-                  Intelligence
-                  <span className="text-xs text-gray-500 dark:text-gray-400 block">AI Decision Platform</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
+
 
           {/* Free AI Tools */}
           <div className="space-y-4">
@@ -211,7 +172,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-500 dark:text-gray-400 text-sm">© 2024 KozkerTech. All rights reserved.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">© 2026 Kozker Tech Pvt. Ltd. All rights reserved.</p>
             <div className="flex space-x-6">
             </div>
           </div>
